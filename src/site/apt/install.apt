@@ -1,0 +1,65 @@
+Installation
+
+* Installing a JRE
+
+  If you not already have a Java Runtime Environment installed then you have 
+  to do it now. {{{http://www.java.com/download/}Download Java 5.0 for your platform}}
+  from Sun and follow the installation instructions.
+  
+  Please note that the Wasteland Suite needs at least Java 5.0. It will not
+  work with the ancient Java 1.4.
+  
+* Installing the Wasteland Suite
+
+  After you have {{{download.html}downloaded}} the Wasteland Suite binary
+  archive you have to unpack it somewhere on your system. Windows users may choose
+  <C:\Program Files> for it while Unix users may prefer </opt> or 
+  </usr/local>.
+
+  Unpacking creates a new directory named <wlandsuite-x.x.x> containing the
+  shell scripts (for Unix) and batch files (for Windows) which are used
+  to launch the Java Application with the various functions. You can rename
+  the folder to <wlandsuite> if you don't like version numbers in directory
+  names.
+  
+  If you want
+  to be able to use the Wasteland Suite programs from everywhere you have to
+  add the directory name to the <PATH> environment variable. On Unix this can
+  be done by adding this line to your <.bashrc>, <.bash_profile> or 
+  <.profile> file in your home directory:
+  
+---
+export PATH=$PATH:/opt/wlandsuite
+---
+   
+  Windows users have to do it like this:
+  
+  * Right-click <My Computer> (Which is on your Desktop or in the Start menu
+    when you have Windows XP). Choose <Properties> in the context-menu.
+    
+  * Click the <Advanced> tab folder.
+  
+  * Click the <Environment Variables> button.
+    
+  * Double-click the <Path> entry in the <System Variables> list.
+  
+  * Add <;C:\Program Files\wlandsuite> (or whatever directory you choosed 
+    for the Wasteland Suite files) to the path.
+    
+  * Confirm all the open dialogs and you are done.
+
+  []
+ 
+* Testing the installation
+ 
+  To test the installation and check if you have modified the PATH 
+  environment variable successfully just open a shell and enter the following
+  command:
+   
+---
+decodepic --version
+---
+
+  It should output the version number and the license. If it doesn't then you
+  have done something wrong.
+  

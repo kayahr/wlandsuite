@@ -1,0 +1,29 @@
+Usage: decodepic [OPTION]... [INPUT [OUTPUT]]
+Converts a Wasteland PIC file to a standard image format file
+
+  -W, --width    The width of the PIC file (Default: 288)
+  -H, --height   The height of the PIC file (Default: 128)
+  -f, --format   The image format if writing to stdout (Default: PNG)
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+  
+Without any parameters decodepic reads the input from stdin and writes it
+to stdout. With one parameter the wasteland pic is read from the specified
+file and the output is written to stdout. If you specify two parameters then
+the input is read from the first file and the output is written to the second 
+file. You can also specify a minus character ("-") as filename which also means
+reading to stdin or writing to stdout.
+
+If you have selected to write the output to stdout then you have to use the
+format parameter to tell decodepic in which image format you want the output to
+be. Default is PNG. What formats are available on your system depends on
+the installed ImageIO plugins. Normally you can select PNG, BMP and JPEG. When
+you have installed the JAI ImageIO plugins from Sun then you can also use GIF
+and TIFF.
+
+A PIC file does not contain any information about picture dimensions. So if the
+size of the PIC file is not the default 288x128 pixels then you have to use the
+width and height parameters to tell decodepic the real size of the picture.
+    
+Report bugs to Klaus Reimer <k@ailis.de>

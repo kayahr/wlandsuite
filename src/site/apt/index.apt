@@ -1,0 +1,37 @@
+What is the Wasteland Suite?
+
+  The Wastelans Suite is a collection of command-line programs for converting
+  the game files of the famous game Wasteland 
+  {{{http://en.wikipedia.org/wiki/Wasteland_%28computer_game%29}Wasteland}} 
+  (PC version) to standard formats which can be processed by standard 
+  software.
+  
+  The Wasteland Suite is written in Java and therefor is working an all
+  platforms supported by Java.
+  
+  Up to now the Wasteland Suite implements the following functionality:
+      
+    * Reading/Writing pic from/to file and stream.
+
+    * Reading/Writing wlf sprite masks from/to file and stream.
+
+    * Encoding/Decoding data with vertical xor scheme.
+    
+    []
+    
+  The suite contains the following command line programs:
+   
+    * {{{encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
+
+    * {{{decodepic.html}decodepic}} (Converts a pic file to a standard image format file)
+    
+    * {{{encodewlf.html}encodewlf}} (Converts a standard image format file to a wlf mask file)
+
+    * {{{decodewlf.html}decodewlf}} (Converts a wlf mask file to a standard image format file)
+    
+    []
+    
+* Getting started
+
+  {{{download.html}Download}} the latest binary archive of the Wasteland Suite 
+  and follow the {{{install.html}installation instructions}}.

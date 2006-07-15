@@ -1,0 +1,17 @@
+Usage: wlandsuite [OPTION]... -- COMMAND [CMD-OPTION...] [CMD-PARAM]...
+Wasteland Suite
+
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+This program is just the starter for the various commands of the suite. If
+you want help for a particular command then run this:
+
+  wlandsuite COMMAND --help
+  
+Valid commands are:
+
+  decodepic - Converts a wasteland pic file to a standard image format file
+  encodepic - Converts a standard image format file to a wasteland pic file
+    
+Report bugs to Klaus Reimer <k@ailis.de>

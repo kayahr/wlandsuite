@@ -1,0 +1,51 @@
+decodepic
+
+  With the decodepic program you can convert a Wasteland PIC file into a 
+  standard image format file (like PNG, JPEG and BMP).
+
+  Without any parameters decodepic reads the input from stdin and writes it
+  to stdout. With one parameter the input is read from the specified file and the 
+  output is written to stdout. If you specify two parameters then the input is 
+  read from the first file and the output is written to the second file. You can 
+  also specify a minus character ("-") as filename which also means reading to 
+  stdin or writing to stdout.
+  
+  If you choose to write the output to stdout then you have to specifiy the
+  output format with the format parameter which defaults to PNG. If you 
+  specify an output filename then the format is automatically determined by the
+  file extension.
+  
+  If the PIC file has not the size 288x128 then you must specify the real size 
+  with the width and height parameters because no size information can be read
+  from a Wasteland PIC file.
+
+* Usage  
+  
+---
+decodepic [OPTION]... [INPUT [OUTPUT]]
+---
+  
+* Parameters
+
+---
+-W, --width    The width of the PIC file (Default: 288)
+-H, --height   The height of the PIC file (Default: 128)
+-f, --format   The image format if writing to stdout (Default: PNG)
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command reads Wasteland's title.pic, converts it to a PNG
+  and writes it to the file {{{images/title.png}title.png}} in the 
+  current directory.
+  
+---
+decodepic c:\wland\title.pic title.png
+---
+
+  The resulting file is a 4-bit color PNG:
+
+[images/title.png]

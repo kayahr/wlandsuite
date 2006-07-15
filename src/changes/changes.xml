@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <properties>
+    <title>Wasteland Suite</title>
+    <author email="k@ailis.de">Klaus Reimer</author>
+  </properties>
+  <body>
+<!--     <release version="1.1.0" date="2006-06-26" desc="Minor update">
+      <action dev="k" type="add">
+        PHP4 compatible serializing support for Serializable objects (Using Reflection API)
+      </action>
+    </release>-->
+    <release version="1.0.0" date="2006-07-12" desc="Initial release">
+    </release>
+  </body>
+</document>

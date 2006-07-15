@@ -1,0 +1,35 @@
+encodepic
+
+  With the encodewlf program you can convert a standard image format file
+  (like PNG, JPEG and BMP) to a Wasteland WLF masks file.
+
+  Without any parameters encodepic reads the input from stdin and writes it
+  to stdout. With one parameter the input is read from the specified file and the 
+  output is written to stdout. If you specify two parameters then the input is 
+  read from the first file and the output is written to the second file. You can 
+  also specify a minus character ("-") as filename which also means reading to 
+  stdin or writing to stdout.
+  
+  A mask is only a bit map so the source file should only contain the colors
+  black and white.
+
+* Usage  
+  
+---
+encodewlf [OPTION]... [INPUT [OUTPUT]]
+---
+  
+* Parameters
+
+---
+-m, --masks    The number of masks (Default is automatically calculated)
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+---
+encodewlf masks.png c:\wland\masks.pic
+---

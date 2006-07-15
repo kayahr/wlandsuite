@@ -1,0 +1,33 @@
+Usage: decodewlf [OPTION]... [INPUT [OUTPUT]]
+Converts a Wasteland WLF file to a standard image format file
+
+  -W, --width    The width of the masks in the WLF file (Default: 16)
+  -H, --height   The height of the masks in the WLF file (Default: 16)
+  -m, --masks    The number of masks in the WLF file (Default: 10)
+  -f, --format   The image format for output file (Default: PNG)
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+  
+Without any parameters decodewlf reads the input from stdin and writes it
+to stdout. With one parameter the input is read from the specified file and the 
+output is written to stdout. If you specify two parameters then the input is 
+read from the first file and the output is written to the second file. You can 
+also specify a minus character ("-") as filename which also means reading to 
+stdin or writing to stdout.
+
+If you have selected to write the output to stdout then you have to use the
+format parameter to tell decodewlf in which image format you want the output to
+be written. Default is PNG. What formats are available on your system depends 
+on the installed ImageIO plugins. Normally you can select PNG, BMP and JPEG. 
+When you have installed the JAI ImageIO plugins from Sun then you can also use 
+GIF and TIFF.
+
+A WLF file does not contain any information about mask dimensions. So if the 
+masks in the WLF file are not the default 16x16 pixels then you have to use the
+width and height parameters to tell decodewlf the real size of the masks.
+
+If you are reading input from stdin then you must also specify the number of
+masks to read. The default is 10 masks.
+    
+Report bugs to Klaus Reimer <k@ailis.de>

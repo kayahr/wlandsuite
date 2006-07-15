@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven">
+  <bannerLeft>
+    <name>wlandsuite</name>
+    <src>images/logo.png</src>
+    <href>http://www.ailis.de/~k/software/projects/wlandsuite/</href>
+  </bannerLeft>
+  <body>
+    <links>
+      <item name="Wasteland" href="http://en.wikipedia.org/wiki/Wasteland_%28computer_game%29" />
+      <item name="Wasteland Wikispace" href="http://wasteland.wikispaces.com/" />
+    </links>
+    
+    <menu name="Wasteland Suite">
+      <item name="About" href="index.html" />
+      <item name="Download" href="download.html" />
+      <item name="Installation" href="install.html" />
+    </menu>
+    <menu name="Programs">
+      <item name="encodepic" href="encodepic.html" />
+      <item name="decodepic" href="decodepic.html" />
+      <item name="encodewlf" href="encodewlf.html" />
+      <item name="decodewlf" href="decodewlf.html" />
+    </menu>
+    
+    ${reports}
+    
+  </body>
+</project>

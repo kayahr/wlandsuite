@@ -1,0 +1,21 @@
+Usage: encodewlf [OPTION]... [INPUT [OUTPUT]]
+Converts a standard image format file into a Wasteland WLF file
+
+  -m, --masks    The number of masks (Default is automatically calculated)
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+Without any parameters encodepic reads the input from stdin and writes it
+to stdout. With one parameter the input is read from the specified file and the 
+output is written to stdout. If you specify two parameters then the input is 
+read from the first file and the output is written to the second file. You can 
+also specify a minus character ("-") as filename which also means reading to 
+stdin or writing to stdout.
+
+The number of masks is determined automatically but this only works when the
+mask height is the same as the width (Which is normally the case because
+Wasteland masks are 16x16). If your masks have different sizes then you may
+want to specify the masks parameter.
+
+Report bugs to Klaus Reimer <k@ailis.de>
