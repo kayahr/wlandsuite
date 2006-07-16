@@ -1,19 +1,19 @@
 What is the Wasteland Suite?
 
-  The Wastelans Suite is a collection of command-line programs for converting
-  the game files of the famous game Wasteland 
+  The Wasteland Suite is a collection of command-line programs for converting
+  the game files of the famous game
   {{{http://en.wikipedia.org/wiki/Wasteland_%28computer_game%29}Wasteland}} 
-  (PC version) to standard formats which can be processed by standard 
+  (PC version) to standard format files which can be processed by standard 
   software.
   
-  The Wasteland Suite is written in Java and therefor is working an all
+  The Wasteland Suite is written in Java and therefore is working an all
   platforms supported by Java.
   
   Up to now the Wasteland Suite implements the following functionality:
       
     * Reading/Writing pic from/to file and stream.
 
-    * Reading/Writing wlf sprite masks from/to file and stream.
+    * Reading/Writing wlf masks from/to file and stream.
 
     * Encoding/Decoding data with vertical xor scheme.
     
