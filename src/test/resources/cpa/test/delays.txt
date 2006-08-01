@@ -1,0 +1,17 @@
+# The delays between the animation frames (0-65534)
+
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5
+    5

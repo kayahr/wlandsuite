@@ -1,0 +1,39 @@
+unpackhtds
+
+  Unpacks all tilesets of a allhtds file into a directory.
+
+  The first parameter must be the name of the directory in which the tilesets 
+  should be unpacked. The program creates the necessary directory structure
+  automatically.
+
+  The second parameter specifies the filename of the HTDS file to read. If
+  the parameter is missing or is "-" then the input is read from stdin.
+  
+
+* Usage  
+  
+---
+unpackhtds [OPTION]... DIRECTORY [INPUT]
+---
+  
+* Parameters
+
+---
+-W, --width    The tile width (Default: 16)
+-H, --height   The tile height (Default: 16)
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command unpacks the allhtds1 file into a temporary directory.
+  
+---
+unpackhtds c:\tiles1 c:\wland\allhtds1
+---
+
+  The program creates the c:\tiles1 directory and creates four sub directories
+  which are numbered from 0 to 3. Each sub directory represents a tile set bank.
+  Each bank contains lots of PNG files. Each PNG file is one tile.

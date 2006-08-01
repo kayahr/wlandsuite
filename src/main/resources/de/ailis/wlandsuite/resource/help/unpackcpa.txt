@@ -1,0 +1,21 @@
+Usage: unpackcpa [OPTION]... DIRECTORY [INPUT]
+Unpacks a Compressed Picture Animation (CPA) into a directory
+
+  -W, --width      The width of the picture (Default: 288)
+  -d, --debug      Shows stacktrace when an error occurs
+  -h, --help       Display help and exit
+  -V, --version    Display version and exit
+  
+The first parameter must be the name of the directory in which the animation
+should be unpacked. The program creates the directory automatically if it does
+not yet exist.
+
+The second parameter specifies the filename of the CPA file to read. If
+the parameter is missing or is "-" then the input is read from stdin.
+  
+A CPA file does not contain any information about picture dimensions. So if the
+size of the CPA file is not the default 288x128 pixels then you have to use the
+width parameter to give unpackcpa a clue about the real size of the picture. 
+The height is calculated automatically.
+    
+Report bugs to Klaus Reimer <k@ailis.de>

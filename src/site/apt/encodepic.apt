@@ -7,7 +7,7 @@ encodepic
   to stdout. With one parameter the image is read from the specified file and the 
   output is written to stdout. If you specify two parameters then the input is 
   read from the first file and the output is written to the second file. You can 
-  also specify a minus character ("-") as filename which also means reading to 
+  also specify a minus character ("-") as filename which also means reading from
   stdin or writing to stdout.
   
   The number of colors and the color palette in the source image does not

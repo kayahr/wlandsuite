@@ -1,0 +1,20 @@
+Usage: packcurs [OPTION]... DIRECTORY [OUTPUT]
+Packs cursors into a CURS file.
+
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory which holds the
+cursor images. This directory must contain cursor images in files named 
+000.png, 001.png and so on and corresponding cursor transparency mask images
+(whcih are normaly black (transparent) and white (opaque) images. They need
+to be named like 000_mask.png, 001_mask.png and so on.
+
+The easiest way to initialize a cursor directory is using unpackcurs to
+unpack the original curs file from the game.
+
+The second parameter specifies the filename of the CURS file to write. If
+the parameter is missing or is "-" then the output is written to stdout.
+
+Report bugs to Klaus Reimer <k@ailis.de>

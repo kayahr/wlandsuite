@@ -1,0 +1,31 @@
+Usage: packpics [OPTION]... DIRECTORY [OUTPUT]
+Packs encounter animations from a directory into a allpics file
+
+  -D, --disk     The disk index (0 for allpics1 or 1 for allpics2)
+                 Default is automatically determined by looking at the 
+                 number of animatioons.
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory which holds the
+encounter animations. This directory must contain numbered subdirectories for 
+each animation starting with 000. Each animation directory must contain a
+base frame in 000.png and for each animation frame set a numbered subdirectory
+starting with 000. Each animation frame set directory must contain the frames
+with numbered file names starting with 001.png and an animation.txt file which
+contains two numbers per line. The first number is the delay and the second
+number the frame to display.
+
+The easiest way to initialize an animation directory is using unpackpics to
+unpack the original animations from the game.
+
+The second parameter specifies the filename of the PICS file to write. If
+the parameter is missing or is "-" then the output is written to stdout.
+
+Please note that you must run the fixwloffsets program after you have modified
+the tileset files of wasteland because the MSQ offsets in the allpics files
+are now most likely different to the original offsets hardcoded in the wl.exe
+file.
+
+Report bugs to Klaus Reimer <k@ailis.de>

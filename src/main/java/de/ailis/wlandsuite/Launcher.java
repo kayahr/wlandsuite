@@ -61,22 +61,77 @@ public class Launcher extends CLIProg
         if ("decodepic".equals(command))
         {
             DecodePic.main(newArgs);
-            return;
+            System.exit(0);
         }
         else if ("encodepic".equals(command))
         {
             EncodePic.main(newArgs);
-            return;
+            System.exit(0);
         }
-        else if ("decodewlf".equals(command))
+        else if ("unpackwlf".equals(command))
         {
-            DecodeWlf.main(newArgs);
-            return;
+            UnpackWlf.main(newArgs);
+            System.exit(0);
         }
-        else if ("encodewlf".equals(command))
+        else if ("packwlf".equals(command))
         {
-            EncodeWlf.main(newArgs);
-            return;
+            PackWlf.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpackcpa".equals(command))
+        {
+            UnpackCpa.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packcpa".equals(command))
+        {
+            PackCpa.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpackcurs".equals(command))
+        {
+            UnpackCurs.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packcurs".equals(command))
+        {
+            PackCurs.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpackfnt".equals(command))
+        {
+            UnpackFnt.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packfnt".equals(command))
+        {
+            PackFnt.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packhtds".equals(command))
+        {
+            PackHtds.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpackhtds".equals(command))
+        {
+            UnpackHtds.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packpics".equals(command))
+        {
+            PackPics.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpackpics".equals(command))
+        {
+            UnpackPics.main(newArgs);
+            System.exit(0);
+        }
+        else if ("fixwloffsets".equals(command))
+        {
+            FixWlOffsets.main(newArgs);
+            System.exit(0);
         }
         else
         {

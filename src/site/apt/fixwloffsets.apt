@@ -1,0 +1,37 @@
+fixwloffsets
+
+  When modifying any of the data files consisting of multiple MSQ blocks then
+  the offsets to those MSQ blocks are most likely different to the offsets which
+  are hardcoded in the wl.exe file. This program fixes all these offsets. So
+  you should run this program whenever you change the allhtds*, allpics* or
+  game* files. Just give the program the name of the directory where the 
+  Wasteland files are installed.
+
+  fixwloffsets also displays warnings if a modified file is larger then the
+  original file because larger files can cause trouble because they may no longer
+  fit into their space in the data segement. Maybe they overwrite other data and
+  this may cause crashes and other strange behaviours.
+  
+
+* Usage  
+  
+---
+fixwloffsets [OPTION]... DIRECTORY
+---
+  
+* Parameters
+
+---
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command fixes the offsets in the wl.exe file. It assumes that
+  all wasteland files are installed in c:\wland.
+  
+---
+fixwloffsets c:\wland
+---

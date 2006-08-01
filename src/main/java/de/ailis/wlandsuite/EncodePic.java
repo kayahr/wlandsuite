@@ -23,19 +23,16 @@
 
 package de.ailis.wlandsuite;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.imageio.ImageIO;
-
 import de.ailis.wlandsuite.cli.ConvertProg;
-import de.ailis.wlandsuite.io.PicWriter;
+import de.ailis.wlandsuite.pic.Pic;
 
 
 /**
- * Comverts a standard image format file into a Wasteland PIC file.
+ * Converts a standard image format file into a Wasteland PIC file.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
@@ -52,10 +49,7 @@ public class EncodePic extends ConvertProg
     protected void convert(InputStream input, OutputStream output)
         throws IOException
     {
-        BufferedImage image;
-
-        image = ImageIO.read(input);
-        PicWriter.getInstance().writePic(output, image);
+        Pic.read(input).write(output);
     }
 
 

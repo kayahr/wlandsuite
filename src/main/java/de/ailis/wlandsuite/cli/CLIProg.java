@@ -39,10 +39,10 @@ import de.ailis.wlandsuite.utils.ResourceUtils;
 
 public abstract class CLIProg
 {
-    /** The help text resource  */
+    /** The help text resource */
     private String help = "help/launcher.txt";
 
-    /** The version information text resource  */
+    /** The version information text resource */
     private String version = "version.txt";
 
     /** The program name */
@@ -87,8 +87,49 @@ public abstract class CLIProg
     protected void wrongUsage(String message)
     {
         System.err.println(this.progName + ": " + message);
-        System.err.println("Try 'jscram --help' for more information.");
+        System.err.println("Try '" + this.progName
+            + " --help' for more information.");
         System.exit(2);
+    }
+
+
+    /**
+     * Aborts the program with an error message and exit code 1
+     * 
+     * @param message
+     *            The error message
+     */
+
+    protected void error(String message)
+    {
+        System.err.println(this.progName + ": ERROR! " + message);
+        System.exit(1);
+    }
+
+
+    /**
+     * Displays a warning message and continues the program
+     * 
+     * @param message
+     *            The warning message
+     */
+
+    protected void warn(String message)
+    {
+        System.err.println(this.progName + ": WARNING! " + message);
+    }
+
+
+    /**
+     * Outputs an informational message
+     * 
+     * @param message
+     *            The informational message
+     */
+
+    protected void info(String message)
+    {
+        System.err.println(this.progName + ": " + message);
     }
 
 
@@ -133,7 +174,8 @@ public abstract class CLIProg
         }
 
         // Setup short options
-        getopt = new Getopt(this.progName, args, shortOpts.toString(), allLongOpts);
+        getopt = new Getopt(this.progName, args, shortOpts.toString(),
+            allLongOpts);
 
         // Process options
         while ((c = getopt.getopt()) != -1)
@@ -186,7 +228,7 @@ public abstract class CLIProg
      * 
      * @param params
      *            The parameters without the already processed options
-     * @throws IOException 
+     * @throws IOException
      */
 
     protected abstract void run(String[] params) throws IOException;
@@ -205,29 +247,30 @@ public abstract class CLIProg
         {
             // Process command line arguments and run the program
             run(processOptions(args));
+            info("Success");
         }
         catch (Exception e)
         {
             if (this.debug || e.getMessage() == null)
             {
                 e.printStackTrace();
+                System.exit(1);
             }
             else
             {
-                System.err.println(this.progName + ": " + e.getMessage());
+                error(e.getMessage());
             }
-            System.exit(1);
         }
     }
 
 
     /**
      * Sets the help resource.
-     *
-     * @param help 
+     * 
+     * @param help
      *            The help resource to set
      */
-    
+
     public void setHelp(String help)
     {
         this.help = help;
@@ -236,11 +279,11 @@ public abstract class CLIProg
 
     /**
      * Sets the long options.
-     *
-     * @param longOpts 
+     * 
+     * @param longOpts
      *            The long options to set
      */
-    
+
     public void setLongOpts(LongOpt[] longOpts)
     {
         this.longOpts = longOpts;
@@ -249,11 +292,11 @@ public abstract class CLIProg
 
     /**
      * Sets the program name
-     *
-     * @param progName 
+     * 
+     * @param progName
      *            The program name to set
      */
-    
+
     public void setProgName(String progName)
     {
         this.progName = progName;

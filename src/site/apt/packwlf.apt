@@ -1,0 +1,33 @@
+packwlf
+
+  With the packwlf program you can pack bit mask files into a WLF file.
+
+  The first parameter must be the name of the directory which holds the
+  bit masks. This directory must contain bit masks in files names 000.png, 001.png
+  and so on.
+
+  The easiest way to initialize a bit mask directory is using unpackwlf to
+  unpack the original masks.wlf or ic0_9.wlf from the game.
+
+  The second parameter specifies the filename of the WLF file to write. If
+  the parameter is missing or is "-" then the output is written to stdout.
+
+* Usage  
+  
+---
+packwlf [OPTION]... DIRECTORY [OUTPUT]
+---
+  
+* Parameters
+
+---
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+---
+packwlf c:\masks c:\wland\masks.pic
+---

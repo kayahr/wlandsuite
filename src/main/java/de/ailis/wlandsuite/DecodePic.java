@@ -26,7 +26,6 @@ package de.ailis.wlandsuite;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,7 +33,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 import de.ailis.wlandsuite.cli.ConvertProg;
-import de.ailis.wlandsuite.io.PicReader;
+import de.ailis.wlandsuite.pic.Pic;
 import de.ailis.wlandsuite.utils.FileUtils;
 
 
@@ -76,7 +75,6 @@ public class DecodePic extends ConvertProg
                 this.format = getopt.getOptarg();
                 break;
         }
-
     }
 
 
@@ -89,7 +87,7 @@ public class DecodePic extends ConvertProg
     public void convert(InputStream input, OutputStream output)
         throws IOException
     {
-        BufferedImage image;
+        Pic pic;
 
         // Set format if not set via parameter
         if (this.format == null)
@@ -104,8 +102,8 @@ public class DecodePic extends ConvertProg
             }
         }
 
-        image = PicReader.getInstance().readPic(input, this.width, this.height);
-        ImageIO.write(image, this.format, output);
+        pic = Pic.read(input, this.width, this.height);
+        ImageIO.write(pic, this.format, output);
     }
 
 

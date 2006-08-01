@@ -1,0 +1,17 @@
+Usage: unpackhtds [OPTION]... DIRECTORY [INPUT]
+Unpacks all tilesets of a allhtds file into a directory
+
+  -W, --width    The tile width (Default: 16)
+  -H, --height   The tile height (Default: 16)
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory in which the tilesets 
+should be unpacked. The program creates the necessary directory structure
+automatically.
+
+The second parameter specifies the filename of the HTDS file to read. If
+the parameter is missing or is "-" then the input is read from stdin.
+
+Report bugs to Klaus Reimer <k@ailis.de>

@@ -11,7 +11,20 @@ you want help for a particular command then run this:
   
 Valid commands are:
 
-  decodepic - Converts a wasteland pic file to a standard image format file
-  encodepic - Converts a standard image format file to a wasteland pic file
+  decodepic    - Converts a wasteland pic file to a standard image format file
+  encodepic    - Converts a standard image format file to a wasteland pic file
+  unpackwlf    - Unpacks a WLF bit mask file
+  packwlf      - Packs a WLF bit mask file
+  unpackcpa    - Unpacks a CPA animation file
+  packcpa      - Packs a CPA animation file
+  unpackhtds   - Unpacks tilesets from an allhtds file
+  packhtds     - Packs tilesets into an allhtds file
+  unpackpics   - Unpacks encounter animations from an allpics file
+  packpics     - Packs encounter animations into an allpics file
+  unpackcurs   - Unpacks cursors from a curs file
+  packcurs     - Packs cursors into a curs file
+  unpackfnt    - Unpacks font characters from a fnt file
+  packfnt      - Packs font characters into a fnt file
+  fixwloffsets - Fixes the MSQ offsets in the wl.exe file
     
 Report bugs to Klaus Reimer <k@ailis.de>

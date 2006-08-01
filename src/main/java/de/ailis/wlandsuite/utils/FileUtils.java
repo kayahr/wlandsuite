@@ -23,6 +23,13 @@
 
 package de.ailis.wlandsuite.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 
 /**
  * File utility methods
@@ -54,6 +61,91 @@ public class FileUtils
         else
         {
             return "";
+        }
+    }
+
+
+    /**
+     * Reads all the available bytes from a file and returns them as a byte
+     * array.
+     * 
+     * @param file
+     *            The file to read
+     * @return The read data
+     * @throws IOException
+     */
+
+    public static byte[] readBytes(File file) throws IOException
+    {
+        FileInputStream stream;
+
+        stream = new FileInputStream(file);
+        try
+        {
+            return readBytes(stream);
+        }
+        finally
+        {
+            stream.close();
+        }
+    }
+
+
+    /**
+     * Reads all the available bytes from the input stream and returns them as a
+     * byte array.
+     * 
+     * @param stream
+     *            The input stream
+     * @return The read data
+     * @throws IOException
+     */
+
+    public static byte[] readBytes(InputStream stream) throws IOException
+    {
+        ByteArrayOutputStream output;
+        byte[] buffer;
+        int read;
+
+        output = new ByteArrayOutputStream();
+        try
+        {
+            buffer = new byte[8192];
+            while ((read = stream.read(buffer)) != -1)
+            {
+                output.write(buffer, 0, read);
+            }
+            return output.toByteArray();
+        }
+        finally
+        {
+            output.close();
+        }
+    }
+
+
+    /**
+     * Writes bytes to a file.
+     * 
+     * @param file
+     *            The file
+     * @param bytes
+     *            The bytes
+     * @throws IOException
+     */
+
+    public static void writeBytes(File file, byte[] bytes) throws IOException
+    {
+        FileOutputStream stream;
+
+        stream = new FileOutputStream(file);
+        try
+        {
+            stream.write(bytes);
+        }
+        finally
+        {
+            stream.close();
         }
     }
 }

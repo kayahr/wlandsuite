@@ -1,0 +1,22 @@
+Usage: unpackfnt [OPTION]... DIRECTORY [INPUT]
+Unpacks font characters from a FNT file into a directory
+
+  -q, --quantity  The number of font characters in the FNT file (Default: Auto 
+                  or 172)
+  -d, --debug     Shows stacktrace when an error occurs
+  -h, --help      Display help and exit
+  -V, --version   Display version and exit
+  
+The first parameter must be the name of the directory in which the font chars
+should be unpacked. The program creates the directory automatically if it does
+not yet exist.
+
+The second parameter specifies the filename of the FNT file to read. If
+the parameter is missing or is "-" then the input is read from stdin.
+
+A FNT file does not contain any information about cursor image dimensions.
+
+If you are reading input from stdin then you must also specify the number of
+font characters to read. The default is 172 characters.
+    
+Report bugs to Klaus Reimer <k@ailis.de>

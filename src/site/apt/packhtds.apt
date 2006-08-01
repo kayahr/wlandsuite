@@ -1,0 +1,56 @@
+packhtds
+
+  Packs a tileset directory into a allhtds file.
+
+  The first parameter must be the name of the directory which holds the
+  tilesets. This directory must contain numbered subdirectories for each tileset 
+  starting with 000. Each tileset directory must contain tile images as PNGs.
+  The names must be numbered starting with 000. For example: 000.png. 
+
+  The easiest way to initialize a tileset directory is using 
+  {{{unpackhtds.html}unpackhtds}} to unpack the original tilesets from the game.
+
+  The second parameter specifies the filename of the HTDS file to write. If
+  the parameter is missing or is "-" then the output is written to stdout.
+
+  Please note that you must run the {{{fixwloffsets.html}fixwloffsets}} program 
+  after you have modified
+  the tileset files of wasteland because the MSQ offsets in the allhtds files
+  are now most likely different to the original offsets hardcoded in the wl.exe
+  file.
+  
+
+* Usage  
+  
+---
+packhtds [OPTION]... DIRECTORY [OUTPUT]
+---
+  
+* Parameters
+
+---
+-D, --disk     The disk index (0 for allhtds1 or 1 for allhtds2)
+               Default is automatically determined by looking at the number
+               of tilesets.
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  Let's assume you have unpacked the allhtds2 file into c:\tiles1 and
+  you have modified the tiles {{{images/18.png}18.png}} and {{{images/71.png}71.png}}
+  (which draws the nuke symbol on the roof of the Mushroom Cloud Temple) of tile set bank 2. To
+  build a custom allhtds2 file with these changes just run these commands:
+  
+---
+packhtds -f 1 c:\tiles1 c:\wland\allhtds1
+fixwloffsets c:\wland
+---
+
+  When you now go to the temple you'll be shocked because the servants are
+  following a new god now:
+  
+[images/mushroom.png]
+  

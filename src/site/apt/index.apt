@@ -11,23 +11,39 @@ What is the Wasteland Suite?
   
   Up to now the Wasteland Suite implements the following functionality:
       
-    * Reading/Writing pic from/to file and stream.
+    * Reading/Writing pic files and streams.
 
-    * Reading/Writing wlf masks from/to file and stream.
+    * Unpacking/Packing WLF bit mask files and streams
+    
+    * Unpacking/Packing CPA files and streams.
+
+    * Unpacking/Packing htds (tile set) files and streams.
 
     * Encoding/Decoding data with vertical xor scheme.
+
+    * Compressing/Uncompressing data with Huffman encoding.
     
     []
     
   The suite contains the following command line programs:
    
-    * {{{encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
-
     * {{{decodepic.html}decodepic}} (Converts a pic file to a standard image format file)
     
-    * {{{encodewlf.html}encodewlf}} (Converts a standard image format file to a wlf mask file)
+    * {{{encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
 
-    * {{{decodewlf.html}decodewlf}} (Converts a wlf mask file to a standard image format file)
+    * {{{unpackwlf.html}unpackwlf}} (Unpacks a WKF file to a directory)
+
+    * {{{packwlf.html}packwlf}} (Packs the bit masks from a directory into a WLF file)
+    
+    * {{{unpackcpa.html}unpackcpa}} (Unpacks a CPA file to a directory)
+    
+    * {{{packcpa.html}packcpa}} (Packs the animation from a directory into a CPA file)
+
+    * {{{unpackhtds.html}unpackhtds}} (Unpacks a allhtds (tile set) file to a directory)
+    
+    * {{{packhtds.html}packhtds}} (Packs the tile sets from a directory into a allhtds file)
+    
+    * {{{fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets in the wl.exe file)
     
     []
     

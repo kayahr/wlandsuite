@@ -44,15 +44,15 @@ public abstract class ConvertProg extends CLIProg
     /** The input filename (or null for stdin) */
     protected String input = null;
     
-    /** The output filename (of null for stdout) */
+    /** The output filename (or null for stdout) */
     protected String output = null;
 
     
     /**
-     * Returns the input stream where the PIC file can be read from.
+     * Returns the input stream where the input data can be read from.
      * 
      * @param input
-     *            The input file name of null for stdin
+     *            The input file name or null for stdin
      * @return The input stream
      * @throws FileNotFoundException
      */

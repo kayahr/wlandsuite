@@ -17,10 +17,15 @@
       <item name="Installation" href="install.html" />
     </menu>
     <menu name="Programs">
-      <item name="encodepic" href="encodepic.html" />
       <item name="decodepic" href="decodepic.html" />
-      <item name="encodewlf" href="encodewlf.html" />
-      <item name="decodewlf" href="decodewlf.html" />
+      <item name="encodepic" href="encodepic.html" />
+      <item name="unpackwlf" href="unpackwlf.html" />
+      <item name="packwlf" href="packwlf.html" />
+      <item name="unpackcpa" href="unpackcpa.html" />
+      <item name="packcpa" href="packcpa.html" />
+      <item name="unpackhtds" href="unpackhtds.html" />
+      <item name="packhtds" href="packhtds.html" />
+      <item name="fixwloffsets" href="fixwloffsets.html" />
     </menu>
     
     ${reports}

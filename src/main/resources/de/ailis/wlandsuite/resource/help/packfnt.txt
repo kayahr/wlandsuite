@@ -1,0 +1,18 @@
+Usage: packfnt [OPTION]... DIRECTORY [OUTPUT]
+Packs font characters into a FNT file.
+
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory which holds the
+font characters. This directory must contain images with files names like
+000.png, 001.png and so on.
+
+The easiest way to initialize a font character directory is using unpackfnt to
+unpack the original colorf.fnt file from the game.
+
+The second parameter specifies the filename of the FNT file to write. If
+the parameter is missing or is "-" then the output is written to stdout.
+
+Report bugs to Klaus Reimer <k@ailis.de>

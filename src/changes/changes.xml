@@ -5,11 +5,17 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
-<!--     <release version="1.1.0" date="2006-06-26" desc="Minor update">
+    <release version="1.1.0" date="2006-07-20" desc="Minor update">
       <action dev="k" type="add">
-        PHP4 compatible serializing support for Serializable objects (Using Reflection API)
+        Added read and write support for CPA files (Without animations)
       </action>
-    </release>-->
+      <action dev="k" type="add">
+        Added read and write support for HTDS (tile set) files
+      </action>
+      <action dev="k" type="add">
+        Added fixwloffsets program to fix the MSQ offsets in wl.exe
+      </action>
+    </release>
     <release version="1.0.0" date="2006-07-12" desc="Initial release">
     </release>
   </body>
