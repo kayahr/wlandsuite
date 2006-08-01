@@ -1,0 +1,43 @@
+unpackpics
+
+  Unpacks all encounter animations of a allpics file into a directory.
+
+  The first parameter must be the name of the directory in which the animations
+  should be unpacked. The program creates the necessary directory structure
+  automatically.
+
+  The second parameter specifies the filename of the PICS file to read. If
+  the parameter is missing or is "-" then the input is read from stdin.
+  
+
+* Usage  
+  
+---
+unpackpics [OPTION]... DIRECTORY [INPUT]
+---
+  
+* Parameters
+
+---
+-W, --width    The animation picture width (Default: 96)
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command unpacks the allpics1 file into a temporary directory.
+  
+---
+unpackpics c:\pics1 c:\wland\allpics1
+---
+
+  The program creates the c:\pics1 directory and creates numbered sub directories
+  for each animation starting with 000. Each animation directory contains the
+  base frame in 000.png and contains numbered sub directories for each 
+  animation frame set starting with 000. Each animation frame set directory
+  contains the numbered frame pictures starting with 001.png and also contains
+  an animation.txt file which contains on each line the delays and frame number
+  to display. So this animation.txt files defines in which order and how fast
+  the animation is shown.

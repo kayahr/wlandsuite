@@ -24,7 +24,7 @@ The second parameter specifies the filename of the PICS file to write. If
 the parameter is missing or is "-" then the output is written to stdout.
 
 Please note that you must run the fixwloffsets program after you have modified
-the tileset files of wasteland because the MSQ offsets in the allpics files
+the allpics files of wasteland because the MSQ offsets in the allpics files
 are now most likely different to the original offsets hardcoded in the wl.exe
 file.
 

@@ -9,36 +9,32 @@ Download
 
 * Binaries
 
-  If you are using Windows then you may want to download the ZIP distribution
-  because it's most likely that your Operating System can unpack ZIP files
-  without any third-party software:
-
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-bin.zip}wlandsuite-1.1.0-bin.zip}}
+  * For Windows (with batch files): {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.1.0/wlandsuite-1.1.0-win-bin.zip}wlandsuite-1.1.0-win-bin.zip}}
   
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-bin.zip}wlandsuite-1.0.0-bin.zip}}
+  * For Unix (with shell scripts): {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.1.0/wlandsuite-1.1.0-unix-bin.tar.bz2}wlandsuite-1.1.0-unix-bin.tar.bz2}}
   
-  []
-  
-  If you are using Linux or an other Unix-compatible OS then you are advised
-  to download the tar.bz2 archive instead:
-
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-bin.tar.bz2}wlandsuite-1.1.0-bin.tar.bz2}}
-  
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-bin.tar.bz2}wlandsuite-1.0.0-bin.tar.bz2}}
-
   []
  
 * Sources
 
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-src.zip}wlandsuite-1.1.0-src.zip}}
+  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.1.0/wlandsuite-1.1.0-src.zip}wlandsuite-1.1.0-src.zip}}
     
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-src.tar.bz2}wlandsuite-1.1.0-src.tar.bz2}}
-    
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-src.zip}wlandsuite-1.0.0-src.zip}}
-    
-  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-src.tar.bz2}wlandsuite-1.0.0-src.tar.bz2}}
+  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.1.0/wlandsuite-1.1.0-src.tar.bz2}wlandsuite-1.1.0-src.tar.bz2}}
     
   []
   
   Sources are also available in the {{{source-repository.html}source repository}}.
   
+* Archive
+
+  Old versions are always available here:
+    
+  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-bin.zip}wlandsuite-1.0.0-bin.zip}}
+
+  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-bin.tar.bz2}wlandsuite-1.0.0-bin.tar.bz2}}
+
+  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-src.zip}wlandsuite-1.0.0-src.zip}}
+    
+  * {{{http://www.ailis.de/~k/software/maven2/de/ailis/wlandsuite/wlandsuite/1.0.0/wlandsuite-1.0.0-src.tar.bz2}wlandsuite-1.0.0-src.tar.bz2}}
+    
+  []  

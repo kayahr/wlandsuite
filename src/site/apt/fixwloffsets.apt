@@ -12,6 +12,13 @@ fixwloffsets
   fit into their space in the data segement. Maybe they overwrite other data and
   this may cause crashes and other strange behaviours.
   
+  fixwloffsets assumes that the wl.exe is already unpacked with an EXE 
+  unpacker.
+  
+  IMPORTANT! Looks like the results of different EXE unpackers are not always
+  the same. fixwloffsets works fine with the result of the unpacker 
+  {{{contrib/iup067}IUP (Intelligent EXE UnPacker) version 0.6.7}}.
+  
 
 * Usage  
   

@@ -9,29 +9,18 @@ What is the Wasteland Suite?
   The Wasteland Suite is written in Java and therefore is working an all
   platforms supported by Java.
   
-  Up to now the Wasteland Suite implements the following functionality:
+  Up to now the Wasteland Suite can read and write PIC, WLF, CPA, HTDS, PICS,
+  CURS and FNT data. It also provides easy to use classes for reading and
+  writing vertical xor and huffman streams. See the {{{apidocs/}API documentation}}
+  for more details.
       
-    * Reading/Writing pic files and streams.
-
-    * Unpacking/Packing WLF bit mask files and streams
-    
-    * Unpacking/Packing CPA files and streams.
-
-    * Unpacking/Packing htds (tile set) files and streams.
-
-    * Encoding/Decoding data with vertical xor scheme.
-
-    * Compressing/Uncompressing data with Huffman encoding.
-    
-    []
-    
   The suite contains the following command line programs:
    
     * {{{decodepic.html}decodepic}} (Converts a pic file to a standard image format file)
     
     * {{{encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
 
-    * {{{unpackwlf.html}unpackwlf}} (Unpacks a WKF file to a directory)
+    * {{{unpackwlf.html}unpackwlf}} (Unpacks a WLF file to a directory)
 
     * {{{packwlf.html}packwlf}} (Packs the bit masks from a directory into a WLF file)
     
@@ -39,11 +28,23 @@ What is the Wasteland Suite?
     
     * {{{packcpa.html}packcpa}} (Packs the animation from a directory into a CPA file)
 
-    * {{{unpackhtds.html}unpackhtds}} (Unpacks a allhtds (tile set) file to a directory)
+    * {{{unpackhtds.html}unpackhtds}} (Unpacks tilesets from an allhtds file to a directory)
     
-    * {{{packhtds.html}packhtds}} (Packs the tile sets from a directory into a allhtds file)
+    * {{{packhtds.html}packhtds}} (Packs tilesets from a directory into a allhtds file)
+
+    * {{{unpackpics.html}unpackpics}} (Unpacks encounter animations from an allpics file to a directory)
     
-    * {{{fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets in the wl.exe file)
+    * {{{packpics.html}packpics}} (Packs encounter animations from a directory into a allpics file)
+
+    * {{{unpackcurs.html}unpackcurs}} (Unpacks cursors from a curs file to a directory)
+    
+    * {{{packcurs.html}packcurs}} (Packs cursors from a directory into a curs file)
+
+    * {{{unpackfnt.html}unpackfnt}} (Unpacks font characters from a fnt file to a directory)
+    
+    * {{{packfnt.html}packfnt}} (Packs font characters from a directory into a fnt file)
+    
+    * {{{fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets for tilesets and encounter animations in the wl.exe file)
     
     []
     

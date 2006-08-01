@@ -39,13 +39,13 @@ packhtds [OPTION]... DIRECTORY [OUTPUT]
 
 * Example
 
-  Let's assume you have unpacked the allhtds2 file into c:\tiles1 and
+  Let's assume you have unpacked the allhtds2 file into c:\tiles2 and
   you have modified the tiles {{{images/18.png}18.png}} and {{{images/71.png}71.png}}
   (which draws the nuke symbol on the roof of the Mushroom Cloud Temple) of tile set bank 2. To
   build a custom allhtds2 file with these changes just run these commands:
   
 ---
-packhtds -f 1 c:\tiles1 c:\wland\allhtds1
+packhtds c:\tiles2 c:\wland\allhtds2
 fixwloffsets c:\wland
 ---
 

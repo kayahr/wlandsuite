@@ -1,8 +1,7 @@
 <assembly>
-  <id>bin</id>
+  <id>win-bin</id>
   <formats>
     <format>zip</format>
-    <format>tar.bz2</format>
   </formats>
   <fileSets>
     <fileSet>
@@ -10,15 +9,8 @@
         <include>LICENSE.txt</include>
         <include>README.txt</include>
       </includes>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/scripts</directory>
-      <outputDirectory>/</outputDirectory>
-      <excludes>
-        <exclude>*.bat</exclude>
-      </excludes>
-      <fileMode>0755</fileMode>
-      <lineEnding>unix</lineEnding>
+      <fileMode>0644</fileMode>
+      <lineEnding>dos</lineEnding>
     </fileSet>
     <fileSet>
       <directory>src/main/scripts</directory>
