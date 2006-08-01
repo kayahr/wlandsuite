@@ -33,19 +33,16 @@ import javax.imageio.ImageIO;
 
 
 /**
- * An EGA image.
+ * An black/white image.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class EgaImage extends PaletteImage
+public class BwImage extends PaletteImage
 {
     /** The color palette */
-    private static final int palette[] = { 0xff000000, 0xff0000aa, 0xff00aa00, 0xff00aaaa,
-        0xffaa0000, 0xffaa00aa, 0xffaa5500, 0xffaaaaaa, 0xff555555,
-        0xff5555ff, 0xff55ff55, 0xff55ffff, 0xffff5555, 0xffff55ff,
-        0xffffff55, 0xffffffff }; 
+    private static final int palette[] = { 0xff000000, 0xffffffff }; 
 
 
     /**
@@ -57,7 +54,7 @@ public class EgaImage extends PaletteImage
      *            The picture height
      */
 
-    public EgaImage(int width, int height)
+    public BwImage(int width, int height)
     {
         super(width, height, TYPE_BYTE_BINARY, new IndexColorModel(4,
             palette.length, palette, 0, false, -1, DataBuffer.TYPE_BYTE));
@@ -73,7 +70,7 @@ public class EgaImage extends PaletteImage
      *            The normal buffered image
      */
 
-    public EgaImage(BufferedImage image)
+    public BwImage(BufferedImage image)
     {
         this(image.getWidth(), image.getHeight());
         createGraphics().drawImage(image, 0, 0, null);
@@ -89,7 +86,7 @@ public class EgaImage extends PaletteImage
      * @throws IOException
      */
 
-    public static EgaImage read(InputStream stream) throws IOException
+    public static BwImage read(InputStream stream) throws IOException
     {
         BufferedImage image;
 
@@ -98,7 +95,7 @@ public class EgaImage extends PaletteImage
         {
             throw new IOException("Unable to read image from stream");
         }
-        return new EgaImage(image);
+        return new BwImage(image);
     }
 
 

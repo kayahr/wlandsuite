@@ -24,8 +24,6 @@
 package de.ailis.wlandsuite.wlf;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.IndexColorModel;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -35,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import de.ailis.wlandsuite.image.BwImage;
+
 
 /**
  * WLF mask.
@@ -43,12 +43,8 @@ import java.io.OutputStream;
  * @version $Revision$
  */
 
-public class WlfMask extends BufferedImage implements Cloneable
+public class WlfMask extends BwImage implements Cloneable
 {
-    /** Black & White color palette */
-    public static final int palette[] = { 0xff000000, 0xffffffff };
-
-
     /**
      * Constructor
      * 
@@ -60,8 +56,7 @@ public class WlfMask extends BufferedImage implements Cloneable
 
     public WlfMask(int width, int height)
     {
-        super(width, height, TYPE_BYTE_BINARY, new IndexColorModel(1,
-            palette.length, palette, 0, false, -1, DataBuffer.TYPE_BYTE));
+        super(width, height);
     }
 
 
@@ -76,63 +71,8 @@ public class WlfMask extends BufferedImage implements Cloneable
 
     public WlfMask(BufferedImage image)
     {
-        this(image.getWidth(), image.getHeight());
-        createGraphics().drawImage(image, 0, 0, null);
-    }
-
-
-    /**
-     * Returns the palette index for the specified color. Returns -1 if the
-     * color was not found in the palette.
-     * 
-     * @param color
-     *            The color
-     * @return The palette index
-     */
-
-    private int getPaletteIndex(int color)
-    {
-        for (int i = 0; i < palette.length; i++)
-        {
-            if (palette[i] == color) return i;
-        }
-        return -1;
-    }
-    
-
-    /**
-     * Sets a pixel. The difference to setRGB is that the color is the black and
-     * white palette index (0 or 1) and not the RGB value.
-     * 
-     * @param x
-     *            The x coordinate
-     * @param y
-     *            The y coordinate
-     * @param color
-     *            The color index (0 or 1)
-     */
-
-    public void setPixel(int x, int y, int color)
-    {
-        setRGB(x, y, palette[color]);
-    }
-
-
-    /**
-     * Returns a pixel color. The difference to getRGB is that the color is the
-     * palette index (0 or 1) and not the RGB value.
-     * 
-     * @param x
-     *            The x coordinate
-     * @param y
-     *            The y coordinate
-     * @return The color index (0 or 1) of the pixel
-     */
-
-    public int getPixel(int x, int y)
-    {
-        return getPaletteIndex(getRGB(x, y));
-    }
+        super(image);
+    }    
 
 
     /**

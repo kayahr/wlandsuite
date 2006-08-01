@@ -5,12 +5,21 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
-    <release version="1.1.0" date="2006-07-20" desc="Minor update">
+    <release version="1.1.0" date="2006-08-01" desc="Minor update">
       <action dev="k" type="add">
-        Added read and write support for CPA files (Without animations)
+        Added read and write support for CPA files
       </action>
       <action dev="k" type="add">
-        Added read and write support for HTDS (tile set) files
+        Added read and write support for HTDS (tilesets) files
+      </action>
+      <action dev="k" type="add">
+        Added read and write support for PICS files (encounter animations) files
+      </action>
+      <action dev="k" type="add">
+        Added read and write support for curs file
+      </action>
+      <action dev="k" type="add">
+        Added read and write support for colorf.fnt file
       </action>
       <action dev="k" type="add">
         Added fixwloffsets program to fix the MSQ offsets in wl.exe

@@ -355,13 +355,10 @@ public class Cpa implements Serializable
                             {
                                 changed = true;
                             }
-                            if (last != null)
+                            if ((last != null) && ((last.getPixel(x + i * 2, y) != p1)
+                                || (last.getPixel(x + i * 2 + 1, y) != p2)))
                             {
-                                if ((last.getPixel(x + i * 2, y) != p1)
-                                    || (last.getPixel(x + i * 2 + 1, y) != p2))
-                                {
-                                    changed = true;
-                                }
+                                changed = true;
                             }
 
                             bytes[i] = (byte) ((p1 << 4) | p2);

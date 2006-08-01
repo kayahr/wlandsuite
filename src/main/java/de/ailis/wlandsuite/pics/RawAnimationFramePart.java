@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import de.ailis.wlandsuite.pic.Pic;
 
 
@@ -197,6 +200,18 @@ public class RawAnimationFramePart
 
 
     /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(17, 37).append(this.offset)
+            .append(this.diff).toHashCode();
+    }
+
+
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
 
@@ -205,29 +220,17 @@ public class RawAnimationFramePart
     {
         RawAnimationFramePart other;
 
-        try
-        {
-            other = (RawAnimationFramePart) o;
-        }
-        catch (ClassCastException e)
+        if (o instanceof RawAnimationFramePart == false)
         {
             return false;
         }
-
-        if ((this.diff.length != other.diff.length)
-            || (this.offset != other.offset))
+        if (this == o)
         {
-            return false;
+            return true;
         }
-
-        for (int i = 0, max = this.diff.length; i < max; i++)
-        {
-            if (this.diff[i] != other.diff[i])
-            {
-                return false;
-            }
-        }
-        return true;
+        other = (RawAnimationFramePart) o;
+        return new EqualsBuilder().append(this.offset, other.offset).append(
+            this.diff, other.diff).isEquals();
     }
 
 
@@ -243,7 +246,7 @@ public class RawAnimationFramePart
     public boolean isMergable(RawAnimationFramePart other)
     {
         int size;
-        
+
         size = other.offset - this.offset + other.diff.length;
         if (size > 16)
         {
@@ -271,7 +274,7 @@ public class RawAnimationFramePart
         int vorher, nachher;
 
         vorher = this.diff.length + 2 + other.diff.length + 2;
-        
+
         nulls = other.offset - this.offset - this.diff.length;
         newDiff = new int[nulls + this.diff.length + other.diff.length];
         for (int i = 0; i < this.diff.length; i++)
@@ -287,7 +290,7 @@ public class RawAnimationFramePart
             newDiff[this.diff.length + nulls + i] = other.diff[i];
         }
         this.diff = newDiff;
-        
+
         nachher = this.diff.length + 2;
         if (nachher >= vorher)
         {

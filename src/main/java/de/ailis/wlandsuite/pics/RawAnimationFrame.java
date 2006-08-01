@@ -29,6 +29,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import de.ailis.wlandsuite.pic.Pic;
 
 
@@ -142,6 +145,17 @@ public class RawAnimationFrame
 
 
     /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(17, 37).append(this.parts).toHashCode();
+    }
+
+
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
 
@@ -150,27 +164,16 @@ public class RawAnimationFrame
     {
         RawAnimationFrame other;
 
-        try
-        {
-            other = (RawAnimationFrame) o;
-        }
-        catch (ClassCastException e)
+        if (o instanceof RawAnimationFrame == false)
         {
             return false;
         }
-
-        if (this.parts.size() != other.parts.size())
+        if (this == o)
         {
-            return false;
+            return true;
         }
-
-        for (int i = 0, max = this.parts.size(); i < max; i++)
-        {
-            if (!this.parts.get(i).equals(other.parts.get(i)))
-            {
-                return false;
-            }
-        }
-        return true;
+        other = (RawAnimationFrame) o;
+        return new EqualsBuilder().append(
+            this.parts, other.parts).isEquals();
     }
 }
