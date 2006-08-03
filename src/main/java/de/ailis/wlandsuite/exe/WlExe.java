@@ -44,6 +44,9 @@ public class WlExe
     /** The random access to wl.exe */
     private RandomAccessFile file;
 
+    /** The offset of seg002 in the EXE file */
+    private int seg2Offset;
+
 
     /**
      * Constructor. If you create this object then you must call the close()
@@ -56,12 +59,31 @@ public class WlExe
 
     public WlExe(File file) throws IOException
     {
-        if (file.length() != 169488 && file.length() != 169824)
+        this.file = new RandomAccessFile(file, "rw");
+        scan();
+    }
+
+
+    /**
+     * Scans the EXE to find the segments and validate if the EXE could safely
+     * be read.
+     * 
+     * @throws IOException
+     */
+
+    private void scan() throws IOException
+    {
+        byte[] bytes;
+
+        this.seg2Offset = (int) (this.file.length() - 116544);
+        this.file.seek(this.seg2Offset + 56941);
+        bytes = new byte[36];
+        this.file.read(bytes);
+        if (!new String(bytes).equals("Your life has ended in The Wasteland"))
         {
             throw new IOException(
-                "wl.exe is not 169488 bytes long. Maybe it's still packed?");
+                "Could not find segment 002 in EXE file. Maybe the EXE file is not unpacked or an unknown EXE Unpacker was used");
         }
-        this.file = new RandomAccessFile(file, "rw");
     }
 
 
@@ -89,7 +111,7 @@ public class WlExe
         List<Integer> offsets;
 
         offsets = new ArrayList<Integer>(4);
-        this.file.seek(0x18ccc);
+        this.file.seek(this.seg2Offset + 48636);
         offsets.add(Integer.valueOf(readOffset()));
         offsets.add(Integer.valueOf(readOffset()));
         offsets.add(Integer.valueOf(readOffset()));
@@ -113,7 +135,7 @@ public class WlExe
             throw new IOException("HTDS1 needs 4 offsets but tried to write "
                 + offsets.size() + " offsets");
         }
-        this.file.seek(0x18ccc);
+        this.file.seek(this.seg2Offset + 48636);
         for (Integer offset: offsets)
         {
             writeOffset(offset.intValue());
@@ -133,7 +155,7 @@ public class WlExe
         List<Integer> offsets;
 
         offsets = new ArrayList<Integer>(5);
-        this.file.seek(0x18cdc);
+        this.file.seek(this.seg2Offset + 48652);
         offsets.add(Integer.valueOf(readOffset() - 0x8603));
         offsets.add(Integer.valueOf(readOffset() - 0x8603));
         offsets.add(Integer.valueOf(readOffset() - 0x8603));
@@ -158,7 +180,7 @@ public class WlExe
             throw new IOException("HTDS2 needs 5 offsets but tried to write "
                 + offsets.size() + " offsets");
         }
-        this.file.seek(0x18cdc);
+        this.file.seek(this.seg2Offset + 48652);
         for (Integer offset: offsets)
         {
             writeOffset(offset.intValue() + 0x8603);
@@ -199,8 +221,8 @@ public class WlExe
         this.file.write((offset >>> 16) & 0xFF);
         this.file.write((offset >>> 24) & 0xFF);
     }
-    
-    
+
+
     /**
      * Returns the MSQ offsets of the first pics file.
      * 
@@ -214,15 +236,15 @@ public class WlExe
         int offset;
 
         offsets = new ArrayList<Integer>(33);
-        this.file.seek(0x18960);
+        this.file.seek(this.seg2Offset + 47760);
         for (int i = 0; i < 34; i++)
         {
             offset = readOffset();
-            
-            // Ignore the 26th offset. It's always the same as the 25th. 
+
+            // Ignore the 26th offset. It's always the same as the 25th.
             // Bug in the game?
             if (i == 26) continue;
-            
+
             offsets.add(Integer.valueOf(offset));
         }
         return offsets;
@@ -240,17 +262,17 @@ public class WlExe
     public void setPics1Offsets(List<Integer> offsets) throws IOException
     {
         int index;
-        
+
         if (offsets.size() != 33)
         {
             throw new IOException("PICS1 needs 33 offsets but tried to write "
                 + offsets.size() + " offsets");
         }
-        this.file.seek(0x18960);
+        this.file.seek(this.seg2Offset + 47760);
         index = 0;
         for (Integer offset: offsets)
         {
-            // Write the 25th offset twice. Bug in the game? 
+            // Write the 25th offset twice. Bug in the game?
             if (index == 25)
             {
                 writeOffset(offset.intValue());
@@ -259,8 +281,8 @@ public class WlExe
             index++;
         }
     }
-    
-    
+
+
     /**
      * Returns the MSQ offsets of the second pics file.
      * 
@@ -273,7 +295,7 @@ public class WlExe
         List<Integer> offsets;
 
         offsets = new ArrayList<Integer>(49);
-        this.file.seek(0x189e8);
+        this.file.seek(this.seg2Offset + 47896);
         for (int i = 0; i < 49; i++)
         {
             offsets.add(Integer.valueOf(readOffset()));
@@ -297,7 +319,7 @@ public class WlExe
             throw new IOException("PICS2 needs 49 offsets but tried to write "
                 + offsets.size() + " offsets");
         }
-        this.file.seek(0x189e8);
+        this.file.seek(this.seg2Offset + 47896);
         for (Integer offset: offsets)
         {
             writeOffset(offset.intValue());
