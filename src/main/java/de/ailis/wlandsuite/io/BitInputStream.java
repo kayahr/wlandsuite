@@ -30,8 +30,8 @@ import java.io.InputStream;
 /**
  * The bit input stream can be used to read a stream bit by bit. But it also
  * provides other useful methods like reading 16 or 32 bit values which also
- * works in a not-byte aligned stream. So if you read 4 bits then you are
- * still able to read the next 16 bits as a word.
+ * works in a not-byte aligned stream. So if you read 4 bits then you are still
+ * able to read the next 16 bits as a word.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
@@ -56,6 +56,23 @@ public abstract class BitInputStream extends InputStream
 
     public byte readBit() throws IOException
     {
+        return readBit(false);
+    }
+
+
+    /**
+     * Reads a bit from the input stream and returns it (0 or 1). Returns -1 if
+     * there is no more data on the stream. This method can read the bits in
+     * reversed order.
+     * 
+     * @param reverse
+     *            If bits should be read in reversed order
+     * @return The next bit in the stream
+     * @throws IOException
+     */
+
+    public byte readBit(boolean reverse) throws IOException
+    {
         if (this.currentBit > 6)
         {
             this.currentByte = read();
@@ -70,7 +87,46 @@ public abstract class BitInputStream extends InputStream
             this.currentBit++;
         }
 
-        return (byte) ((this.currentByte >> (7 - this.currentBit)) & 1);
+        if (reverse)
+        {
+            return (byte) ((this.currentByte >> (this.currentBit)) & 1);
+        }
+        else
+        {
+            return (byte) ((this.currentByte >> (7 - this.currentBit)) & 1);
+        }
+    }
+
+
+    /**
+     * Reads the specified number of bits. The bits can be read in reverse order
+     * if the reverse flag is set.
+     * 
+     * @param quantity
+     *            The number of bits to read
+     * @param reverse
+     *            If the bits should be read reversed.
+     * @return The bits
+     * @throws IOException
+     */
+
+    public int readBits(int quantity, boolean reverse) throws IOException
+    {
+        int value;
+
+        value = 0;
+        for (int i = 0; i < quantity; i++)
+        {
+            if (reverse)
+            {
+                value = value | (readBit(true) << i);
+            }
+            else
+            {
+                value = (value << 1) | readBit();
+            }
+        }
+        return value;
     }
 
 

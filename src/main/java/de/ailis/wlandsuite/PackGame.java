@@ -32,22 +32,20 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import de.ailis.wlandsuite.cli.PackProg;
-import de.ailis.wlandsuite.htds.Htds;
-import de.ailis.wlandsuite.htds.HtdsTileset;
-import de.ailis.wlandsuite.pic.Pic;
+import de.ailis.wlandsuite.game.Game;
+import de.ailis.wlandsuite.game.GameBlock;
+import de.ailis.wlandsuite.utils.FileUtils;
 
 
 /**
- * Packs tiles from a directory into a HTDS file.
+ * Packs a GAME file.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class PackHtds extends PackProg
+public class PackGame extends PackProg
 {
     /** The disk index */
     private byte disk = -1;
@@ -79,50 +77,34 @@ public class PackHtds extends PackProg
     @Override
     public void pack(File directory, OutputStream output) throws IOException
     {
-        Htds htds;
-        List<HtdsTileset> tilesets;
-        List<Pic> tiles;
-        int tilesetNo, tileNo;
-        File file;
-        File tilesetDir;
+        Game game;
+        List<GameBlock> blocks;
+        int blockNo;
+        File blockFile;
 
-        tilesets = new ArrayList<HtdsTileset>();
-        tilesetNo = 0;
+        blocks = new ArrayList<GameBlock>();
+        blockNo = 0;
         while (true)
         {
-            tileNo = 0;
-            tilesetDir = new File(String.format("%s%c%03d", new Object[] {
-                directory.getPath(), File.separatorChar, tilesetNo}));
-            if (!tilesetDir.exists())
+            blockFile = new File(String.format("%s%c%03d.dat", new Object[] {
+                directory.getPath(), File.separatorChar, blockNo}));
+            if (!blockFile.exists())
             {
                 break;
             }
-            tiles = new ArrayList<Pic>();
-            while (true)
-            {
-                file = new File(String.format("%s%c%03d.png", new Object[]
-                                                                         { 
-                    tilesetDir.getPath(), File.separatorChar, tileNo}));
-                if (!file.exists())
-                {
-                    break;
-                }
-                tiles.add(new Pic(ImageIO.read(file)));
-                tileNo++;
-            }
-            tilesets.add(new HtdsTileset(tiles));
-            tilesetNo++;
+            blocks.add(new GameBlock(FileUtils.readBytes(blockFile)));            
+            blockNo++;
         }
         
-        htds = new Htds(tilesets);
+        game = new Game(blocks);
         
         if (this.disk == -1)
         {
-            htds.write(output);
+            game.write(output, 0);
         }
         else
         {
-            htds.write(output, this.disk);
+            game.write(output, this.disk);
         }
     }
 
@@ -136,16 +118,16 @@ public class PackHtds extends PackProg
 
     public static void main(String[] args)
     {
-        PackHtds app;
+        PackGame app;
         LongOpt[] longOpts;
 
         longOpts = new LongOpt[1];
         longOpts[0] = new LongOpt("disk", LongOpt.REQUIRED_ARGUMENT,
             null, 'D');
 
-        app = new PackHtds();
-        app.setHelp("help/packhtds.txt");
-        app.setProgName("packhtds");
+        app = new PackGame();
+        app.setHelp("help/packgame.txt");
+        app.setProgName("packgame");
         app.setLongOpts(longOpts);
         app.start(args);
     }

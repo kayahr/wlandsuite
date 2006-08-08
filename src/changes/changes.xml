@@ -5,6 +5,12 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
+    <release version="1.2.0" date="2006-08-03" desc="Minor update">
+      <action dev="k" type="change">
+        Fixed fixwloffsets problems with different EXE files unpacked with
+        different EXE unpackers.
+      </action>
+    </release>
     <release version="1.1.0" date="2006-08-01" desc="Minor update">
       <action dev="k" type="add">
         Added read and write support for CPA files

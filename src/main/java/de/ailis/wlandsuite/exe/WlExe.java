@@ -325,4 +325,96 @@ public class WlExe
             writeOffset(offset.intValue());
         }
     }
+    
+    
+    /**
+     * Returns the map MSQ block offsets of GAME1
+     *
+     * @return The map MSQ block offsets
+     * @throws IOException
+     */
+    
+    public List<Integer> getMap1Offsets() throws IOException
+    {
+        List<Integer> offsets;
+        int offset;
+
+        offsets = new ArrayList<Integer>(20);
+        this.file.seek(this.seg2Offset + 0xbc7a);
+        for (int i = 0; i < 20; i++)
+        {
+            offset = readOffset();
+            offsets.add(Integer.valueOf(offset));
+        }
+        return offsets;        
+    }
+
+    
+    /**
+     * Returns the map MSQ block offsets of GAME2
+     *
+     * @return The map MSQ block offsets
+     * @throws IOException
+     */
+    
+    public List<Integer> getMap2Offsets() throws IOException
+    {
+        List<Integer> offsets;
+        int offset;
+
+        offsets = new ArrayList<Integer>(22);
+        this.file.seek(this.seg2Offset + 0xbcca);
+        for (int i = 0; i < 22; i++)
+        {
+            offset = readOffset();
+            offsets.add(Integer.valueOf(offset));
+        }
+        return offsets;        
+    }
+    
+    
+    /**
+     * Returns the map sizes of GAME1
+     *
+     * @return The map sizes
+     * @throws IOException
+     */
+    
+    public List<Integer> getMap1Sizes() throws IOException
+    {
+        List<Integer> sizes;
+        int size;
+
+        sizes = new ArrayList<Integer>(20);
+        this.file.seek(this.seg2Offset + 0xbf1c);
+        for (int i = 0; i < 20; i++)
+        {
+            size = this.file.read();
+            sizes.add(Integer.valueOf(size));
+        }
+        return sizes;        
+    }    
+    
+    
+    /**
+     * Returns the map sizes of GAME1
+     *
+     * @return The map sizes
+     * @throws IOException
+     */
+    
+    public List<Integer> getMap2Sizes() throws IOException
+    {
+        List<Integer> sizes;
+        int size;
+
+        sizes = new ArrayList<Integer>(22);
+        this.file.seek(this.seg2Offset + 0xbf30);
+        for (int i = 0; i < 22; i++)
+        {
+            size = this.file.read();
+            sizes.add(Integer.valueOf(size));
+        }
+        return sizes;        
+    }    
 }
