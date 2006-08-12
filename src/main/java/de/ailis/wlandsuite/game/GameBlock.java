@@ -29,6 +29,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import de.ailis.wlandsuite.game.blocks.MapBlock;
+import de.ailis.wlandsuite.game.blocks.SavegameBlock;
+import de.ailis.wlandsuite.game.blocks.ShopItemsBlock;
+import de.ailis.wlandsuite.game.parts.ActionClassMapPart;
+import de.ailis.wlandsuite.game.parts.ActionSelectorMapPart;
+import de.ailis.wlandsuite.game.parts.Part;
+import de.ailis.wlandsuite.game.parts.UnknownPart;
 
 
 /**
@@ -38,56 +56,82 @@ import java.util.List;
  * @version $Revision$
  */
 
-public class GameBlock
+public abstract class GameBlock
 {
-    /** The block bytes */
-    protected byte[] bytes;
-
     /** The block type */
     protected GameBlockType type;
 
-    /** The map size. Only when block type is "map" */
-    protected int mapSize;
+    /** The list of block parts */
+    protected SortedSet<Part> parts;
 
 
     /**
-     * Constructor
-     * 
-     * @param bytes
-     *            The block bytes
+     * Empty Constructor
      */
 
-    public GameBlock(byte[] bytes)
+    protected GameBlock()
     {
-        this.bytes = bytes;
-        this.type = getType(this.bytes);
-        if (this.type == GameBlockType.map)
-        {
-            this.mapSize = getMapSize(this.bytes);
-        }
-        else
-        {
-            this.mapSize = 0;
-        }
+        this.parts = new TreeSet<Part>();
     }
 
 
     /**
      * Constructor
      * 
-     * @param bytes
-     *            The block bytes
      * @param type
-     *            The block type
-     * @param mapSize
-     *            The map size
+     *            The game block type
      */
 
-    public GameBlock(byte[] bytes, GameBlockType type, int mapSize)
+    protected GameBlock(GameBlockType type)
     {
-        this.bytes = bytes;
+        this();
         this.type = type;
-        this.mapSize = mapSize;
+    }
+
+
+    /**
+     * Processes the children of an XML element
+     * 
+     * @param element
+     *            The XML element
+     */
+
+    @SuppressWarnings("unchecked")
+    protected void processChildren(Element element)
+    {
+        int offset;
+        String tagName;
+        Part part;
+        ActionClassMapPart actionClassMap = null;
+        
+        offset = 0;
+        for (Element child: (List<Element>) element.elements())
+        {
+            tagName = child.getName();
+
+            if (tagName.equals("unknown"))
+            {
+                part = new UnknownPart(offset, child);
+            }
+            else if (tagName.equals("actionClassMap"))
+            {                
+                part = new ActionClassMapPart(offset, child,
+                    ((MapBlock) this).getMapSize());
+                actionClassMap = (ActionClassMapPart) part;
+            }
+            else if (tagName.equals("actionSelectorMap"))
+            {
+                part = new ActionSelectorMapPart(offset, child,
+                    ((MapBlock) this).getMapSize(), actionClassMap);
+            }
+            else
+            {
+                throw new GameException("Unknown game part type: " + tagName);
+            }
+
+            this.parts.add(part);
+            offset += part.getSize();
+        }
     }
 
 
@@ -115,8 +159,6 @@ public class GameBlock
         int read;
         int checksum, endChecksum;
         GameBlockType type;
-        int mapSize = 0;
-        int offset;
         int encSize;
 
         // Read the raw block
@@ -143,25 +185,20 @@ public class GameBlock
         // encrypted block and read the data again
         if (type == GameBlockType.map)
         {
-            // Get map size, calculate string offset position and use it
-            // as the size of the encrypted block
-            mapSize = getMapSize(bytes);
-            offset = mapSize * mapSize * 3 / 2;
-            encSize = ((bytes[offset] & 0xff) | ((bytes[offset + 1] & 0xff) << 8));
-
-            stream = new ByteArrayInputStream(rawBytes);
-
-            // Read the encrypted part of the data
-            gameStream = new RotatingXorInputStream(stream);
-            gameStream.read(bytes, 0, encSize);
-
-            // Read the unecrypted part of the data
-            stream.read(bytes, encSize, bytes.length - encSize);
+            encSize = MapBlock.getEncSize(bytes);
         }
         else if (type == GameBlockType.savegame)
         {
-            encSize = 0x800;
+            encSize = SavegameBlock.getEncSize();
+        }
+        else
+        {
+            encSize = bytes.length;
+        }
 
+        // Decrypt data again if not all data is encrypted
+        if (encSize < bytes.length)
+        {
             stream = new ByteArrayInputStream(rawBytes);
 
             // Read the encrypted part of the data
@@ -175,13 +212,54 @@ public class GameBlock
         // Check the checksum
         checksum = gameStream.getChecksum();
         endChecksum = gameStream.getEndChecksum();
-        System.out.println(endChecksum);
         if (endChecksum != checksum)
         {
             throw new IOException("Checksum error! Expected " + endChecksum
                 + " but got " + checksum);
         }
-        return new GameBlock(bytes, type, mapSize);
+
+        return createGameBlock(bytes, type);
+    }
+
+
+    /**
+     * Creates a new game block.
+     * 
+     * @param bytes
+     *            The block data
+     * @return The game block
+     */
+
+    public static GameBlock createGameBlock(byte[] bytes)
+    {
+        return createGameBlock(bytes, getType(bytes));
+    }
+
+
+    /**
+     * Creates a new game block.
+     * 
+     * @param bytes
+     *            The block data
+     * @param type
+     *            The block type
+     * @return The game block
+     */
+
+    private static GameBlock createGameBlock(byte[] bytes, GameBlockType type)
+    {
+        if (type == GameBlockType.map)
+        {
+            return new MapBlock(bytes);
+        }
+        else if (type == GameBlockType.savegame)
+        {
+            return new SavegameBlock(bytes);
+        }
+        else
+        {
+            return new ShopItemsBlock(bytes);
+        }
     }
 
 
@@ -193,44 +271,7 @@ public class GameBlock
      * @throws IOException
      */
 
-    public void write(OutputStream stream) throws IOException
-    {
-        OutputStream gameStream;
-        int encSize;
-        int mapSize;
-        int offset;
-
-        // Determine the size of the encrypted part of the block
-        if (this.type == GameBlockType.map)
-        {
-            // Only the stuff before the strings is encrypted. So we get
-            // the string offset and use it as the size.
-            mapSize = this.mapSize;
-            offset = mapSize * mapSize * 3 / 2;
-            encSize = ((this.bytes[offset] & 0xff) | ((this.bytes[offset + 1] & 0xff) << 8));
-        }
-        else if (this.type == GameBlockType.savegame)
-        {
-            // Only the first 0x800 bytes of the savegame block is encoded
-            encSize = 0x800;
-        }
-        else
-        {
-            // Other blocks are completely encrypted
-            encSize = this.bytes.length;
-        }
-
-        // Write the encrypted data
-        gameStream = new RotatingXorOutputStream(stream);
-        gameStream.write(this.bytes, 0, encSize);
-        gameStream.flush();
-
-        // Write the unencrypted data
-        if (encSize < this.bytes.length)
-        {
-            stream.write(this.bytes, encSize, this.bytes.length - encSize);
-        }
-    }
+    public abstract void write(OutputStream stream) throws IOException;
 
 
     /**
@@ -264,6 +305,7 @@ public class GameBlock
         return false;
     }
 
+
     /**
      * Checks if the specified byte array represents an unknown block which is
      * one of the blocks following the save game block. Purpose of these blocks
@@ -274,7 +316,7 @@ public class GameBlock
      * @return If it's an unknwon block or not
      */
 
-    private static boolean isUnknown(byte[] bytes)
+    private static boolean isShopItems(byte[] bytes)
     {
         if (bytes.length == 760)
         {
@@ -302,9 +344,9 @@ public class GameBlock
         {
             return GameBlockType.savegame;
         }
-        else if (isUnknown(bytes))
+        else if (isShopItems(bytes))
         {
-            return GameBlockType.unknown;
+            return GameBlockType.shopItems;
         }
         else
         {
@@ -314,70 +356,114 @@ public class GameBlock
 
 
     /**
-     * Returns the map size. This method does not look for the map size in the
-     * EXE file. Instead it tries to "guess" it by looking at some
-     * characteristics of the byte array. This is not totaly safe but it works
-     * fine.
-     * 
-     * If the map size could not be determined then a GameException is thrown.
+     * Creates unknown parts to cover all the bytes which are not covered by
+     * known parts.
      * 
      * @param bytes
-     *            The bytes of the map block
-     * @return The map size
-     * @throws GameException
-     *             If size could not be determined
+     *            The bytes of the block
      */
 
-    private static int getMapSize(byte[] bytes) throws GameException
+    protected void createUnknownParts(byte[] bytes)
     {
-        int start;
-        int offset;
+        int start, end;
 
-        // Cycle over possible map sizes
-        size: for (int size = 32; size <= 64; size *= 2)
+        start = 0;
+        for (Part part: this.parts)
         {
-            // Calculate start of central directory
-            start = size * size * 3 / 2;
-
-            // Read 19 offsets of the central directory and validate them
-            for (int i = 0; i < 19; i++)
+            end = part.getOffset();
+            if (start != end)
             {
-                // Read offset
-                try
-                {
-                    offset = (bytes[start + i * 2] & 0xff)
-                        | ((bytes[start + i * 2 + 1] & 0xff) << 8);
-                }
-                catch (IndexOutOfBoundsException e)
-                {
-                    // Out of bounds? Size must be wrong
-                    continue size;
-                }
-
-                // Validate offset
-                if (offset != 0 && (offset < start || offset > bytes.length))
-                {
-                    continue size;
-                }
+                this.parts.add(new UnknownPart(bytes, start, end - start));
             }
-
-            // Everything looks fine. This size is correct
-            return size;
+            start = end + part.getSize();
         }
-
-        // Found no valid size? Strange. Throw exception
-        throw new GameException("Unable to determine map size");
+        end = bytes.length;
+        this.parts.add(new UnknownPart(bytes, start, end - start));
     }
 
 
     /**
-     * Returns the block bytes.
+     * Converts the block into XML
      * 
-     * @return The block bytes
+     * @return The block as XML code
      */
 
-    public byte[] getBytes()
+    public abstract Element toXml();
+
+
+    /**
+     * Writes the block to a stream as XML
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void writeXml(OutputStream stream) throws IOException
     {
-        return this.bytes;
+        XMLWriter writer;
+        Document document;
+        OutputFormat format;
+
+        format = OutputFormat.createPrettyPrint();
+        format.setTrimText(false);
+
+        writer = new XMLWriter(stream, format);
+        try
+        {
+            document = DocumentHelper.createDocument(toXml());
+            writer.write(document);
+        }
+        finally
+        {
+            writer.close();
+        }
+    }
+
+
+    /**
+     * Parses a gameblock from an XML stream.
+     * 
+     * @param stream
+     *            The XML stream
+     * @return The game block
+     * @throws IOException
+     */
+
+    public static GameBlock readXml(InputStream stream) throws IOException
+    {
+        SAXReader reader;
+        Document document;
+        Element element;
+        String tagName;
+
+        reader = new SAXReader();
+        try
+        {
+            document = reader.read(stream);
+            element = document.getRootElement();
+            tagName = element.getName();
+            if (tagName.equals("map"))
+            {
+                return new MapBlock(element);
+            }
+            else if (tagName.equals("savegame"))
+            {
+                return new SavegameBlock(element);
+            }
+            else if (tagName.equals("shopitems"))
+            {
+                return new ShopItemsBlock(element);
+            }
+            else
+            {
+                throw new GameException("Unknown game block type: " + tagName);
+            }
+        }
+        catch (DocumentException e)
+        {
+            throw new IOException("Unable to parse XML gam block: "
+                + e.getMessage());
+        }
     }
 }

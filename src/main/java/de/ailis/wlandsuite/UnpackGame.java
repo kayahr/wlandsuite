@@ -26,14 +26,15 @@ package de.ailis.wlandsuite;
 import gnu.getopt.Getopt;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import de.ailis.wlandsuite.cli.UnpackProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.GameBlock;
-import de.ailis.wlandsuite.utils.FileUtils;
 
 
 /**
@@ -94,9 +95,19 @@ public class UnpackGame extends UnpackProg
         blockNo = 0;
         for (GameBlock block: blocks)
         {
-            blockFile = new File(String.format("%s%c%03d.dat", new Object[] {
+            OutputStream stream;
+            
+            blockFile = new File(String.format("%s%c%03d.xml", new Object[] {
                 output, File.separatorChar, blockNo }));
-            FileUtils.writeBytes(blockFile, block.getBytes());
+            stream = new FileOutputStream(blockFile);
+            try
+            {
+                block.writeXml(stream);
+            }
+            finally
+            {
+                stream.close();
+            }
             blockNo++;
         }
     }

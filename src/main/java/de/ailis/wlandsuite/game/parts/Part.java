@@ -21,24 +21,57 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game;
+package de.ailis.wlandsuite.game.parts;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.dom4j.Element;
 
 
 /**
- * Game block type
- *
+ * Part
+ * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public enum GameBlockType
+public interface Part
 {
-    /** It's a map */
-    map,
-    
-    /** It's a savegame */
-    savegame,
-    
-    /** It's a shop items list */
-    shopItems
+    /**
+     * Returns the offset of the part in the game block.
+     * 
+     * @return The offset
+     */
+
+    public int getOffset();
+
+
+    /**
+     * Returns the size of the part.
+     * 
+     * @return The size
+     */
+
+    public int getSize();
+
+
+    /**
+     * Converts the game block part into a XML element.
+     * 
+     * @return The XML element
+     */
+
+    public Element toXml();
+
+
+    /**
+     * Writes the part to the specified output stream.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException 
+     */
+
+    public void write(OutputStream stream) throws IOException;
 }

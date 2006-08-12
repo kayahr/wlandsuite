@@ -96,8 +96,6 @@ public class RotatingXorOutputStream extends OutputStream
         this.origStream.write(endChecksum & 0xff);
         this.origStream.write(endChecksum >> 8);
         
-        System.out.println(endChecksum);
-
         // Calculate initial encryptor
         enc = (endChecksum & 0xff) ^ (endChecksum >> 8);
 

@@ -27,7 +27,9 @@ import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,6 @@ import java.util.List;
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.GameBlock;
-import de.ailis.wlandsuite.utils.FileUtils;
 
 
 /**
@@ -81,23 +82,32 @@ public class PackGame extends PackProg
         List<GameBlock> blocks;
         int blockNo;
         File blockFile;
+        InputStream stream;
 
         blocks = new ArrayList<GameBlock>();
         blockNo = 0;
         while (true)
         {
-            blockFile = new File(String.format("%s%c%03d.dat", new Object[] {
-                directory.getPath(), File.separatorChar, blockNo}));
+            blockFile = new File(String.format("%s%c%03d.xml", new Object[] {
+                directory.getPath(), File.separatorChar, blockNo }));
             if (!blockFile.exists())
             {
                 break;
             }
-            blocks.add(new GameBlock(FileUtils.readBytes(blockFile)));            
+            stream = new FileInputStream(blockFile);
+            try
+            {
+                blocks.add(GameBlock.readXml(stream));
+            }
+            finally
+            {
+                stream.close();
+            }
             blockNo++;
         }
-        
+
         game = new Game(blocks);
-        
+
         if (this.disk == -1)
         {
             game.write(output, 0);
@@ -122,8 +132,7 @@ public class PackGame extends PackProg
         LongOpt[] longOpts;
 
         longOpts = new LongOpt[1];
-        longOpts[0] = new LongOpt("disk", LongOpt.REQUIRED_ARGUMENT,
-            null, 'D');
+        longOpts[0] = new LongOpt("disk", LongOpt.REQUIRED_ARGUMENT, null, 'D');
 
         app = new PackGame();
         app.setHelp("help/packgame.txt");
