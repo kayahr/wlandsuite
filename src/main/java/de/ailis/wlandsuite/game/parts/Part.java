@@ -36,26 +36,8 @@ import org.dom4j.Element;
  * @version $Revision$
  */
 
-public interface Part
+public interface Part extends Comparable<Part>
 {
-    /**
-     * Returns the offset of the part in the game block.
-     * 
-     * @return The offset
-     */
-
-    public int getOffset();
-
-
-    /**
-     * Returns the size of the part.
-     * 
-     * @return The size
-     */
-
-    public int getSize();
-
-
     /**
      * Converts the game block part into a XML element.
      * 
@@ -70,8 +52,31 @@ public interface Part
      * 
      * @param stream
      *            The output stream
-     * @throws IOException 
+     * @throws IOException
      */
 
     public void write(OutputStream stream) throws IOException;
+
+
+    /**
+     * Returns the offset from which the part was read. This is only possible
+     * (and needed) if the part was read from a game file or is an unknown
+     * block (for which the offset is also stored in the XML file). Otherwise it
+     * will return -1.
+     * 
+     * @return The offset of the part or -1 if not available
+     */
+
+    public int getOffset();
+
+
+    /**
+     * Returns the size of the read part. This is only possible (and needed) if
+     * the part was read from a game file or is an unknown block (for which
+     * the size is also stored in the XML file). Otherwise it will return -1.
+     * 
+     * @return The size of the part or -1 if not available
+     */
+
+    public int getSize();
 }

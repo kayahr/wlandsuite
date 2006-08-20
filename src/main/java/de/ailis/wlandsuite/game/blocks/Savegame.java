@@ -23,50 +23,48 @@
 
 package de.ailis.wlandsuite.game.blocks;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.GameBlock;
 import de.ailis.wlandsuite.game.GameBlockType;
 import de.ailis.wlandsuite.game.RotatingXorOutputStream;
 import de.ailis.wlandsuite.game.parts.Part;
 
 
 /**
- * Shop items block
+ * Savegame block
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class ShopItemsBlock extends GameBlock
+public class Savegame extends AbstractGameBlock
 {
     /**
      * Constructor
      */
     
-    private ShopItemsBlock()
+    private Savegame()
     {
-        super(GameBlockType.shopItems);
+        super(GameBlockType.SAVEGAME);        
     }
     
     
     /**
-     * Builds a shopitems block from XML.
+     * Builds a savegame block from XML.
      * 
      * @param element
      *            The XML element
      */
 
     @SuppressWarnings("unchecked")
-    public ShopItemsBlock(Element element)
+    public Savegame(Element element)
     {
         this();
-        processChildren(element);        
+        processChildren(element);
     }
 
     
@@ -77,7 +75,7 @@ public class ShopItemsBlock extends GameBlock
      *            The block data
      */
 
-    public ShopItemsBlock(byte[] bytes)
+    public Savegame(byte[] bytes)
     {
         this();
         parse(bytes);
@@ -95,6 +93,18 @@ public class ShopItemsBlock extends GameBlock
     {
         createUnknownParts(bytes);
     }
+
+    
+    /**
+     * Returns the size of the encrypted part in the map block
+     *
+     * @return The size of the encrypted part
+     */
+
+    public static int getEncSize()
+    {
+        return 0x800;
+    }
     
 
     /**
@@ -105,38 +115,37 @@ public class ShopItemsBlock extends GameBlock
      * @throws IOException
      */
 
-    @Override
     public void write(OutputStream stream) throws IOException
     {
         OutputStream gameStream;
+        int encSize;
         byte[] bytes;
-        ByteArrayOutputStream byteStream;
         
-        // Create the byte array
-        byteStream = new ByteArrayOutputStream();
-        for (Part part: this.parts)
-        {
-            part.write(byteStream);
-        }
-        bytes = byteStream.toByteArray();
+        // Create the game block data
+        bytes = createBlockData();
+
+        // Only the first 0x800 bytes of the savegame block is encrypted
+        encSize = getEncSize();
 
         // Write the encrypted data
         gameStream = new RotatingXorOutputStream(stream);
-        gameStream.write(bytes);
+        gameStream.write(bytes, 0, encSize);
         gameStream.flush();
+
+        // Write the unencrypted data
+        stream.write(bytes, encSize, bytes.length - encSize);
     }
 
 
     /**
-     * @see de.ailis.wlandsuite.game.GameBlock#toXml()
+     * @see de.ailis.wlandsuite.game.blocks.AbstractGameBlock#toXml()
      */
     
-    @Override
     public Element toXml()
     {
         Element element;
         
-        element = DocumentHelper.createElement("shopitems");
+        element = DocumentHelper.createElement("savegame");
         for (Part part: this.parts)
         {
             element.add(part.toXml());

@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ailis.wlandsuite.game.blocks.GameBlock;
 import de.ailis.wlandsuite.utils.FileUtils;
 
 
@@ -81,10 +82,6 @@ public class Game
         int disk;
         boolean eof = false;
         
-        // TODO Remove me
-//        GameMap.read(stream);
-//        System.exit(0);
-        
         // Read the whole file into a byte array
         bytes = FileUtils.readBytes(stream);
 
@@ -116,7 +113,7 @@ public class Game
             }
 
             // Read MSQ block
-            block = GameBlock.read(byteStream, disk, blocks.size(), end - pos);
+            block = BlockFactory.read(byteStream, end - pos);
             blocks.add(block);
 
             // Check if end has been reached

@@ -35,8 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.ailis.wlandsuite.cli.PackProg;
+import de.ailis.wlandsuite.game.BlockFactory;
 import de.ailis.wlandsuite.game.Game;
-import de.ailis.wlandsuite.game.GameBlock;
+import de.ailis.wlandsuite.game.blocks.GameBlock;
 
 
 /**
@@ -97,7 +98,7 @@ public class PackGame extends PackProg
             stream = new FileInputStream(blockFile);
             try
             {
-                blocks.add(GameBlock.readXml(stream));
+                blocks.add(BlockFactory.readXml(stream));
             }
             finally
             {

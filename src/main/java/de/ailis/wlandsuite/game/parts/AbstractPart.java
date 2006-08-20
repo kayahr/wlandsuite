@@ -21,24 +21,66 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game;
+package de.ailis.wlandsuite.game.parts;
 
 
 /**
- * Game block type
- *
+ * The base class for all the parts implementing functionality which is common
+ * to all parts.
+ * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public enum GameBlockType
+public abstract class AbstractPart implements Part
 {
-    /** It's a map */
-    MAP,
-    
-    /** It's a savegame */
-    SAVEGAME,
-    
-    /** It's a shop items list */
-    SHOPITEMS
+    /** The part size (only available if part was read from game file) */
+    protected int size = -1;
+
+    /** The part offset (only available if part was read from game file) */
+    protected int offset = -1;
+
+
+    /**
+     * @see de.ailis.wlandsuite.game.parts.Part#getOffset()
+     */
+
+    public int getOffset()
+    {
+        return this.offset;
+    }
+
+    /**
+     * @see de.ailis.wlandsuite.game.parts.Part#getSize()
+     */
+
+    public int getSize()
+    {
+        return this.size;
+    }
+
+
+    /**
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * 
+     * @param other
+     *            The other part to compare with
+     * @return The compare result
+     */
+
+    public int compareTo(Part other)
+    {
+        if (this.offset < other.getOffset())
+        {
+            return -1;
+        }
+        else if (this.offset > other.getOffset())
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

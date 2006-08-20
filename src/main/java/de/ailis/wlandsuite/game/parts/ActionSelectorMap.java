@@ -35,29 +35,24 @@ import de.ailis.wlandsuite.game.GameException;
 
 
 /**
- * Action Selector Map part
+ * Action Selector Map
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class ActionSelectorMapPart extends AbstractPart
+public class ActionSelectorMap extends AbstractPart
 {
-    /** The map size */
-    private int mapSize;
-
     /** The action select map. First index is y, second is x */
     private int[][] map;
 
     /** The action class map */
-    private ActionClassMapPart actionClassMap;
+    private ActionClassMap actionClassMap;
 
 
     /**
      * Creates an action selector map part from XML.
      * 
-     * @param offset
-     *            The offset
      * @param element
      *            The XML element
      * @param mapSize
@@ -66,8 +61,8 @@ public class ActionSelectorMapPart extends AbstractPart
      *            The action class map
      */
 
-    public ActionSelectorMapPart(int offset, Element element, int mapSize,
-        ActionClassMapPart actionClassMap)
+    public ActionSelectorMap(Element element, int mapSize,
+        ActionClassMap actionClassMap)
     {
         this(mapSize, actionClassMap);
 
@@ -75,15 +70,6 @@ public class ActionSelectorMapPart extends AbstractPart
         String c;
         int i;
         int b;
-
-        // Validate the offset
-        if (offset != this.offset)
-        {
-            throw new GameException(String.format(
-                "Action selector map is at the wrong offset. Should "
-                    + "be at 0x%x but is at 0x%x", new Object[] { this.offset,
-                    offset }));
-        }
 
         data = element.getTextTrim();
         i = 0;
@@ -128,10 +114,8 @@ public class ActionSelectorMapPart extends AbstractPart
      *            The action class map
      */
 
-    public ActionSelectorMapPart(int mapSize, ActionClassMapPart actionClassMap)
+    public ActionSelectorMap(int mapSize, ActionClassMap actionClassMap)
     {
-        super(mapSize * mapSize / 2, mapSize * mapSize);
-        this.mapSize = mapSize;
         this.map = new int[mapSize][mapSize];
         this.actionClassMap = actionClassMap;
     }
@@ -148,25 +132,13 @@ public class ActionSelectorMapPart extends AbstractPart
      *            The action class map
      */
 
-    public ActionSelectorMapPart(byte[] bytes, int mapSize,
-        ActionClassMapPart actionClassMap)
+    public ActionSelectorMap(byte[] bytes, int mapSize,
+        ActionClassMap actionClassMap)
     {
         this(mapSize, actionClassMap);
-        parse(bytes, mapSize);
-    }
 
-
-    /**
-     * Parses the action selector map
-     * 
-     * @param bytes
-     *            The block bytes
-     * @param mapSize
-     *            The map size
-     */
-
-    private void parse(byte[] bytes, int mapSize)
-    {
+        this.offset = mapSize * mapSize / 2;
+        this.size = mapSize * mapSize;
         for (int y = 0; y < mapSize; y++)
         {
             for (int x = 0; x < mapSize; x++)
@@ -193,10 +165,10 @@ public class ActionSelectorMapPart extends AbstractPart
         writer = new PrintWriter(text);
 
         writer.println();
-        for (int y = 0; y < this.mapSize; y++)
+        for (int y = 0, yMax = this.map.length; y < yMax; y++)
         {
             writer.print("    ");
-            for (int x = 0; x < this.mapSize; x++)
+            for (int x = 0, xMax = this.map[y].length; x < xMax; x++)
             {
                 int b;
 
@@ -230,9 +202,9 @@ public class ActionSelectorMapPart extends AbstractPart
 
     public void write(OutputStream stream) throws IOException
     {
-        for (int y = 0; y < this.mapSize; y++)
+        for (int y = 0, yMax = this.map.length; y < yMax; y++)
         {
-            for (int x = 0; x < this.mapSize; x++)
+            for (int x = 0, xMax = this.map[y].length; x < xMax; x++)
             {
                 stream.write(this.map[y][x]);
             }

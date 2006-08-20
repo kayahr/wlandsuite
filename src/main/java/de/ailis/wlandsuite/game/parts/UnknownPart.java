@@ -49,33 +49,62 @@ public class UnknownPart extends AbstractPart
 
 
     /**
+     * Constructor
+     * 
+     * @param bytes
+     *            The unknown bytes of the game block
+     * @param offset
+     *            The offset of the part in the game block
+     */
+
+    public UnknownPart(byte[] bytes, int offset)
+    {
+        this.bytes = bytes;
+        this.offset = offset;
+        this.size = bytes.length;
+    }
+
+
+    /**
+     * Constructor
+     * 
+     * @param bytes
+     *            The complete block data
+     * @param start
+     *            The start of the unknown part in the block
+     * @param size
+     *            The size of the unknoen part
+     */
+
+    public UnknownPart(byte[] bytes, int start, int size)
+    {
+        this.bytes = new byte[size];
+        System.arraycopy(bytes, start, this.bytes, 0, size);
+        this.offset = start;
+        this.size = size;
+    }
+
+
+    /**
      * Creates an unknown part from XML.
      * 
-     * @param offset
-     *            The offset
      * @param element
      *            The XML element
      */
 
-    public UnknownPart(int offset, Element element)
+    public UnknownPart(Element element)
     {
         super();
 
         ByteArrayOutputStream stream;
         String data;
         int b;
+        int size;
 
         this.offset = Integer.parseInt(element.attributeValue("offset")
             .replace("0x", ""), 16);
-        if (offset != this.offset)
-        {
-            throw new GameException(String.format(
-                "Unknown part is at the wrong offset. Should "
-                    + "be at 0x%x but is at 0x%x", new Object[] { this.offset,
-                    offset }));
-        }
 
-        this.size = Integer.parseInt(element.attributeValue("size"));
+        size = Integer.parseInt(element.attributeValue("size"));
         stream = new ByteArrayOutputStream();
         data = element.getTextTrim();
         for (String c: data.split("\\s"))
@@ -84,25 +113,11 @@ public class UnknownPart extends AbstractPart
             stream.write(b);
         }
         this.bytes = stream.toByteArray();
-    }
-
-
-    /**
-     * Constructor
-     * 
-     * @param bytes
-     *            The bytes of the game block
-     * @param offset
-     *            The offset of the part in the game block
-     * @param size
-     *            The size of the part
-     */
-
-    public UnknownPart(byte[] bytes, int offset, int size)
-    {
-        super(offset, size);
-        this.bytes = new byte[size];
-        System.arraycopy(bytes, offset, this.bytes, 0, size);
+        if (this.bytes.length != size)
+        {
+            throw new GameException("Unknown part has wrong size. Should be "
+                + size + " bytes but is " + this.bytes.length + " bytes");
+        }
     }
 
 
@@ -115,21 +130,24 @@ public class UnknownPart extends AbstractPart
         Element element;
         StringWriter text;
         PrintWriter writer;
+        int size;
+
+        size = this.bytes.length;
 
         element = DocumentHelper.createElement("unknown");
         element.addAttribute("offset", String.format("0x%x",
             new Object[] { this.offset }));
-        element.addAttribute("size", Integer.toString(this.size));
+        element.addAttribute("size", Integer.toString(size));
 
         text = new StringWriter();
         writer = new PrintWriter(text);
 
-        if (this.size > 9)
+        if (size > 9)
         {
             writer.println();
             writer.print("    ");
         }
-        for (int i = 0; i < this.size; i++)
+        for (int i = 0; i < size; i++)
         {
             if (i > 0)
             {
@@ -137,7 +155,7 @@ public class UnknownPart extends AbstractPart
                 {
                     writer.println();
                 }
-                if ((i < this.size - 1) && (this.size > 9) && (i % 4 == 0))
+                if ((i < size - 1) && (size > 9) && (i % 4 == 0))
                 {
                     writer.print("    ");
                 }
@@ -148,7 +166,7 @@ public class UnknownPart extends AbstractPart
             }
             writer.format("%02x", new Object[] { this.bytes[i] });
         }
-        if (this.size > 9)
+        if (size > 9)
         {
             writer.println();
             writer.print("  ");
@@ -168,5 +186,17 @@ public class UnknownPart extends AbstractPart
     public void write(OutputStream stream) throws IOException
     {
         stream.write(this.bytes);
+    }
+
+
+    /**
+     * Returns the unknown bytes of the this block part
+     * 
+     * @return The unknown bytes
+     */
+
+    public byte[] getBytes()
+    {
+        return this.bytes;
     }
 }

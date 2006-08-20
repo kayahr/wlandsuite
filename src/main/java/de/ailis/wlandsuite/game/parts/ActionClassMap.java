@@ -35,17 +35,14 @@ import de.ailis.wlandsuite.game.GameException;
 
 
 /**
- * Action class map part
+ * Action class map
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class ActionClassMapPart extends AbstractPart
+public class ActionClassMap extends AbstractPart
 {
-    /** The map size */
-    private int mapSize;
-
     /** The action class map. First index is y, second is x */
     private byte[][] map;
 
@@ -53,15 +50,13 @@ public class ActionClassMapPart extends AbstractPart
     /**
      * Creates an action class part from XML.
      * 
-     * @param offset
-     *            The offset
      * @param element
      *            The XML element
      * @param mapSize
      *            The map size
      */
 
-    public ActionClassMapPart(int offset, Element element, int mapSize)
+    public ActionClassMap(Element element, int mapSize)
     {
         this(mapSize);
 
@@ -69,15 +64,6 @@ public class ActionClassMapPart extends AbstractPart
         char c;
         int i;
         byte b;
-
-        // Validate the offset
-        if (offset != this.offset)
-        {
-            throw new GameException(String.format(
-                "Action class map is at the wrong offset. Should "
-                    + "be at 0x%x but is at 0x%x", new Object[] { this.offset,
-                    offset }));
-        }
 
         data = element.getTextTrim();
         i = 0;
@@ -121,10 +107,8 @@ public class ActionClassMapPart extends AbstractPart
      *            The map size
      */
 
-    public ActionClassMapPart(int mapSize)
+    public ActionClassMap(int mapSize)
     {
-        super(0, mapSize * mapSize / 2);
-        this.mapSize = mapSize;
         this.map = new byte[mapSize][mapSize];
     }
 
@@ -138,25 +122,11 @@ public class ActionClassMapPart extends AbstractPart
      *            The map size
      */
 
-    public ActionClassMapPart(byte[] bytes, int mapSize)
+    public ActionClassMap(byte[] bytes, int mapSize)
     {
         this(mapSize);
-        parse(bytes, mapSize);
-    }
-
-
-    /**
-     * Parses the action class map
-     * 
-     * @param bytes
-     *            The block bytes
-     * @param mapSize
-     *            The map size
-     */
-
-    private void parse(byte[] bytes, int mapSize)
-    {
-
+        this.offset = 0;
+        this.size = mapSize * mapSize / 2;
         for (int y = 0; y < mapSize; y++)
         {
             for (int x = 0; x < mapSize; x += 2)
@@ -187,10 +157,10 @@ public class ActionClassMapPart extends AbstractPart
         writer = new PrintWriter(text);
 
         writer.println();
-        for (int y = 0; y < this.mapSize; y++)
+        for (int y = 0, yMax = this.map.length; y < yMax; y++)
         {
             writer.print("    ");
-            for (int x = 0; x < this.mapSize; x++)
+            for (int x = 0, xMax = this.map[y].length; x < xMax; x++)
             {
                 byte b = this.map[y][x];
                 if (b == 0)
@@ -217,9 +187,9 @@ public class ActionClassMapPart extends AbstractPart
 
     public void write(OutputStream stream) throws IOException
     {
-        for (int y = 0; y < this.mapSize; y++)
+        for (int y = 0, yMax = this.map.length; y < yMax; y++)
         {
-            for (int x = 0; x < this.mapSize; x += 2)
+            for (int x = 0, xMax = this.map[y].length; x < xMax; x += 2)
             {
                 stream.write(((this.map[y][x] & 0x0f) << 4)
                     | (this.map[y][x + 1] & 0x0f));
@@ -241,5 +211,22 @@ public class ActionClassMapPart extends AbstractPart
     public byte getActionClass(int x, int y)
     {
         return this.map[y][x];
+    }
+
+    
+    /**
+     * Sets the action class for a specific position
+     * 
+     * @param x
+     *            The X position
+     * @param y
+     *            The Y position
+     * @param actionClass
+     *            The action class
+     */
+
+    public void setActionClass(int x, int y, byte actionClass)
+    {
+        this.map[y][x] = actionClass;
     }
 }

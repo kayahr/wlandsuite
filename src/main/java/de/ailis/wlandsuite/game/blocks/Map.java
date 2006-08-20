@@ -23,19 +23,17 @@
 
 package de.ailis.wlandsuite.game.blocks;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.GameBlock;
 import de.ailis.wlandsuite.game.GameBlockType;
 import de.ailis.wlandsuite.game.GameException;
 import de.ailis.wlandsuite.game.RotatingXorOutputStream;
-import de.ailis.wlandsuite.game.parts.ActionClassMapPart;
-import de.ailis.wlandsuite.game.parts.ActionSelectorMapPart;
+import de.ailis.wlandsuite.game.parts.ActionClassMap;
+import de.ailis.wlandsuite.game.parts.ActionSelectorMap;
 import de.ailis.wlandsuite.game.parts.Part;
 
 
@@ -46,7 +44,7 @@ import de.ailis.wlandsuite.game.parts.Part;
  * @version $Revision$
  */
 
-public class MapBlock extends GameBlock
+public class Map extends AbstractGameBlock
 {
     /** The map size. Only when block type is "map" */
     protected int mapSize;
@@ -56,9 +54,9 @@ public class MapBlock extends GameBlock
      * Constructor
      */
 
-    private MapBlock()
+    private Map()
     {
-        super(GameBlockType.map);
+        super(GameBlockType.MAP);
     }
 
 
@@ -70,7 +68,7 @@ public class MapBlock extends GameBlock
      */
 
     @SuppressWarnings("unchecked")
-    public MapBlock(Element element)
+    public Map(Element element)
     {
         this();
 
@@ -86,7 +84,7 @@ public class MapBlock extends GameBlock
      *            The block data
      */
 
-    public MapBlock(byte[] bytes)
+    public Map(byte[] bytes)
     {
         this(bytes, getMapSize(bytes));
     }
@@ -96,37 +94,26 @@ public class MapBlock extends GameBlock
      * Constructor
      * 
      * @param bytes
-     *            The block data
+     *            The complete block data. Map is parsed from it
      * @param mapSize
      *            The map size
      */
 
-    public MapBlock(byte[] bytes, int mapSize)
+    public Map(byte[] bytes, int mapSize)
     {
         this();
 
+        ActionClassMap actionClassMap;
+
+        // Remember the map size
         this.mapSize = mapSize;
-        parse(bytes);
-    }
-
-
-    /**
-     * Parses the game block
-     * 
-     * @param bytes
-     *            The bytes of the game block to parse
-     */
-
-    private void parse(byte[] bytes)
-    {
-        ActionClassMapPart actionClassMap;
 
         // Create the action class map part
-        actionClassMap = new ActionClassMapPart(bytes, this.mapSize);
+        actionClassMap = new ActionClassMap(bytes, this.mapSize);
         this.parts.add(actionClassMap);
 
         // Create the action selector map part
-        this.parts.add(new ActionSelectorMapPart(bytes, this.mapSize,
+        this.parts.add(new ActionSelectorMap(bytes, this.mapSize,
             actionClassMap));
 
         createUnknownParts(bytes);
@@ -151,16 +138,11 @@ public class MapBlock extends GameBlock
         return ((bytes[offset] & 0xff) | ((bytes[offset + 1] & 0xff) << 8));
     }
 
-
+    
     /**
-     * Writes the game block to the specified output stream.
-     * 
-     * @param stream
-     *            The output stream
-     * @throws IOException
+     * @see de.ailis.wlandsuite.game.blocks.GameBlock#write(java.io.OutputStream)
      */
-
-    @Override
+    
     public void write(OutputStream stream) throws IOException
     {
         OutputStream gameStream;
@@ -168,15 +150,9 @@ public class MapBlock extends GameBlock
         int encSize;
         int mapSize;
         int offset;
-        ByteArrayOutputStream byteStream;
 
-        // Create the byte array
-        byteStream = new ByteArrayOutputStream();
-        for (Part part: this.parts)
-        {
-            part.write(byteStream);
-        }
-        bytes = byteStream.toByteArray();
+        // Create the game block data
+        bytes = createBlockData();
 
         // Only the stuff before the strings is encrypted. So we get
         // the string offset and use it as the size.
@@ -195,10 +171,9 @@ public class MapBlock extends GameBlock
 
 
     /**
-     * @see de.ailis.wlandsuite.game.GameBlock#toXml()
+     * @see de.ailis.wlandsuite.game.blocks.GameBlock#toXml()
      */
-
-    @Override
+    
     public Element toXml()
     {
         Element element;

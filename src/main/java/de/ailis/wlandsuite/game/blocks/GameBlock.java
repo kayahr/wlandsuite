@@ -21,24 +21,61 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game;
+package de.ailis.wlandsuite.game.blocks;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.dom4j.Element;
+
+import de.ailis.wlandsuite.game.GameBlockType;
 
 
 /**
- * Game block type
- *
+ * The interface for game blocks.
+ * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public enum GameBlockType
+public interface GameBlock
 {
-    /** It's a map */
-    MAP,
+    /**
+     * Writes the game block to the specified output stream.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException 
+     */
+
+    public void write(OutputStream stream) throws IOException;
+
+
+    /**
+     * Writes the game block to the specified output stream in XML format.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException 
+     */
+
+    public void writeXml(OutputStream stream) throws IOException;
     
-    /** It's a savegame */
-    SAVEGAME,
     
-    /** It's a shop items list */
-    SHOPITEMS
+    /**
+     * Converts the game block into an XML element and returns it.
+     * 
+     * @return The XML element
+     */
+    
+    public Element toXml();
+    
+    
+    /**
+     * Returns the game block type.
+     * 
+     * @return The game block type
+     */
+    
+    public GameBlockType getType();
 }

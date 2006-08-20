@@ -34,7 +34,7 @@ import java.util.List;
 
 import de.ailis.wlandsuite.cli.UnpackProg;
 import de.ailis.wlandsuite.game.Game;
-import de.ailis.wlandsuite.game.GameBlock;
+import de.ailis.wlandsuite.game.blocks.GameBlock;
 
 
 /**
