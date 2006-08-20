@@ -126,6 +126,23 @@ public abstract class BitOutputStream extends OutputStream
 
 
     /**
+     * Writes a 4-byte integer to the stream.
+     * 
+     * @param integer
+     *            The integer to write
+     * @throws IOException
+     */
+
+    public void writeInt(long integer) throws IOException
+    {
+        writeByte((int) (integer & 0xff));
+        writeByte((int) ((integer >> 8) & 0xff));
+        writeByte((int) ((integer >> 16) & 0xff));
+        writeByte((int) ((integer >> 24) & 0xff));
+    }
+
+
+    /**
      * Flush the output to make sure all bits are written even if they don't
      * fill a whole byte.
      * 

@@ -25,6 +25,9 @@ package de.ailis.wlandsuite.game.blocks;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -34,7 +37,10 @@ import de.ailis.wlandsuite.game.GameException;
 import de.ailis.wlandsuite.game.RotatingXorOutputStream;
 import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionSelectorMap;
+import de.ailis.wlandsuite.game.parts.CentralDirectory;
+import de.ailis.wlandsuite.game.parts.CodePointerTable;
 import de.ailis.wlandsuite.game.parts.Part;
+import de.ailis.wlandsuite.game.parts.UnknownPart;
 
 
 /**
@@ -44,19 +50,32 @@ import de.ailis.wlandsuite.game.parts.Part;
  * @version $Revision$
  */
 
-public class Map extends AbstractGameBlock
+public class GameMap extends AbstractGameBlock
 {
     /** The map size. Only when block type is "map" */
-    protected int mapSize;
+    private int mapSize;
+
+    /** The action class map */
+    private ActionClassMap actionClassMap;
+
+    /** The action selector map */
+    private ActionSelectorMap actionSelectorMap;
+
+    /** The central directory */
+    private CentralDirectory centralDirectory;
+
+    /** The action class code pointer tables */
+    private Map<Integer, CodePointerTable> codePointerTables;
 
 
     /**
      * Constructor
      */
 
-    private Map()
+    private GameMap()
     {
         super(GameBlockType.MAP);
+        this.codePointerTables = new HashMap<Integer, CodePointerTable>();
     }
 
 
@@ -68,12 +87,53 @@ public class Map extends AbstractGameBlock
      */
 
     @SuppressWarnings("unchecked")
-    public Map(Element element)
+    public GameMap(Element element)
     {
         this();
 
+        String tagName;
+        Part part;
+
         this.mapSize = Integer.parseInt(element.attributeValue("size", "32"));
-        processChildren(element);
+
+        for (Element child: (List<Element>) element.elements())
+        {
+            tagName = child.getName();
+
+            if (tagName.equals("unknown"))
+            {
+                part = new UnknownPart(child);
+            }
+            else if (tagName.equals("actionClassMap"))
+            {
+                part = this.actionClassMap = new ActionClassMap(child,
+                    this.mapSize);
+            }
+            else if (tagName.equals("actionSelectorMap"))
+            {
+                part = this.actionSelectorMap = new ActionSelectorMap(child,
+                    this.mapSize, this.actionClassMap);
+            }
+            else if (tagName.equals("centralDirectory"))
+            {
+                part = this.centralDirectory = new CentralDirectory(child);
+            }
+            else if (tagName.equals("codePointers"))
+            {
+                CodePointerTable table = new CodePointerTable(child); 
+                part = table; 
+                for (Integer actionClass: table.getActionClasses())
+                {
+                    this.codePointerTables.put(actionClass, table);
+                }
+            }
+            else
+            {
+                throw new GameException("Unknown game part type: " + tagName);
+            }
+
+            this.parts.add(part);
+        }
     }
 
 
@@ -84,7 +144,7 @@ public class Map extends AbstractGameBlock
      *            The block data
      */
 
-    public Map(byte[] bytes)
+    public GameMap(byte[] bytes)
     {
         this(bytes, getMapSize(bytes));
     }
@@ -99,23 +159,56 @@ public class Map extends AbstractGameBlock
      *            The map size
      */
 
-    public Map(byte[] bytes, int mapSize)
+    public GameMap(byte[] bytes, int mapSize)
     {
         this();
 
-        ActionClassMap actionClassMap;
+        int offset;
 
         // Remember the map size
         this.mapSize = mapSize;
 
-        // Create the action class map part
-        actionClassMap = new ActionClassMap(bytes, this.mapSize);
-        this.parts.add(actionClassMap);
+        // Parse the action class map part
+        this.actionClassMap = new ActionClassMap(bytes, this.mapSize);
+        this.parts.add(this.actionClassMap);
 
-        // Create the action selector map part
-        this.parts.add(new ActionSelectorMap(bytes, this.mapSize,
-            actionClassMap));
+        // Parse the action selector map part
+        this.actionSelectorMap = new ActionSelectorMap(bytes, this.mapSize,
+            this.actionClassMap);
+        this.parts.add(this.actionSelectorMap);
 
+        // Parse the central directory
+        offset = mapSize * mapSize * 3 / 2;
+        this.centralDirectory = new CentralDirectory(bytes, offset);
+        this.parts.add(this.centralDirectory);
+
+        // Cycle through all action class offsets and build code pointer tables
+        Map<Integer, CodePointerTable> tables;
+        tables = new HashMap<Integer, CodePointerTable>(16);
+        this.codePointerTables = new HashMap<Integer, CodePointerTable>(16);
+        for (int i = 0; i < 16; i++)
+        {
+            CodePointerTable codePointerTable;
+
+            offset = this.centralDirectory.getActionClassOffset(i);
+            if (offset == 0) continue;
+
+            // Create the code pointer table
+            codePointerTable = tables.get(offset);
+            if (codePointerTable == null)
+            {
+                codePointerTable = new CodePointerTable(bytes, offset, i);
+                tables.put(offset, codePointerTable);
+                this.parts.add(codePointerTable);
+            }
+            else
+            {
+                codePointerTable.addActionClass(i);
+            }
+            this.codePointerTables.put(i, codePointerTable);
+        }
+
+        // Create unknown parts for all the data left
         createUnknownParts(bytes);
     }
 
@@ -138,11 +231,11 @@ public class Map extends AbstractGameBlock
         return ((bytes[offset] & 0xff) | ((bytes[offset + 1] & 0xff) << 8));
     }
 
-    
+
     /**
      * @see de.ailis.wlandsuite.game.blocks.GameBlock#write(java.io.OutputStream)
      */
-    
+
     public void write(OutputStream stream) throws IOException
     {
         OutputStream gameStream;
@@ -173,16 +266,20 @@ public class Map extends AbstractGameBlock
     /**
      * @see de.ailis.wlandsuite.game.blocks.GameBlock#toXml()
      */
-    
+
     public Element toXml()
     {
-        Element element;
+        Element element, partElement;
 
         element = DocumentHelper.createElement("map");
         element.addAttribute("size", Integer.toString(this.mapSize));
         for (Part part: this.parts)
         {
-            element.add(part.toXml());
+            partElement = part.toXml();
+            if (partElement != null)
+            {
+                element.add(part.toXml());
+            }
         }
         return element;
     }
@@ -254,5 +351,77 @@ public class Map extends AbstractGameBlock
     public int getMapSize()
     {
         return this.mapSize;
+    }
+
+    /**
+     * Sets the map size.
+     * 
+     * @param mapSize
+     *            The map size to set
+     */
+
+    public void setMapSize(int mapSize)
+    {
+        this.mapSize = mapSize;
+    }
+
+
+    /**
+     * Returns the action class map.
+     * 
+     * @return The action class map
+     */
+
+    public ActionClassMap getActionClassMap()
+    {
+        return this.actionClassMap;
+    }
+
+
+    /**
+     * Sets the action class map.
+     * 
+     * @param actionClassMap
+     *            The action class map to set
+     */
+
+    public void setActionClassMap(ActionClassMap actionClassMap)
+    {
+        if (this.actionClassMap != null)
+        {
+            this.parts.remove(this.actionClassMap);
+        }
+        this.actionClassMap = actionClassMap;
+        this.parts.add(actionClassMap);
+    }
+
+
+    /**
+     * Returns the action selector map.
+     * 
+     * @return The action selector map
+     */
+
+    public ActionSelectorMap getActionSelectorMap()
+    {
+        return this.actionSelectorMap;
+    }
+
+
+    /**
+     * Sets the action selector map.
+     * 
+     * @param actionSelectorMap
+     *            The action selector map to set
+     */
+
+    public void setActionSelectorMap(ActionSelectorMap actionSelectorMap)
+    {
+        if (this.actionSelectorMap != null)
+        {
+            this.parts.remove(this.actionSelectorMap);
+        }
+        this.actionSelectorMap = actionSelectorMap;
+        this.parts.add(actionSelectorMap);
     }
 }

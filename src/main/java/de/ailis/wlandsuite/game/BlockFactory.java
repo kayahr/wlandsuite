@@ -35,7 +35,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import de.ailis.wlandsuite.game.blocks.GameBlock;
-import de.ailis.wlandsuite.game.blocks.Map;
+import de.ailis.wlandsuite.game.blocks.GameMap;
 import de.ailis.wlandsuite.game.blocks.Savegame;
 import de.ailis.wlandsuite.game.blocks.ShopItems;
 
@@ -105,7 +105,7 @@ public class BlockFactory
         // encrypted block and read the data again
         if (type == GameBlockType.MAP)
         {
-            encSize = Map.getEncSize(bytes);
+            encSize = GameMap.getEncSize(bytes);
         }
         else if (type == GameBlockType.SAVEGAME)
         {
@@ -157,7 +157,7 @@ public class BlockFactory
     {
         if (type == GameBlockType.MAP)
         {
-            return new Map(bytes);
+            return new GameMap(bytes);
         }
         else if (type == GameBlockType.SAVEGAME)
         {
@@ -194,7 +194,7 @@ public class BlockFactory
             tagName = element.getName();
             if (tagName.equals("map"))
             {
-                return new Map(element);
+                return new GameMap(element);
             }
             else if (tagName.equals("savegame"))
             {

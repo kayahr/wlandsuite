@@ -99,13 +99,13 @@ public abstract class AbstractGameBlock implements GameBlock
             }
             else if (tagName.equals("actionClassMap"))
             {
-                part = new ActionClassMap(child, ((Map) this).getMapSize());
+                part = new ActionClassMap(child, ((GameMap) this).getMapSize());
                 actionClassMap = (ActionClassMap) part;
             }
             else if (tagName.equals("actionSelectorMap"))
             {
-                part = new ActionSelectorMap(child, ((Map) this).getMapSize(),
-                    actionClassMap);
+                part = new ActionSelectorMap(child, ((GameMap) this)
+                    .getMapSize(), actionClassMap);
             }
             else
             {
@@ -131,9 +131,15 @@ public abstract class AbstractGameBlock implements GameBlock
 
         Collections.sort(this.parts);
         start = 0;
-        for (Part part: this.parts)
+        for (int i = 0, max = this.parts.size(); i < max; i++)
         {
+            Part part = this.parts.get(i);
             end = part.getOffset();
+            if (start > end)
+            {
+                throw new GameException("Part " + part + " overlaps part "
+                    + this.parts.get(i - 1));
+            }
             if (start != end)
             {
                 this.parts.add(new UnknownPart(bytes, start, end - start));
@@ -141,7 +147,11 @@ public abstract class AbstractGameBlock implements GameBlock
             start = end + part.getSize();
         }
         end = bytes.length;
-        this.parts.add(new UnknownPart(bytes, start, end - start));
+        if (start != end)
+        {
+            this.parts.add(new UnknownPart(bytes, start, end - start));
+        }
+        Collections.sort(this.parts);
     }
 
 
@@ -209,15 +219,15 @@ public abstract class AbstractGameBlock implements GameBlock
                 targetOffset = part.getOffset();
 
                 // Pad with zeros to match target offset
-                for (int i = realOffset; i < targetOffset; i++)
-                {
-                    byteStream.write(0);
-                }
+                /*
+                 * for (int i = realOffset; i < targetOffset; i++) {
+                 * byteStream.write(0); }
+                 */
 
-                if (realOffset > targetOffset)
+                if (realOffset != targetOffset)
                 {
                     System.err.println("oho, offset mismatch: " + realOffset
-                        + " > " + targetOffset);
+                        + " != " + targetOffset);
                 }
             }
 
