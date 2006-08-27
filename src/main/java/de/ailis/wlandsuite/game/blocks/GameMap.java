@@ -40,6 +40,8 @@ import de.ailis.wlandsuite.game.parts.ActionSelectorMap;
 import de.ailis.wlandsuite.game.parts.CentralDirectory;
 import de.ailis.wlandsuite.game.parts.CodePointerTable;
 import de.ailis.wlandsuite.game.parts.Part;
+import de.ailis.wlandsuite.game.parts.RadiationCode;
+import de.ailis.wlandsuite.game.parts.TransitionCode;
 import de.ailis.wlandsuite.game.parts.UnknownPart;
 
 
@@ -120,12 +122,20 @@ public class GameMap extends AbstractGameBlock
             }
             else if (tagName.equals("codePointers"))
             {
-                CodePointerTable table = new CodePointerTable(child); 
-                part = table; 
+                CodePointerTable table = new CodePointerTable(child);
+                part = table;
                 for (Integer actionClass: table.getActionClasses())
                 {
                     this.codePointerTables.put(actionClass, table);
                 }
+            }
+            else if (tagName.equals("transition"))
+            {
+                part = new TransitionCode(child);
+            }
+            else if (tagName.equals("radiation"))
+            {
+                part = new RadiationCode(child);
             }
             else
             {
@@ -208,8 +218,93 @@ public class GameMap extends AbstractGameBlock
             this.codePointerTables.put(i, codePointerTable);
         }
 
+        // Parse transition codes
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+                int actionClass = this.actionClassMap.getActionClass(x, y);
+                if (actionClass == 0) continue;
+                int actionSelector = this.actionSelectorMap.getActionSelector(
+                    x, y);
+                int pointer = this.codePointerTables.get(actionClass)
+                    .getCodePointer(actionSelector);
+                if (hasPart(pointer)) continue;
+                switch (actionClass)
+                {
+                    case 10:
+                        this.parts.add(new TransitionCode(bytes, pointer));
+                        break;
+
+                    case 9:
+                        this.parts.add(new RadiationCode(bytes, pointer));
+                        break;
+                }
+            }
+        }
+
+        createUnknownPartsForCodeStrings(bytes);
+
         // Create unknown parts for all the data left
         createUnknownParts(bytes);
+    }
+    
+
+    /**
+     * Checks if there is already a part with the specified offset.
+     * 
+     * @param offset
+     *            The offset
+     * @return If there is alreary a part at this offset or not
+     */
+
+    private boolean hasPart(int offset)
+    {
+        for (Part part: this.parts)
+        {
+            if (part.getOffset() == offset)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Create unknown parts for code strings.
+     * 
+     * @param bytes
+     *            The game block bytes
+     */
+
+    private void createUnknownPartsForCodeStrings(byte[] bytes)
+    {
+        int lastOffset;
+
+        for (CodePointerTable table: this.codePointerTables.values())
+        {
+            lastOffset = -1;
+            for (int i = 0; i < table.getCodePointers(); i++)
+            {
+                int pointer = table.getCodePointer(i);
+                if (pointer == 0) continue;
+
+                if (lastOffset >= 0)
+                {
+                    if (!hasPart(lastOffset))
+                    {
+                        if (lastOffset < bytes.length && pointer < bytes.length
+                            && pointer > lastOffset)
+                        {
+                            this.parts.add(new UnknownPart(bytes, lastOffset,
+                                pointer - lastOffset));
+                        }
+                    }
+                }
+                lastOffset = pointer;
+            }
+        }
     }
 
 

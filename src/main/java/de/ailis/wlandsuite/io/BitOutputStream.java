@@ -111,6 +111,27 @@ public abstract class BitOutputStream extends OutputStream
 
 
     /**
+     * Writes a signed byte.
+     * 
+     * @param b
+     *            The byte to write
+     * @throws IOException
+     */
+    
+    public void writeSignedByte(int b) throws IOException
+    {
+        if (b < 0)
+        {
+            writeByte(b + 256);
+        }
+        else
+        {
+            writeByte(b);
+        }
+    }
+
+
+    /**
      * Writes a 2-byte word to the stream.
      * 
      * @param word

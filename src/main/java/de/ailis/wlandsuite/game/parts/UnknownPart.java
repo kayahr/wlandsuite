@@ -101,8 +101,7 @@ public class UnknownPart extends AbstractPart
         int b;
         int size;
 
-        this.offset = Integer.parseInt(element.attributeValue("offset")
-            .replace("0x", ""), 16);
+        this.offset = Integer.parseInt(element.attributeValue("offset"));
 
         size = Integer.parseInt(element.attributeValue("size"));
         stream = new ByteArrayOutputStream();
@@ -135,8 +134,7 @@ public class UnknownPart extends AbstractPart
         size = this.bytes.length;
 
         element = DocumentHelper.createElement("unknown");
-        element.addAttribute("offset", String.format("0x%x",
-            new Object[] { this.offset }));
+        element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("size", Integer.toString(size));
 
         text = new StringWriter();
@@ -155,7 +153,7 @@ public class UnknownPart extends AbstractPart
                 {
                     writer.println();
                 }
-                if ((i < size - 1) && (size > 9) && (i % 4 == 0))
+                if ((i < size) && (size > 9) && (i % 4 == 0))
                 {
                     writer.print("    ");
                 }

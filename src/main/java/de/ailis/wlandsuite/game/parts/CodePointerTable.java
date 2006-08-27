@@ -119,17 +119,15 @@ public class CodePointerTable extends AbstractPart
         for (String actionClass: element.attributeValue("actionClasses").split(
             ","))
         {
-            this.actionClasses.add(Integer.valueOf(actionClass, 16));
+            this.actionClasses.add(Integer.valueOf(actionClass));
         }
         for (Element subElement: (List<Element>) element.elements())
         {
             int codeId;
             int offset;
 
-            codeId = Integer.parseInt(subElement.attributeValue("codeId")
-                .replace("0x", ""), 16);
-            offset = Integer.parseInt(subElement.attributeValue("offset")
-                .replace("0x", ""), 16);
+            codeId = Integer.parseInt(subElement.attributeValue("codeId"));
+            offset = Integer.parseInt(subElement.attributeValue("offset"));
             codePointers[codeId] = offset;
         }
         
@@ -159,16 +157,15 @@ public class CodePointerTable extends AbstractPart
             {
                 builder.append(",");
             }
-            builder.append(Integer.toHexString(this.actionClasses.get(i)));
+            builder.append(Integer.toString(this.actionClasses.get(i)));
         }
         element.addAttribute("actionClasses", builder.toString());
 
         for (int i = 0; i < this.codePointers.size(); i++)
         {
             subElement = DocumentHelper.createElement("codePointer");
-            subElement.addAttribute("codeId", Integer.toHexString(i));
-            subElement.addAttribute("offset", String.format("0x%x",
-                new Object[] { this.codePointers.get(i) }));
+            subElement.addAttribute("codeId", Integer.toString(i));
+            subElement.addAttribute("offset", Integer.toString(this.codePointers.get(i)));
             element.add(subElement);
         }
 

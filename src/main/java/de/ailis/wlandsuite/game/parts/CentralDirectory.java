@@ -105,21 +105,19 @@ public class CentralDirectory extends AbstractPart
         super();
 
         this.stringsOffset = Integer.parseInt(element.attributeValue(
-            "stringsOffset").replace("0x", ""), 16);
+            "stringsOffset"));
         this.monsterNamesOffset = Integer.parseInt(element.attributeValue(
-            "monsterNamesOffset").replace("0x", ""), 16);
+            "monsterNamesOffset"));
         this.monsterDataOffset = Integer.parseInt(element.attributeValue(
-            "monsterDataOffset").replace("0x", ""), 16);
+            "monsterDataOffset"));
 
         for (Element subElement: (List<Element>) element.elements())
         {
             int actionClass;
             int offset;
 
-            actionClass = Integer.parseInt(subElement.attributeValue("actionClass")
-                .replace("0x", ""), 16);
-            offset = Integer.parseInt(subElement.attributeValue("offset")
-                .replace("0x", ""), 16);
+            actionClass = Integer.parseInt(subElement.attributeValue("actionClass"));
+            offset = Integer.parseInt(subElement.attributeValue("offset"));
             this.actionClassMasterTable[actionClass] = offset;
         }
     }
@@ -134,19 +132,15 @@ public class CentralDirectory extends AbstractPart
         Element element, subElement;
 
         element = DocumentHelper.createElement("centralDirectory");
-        element.addAttribute("stringsOffset", String.format("0x%x",
-            new Object[] { this.stringsOffset }));
-        element.addAttribute("monsterNamesOffset", String.format("0x%x",
-            new Object[] { this.monsterNamesOffset }));
-        element.addAttribute("monsterDataOffset", String.format("0x%x",
-            new Object[] { this.monsterDataOffset }));
+        element.addAttribute("stringsOffset",  Integer.toString(this.stringsOffset));
+        element.addAttribute("monsterNamesOffset", Integer.toString(this.monsterNamesOffset));
+        element.addAttribute("monsterDataOffset", Integer.toString(this.monsterDataOffset));
 
         for (int i = 0; i < 16; i++)
         {
             subElement = DocumentHelper.createElement("actionClassOffset");
-            subElement.addAttribute("actionClass", Integer.toHexString(i));
-            subElement.addAttribute("offset", String.format("0x%x",
-                new Object[] { this.actionClassMasterTable[i] }));
+            subElement.addAttribute("actionClass", Integer.toString(i));
+            subElement.addAttribute("offset", Integer.toString(this.actionClassMasterTable[i]));
             element.add(subElement);
         }
 

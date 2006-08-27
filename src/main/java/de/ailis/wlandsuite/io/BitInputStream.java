@@ -164,6 +164,29 @@ public abstract class BitInputStream extends InputStream
         }
         return b;
     }
+    
+    
+    /**
+     * Reads a signed byte.
+     *
+     * @return The signed byte
+     * @throws IOException
+     */
+    
+    public int readSignedByte() throws IOException
+    {
+        int b;
+        
+        b = readByte();
+        if (b >= 128) 
+        {
+            return b - 256;
+        }
+        else
+        {
+            return b;
+        }
+    }
 
 
     /**

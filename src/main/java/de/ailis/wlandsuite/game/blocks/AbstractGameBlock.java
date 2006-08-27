@@ -140,7 +140,7 @@ public abstract class AbstractGameBlock implements GameBlock
                 throw new GameException("Part " + part + " overlaps part "
                     + this.parts.get(i - 1));
             }
-            if (start != end)
+            if (start < end)
             {
                 this.parts.add(new UnknownPart(bytes, start, end - start));
             }
