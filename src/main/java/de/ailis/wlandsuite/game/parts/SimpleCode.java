@@ -26,6 +26,8 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -42,25 +44,10 @@ import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
  * @version $Revision$
  */
 
-public class TransitionCode extends AbstractPart
+public class SimpleCode extends AbstractPart
 {
-    /** If positioning is relative */
-    private boolean relative;
-    
-    /** If transition must be confirmed by the user */
-    private boolean confirm;
-    
-    /** The message to print*/
-    private int message;
-    
-    /** The target x position (relative or absolute) */
-    private int targetX;
-    
-    /** The y position (relative or absolute) */
-    private int targetY;
-    
-    /** The target map (255 means previous map) */
-    private int targetMap;
+    /** The messages to print*/
+    private List<Integer> messages = new ArrayList<Integer>();
     
     /** The new action class to set (255 means setting no new action) */
     private int actionClass;
@@ -78,7 +65,7 @@ public class TransitionCode extends AbstractPart
      *            The offset of the part in the game block
      */
 
-    public TransitionCode(byte[] bytes, int offset)
+    public SimpleCode(byte[] bytes, int offset)
     {
         int b;
         BitInputStreamWrapper bitStream;
@@ -90,24 +77,14 @@ public class TransitionCode extends AbstractPart
             bitStream = new BitInputStreamWrapper(new ByteArrayInputStream(bytes,
                 offset, bytes.length - offset));
 
-            // Read first byte
-            b = bitStream.readByte();
-            this.size++;
-            this.relative = (b & 0x80) != 0;
-            this.confirm = (b & 0x40) != 0;
-            this.message = b & 0x3f;
-            
-            // Read the X position
-            this.targetX = bitStream.readSignedByte();
-            this.size++;
-            
-            // Read the Y position
-            this.targetY = bitStream.readSignedByte();
-            this.size++;
-            
-            // Read the map
-            this.targetMap = bitStream.readByte();
-            this.size++;
+            // Read messages
+            do
+            {
+                b = bitStream.readByte();
+                this.size++;
+                this.messages.add(b & 0x7f);
+            }
+            while ((b & 0x80) == 0);
             
             // Read the action class
             this.actionClass = bitStream.readByte();
@@ -139,16 +116,15 @@ public class TransitionCode extends AbstractPart
      */
 
     @SuppressWarnings("unchecked")
-    public TransitionCode(Element element)
+    public SimpleCode(Element element)
     {
         super();
         
-        this.relative = Boolean.parseBoolean(element.attributeValue("relative", "false"));
-        this.confirm = Boolean.parseBoolean(element.attributeValue("confirm", "false"));
-        this.message = Integer.parseInt(element.attributeValue("message", "0"));
-        this.targetX = Integer.parseInt(element.attributeValue("x", "0"));
-        this.targetY = Integer.parseInt(element.attributeValue("y", "0"));
-        this.targetMap = Integer.parseInt(element.attributeValue("map", "255"));
+        String[] parts = element.attributeValue("messages", "0").split(",");
+        for (String part: parts)
+        {
+            this.messages.add(Integer.valueOf(part.trim()));
+        }
         this.actionClass = Integer.parseInt(element.attributeValue("class", "255"));
         this.actionSelector = Integer.parseInt(element.attributeValue("selector", "255"));
     }
@@ -162,14 +138,15 @@ public class TransitionCode extends AbstractPart
     {
         Element element;
 
-        element = DocumentHelper.createElement("transition");
+        element = DocumentHelper.createElement("simple");
         element.addAttribute("offset", Integer.toString(this.offset));
-        element.addAttribute("relative", this.relative ? "true" : "false");
-        element.addAttribute("confirm", this.confirm ? "true" : "false");
-        element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("x", Integer.toString(this.targetX));
-        element.addAttribute("y", Integer.toString(this.targetY));
-        element.addAttribute("map", Integer.toString(this.targetMap));
+        StringBuilder messages = new StringBuilder();
+        messages.append(this.messages.get(0));
+        for (int i = 1; i < this.messages.size(); i++)
+        {
+            messages.append(", ").append(this.messages.get(i));
+        }
+        element.addAttribute("messages", messages.toString());
         element.addAttribute("class", Integer.toString(this.actionClass));
         element.addAttribute("selector", Integer.toString(this.actionSelector));
         return element;
@@ -183,17 +160,14 @@ public class TransitionCode extends AbstractPart
     public void write(OutputStream stream) throws IOException
     {
         BitOutputStreamWrapper bitStream;
-        int b;
 
         bitStream = new BitOutputStreamWrapper(stream);
-        b = this.relative ? 0x80 : 0;
-        b |= this.confirm ? 0x40 : 0;
-        b |= this.message & 0x3f;
-        bitStream.writeByte(b);
+        for (int i = 0; i < this.messages.size() - 1; i++)
+        {
+            bitStream.writeByte(this.messages.get(i));
+        }
+        bitStream.writeByte(this.messages.get(this.messages.size() - 1).intValue() | 0x80);
         
-        bitStream.writeSignedByte(this.targetX);
-        bitStream.writeSignedByte(this.targetY);
-        bitStream.writeByte(this.targetMap);
         bitStream.writeByte(this.actionClass);
         if (this.actionClass < 253)
         {
@@ -255,151 +229,26 @@ public class TransitionCode extends AbstractPart
 
 
     /**
-     * Returns the confirm flag.
+     * Returns the messages.
      *
-     * @return The confirm flag
+     * @return The messages
      */
     
-    public boolean isConfirm()
+    public List<Integer> getMessages()
     {
-        return this.confirm;
+        return this.messages;
     }
 
 
     /**
-     * Sets the confirm flag.
+     * Sets the messages.
      *
-     * @param confirm 
-     *            The confirm flag to set
+     * @param messages
+     *            The messages to set
      */
     
-    public void setConfirm(boolean confirm)
+    public void setMessages(List<Integer> messages)
     {
-        this.confirm = confirm;
-    }
-
-
-    /**
-     * Returns the relative flag.
-     *
-     * @return The relative flag
-     */
-    
-    public boolean isRelative()
-    {
-        return this.relative;
-    }
-
-
-    /**
-     * Sets the relative flag.
-     *
-     * @param relative 
-     *            The relative flag to set
-     */
-    
-    public void setRelative(boolean relative)
-    {
-        this.relative = relative;
-    }
-
-
-    /**
-     * Returns the message id.
-     *
-     * @return The message id
-     */
-    
-    public int getMessage()
-    {
-        return this.message;
-    }
-
-
-    /**
-     * Sets the message id.
-     *
-     * @param message 
-     *            The message id to set
-     */
-    
-    public void setMessage(int message)
-    {
-        this.message = message;
-    }
-
-
-    /**
-     * Returns the target map.
-     *
-     * @return The target map
-     */
-    
-    public int getTargetMap()
-    {
-        return this.targetMap;
-    }
-
-
-    /**
-     * Sets the target map.
-     *
-     * @param targetMap 
-     *            The target map to set
-     */
-    
-    public void setTargetMap(int targetMap)
-    {
-        this.targetMap = targetMap;
-    }
-
-
-    /**
-     * Returns the target X position.
-     *
-     * @return The target X position
-     */
-    
-    public int getTargetX()
-    {
-        return this.targetX;
-    }
-
-
-    /**
-     * Sets the target X position.
-     *
-     * @param targetX 
-     *            The target X postion to set
-     */
-    
-    public void setTargetX(int targetX)
-    {
-        this.targetX = targetX;
-    }
-
-
-    /**
-     * Returns the target Y position.
-     *
-     * @return The target Y position
-     */
-    
-    public int getTargetY()
-    {
-        return this.targetY;
-    }
-
-
-    /**
-     * Sets the target Y position.
-     *
-     * @param targetY 
-     *            The target Y position to set
-     */
-    
-    public void setTargetY(int targetY)
-    {
-        this.targetY = targetY;
+        this.messages = messages;
     }
 }

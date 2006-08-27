@@ -39,6 +39,7 @@ import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionSelectorMap;
 import de.ailis.wlandsuite.game.parts.CentralDirectory;
 import de.ailis.wlandsuite.game.parts.CodePointerTable;
+import de.ailis.wlandsuite.game.parts.SimpleCode;
 import de.ailis.wlandsuite.game.parts.Part;
 import de.ailis.wlandsuite.game.parts.RadiationCode;
 import de.ailis.wlandsuite.game.parts.TransitionCode;
@@ -137,6 +138,10 @@ public class GameMap extends AbstractGameBlock
             {
                 part = new RadiationCode(child);
             }
+            else if (tagName.equals("simple"))
+            {
+                part = new SimpleCode(child);
+            }
             else
             {
                 throw new GameException("Unknown game part type: " + tagName);
@@ -227,19 +232,7 @@ public class GameMap extends AbstractGameBlock
                 if (actionClass == 0) continue;
                 int actionSelector = this.actionSelectorMap.getActionSelector(
                     x, y);
-                int pointer = this.codePointerTables.get(actionClass)
-                    .getCodePointer(actionSelector);
-                if (hasPart(pointer)) continue;
-                switch (actionClass)
-                {
-                    case 10:
-                        this.parts.add(new TransitionCode(bytes, pointer));
-                        break;
-
-                    case 9:
-                        this.parts.add(new RadiationCode(bytes, pointer));
-                        break;
-                }
+                parseCode(bytes, actionClass, actionSelector);
             }
         }
 
@@ -248,7 +241,56 @@ public class GameMap extends AbstractGameBlock
         // Create unknown parts for all the data left
         createUnknownParts(bytes);
     }
-    
+
+
+    /**
+     * Parses an action code.
+     * 
+     * @param bytes
+     *            The block data
+     * @param actionClass
+     *            The action class
+     * @param actionSelector
+     *            The action selector
+     */
+
+    private void parseCode(byte[] bytes, int actionClass, int actionSelector)
+    {
+        while (actionClass != 255)
+        {
+
+            int pointer = this.codePointerTables.get(actionClass)
+                .getCodePointer(actionSelector);
+            if (hasPart(pointer)) return;
+            switch (actionClass)
+            {
+                case 1:
+                    SimpleCode simple = new SimpleCode(bytes, pointer);
+                    this.parts.add(simple);
+                    actionClass = simple.getActionClass();
+                    actionSelector = simple.getActionSelector();
+                    break;
+
+                case 9:
+                    RadiationCode radiation = new RadiationCode(bytes, pointer); 
+                    this.parts.add(radiation);
+                    actionClass = radiation.getActionClass();
+                    actionSelector = radiation.getActionSelector();
+                    break;
+
+                case 10:
+                    TransitionCode transition = new TransitionCode(bytes, pointer); 
+                    this.parts.add(transition);
+                    actionClass = transition.getActionClass();
+                    actionSelector = transition.getActionSelector();
+                    break;
+                    
+                default:
+                    actionClass = 255;
+            }
+        }
+    }
+
 
     /**
      * Checks if there is already a part with the specified offset.
