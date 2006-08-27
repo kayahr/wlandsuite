@@ -50,11 +50,8 @@ public class TransitionCode extends AbstractPart
     /** If transition must be confirmed by the user */
     private boolean confirm;
     
-    /** The string group to use */
-    private int stringGroupId;
-    
-    /** The id of the string in the string group */
-    private int stringId;
+    /** The message to print*/
+    private int message;
     
     /** The target x position (relative or absolute) */
     private int targetX;
@@ -98,8 +95,7 @@ public class TransitionCode extends AbstractPart
             this.size++;
             this.relative = (b & 0x80) != 0;
             this.confirm = (b & 0x40) != 0;
-            this.stringGroupId = (b & 0x3f) >> 2;
-            this.stringId = b & 3;
+            this.message = b & 0x3f;
             
             // Read the X position
             this.targetX = bitStream.readSignedByte();
@@ -149,8 +145,7 @@ public class TransitionCode extends AbstractPart
         
         this.relative = Boolean.parseBoolean(element.attributeValue("relative", "false"));
         this.confirm = Boolean.parseBoolean(element.attributeValue("confirm", "false"));
-        this.stringGroupId = Integer.parseInt(element.attributeValue("stringGroup", "0"));
-        this.stringId = Integer.parseInt(element.attributeValue("string", "0"));
+        this.message = Integer.parseInt(element.attributeValue("message", "0"));
         this.targetX = Integer.parseInt(element.attributeValue("x", "0"));
         this.targetY = Integer.parseInt(element.attributeValue("y", "0"));
         this.targetMap = Integer.parseInt(element.attributeValue("map", "255"));
@@ -171,8 +166,7 @@ public class TransitionCode extends AbstractPart
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("relative", this.relative ? "true" : "false");
         element.addAttribute("confirm", this.confirm ? "true" : "false");
-        element.addAttribute("stringGroup", Integer.toString(this.stringGroupId));
-        element.addAttribute("string", Integer.toString(this.stringId));
+        element.addAttribute("message", Integer.toString(this.message));
         element.addAttribute("x", Integer.toString(this.targetX));
         element.addAttribute("y", Integer.toString(this.targetY));
         element.addAttribute("map", Integer.toString(this.targetMap));
@@ -194,8 +188,7 @@ public class TransitionCode extends AbstractPart
         bitStream = new BitOutputStreamWrapper(stream);
         b = this.relative ? 0x80 : 0;
         b |= this.confirm ? 0x40 : 0;
-        b |= (this.stringGroupId & 0x0f) << 2;
-        b |= this.stringId & 3;
+        b |= this.message & 0x3f;
         bitStream.writeByte(b);
         
         bitStream.writeSignedByte(this.targetX);
@@ -312,52 +305,27 @@ public class TransitionCode extends AbstractPart
 
 
     /**
-     * Returns the string group id.
+     * Returns the message id.
      *
-     * @return The string group id
+     * @return The message id
      */
     
-    public int getStringGroupId()
+    public int getMessage()
     {
-        return this.stringGroupId;
+        return this.message;
     }
 
 
     /**
-     * Sets the string group id.
+     * Sets the message id.
      *
-     * @param stringGroupId 
-     *            The string group id to set
+     * @param message 
+     *            The message id to set
      */
     
-    public void setStringGroupId(int stringGroupId)
+    public void setMessage(int message)
     {
-        this.stringGroupId = stringGroupId;
-    }
-
-
-    /**
-     * Returns the string id.
-     *
-     * @return The string id
-     */
-    
-    public int getStringId()
-    {
-        return this.stringId;
-    }
-
-
-    /**
-     * Sets the string id.
-     *
-     * @param stringId 
-     *            The string id to set
-     */
-    
-    public void setStringId(int stringId)
-    {
-        this.stringId = stringId;
+        this.message = message;
     }
 
 

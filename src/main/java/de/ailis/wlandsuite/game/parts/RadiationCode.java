@@ -47,11 +47,8 @@ public class RadiationCode extends AbstractPart
     /** If armor is ignored */
     private boolean ignoreArmor;
     
-    /** The string group to use */
-    private int stringGroupId;
-    
-    /** The id of the string in the string group */
-    private int stringId;
+    /** The id of the message to print */
+    private int message;
     
     /** The damage (Number of d6 dices) */
     private int damage;
@@ -87,8 +84,7 @@ public class RadiationCode extends AbstractPart
             // Read first byte
             b = bitStream.readByte();
             this.size++;
-            this.stringGroupId = b >> 2;
-            this.stringId = b & 3;
+            this.message = b;
             this.ignoreArmor = (b & 1) == 1;
             
             // Read the damage
@@ -130,20 +126,19 @@ public class RadiationCode extends AbstractPart
         super();
         
         this.ignoreArmor = Boolean.parseBoolean(element.attributeValue("ignoreArmor", "false"));
-        this.stringGroupId = Integer.parseInt(element.attributeValue("stringGroup", "0"));
-        this.stringId = Integer.parseInt(element.attributeValue("string", "0"));
+        this.message = Integer.parseInt(element.attributeValue("message", "0"));
         this.damage = Integer.parseInt(element.attributeValue("damage", "0"));
         this.actionClass = Integer.parseInt(element.attributeValue("class", "255"));
         this.actionSelector = Integer.parseInt(element.attributeValue("selector", "255"));
         
         // Validate ignoreArmor flag
-        if (this.ignoreArmor && (this.stringId & 1) == 0)
+        if (this.ignoreArmor && (this.message & 1) == 0)
         {
-            throw new GameException("Invalid radiation data: Ignore armor flag can only be true when an odd string id is used");
+            throw new GameException("Invalid radiation data: Ignore armor flag can only be true when an odd message id is used");
         }
-        if (!this.ignoreArmor && (this.stringId & 1) != 0)
+        if (!this.ignoreArmor && (this.message & 1) != 0)
         {
-            throw new GameException("Invalid radiation data: Ignore armor flag can only be false when an even string id is used");
+            throw new GameException("Invalid radiation data: Ignore armor flag can only be false when an even message id is used");
         }
     }
 
@@ -159,8 +154,7 @@ public class RadiationCode extends AbstractPart
         element = DocumentHelper.createElement("radiation");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("ignoreArmor", this.ignoreArmor ? "true" : "false");
-        element.addAttribute("stringGroup", Integer.toString(this.stringGroupId));
-        element.addAttribute("string", Integer.toString(this.stringId));
+        element.addAttribute("message", Integer.toString(this.message));
         element.addAttribute("damage", Integer.toString(this.damage));
         element.addAttribute("class", Integer.toString(this.actionClass));
         element.addAttribute("selector", Integer.toString(this.actionSelector));
@@ -178,8 +172,7 @@ public class RadiationCode extends AbstractPart
         int b;
 
         bitStream = new BitOutputStreamWrapper(stream);
-        b = this.stringGroupId << 2;
-        b |= this.stringId & 3;
+        b = this.message;
         bitStream.writeByte(b);
         
         bitStream.writeByte(this.damage);
@@ -267,54 +260,29 @@ public class RadiationCode extends AbstractPart
         this.ignoreArmor = ignoreArmor;
     }
 
-    
+
     /**
-     * Returns the string group id.
+     * Returns the message id.
      *
-     * @return The string group id
+     * @return The message id
      */
     
-    public int getStringGroupId()
+    public int getMessage()
     {
-        return this.stringGroupId;
+        return this.message;
     }
 
 
     /**
-     * Sets the string group id.
+     * Sets the message id.
      *
-     * @param stringGroupId 
-     *            The string group id to set
+     * @param message 
+     *            The message id to set
      */
     
-    public void setStringGroupId(int stringGroupId)
+    public void setMessage(int message)
     {
-        this.stringGroupId = stringGroupId;
-    }
-
-
-    /**
-     * Returns the string id.
-     *
-     * @return The string id
-     */
-    
-    public int getStringId()
-    {
-        return this.stringId;
-    }
-
-
-    /**
-     * Sets the string id.
-     *
-     * @param stringId 
-     *            The string id to set
-     */
-    
-    public void setStringId(int stringId)
-    {
-        this.stringId = stringId;
+        this.message = message;
     }
 
 
