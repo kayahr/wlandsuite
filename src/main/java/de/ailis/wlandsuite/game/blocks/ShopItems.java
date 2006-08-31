@@ -96,14 +96,10 @@ public class ShopItems extends AbstractGameBlock
     
 
     /**
-     * Writes the game block to the specified output stream.
-     * 
-     * @param stream
-     *            The output stream
-     * @throws IOException
+     * @see de.ailis.wlandsuite.game.blocks.GameBlock#write(java.io.OutputStream, boolean)
      */
-
-    public void write(OutputStream stream) throws IOException
+    
+    public void write(OutputStream stream, boolean encrypt) throws IOException
     {
         OutputStream gameStream;
         byte[] bytes;
@@ -112,7 +108,18 @@ public class ShopItems extends AbstractGameBlock
         bytes = createBlockData();
 
         // Write the encrypted data
-        gameStream = new RotatingXorOutputStream(stream);
+        if (encrypt)
+        {
+            gameStream = new RotatingXorOutputStream(stream);
+        }
+        else
+        {
+            gameStream = stream;
+
+            // Write dummy checksum to keep the filesize
+            gameStream.write(0);
+            gameStream.write(0);
+        }
         gameStream.write(bytes);
         gameStream.flush();
     }

@@ -24,7 +24,6 @@
 package de.ailis.wlandsuite.game;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,32 +46,56 @@ public class Game
     /** The game blocks */
     private List<GameBlock> blocks;
 
+    /** The disk number */
+    private int disk;
+
 
     /**
      * Constructor
      * 
      * @param blocks
      *            The game blocks
+     * @param disk
+     *            The disk number
      */
 
-    public Game(List<GameBlock> blocks)
+    public Game(List<GameBlock> blocks, int disk)
     {
         this.blocks = blocks;
+        this.disk = disk;
     }
 
-    
+
     /**
-     * Reads all game blocks from the specified input stream.
+     * Reads all game blocks from the specified input stream. Data is
+     * automatically decrypted.
      * 
      * @param stream
      *            The input stream
-     * @param wlFile
-     *            The wl.exe file
      * @return The game
      * @throws IOException
      */
 
-    public static Game read(InputStream stream, File wlFile) throws IOException
+    public static Game read(InputStream stream) throws IOException
+    {
+        return read(stream, true);        
+    }
+    
+    
+    /**
+     * Reads all game blocks from the specified input stream. A second 
+     * parameter can be used to control if the data should be decrypted
+     * or not.
+     * 
+     * @param stream
+     *            The input stream
+     * @param decrypt
+     *            If data should be decrypted
+     * @return The game
+     * @throws IOException
+     */
+
+    public static Game read(InputStream stream, boolean decrypt) throws IOException
     {
         byte[] bytes;
         List<GameBlock> blocks;
@@ -81,7 +104,7 @@ public class Game
         int pos, end;
         int disk;
         boolean eof = false;
-        
+
         // Read the whole file into a byte array
         bytes = FileUtils.readBytes(stream);
 
@@ -114,7 +137,7 @@ public class Game
 
             // Read MSQ block
             System.out.println("Block " + blocks.size());
-            block = BlockFactory.read(byteStream, end - pos);
+            block = BlockFactory.read(byteStream, end - pos, decrypt);
             blocks.add(block);
 
             // Check if end has been reached
@@ -129,29 +152,45 @@ public class Game
                 byteStream.skip(4);
             }
         }
-        return new Game(blocks);
+        return new Game(blocks, disk);
     }
 
 
     /**
-     * Writes the game data to a stream.
+     * Writes the encrypted game data to a stream.
      * 
      * @param stream
      *            The output stream
-     * @param disk
-     *            The disk id
      * @throws IOException
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(OutputStream stream) throws IOException
+    {
+        write(stream, true);
+    }
+
+
+    /**
+     * Writes the game data to a stream. If the data should be encrypted or not
+     * can be selected with a parameter.
+     * 
+     * @param stream
+     *            The output stream
+     * @param encrypt
+     *            If the writtendata should be encrypted
+     * @throws IOException
+     */
+
+    public void write(OutputStream stream, boolean encrypt)
+        throws IOException
     {
         for (GameBlock block: this.blocks)
         {
             stream.write('m');
             stream.write('s');
             stream.write('q');
-            stream.write('0' + disk);
-            block.write(stream);
+            stream.write('0' + this.disk);
+            block.write(stream, encrypt);
         }
     }
 
@@ -165,5 +204,17 @@ public class Game
     public List<GameBlock> getBlocks()
     {
         return this.blocks;
+    }
+
+
+    /**
+     * Returns the disk number.
+     *
+     * @return The disk number
+     */
+    
+    public int getDisk()
+    {
+        return this.disk;
     }
 }

@@ -60,7 +60,7 @@ public class Launcher extends CLIProg
         
         if ("decodepic".equals(command))
         {
-            DecodePic.main(newArgs);
+            DecryptGame.main(newArgs);
             System.exit(0);
         }
         else if ("encodepic".equals(command))

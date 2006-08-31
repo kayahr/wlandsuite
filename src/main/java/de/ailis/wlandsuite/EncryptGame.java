@@ -21,64 +21,53 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.blocks;
+package de.ailis.wlandsuite;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.dom4j.Element;
-
-import de.ailis.wlandsuite.game.GameBlockType;
+import de.ailis.wlandsuite.cli.ConvertProg;
+import de.ailis.wlandsuite.game.Game;
 
 
 /**
- * The interface for game blocks.
+ * Encrypts a Game file.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public interface GameBlock
+public class EncryptGame extends ConvertProg
 {
     /**
-     * Writes the game block to the specified output stream.
-     * 
-     * @param stream
-     *            The output stream
-     * @param encrypt
-     *            If the data should be encrypted
-     * @throws IOException
+     * @see de.ailis.wlandsuite.cli.ConvertProg#convert(java.io.InputStream,
+     *      java.io.OutputStream)
      */
 
-    public void write(OutputStream stream, boolean encrypt)
-        throws IOException;
+    @Override
+    public void convert(InputStream input, OutputStream output)
+        throws IOException
+    {
+        Game game = Game.read(input, false);
+        game.write(output, true);
+    }
 
 
     /**
-     * Writes the game block to the specified output stream in XML format.
+     * Main method
      * 
-     * @param stream
-     *            The output stream
-     * @throws IOException
+     * @param args
+     *            Command line arguments
      */
 
-    public void writeXml(OutputStream stream) throws IOException;
+    public static void main(String[] args)
+    {
+        EncryptGame app;
 
-
-    /**
-     * Converts the game block into an XML element and returns it.
-     * 
-     * @return The XML element
-     */
-
-    public Element toXml();
-
-
-    /**
-     * Returns the game block type.
-     * 
-     * @return The game block type
-     */
-
-    public GameBlockType getType();
+        app = new EncryptGame();
+        app.setHelp("help/encryptgame.txt");
+        app.setProgName("encryptgame");
+        app.start(args);
+    }
 }

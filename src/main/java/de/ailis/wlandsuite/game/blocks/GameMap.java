@@ -23,8 +23,11 @@
 
 package de.ailis.wlandsuite.game.blocks;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +42,16 @@ import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionSelectorMap;
 import de.ailis.wlandsuite.game.parts.CentralDirectory;
 import de.ailis.wlandsuite.game.parts.CodePointerTable;
+import de.ailis.wlandsuite.game.parts.MonsterData;
+import de.ailis.wlandsuite.game.parts.MonsterNames;
 import de.ailis.wlandsuite.game.parts.SimpleCode;
 import de.ailis.wlandsuite.game.parts.Part;
 import de.ailis.wlandsuite.game.parts.RadiationCode;
+import de.ailis.wlandsuite.game.parts.TilesMap;
 import de.ailis.wlandsuite.game.parts.TransitionCode;
 import de.ailis.wlandsuite.game.parts.UnknownPart;
+import de.ailis.wlandsuite.huffman.HuffmanInputStream;
+import de.ailis.wlandsuite.huffman.HuffmanTree;
 
 
 /**
@@ -57,12 +65,15 @@ public class GameMap extends AbstractGameBlock
 {
     /** The map size. Only when block type is "map" */
     private int mapSize;
-
+    
     /** The action class map */
     private ActionClassMap actionClassMap;
 
     /** The action selector map */
     private ActionSelectorMap actionSelectorMap;
+    
+    /** The tiles map */
+    private TilesMap tilesMap; 
 
     /** The central directory */
     private CentralDirectory centralDirectory;
@@ -107,6 +118,11 @@ public class GameMap extends AbstractGameBlock
             {
                 part = new UnknownPart(child);
             }
+            else if (tagName.equals("tilesMap"))
+            {
+                part = this.tilesMap = new TilesMap(child,
+                    this.mapSize);
+            }
             else if (tagName.equals("actionClassMap"))
             {
                 part = this.actionClassMap = new ActionClassMap(child,
@@ -141,6 +157,14 @@ public class GameMap extends AbstractGameBlock
             else if (tagName.equals("simple"))
             {
                 part = new SimpleCode(child);
+            }
+            else if (tagName.equals("monsterNames"))
+            {
+                part = new MonsterNames(child);
+            }
+            else if (tagName.equals("monsterData"))
+            {
+                part = new MonsterData(child);
             }
             else
             {
@@ -183,6 +207,82 @@ public class GameMap extends AbstractGameBlock
         // Remember the map size
         this.mapSize = mapSize;
 
+        /*
+        int p = 8586;
+        byte[] b = new byte[64 * 64];
+        int[] d = new int[b.length];
+        while (p > 0)
+        {
+            List<Byte> seen = new ArrayList<Byte>(b.length);
+            System.out.println("Trying position " + p);
+            InputStream stream = new ByteArrayInputStream(bytes, p, bytes.length - p);
+            try
+            {
+                System.out.println(stream.read());
+                System.out.println(stream.read());
+                System.out.println(stream.read());
+                System.out.println(stream.read());
+                stream = new ByteArrayInputStream(bytes, p, bytes.length - p);
+
+                
+                HuffmanInputStream hstream = new HuffmanInputStream(stream);
+                hstream.read(b);
+                
+                for (int j = 0; j < b.length; j++)
+                {
+                    int c = seen.indexOf(Byte.valueOf(b[j]));
+                    if (c == -1)
+                    {
+                        c = seen.size();
+                        seen.add(b[j]);
+                    }
+                    d[j] = c;
+//                    System.out.print(c);
+                    //System.out.print(" ");
+                }
+//                System.out.println();
+                
+                
+                //for (int y = 0; y < 64; y++)
+                //{
+                    //for (int x = 0; x < 64; x++)
+                    //{
+                        //System.err.print(String.format("%02x ", new Object[] { b[y * 64 +x] }));
+                    //}
+                    //System.err.println();
+                //}
+                System.out.println(bytes.length);
+                System.out.println(64*64);
+                System.out.println(stream.available());
+                //System.exit(0);
+                
+                if (d[0] == 0 && d[1] == 0 && d[2] == 1 && d[3] == 2 && d[4] == 3 && d[5] == 4 && d[6] == 5 && d[7] == 6 && d[8] == 6 && d[9] == 6)
+                {
+          //          for (byte a: b)
+        //            {
+      //                  System.out.print(a);
+    //                    System.out.print(" ");
+  //                  }
+//                    System.out.println();
+                    System.out.println("Got it");
+                    System.exit(0);
+                }
+            }
+            catch (IOException e)
+            {
+                // Ignored
+            }
+            p--;
+        }
+        
+        System.out.println("no luck...");
+        System.exit(0);
+        */
+        
+        // Read the tiles map
+        this.tilesMap = new TilesMap(bytes, this.mapSize);
+        this.parts.add(this.tilesMap);
+
         // Parse the action class map part
         this.actionClassMap = new ActionClassMap(bytes, this.mapSize);
         this.parts.add(this.actionClassMap);
@@ -197,6 +297,20 @@ public class GameMap extends AbstractGameBlock
         this.centralDirectory = new CentralDirectory(bytes, offset);
         this.parts.add(this.centralDirectory);
 
+        int monsters = (this.centralDirectory.getStringsOffset() - this.centralDirectory
+            .getMonsterDataOffset()) / 8;
+
+        // Parse monster names
+        this.parts.add(new MonsterNames(bytes, this.centralDirectory
+            .getMonsterNamesOffset(), monsters));
+
+        this.parts.add(new MonsterData(bytes, this.centralDirectory
+            .getMonsterDataOffset(), monsters));
+
+        // Parse the strings
+        // this.parts.add(new Strings(bytes,
+        // this.centralDirectory.getStringsOffset()));
+
         // Cycle through all action class offsets and build code pointer tables
         Map<Integer, CodePointerTable> tables;
         tables = new HashMap<Integer, CodePointerTable>(16);
@@ -207,6 +321,8 @@ public class GameMap extends AbstractGameBlock
 
             offset = this.centralDirectory.getActionClassOffset(i);
             if (offset == 0) continue;
+            if (offset == this.centralDirectory.getMonsterNamesOffset())
+                continue;
 
             // Create the code pointer table
             codePointerTable = tables.get(offset);
@@ -256,11 +372,10 @@ public class GameMap extends AbstractGameBlock
 
     private void parseCode(byte[] bytes, int actionClass, int actionSelector)
     {
-        while (actionClass != 255)
+        while (actionClass != 255 && actionClass != 0)
         {
-
-            int pointer = this.codePointerTables.get(actionClass)
-                .getCodePointer(actionSelector);
+            CodePointerTable table = this.codePointerTables.get(actionClass);
+            int pointer = table.getCodePointer(actionSelector);
             if (hasPart(pointer)) return;
             switch (actionClass)
             {
@@ -272,19 +387,20 @@ public class GameMap extends AbstractGameBlock
                     break;
 
                 case 9:
-                    RadiationCode radiation = new RadiationCode(bytes, pointer); 
+                    RadiationCode radiation = new RadiationCode(bytes, pointer);
                     this.parts.add(radiation);
                     actionClass = radiation.getActionClass();
                     actionSelector = radiation.getActionSelector();
                     break;
 
                 case 10:
-                    TransitionCode transition = new TransitionCode(bytes, pointer); 
+                    TransitionCode transition = new TransitionCode(bytes,
+                        pointer);
                     this.parts.add(transition);
                     actionClass = transition.getActionClass();
                     actionSelector = transition.getActionSelector();
                     break;
-                    
+
                 default:
                     actionClass = 255;
             }
@@ -370,10 +486,10 @@ public class GameMap extends AbstractGameBlock
 
 
     /**
-     * @see de.ailis.wlandsuite.game.blocks.GameBlock#write(java.io.OutputStream)
+     * @see de.ailis.wlandsuite.game.blocks.GameBlock#write(java.io.OutputStream, boolean)
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(OutputStream stream, boolean encrypt) throws IOException
     {
         OutputStream gameStream;
         byte[] bytes;
@@ -391,7 +507,18 @@ public class GameMap extends AbstractGameBlock
         encSize = ((bytes[offset] & 0xff) | ((bytes[offset + 1] & 0xff) << 8));
 
         // Write the encrypted data
-        gameStream = new RotatingXorOutputStream(stream);
+        if (encrypt)
+        {
+            gameStream = new RotatingXorOutputStream(stream);
+        }
+        else
+        {
+            gameStream = stream;
+            
+            // Write dummy checksum to keep the filesize
+            gameStream.write(0);
+            gameStream.write(0);
+        }
         gameStream.write(bytes, 0, encSize);
         gameStream.flush();
 

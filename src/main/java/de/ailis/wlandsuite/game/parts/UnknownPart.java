@@ -44,6 +44,9 @@ import de.ailis.wlandsuite.game.GameException;
 
 public class UnknownPart extends AbstractPart
 {
+    /** The tag name */
+    protected String tagName = "unknown";
+    
     /** The bytes of this unknown part */
     private byte[] bytes;
 
@@ -133,7 +136,7 @@ public class UnknownPart extends AbstractPart
 
         size = this.bytes.length;
 
-        element = DocumentHelper.createElement("unknown");
+        element = DocumentHelper.createElement(this.tagName);
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("size", Integer.toString(size));
 

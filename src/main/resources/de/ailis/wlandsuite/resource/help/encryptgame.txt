@@ -1,0 +1,15 @@
+Usage: decryptgame [OPTION]... [INPUT [OUTPUT]]
+Encrypts a gameX file.
+
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+Without any parameters encryptgame reads the input from stdin and writes it
+to stdout. With one parameter the game file is read from the specified
+file and the output is written to stdout. If you specify two parameters then
+the input is read from the first file and the output is written to the second 
+file. You can also specify a minus character ("-") as filename which also means
+reading to stdin or writing to stdout.
+    
+Report bugs to Klaus Reimer <k@ailis.de>

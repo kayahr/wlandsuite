@@ -23,6 +23,9 @@
 
 package de.ailis.wlandsuite.game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -63,7 +66,7 @@ public class GameMap
 
         map = new GameMap();
 
-        stream.skip(0x55c3);
+        stream.skip(0x0);
 
         // Read and validate MSQ header
         header = MsqHeader.read(stream);
@@ -77,9 +80,9 @@ public class GameMap
         offset = 0;
 
         // Read tile action classes
-        for (int y = 0; y < 64 / 2; y++)
+        for (int y = 0; y < 64; y++)
         {
-            for (int x = 0; x < 32 / 2; x++)
+            for (int x = 0; x < 32; x++)
             {
                 String c = String.format("%02x", new Object[] { gameStream
                     .read() });
@@ -88,43 +91,43 @@ public class GameMap
                     String c2 = c.substring(i, i + 1);
                     if (c2.equals("0"))
                     {
-                        System.out.print("   ");
+                //        System.out.print("   ");
                     }
                     else
                     {
-                        System.out.print(c2 + c2 + " ");
+              //          System.out.print(c2 + c2 + " ");
                     }
                 }
                 offset++;
             }
-            System.out.println();
+            //System.out.println();
         }
 
         // Read tile action selectors
-        for (int y = 0; y < 64 / 2; y++)
+        for (int y = 0; y < 64; y++)
         {
-            for (int x = 0; x < 64 / 2; x++)
+            for (int x = 0; x < 64; x++)
             {
                 String c = String.format("%02x", new Object[] { gameStream
                     .read() });
                 if (c.equals("00"))
                 {
-                    System.out.print("   ");
+            //        System.out.print("   ");
                 }
                 else
                 {
-                    System.out.print(c + " ");
+              //      System.out.print(c + " ");
                 }
                 offset++;
             }
-            System.out.println();
+            //System.out.println();
         }
 
         // Read string block offset
         stringsOffset = gameStream.readWord();
         System.out.println("Strings offset: " + stringsOffset);
         offset += 2;
-
+/*
         // Read monster names offset
         monsterNamesOffset = gameStream.readWord();
         System.out.println("Monster names offset: " + monsterNamesOffset);
@@ -169,13 +172,13 @@ public class GameMap
                 + String.format("%04x", new Object[] { offset })
                 + ", Actions: " + quantity + ")");
             offset += 2;
-            /*
-             * for (int j = 1; j < quantity; j++) { tmp = gameStream.readWord();
-             * offset += 2; }
-             */
-        }
+            
+              //for (int j = 1; j < quantity; j++) { tmp = gameStream.readWord();
+             // offset += 2; }
+             
+        }*/
 
-        while (offset != stringsOffset)
+        while (offset != stringsOffset - 1)
         {
             gameStream.read();
             offset++;
@@ -186,12 +189,15 @@ public class GameMap
 
         byte[] charTable = new byte[60];
         gameStream.read(charTable);
+        System.out.println(new String(charTable, "ASCII"));
+        System.exit(0);
         offset += 60;
 
         tmp = gameStream.readWord();
         System.out.println(tmp);
         int strings = tmp / 2;
         System.out.println("Number of strings: " + strings);
+        System.exit(0);
         offset += 2;
         int[] stringOffsets = new int[strings];
         stringOffsets[0] = tmp;
@@ -258,5 +264,17 @@ public class GameMap
         System.out.println("Current offset: " + offset);
 
         return true ? null : map;
+    }
+    
+    /**
+     * TODO Document me!
+     *
+     * @param args
+     * @throws IOException 
+     * @throws FileNotFoundException 
+     */
+    public static void main(String args[]) throws FileNotFoundException, IOException
+    {
+        GameMap.read(new FileInputStream(new File("/home/k.reimer/.dosemu/msdos/games/wland/game1.orig")));
     }
 }

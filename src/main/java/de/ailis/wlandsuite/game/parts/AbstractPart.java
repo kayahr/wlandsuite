@@ -83,4 +83,15 @@ public abstract class AbstractPart implements Part
             return 0;
         }
     }
+
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    
+    @Override
+    public String toString()
+    {
+        return this.getClass().getSimpleName() + "@" + this.offset + "+" + this.size;
+    }
 }

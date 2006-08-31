@@ -132,6 +132,7 @@ public class CentralDirectory extends AbstractPart
         Element element, subElement;
 
         element = DocumentHelper.createElement("centralDirectory");
+        element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("stringsOffset",  Integer.toString(this.stringsOffset));
         element.addAttribute("monsterNamesOffset", Integer.toString(this.monsterNamesOffset));
         element.addAttribute("monsterDataOffset", Integer.toString(this.monsterDataOffset));
@@ -174,7 +175,7 @@ public class CentralDirectory extends AbstractPart
      * @return The monster data offset
      */
 
-    public long getMonsterDataOffset()
+    public int getMonsterDataOffset()
     {
         return this.monsterDataOffset;
     }

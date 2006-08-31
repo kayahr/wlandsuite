@@ -107,16 +107,8 @@ public class PackGame extends PackProg
             blockNo++;
         }
 
-        game = new Game(blocks);
-
-        if (this.disk == -1)
-        {
-            game.write(output, 0);
-        }
-        else
-        {
-            game.write(output, this.disk);
-        }
+        game = new Game(blocks, this.disk == -1 ? 0 : this.disk);
+        game.write(output);
     }
 
 

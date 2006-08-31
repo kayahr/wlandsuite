@@ -21,64 +21,53 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.blocks;
+package de.ailis.wlandsuite;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.dom4j.Element;
-
-import de.ailis.wlandsuite.game.GameBlockType;
+import de.ailis.wlandsuite.cli.ConvertProg;
+import de.ailis.wlandsuite.game.Game;
 
 
 /**
- * The interface for game blocks.
+ * Decrypts a Game file.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public interface GameBlock
+public class DecryptGame extends ConvertProg
 {
     /**
-     * Writes the game block to the specified output stream.
-     * 
-     * @param stream
-     *            The output stream
-     * @param encrypt
-     *            If the data should be encrypted
-     * @throws IOException
+     * @see de.ailis.wlandsuite.cli.ConvertProg#convert(java.io.InputStream,
+     *      java.io.OutputStream)
      */
 
-    public void write(OutputStream stream, boolean encrypt)
-        throws IOException;
+    @Override
+    public void convert(InputStream input, OutputStream output)
+        throws IOException
+    {
+        Game game = Game.read(input, true);
+        game.write(output, false);
+    }
 
 
     /**
-     * Writes the game block to the specified output stream in XML format.
+     * Main method
      * 
-     * @param stream
-     *            The output stream
-     * @throws IOException
+     * @param args
+     *            Command line arguments
      */
 
-    public void writeXml(OutputStream stream) throws IOException;
+    public static void main(String[] args)
+    {
+        DecryptGame app;
 
-
-    /**
-     * Converts the game block into an XML element and returns it.
-     * 
-     * @return The XML element
-     */
-
-    public Element toXml();
-
-
-    /**
-     * Returns the game block type.
-     * 
-     * @return The game block type
-     */
-
-    public GameBlockType getType();
+        app = new DecryptGame();
+        app.setHelp("help/decryptgame.txt");
+        app.setProgName("decryptgame");
+        app.start(args);
+    }
 }

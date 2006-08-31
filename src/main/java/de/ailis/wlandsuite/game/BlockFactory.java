@@ -67,14 +67,16 @@ public class BlockFactory
      *            The input stream
      * @param size
      *            The block size
+     * @param decrypt
+     *            If data should be decrypted
      * @return The game block
      * @throws IOException
      */
 
-    public static GameBlock read(InputStream stream, int size)
+    public static GameBlock read(InputStream stream, int size, boolean decrypt)
         throws IOException
     {
-        RotatingXorInputStream gameStream;
+        InputStream gameStream;
         byte[] rawBytes;
         byte[] bytes;
         int read;
@@ -93,49 +95,62 @@ public class BlockFactory
 
         // Decrypt the whole block from the stream
         stream = new ByteArrayInputStream(rawBytes);
-        gameStream = new RotatingXorInputStream(stream);
-        size -= 2;
-        bytes = new byte[size];
-        gameStream.read(bytes);
-
-        // Determine the block type
-        type = getType(bytes);
-
-        // And if the block is a map then we determine the size of the
-        // encrypted block and read the data again
-        if (type == GameBlockType.MAP)
+        if (decrypt)
         {
-            encSize = GameMap.getEncSize(bytes);
-        }
-        else if (type == GameBlockType.SAVEGAME)
-        {
-            encSize = Savegame.getEncSize();
+            gameStream = new RotatingXorInputStream(stream);
         }
         else
         {
-            encSize = bytes.length;
+            gameStream = stream;
+            
+            // Read the dummy checksum
+            gameStream.skip(2);
         }
+        size -= 2;
+        bytes = new byte[size];
+        gameStream.read(bytes);
+        
+        // Determine the block type
+        type = getType(bytes);
 
-        // Decrypt data again if not all data is encrypted
-        if (encSize < bytes.length)
+        if (decrypt)
         {
-            stream = new ByteArrayInputStream(rawBytes);
+            // And if the block is a map then we determine the size of the
+            // encrypted block and read the data again
+            if (type == GameBlockType.MAP)
+            {
+                encSize = GameMap.getEncSize(bytes);
+            }
+            else if (type == GameBlockType.SAVEGAME)
+            {
+                encSize = Savegame.getEncSize();
+            }
+            else
+            {
+                encSize = bytes.length;
+            }
+    
+            // Decrypt data again if not all data is encrypted
+            if (encSize < bytes.length)
+            {
+                stream = new ByteArrayInputStream(rawBytes);
+    
+                // Read the encrypted part of the data
+                gameStream = new RotatingXorInputStream(stream);
+                gameStream.read(bytes, 0, encSize);
+    
+                // Read the unecrypted part of the data
+                stream.read(bytes, encSize, bytes.length - encSize);
+            }
 
-            // Read the encrypted part of the data
-            gameStream = new RotatingXorInputStream(stream);
-            gameStream.read(bytes, 0, encSize);
-
-            // Read the unecrypted part of the data
-            stream.read(bytes, encSize, bytes.length - encSize);
-        }
-
-        // Check the checksum
-        checksum = gameStream.getChecksum();
-        endChecksum = gameStream.getEndChecksum();
-        if (endChecksum != checksum)
-        {
-            throw new IOException("Checksum error! Expected " + endChecksum
-                + " but got " + checksum);
+            // Check the checksum
+            checksum = ((RotatingXorInputStream) gameStream).getChecksum();
+            endChecksum = ((RotatingXorInputStream) gameStream).getEndChecksum();
+            if (endChecksum != checksum)
+            {
+                throw new IOException("Checksum error! Expected " + endChecksum
+                    + " but got " + checksum);
+            }
         }
 
         // Return and create the game block
@@ -176,7 +191,7 @@ public class BlockFactory
      * @param stream
      *            The input stream
      * @return The game block
-     * @throws IOException 
+     * @throws IOException
      */
 
     public static GameBlock readXml(InputStream stream) throws IOException

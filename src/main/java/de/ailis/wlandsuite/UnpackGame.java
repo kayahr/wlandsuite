@@ -23,8 +23,6 @@
 
 package de.ailis.wlandsuite;
 
-import gnu.getopt.Getopt;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,27 +44,6 @@ import de.ailis.wlandsuite.game.blocks.GameBlock;
 
 public class UnpackGame extends UnpackProg
 {
-    /** The wasteland directory */
-    private File wlDir;
-
-
-    /**
-     * @see de.ailis.wlandsuite.cli.CLIProg#processOption(int,
-     *      gnu.getopt.Getopt)
-     */
-
-    @Override
-    protected void processOption(int opt, Getopt getopt)
-    {
-        switch (opt)
-        {
-            case 'w':
-                this.wlDir = new File(getopt.getOptarg());
-                break;
-        }
-    }
-
-
     /**
      * @see de.ailis.wlandsuite.cli.UnpackProg#unpack(java.io.InputStream,
      *      java.io.File)
@@ -77,20 +54,10 @@ public class UnpackGame extends UnpackProg
     {
         Game game;
         List<GameBlock> blocks;
-        File wl;
         int blockNo;
         File blockFile;
 
-        if (this.wlDir == null)
-        {
-            wl = new File("wl.exe");
-        }
-        else
-        {
-            wl = new File(this.wlDir.getPath() + File.separatorChar + "wl.exe");
-        }
-
-        game = Game.read(input, wl);
+        game = Game.read(input);
         blocks = game.getBlocks();
         blockNo = 0;
         for (GameBlock block: blocks)

@@ -113,17 +113,23 @@ public abstract class BitInputStream extends InputStream
     public int readBits(int quantity, boolean reverse) throws IOException
     {
         int value;
+        byte b;
 
         value = 0;
         for (int i = 0; i < quantity; i++)
         {
+            b = readBit(reverse);
+            if (b == -1)
+            {
+                return -1;
+            }
             if (reverse)
             {
-                value = value | (readBit(true) << i);
+                value = value | (b << i);
             }
             else
             {
-                value = (value << 1) | readBit();
+                value = (value << 1) | b;
             }
         }
         return value;
