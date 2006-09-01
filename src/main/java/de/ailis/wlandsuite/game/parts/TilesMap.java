@@ -230,6 +230,20 @@ public class TilesMap extends AbstractPart
         BitOutputStreamWrapper bitStream;
         byte[] bytes;
 
+        /*
+        bitStream = new BitOutputStreamWrapper(stream);
+        bitStream.writeInt(this.map.length * this.map.length);
+        bitStream.writeInt(this.unknown);
+        for (int y = 0, yMax = this.map.length; y < yMax; y++)
+        {
+            for (int x = 0, xMax = this.map[y].length; x < xMax; x++)
+            {
+                bitStream.write(this.map[y][x]);
+            }
+        }
+        if (1==1) return;*/
+        
+
         byteStream = new ByteArrayOutputStream();
         bitStream = new BitOutputStreamWrapper(stream);
         bitStream.writeInt(this.map.length * this.map.length);

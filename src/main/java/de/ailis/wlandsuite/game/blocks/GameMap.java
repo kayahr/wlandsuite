@@ -23,11 +23,8 @@
 
 package de.ailis.wlandsuite.game.blocks;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +41,13 @@ import de.ailis.wlandsuite.game.parts.CentralDirectory;
 import de.ailis.wlandsuite.game.parts.CodePointerTable;
 import de.ailis.wlandsuite.game.parts.MonsterData;
 import de.ailis.wlandsuite.game.parts.MonsterNames;
-import de.ailis.wlandsuite.game.parts.SimpleCode;
 import de.ailis.wlandsuite.game.parts.Part;
 import de.ailis.wlandsuite.game.parts.RadiationCode;
+import de.ailis.wlandsuite.game.parts.SimpleCode;
+import de.ailis.wlandsuite.game.parts.Strings;
 import de.ailis.wlandsuite.game.parts.TilesMap;
 import de.ailis.wlandsuite.game.parts.TransitionCode;
 import de.ailis.wlandsuite.game.parts.UnknownPart;
-import de.ailis.wlandsuite.huffman.HuffmanInputStream;
-import de.ailis.wlandsuite.huffman.HuffmanTree;
 
 
 /**
@@ -166,6 +162,10 @@ public class GameMap extends AbstractGameBlock
             {
                 part = new MonsterData(child);
             }
+            else if (tagName.equals("strings"))
+            {
+                part = new Strings(child);
+            }
             else
             {
                 throw new GameException("Unknown game part type: " + tagName);
@@ -206,78 +206,6 @@ public class GameMap extends AbstractGameBlock
 
         // Remember the map size
         this.mapSize = mapSize;
-
-        /*
-        int p = 8586;
-        byte[] b = new byte[64 * 64];
-        int[] d = new int[b.length];
-        while (p > 0)
-        {
-            List<Byte> seen = new ArrayList<Byte>(b.length);
-            System.out.println("Trying position " + p);
-            InputStream stream = new ByteArrayInputStream(bytes, p, bytes.length - p);
-            try
-            {
-                System.out.println(stream.read());
-                System.out.println(stream.read());
-                System.out.println(stream.read());
-                System.out.println(stream.read());
-                stream = new ByteArrayInputStream(bytes, p, bytes.length - p);
-
-                
-                HuffmanInputStream hstream = new HuffmanInputStream(stream);
-                hstream.read(b);
-                
-                for (int j = 0; j < b.length; j++)
-                {
-                    int c = seen.indexOf(Byte.valueOf(b[j]));
-                    if (c == -1)
-                    {
-                        c = seen.size();
-                        seen.add(b[j]);
-                    }
-                    d[j] = c;
-//                    System.out.print(c);
-                    //System.out.print(" ");
-                }
-//                System.out.println();
-                
-                
-                //for (int y = 0; y < 64; y++)
-                //{
-                    //for (int x = 0; x < 64; x++)
-                    //{
-                        //System.err.print(String.format("%02x ", new Object[] { b[y * 64 +x] }));
-                    //}
-                    //System.err.println();
-                //}
-                System.out.println(bytes.length);
-                System.out.println(64*64);
-                System.out.println(stream.available());
-                //System.exit(0);
-                
-                if (d[0] == 0 && d[1] == 0 && d[2] == 1 && d[3] == 2 && d[4] == 3 && d[5] == 4 && d[6] == 5 && d[7] == 6 && d[8] == 6 && d[9] == 6)
-                {
-          //          for (byte a: b)
-        //            {
-      //                  System.out.print(a);
-    //                    System.out.print(" ");
-  //                  }
-//                    System.out.println();
-                    System.out.println("Got it");
-                    System.exit(0);
-                }
-            }
-            catch (IOException e)
-            {
-                // Ignored
-            }
-            p--;
-        }
-        
-        System.out.println("no luck...");
-        System.exit(0);
-        */
         
         // Read the tiles map
         this.tilesMap = new TilesMap(bytes, this.mapSize);
@@ -308,10 +236,10 @@ public class GameMap extends AbstractGameBlock
             .getMonsterDataOffset(), monsters));
 
         // Parse the strings
-        // this.parts.add(new Strings(bytes,
-        // this.centralDirectory.getStringsOffset()));
+        this.parts.add(new Strings(bytes,
+            this.centralDirectory.getStringsOffset(), this.tilesMap.getOffset()));
 
-        // Cycle through all action class offsets and build code pointer tables
+        // Cycle through all action class offsets and build code pointer tables        
         Map<Integer, CodePointerTable> tables;
         tables = new HashMap<Integer, CodePointerTable>(16);
         this.codePointerTables = new HashMap<Integer, CodePointerTable>(16);

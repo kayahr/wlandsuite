@@ -136,7 +136,6 @@ public class Game
             }
 
             // Read MSQ block
-            System.out.println("Block " + blocks.size());
             block = BlockFactory.read(byteStream, end - pos, decrypt);
             blocks.add(block);
 

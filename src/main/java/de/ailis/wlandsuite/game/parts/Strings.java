@@ -24,6 +24,7 @@
 package de.ailis.wlandsuite.game.parts;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.game.GameException;
+import de.ailis.wlandsuite.game.chartable.CharTable;
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
 
@@ -47,10 +49,10 @@ import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
 public class Strings extends AbstractPart
 {
     /** The character table */
-    private byte[] charTable = new byte[60];
-    
+    private CharTable charTable;
+
     /** The strings */
-    private List<String> strings = new ArrayList<String>();
+    private List<StringGroup> stringGroups = new ArrayList<StringGroup>();
 
 
     /**
@@ -60,105 +62,70 @@ public class Strings extends AbstractPart
      *            The game block data
      * @param offset
      *            The offset of the part in the game block
+     * @param endOffset
+     *            The end offset of the part in the game block
      */
 
-    public Strings(byte[] bytes, int offset)
+    public Strings(byte[] bytes, int offset, int endOffset)
     {
+        ByteArrayInputStream byteStream;
         BitInputStreamWrapper bitStream;
 
-        this.size = 0;
+        this.size = endOffset - offset;
         this.offset = offset;
-        bitStream = new BitInputStreamWrapper(new ByteArrayInputStream(bytes,
-            offset, bytes.length - offset));
+        byteStream = new ByteArrayInputStream(bytes, offset, endOffset - offset);
+        bitStream = new BitInputStreamWrapper(byteStream);
         try
         {
-            bitStream.read(this.charTable);
-            /*for (byte b: this.charTable)
-            {
-                if (b > 0x20)
-                {
-                    System.out.print(String.format("%c", new Object[] { b }));
-                }
-                else
-                {
-                    System.out.print(String.format("\\%02x", new Object[] { b }));
-                }
-            }*/
-            //System.out.println();
-            this.size += this.charTable.length;
+            this.charTable = new CharTable(bitStream);
+            
             int tmp = bitStream.readWord();
-            this.size += 2;
             int strings = tmp / 2;
-            int[] stringOffsets = new int[strings];
-            //System.out.println("Number of strings: " + strings);
-            stringOffsets[0] = tmp;
-            //System.out.println("String offset 0: " + String.format("%x", new Object[] {(offset + stringOffsets[0] + 60)}));
+            List<Integer> stringOffsets = new ArrayList<Integer>(strings);
+            stringOffsets.add(tmp);
             for (int i = 1; i < strings; i++)
             {
-                stringOffsets[i] = bitStream.readWord();
-                this.size += 2;
-              //  System.out.println("String offset " + i + ": " + String.format("%x", new Object[] {(offset + stringOffsets[i] + 60)}));
-            }
-            //System.out.println("Current offset: " + String.format("%x", new Object[] { offset + this.size }));
-            outer: for (int j = 0; j < strings; j++)
-            {
-                int bits = 0;
-                boolean upper = false;
-                boolean high = false;
-                int len;
-                if (j >= strings - 1)
-                    len = 127;
-                else
-                    len = (stringOffsets[j + 1] - stringOffsets[j]) * 8 / 5;
-                StringBuilder string = new StringBuilder(); 
-                for (int i = 0; i < len; i++)
+                tmp = bitStream.readWord();
+                if ((tmp + offset + 60 >= endOffset) || (tmp < stringOffsets.get(i - 1)))
                 {
-                    int index = bitStream.readBits(5, true);
-                    if (index == -1) break outer;
-                    switch (index)
+                    // The last offset may be corrupt. That's ok. If it's not
+                    // the last offset then throw an exception.
+                    if (i == strings - 1)
                     {
-                        case 0x1f:
-                            high = true;
-                            break;
-
-                        case 0x1e:
-                            upper = true;
-                            break;
-
-                        default:
-                            int character = this.charTable[index + (high ? 0x1e : 0)];
-                            String s;
-                            if (character >= 0x20)
-                            {
-                                s = new String(new byte[] { (byte) character });
-                            }
-                            else
-                            {
-                                s = String.format("\\%02x",
-                                    new Object[] { character });
-                            }
-                            if (upper) s = s.toUpperCase();
-               //             System.out.print(s);
-                            string.append(s);
-                            upper = false;
-                            high = false;
+                        continue;                        
                     }
-                    bits += 5;
+                    else
+                    {
+                        throw new GameException("Error parsing strings");
+                    }
                 }
-                this.size += bits / 8;
-                if (bits % 8 > 0)
+                stringOffsets.add(tmp);
+            }
+            
+            for (int i = 0, max = stringOffsets.size(); i < max; i++)
+            {
+                StringGroup group = new StringGroup(bytes, offset
+                    + stringOffsets.get(i) + 60, endOffset, this.charTable);
+
+                // The last offset may be corrupt. That's ok. If it's not
+                // the last offset then throw an exception.
+                if (group.getStrings().size() > 0)
                 {
-                    bitStream.readBits(8 - (bits % 8), true);
-                    this.size++;
+                    this.stringGroups.add(group);
                 }
-                this.strings.add(string.toString());
+                else
+                {
+                    if (i != strings - 1)
+                    {
+                        throw new GameException("Error parsing strings");
+                    }
+                }
             }
         }
         catch (IOException e)
         {
             throw new GameException(e.toString(), e);
         }
-        //System.exit(0);
     }
 
 
@@ -173,6 +140,12 @@ public class Strings extends AbstractPart
     public Strings(Element element)
     {
         super();
+
+        this.size = Integer.parseInt(element.attributeValue("size"));
+        for (Element subElement: (List<Element>) element.elements("stringGroup"))
+        {
+            this.stringGroups.add(new StringGroup(subElement));
+        }
     }
 
 
@@ -185,10 +158,11 @@ public class Strings extends AbstractPart
         Element element, subElement;
 
         element = DocumentHelper.createElement("strings");
-        for (String string: this.strings)
+        element.addAttribute("offset", Integer.toString(this.offset));
+        element.addAttribute("size", Integer.toString(this.size));
+        for (StringGroup stringGroup: this.stringGroups)
         {
-            subElement = DocumentHelper.createElement("string");
-            subElement.addText(string);
+            subElement = stringGroup.toXml();
             element.add(subElement);
         }
         return element;
@@ -202,8 +176,62 @@ public class Strings extends AbstractPart
     public void write(OutputStream stream) throws IOException
     {
         BitOutputStreamWrapper bitStream;
-
+        CharTable charTable;
+        ByteArrayOutputStream stringStream;
+        byte[] strings;
+        List<Integer> offsets;
+        int oldSize;
+        int offset;
+        
         bitStream = new BitOutputStreamWrapper(stream);
+
+        // Create and write the char table
+        charTable = new CharTable();
+        for (StringGroup group: this.stringGroups)
+        {
+            for (String string: group.getStrings())
+            {
+                charTable.add(string);
+                charTable.add(0);
+            }
+        }
+        charTable.write(bitStream);
+
+        // Write the strings to temporary buffer and build the offset table
+        stringStream = new ByteArrayOutputStream();
+        offsets = new ArrayList<Integer>(this.stringGroups.size() * 4);
+        offset = 0;
+        oldSize = 0;
+        for (StringGroup group: this.stringGroups)
+        {
+            group.write(stringStream, charTable);
+            offsets.add(offset);
+            offset += stringStream.size() - oldSize;
+            oldSize = stringStream.size();
+        }
+        strings = stringStream.toByteArray();
+        
+        // Write the correct offsets to the stream
+        for (int i = 0, max = offsets.size(); i < max; i++)
+        {
+            bitStream.writeWord(offsets.get(i) + max * 2);
+        }
+        
+        // Write the strings to the stream
+        bitStream.write(strings);
+        
+        // Write padding bytes
+        int padding = this.size - (60 + offsets.size() * 2 + strings.length);
+        if (padding < 0)
+        {
+            throw new GameException("String section is to large");
+        }
+        for (int i = 0; i < padding; i++)
+        {
+            bitStream.write(0);
+        }
+
+        // Flush the stream to make sure everything has been written
         bitStream.flush();
     }
 }

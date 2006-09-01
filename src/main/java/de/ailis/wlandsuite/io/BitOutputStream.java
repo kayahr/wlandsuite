@@ -61,13 +61,72 @@ public abstract class BitOutputStream extends OutputStream
 
     public void writeBit(byte bit) throws IOException
     {
-        this.currentByte = (this.currentByte << 1) | (bit & 1);
+        writeBit(bit, false);
+    }
+
+
+    /**
+     * Writes a bit to the output stream. This method can write the bits in
+     * reversed order.
+     * 
+     * @param bit
+     *            The bit to write
+     * @param reverse
+     *            If bits should be written in reversed order
+     * @throws IOException
+     */
+
+    public void writeBit(byte bit, boolean reverse) throws IOException
+    {
+        if (reverse)
+        {
+            this.currentByte = this.currentByte
+                | (((bit & 1) << this.currentBit));
+        }
+        else
+        {
+            this.currentByte = (this.currentByte << 1) | (bit & 1);
+        }
+
         this.currentBit++;
         if (this.currentBit > 7)
         {
             write(this.currentByte);
             this.currentByte = 0;
             this.currentBit = 0;
+        }
+    }
+
+
+    /**
+     * Writes the specified number of bits. The bits can be written in reverse
+     * order if the reverse flag is set.
+     * 
+     * @param value
+     *            The value containing the bits to write
+     * @param quantity
+     *            The number of bits to write
+     * @param reverse
+     *            If the bits should be written reversed.
+     * @throws IOException
+     */
+
+    public void writeBits(int value, int quantity, boolean reverse)
+        throws IOException
+    {
+        byte b;
+
+        for (int i = 0; i < quantity; i++)
+        {
+            if (reverse)
+            {
+                b = (byte) ((value >> i) & 1);
+            }
+            else
+            {
+                b = (byte) ((value >> (quantity - i - 1)) & 1);
+            }
+            writeBit(b, reverse);
         }
     }
 
@@ -117,7 +176,7 @@ public abstract class BitOutputStream extends OutputStream
      *            The byte to write
      * @throws IOException
      */
-    
+
     public void writeSignedByte(int b) throws IOException
     {
         if (b < 0)
@@ -173,9 +232,27 @@ public abstract class BitOutputStream extends OutputStream
     @Override
     public void flush() throws IOException
     {
+        flush(false);
+    }
+
+    
+    /**
+     * Flush the output to make sure all bits are written even if they don't
+     * fill a whole byte.
+     * 
+     * @param reverse In bits are written in reverese order
+     * @throws IOException
+     */
+
+    public void flush(boolean reverse) throws IOException
+    {
         if (this.currentBit != 0)
         {
-            write(this.currentByte << (8 - this.currentBit));
+            if (!reverse)
+            {
+                this.currentByte = this.currentByte << (8 - this.currentBit);
+            }
+            write(this.currentByte);
         }
     }
 
