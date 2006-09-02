@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id:WlfTest.java 81 2006-09-02 12:10:44Z k $
  * Copyright (c) 2006 Klaus Reimer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
@@ -34,8 +34,8 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import de.ailis.wlandsuite.masks.Wlf;
-import de.ailis.wlandsuite.masks.WlfMask;
+import de.ailis.wlandsuite.masks.Masks;
+import de.ailis.wlandsuite.masks.Mask;
 import de.ailis.wlandsuite.test.WSTestCase;
 
 
@@ -43,7 +43,7 @@ import de.ailis.wlandsuite.test.WSTestCase;
  * Tests the Wlf class
  * 
  * @author Klaus Reimer (k@ailis.de)
- * @version $Revision$
+ * @version $Revision:81 $
  */
 
 public class WlfTest extends WSTestCase
@@ -68,12 +68,12 @@ public class WlfTest extends WSTestCase
 
     public void testRead() throws IOException
     {
-        Wlf wlf;
+        Masks wlf;
         File file;
-        List<WlfMask> images;
+        List<Mask> images;
 
         file = new File("src/test/resources/wlf/test.wlf");
-        wlf = Wlf.read(new FileInputStream(file), 2);
+        wlf = Masks.read(new FileInputStream(file), 2);
 
         images = wlf.getMasks();
         assertNotNull(images);
@@ -93,16 +93,16 @@ public class WlfTest extends WSTestCase
 
     public void testWriteToStream() throws IOException
     {
-        Wlf wlf;
-        List<WlfMask> masks;
+        Masks wlf;
+        List<Mask> masks;
         ByteArrayOutputStream stream;
 
-        masks = new ArrayList<WlfMask>();
-        masks.add(new WlfMask(ImageIO.read(new File(
+        masks = new ArrayList<Mask>();
+        masks.add(new Mask(ImageIO.read(new File(
             "src/test/resources/wlf/test/000.png"))));
-        masks.add(new WlfMask(ImageIO.read(new File(
+        masks.add(new Mask(ImageIO.read(new File(
             "src/test/resources/wlf/test/001.png"))));
-        wlf = new Wlf(masks);
+        wlf = new Masks(masks);
         stream = new ByteArrayOutputStream();
         wlf.write(stream);
         assertEquals(new File("src/test/resources/wlf/test.wlf"), stream

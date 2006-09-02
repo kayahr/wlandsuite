@@ -70,12 +70,12 @@ public class Launcher extends CLIProg
         }
         else if ("unpackwlf".equals(command))
         {
-            UnpackWlf.main(newArgs);
+            UnpackMasks.main(newArgs);
             System.exit(0);
         }
         else if ("packwlf".equals(command))
         {
-            PackWlf.main(newArgs);
+            PackMasks.main(newArgs);
             System.exit(0);
         }
         else if ("unpackcpa".equals(command))

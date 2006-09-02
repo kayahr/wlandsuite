@@ -1,0 +1,26 @@
+Usage: unpacksprites [OPTION]... DIRECTORY [INPUT]
+Unpacks sprite images from a ic0_9.wlf file into a directory
+
+  -W, --width    The width of the masks in the masks.wlf file (Default: 16)
+  -H, --height   The height of the masks in the masks.wlf file (Default: 16)
+  -q, --quantity The number of masks in the masks.wlf file (Default: Auto or 10)
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+  
+The first parameter must be the name of the directory in which the sprite
+images should be unpacked. The program creates the directory automatically if 
+it does not yet exist.
+
+The second parameter specifies the filename of the file to read. If
+the parameter is missing or is "-" then the input is read from stdin.
+
+A ic0_9.wlf file does not contain any information about image dimensions. So if 
+the images in the file are not the default 16x16 pixels then you have to use 
+the width and height parameters to tell unpacksprites the real size of the 
+sprite images.
+
+If you are reading input from stdin then you must also specify the number of
+sprites to read. The default is 10 sprites.
+    
+Report bugs to Klaus Reimer <k@ailis.de>

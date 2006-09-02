@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id:WlfMask.java 81 2006-09-02 12:10:44Z k $
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -40,10 +40,10 @@ import de.ailis.wlandsuite.image.BwImage;
  * WLF mask.
  * 
  * @author Klaus Reimer (k@ailis.de)
- * @version $Revision$
+ * @version $Revision:81 $
  */
 
-public class WlfMask extends BwImage implements Cloneable
+public class Mask extends BwImage implements Cloneable
 {
     /**
      * Constructor
@@ -54,7 +54,7 @@ public class WlfMask extends BwImage implements Cloneable
      *            The mask height
      */
 
-    public WlfMask(int width, int height)
+    public Mask(int width, int height)
     {
         super(width, height);
     }
@@ -69,7 +69,7 @@ public class WlfMask extends BwImage implements Cloneable
      *            The normal buffered image
      */
 
-    public WlfMask(BufferedImage image)
+    public Mask(BufferedImage image)
     {
         super(image);
     }    
@@ -86,10 +86,10 @@ public class WlfMask extends BwImage implements Cloneable
      * @return The mask
      * @throws IOException
      * 
-     * @see WlfMask#read(File, int, int)
+     * @see Mask#read(File, int, int)
      */
 
-    public static WlfMask read(File file) throws IOException
+    public static Mask read(File file) throws IOException
     {
         return read(file, 16, 16);
     }
@@ -109,7 +109,7 @@ public class WlfMask extends BwImage implements Cloneable
      * @throws IOException
      */
 
-    public static WlfMask read(File file, int width, int height) throws IOException
+    public static Mask read(File file, int width, int height) throws IOException
     {
         InputStream stream;
 
@@ -138,14 +138,14 @@ public class WlfMask extends BwImage implements Cloneable
      * @throws IOException
      */
 
-    public static WlfMask read(InputStream stream, int width, int height)
+    public static Mask read(InputStream stream, int width, int height)
         throws IOException
     {
-        WlfMask mask;
+        Mask mask;
         int b;
         int x, y, bit;
 
-        mask = new WlfMask(width, height);
+        mask = new Mask(width, height);
         for (y = 0; y < height; y++)
         {
             for (x = 0; x < width; x += 8)
@@ -259,11 +259,11 @@ public class WlfMask extends BwImage implements Cloneable
      */
 
     @Override
-    public WlfMask clone()
+    public Mask clone()
     {
-        WlfMask dest;
+        Mask dest;
 
-        dest = new WlfMask(getWidth(), getHeight());
+        dest = new Mask(getWidth(), getHeight());
         dest.createGraphics().drawImage(this, 0, 0, null);
         return dest;
     }

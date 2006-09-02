@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id:Wlf.java 81 2006-09-02 12:10:44Z k $
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,13 +36,13 @@ import java.util.List;
  * and can read and write the Wasteland files.
  * 
  * @author Klaus Reimer (k@ailis.de)
- * @version $Revision$
+ * @version $Revision:81 $
  */
 
-public class Wlf
+public class Masks
 {
     /** The list of WLF masks */
-    private List<WlfMask> masks;
+    private List<Mask> masks;
 
 
     /**
@@ -52,7 +52,7 @@ public class Wlf
      *            The WLF masks
      */
 
-    public Wlf(List<WlfMask> masks)
+    public Masks(List<Mask> masks)
     {
         this.masks = masks;
     }
@@ -62,9 +62,9 @@ public class Wlf
      * Private constructor
      */
 
-    private Wlf()
+    private Masks()
     {
-        this.masks = new ArrayList<WlfMask>();
+        this.masks = new ArrayList<Mask>();
     }
 
 
@@ -80,7 +80,7 @@ public class Wlf
      * @throws IOException
      */
 
-    public static Wlf read(InputStream stream, int quantity) throws IOException
+    public static Masks read(InputStream stream, int quantity) throws IOException
     {
         return read(stream, 16, 16, quantity);
     }
@@ -103,16 +103,16 @@ public class Wlf
      * @throws IOException
      */
 
-    public static Wlf read(InputStream stream, int width, int height,
+    public static Masks read(InputStream stream, int width, int height,
         int quantity) throws IOException
     {
-        Wlf wlf;
-        WlfMask mask;
+        Masks wlf;
+        Mask mask;
 
-        wlf = new Wlf();
+        wlf = new Masks();
         for (int i = 0; i < quantity; i++)
         {
-            mask = WlfMask.read(stream, width, height);
+            mask = Mask.read(stream, width, height);
             wlf.masks.add(mask);
         }
         return wlf;
@@ -129,7 +129,7 @@ public class Wlf
 
     public void write(OutputStream stream) throws IOException
     {
-        for (WlfMask mask: this.masks)
+        for (Mask mask: this.masks)
         {
             mask.write(stream);
         }
@@ -164,7 +164,7 @@ public class Wlf
      * @return The masks
      */
     
-    public List<WlfMask> getMasks()
+    public List<Mask> getMasks()
     {
         return this.masks;
     }

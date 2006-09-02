@@ -34,18 +34,18 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import de.ailis.wlandsuite.cli.UnpackProg;
-import de.ailis.wlandsuite.masks.Wlf;
-import de.ailis.wlandsuite.masks.WlfMask;
+import de.ailis.wlandsuite.masks.Masks;
+import de.ailis.wlandsuite.masks.Mask;
 
 
 /**
- * Unpacks the bit masks from a Wasteland WLF file into a directory.
+ * Unpacks the bit masks from a Wasteland masks.wlf file into a directory.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class UnpackWlf extends UnpackProg
+public class UnpackMasks extends UnpackProg
 {
     /** The width */
     private int width = 16;
@@ -54,7 +54,7 @@ public class UnpackWlf extends UnpackProg
     private int height = 16;
 
     /** The number of masks to read */
-    private int masks = 0;
+    private int quantity = 0;
 
 
     /**
@@ -73,8 +73,8 @@ public class UnpackWlf extends UnpackProg
             case 'H':
                 this.height = Integer.parseInt(getopt.getOptarg());
                 break;
-            case 'm':
-                this.masks = Integer.parseInt(getopt.getOptarg());
+            case 'q':
+                this.quantity = Integer.parseInt(getopt.getOptarg());
                 break;
         }
     }
@@ -88,25 +88,25 @@ public class UnpackWlf extends UnpackProg
     @Override
     public void unpack(InputStream input, File directory) throws IOException
     {
-        Wlf wlf;
-        List<WlfMask> masks;
+        Masks wlf;
+        List<Mask> masks;
         File file;
 
         // Set number of masks if not set via parameter
-        if (this.masks == 0)
+        if (this.quantity == 0)
         {
             if (this.input != null)
             {
-                this.masks = Wlf.getNumberOfMasks(this.width, this.height,
+                this.quantity = Masks.getNumberOfMasks(this.width, this.height,
                     new File(this.input).length());
             }
             else
             {
-                this.masks = 10;
+                this.quantity = 10;
             }
         }
 
-        wlf = Wlf.read(input, this.width, this.height, this.masks);
+        wlf = Masks.read(input, this.width, this.height, this.quantity);
         masks = wlf.getMasks();
         for (int i = 0; i < masks.size(); i++)
         {
@@ -126,18 +126,18 @@ public class UnpackWlf extends UnpackProg
 
     public static void main(String[] args)
     {
-        UnpackWlf app;
+        UnpackMasks app;
         LongOpt[] longOpts;
 
         longOpts = new LongOpt[3];
         longOpts[0] = new LongOpt("width", LongOpt.REQUIRED_ARGUMENT, null, 'W');
         longOpts[1] = new LongOpt("height", LongOpt.REQUIRED_ARGUMENT, null,
             'H');
-        longOpts[2] = new LongOpt("masks", LongOpt.REQUIRED_ARGUMENT, null, 'm');
+        longOpts[2] = new LongOpt("quantity", LongOpt.REQUIRED_ARGUMENT, null, 'q');
 
-        app = new UnpackWlf();
-        app.setHelp("help/unpackwlf.txt");
-        app.setProgName("unpackwlf");
+        app = new UnpackMasks();
+        app.setHelp("help/unpackmasks.txt");
+        app.setProgName("unpackmasks");
         app.setLongOpts(longOpts);
         app.start(args);
     }
