@@ -57,6 +57,12 @@ public class CentralDirectory extends AbstractPart
     /** The action class master table */
     private int[] actionClassMasterTable = new int[16];
 
+    /** The nibble 6 offset */
+    private int nibble6Offset;
+
+    /** The NPC offset */
+    private int npcOffset;
+
 
     /**
      * Constructor
@@ -71,7 +77,7 @@ public class CentralDirectory extends AbstractPart
     {
         BitInputStreamWrapper bitStream;
 
-        this.size = (16 + 3) * 2;
+        this.size = (16 + 6) * 2;
         this.offset = offset;
         bitStream = new BitInputStreamWrapper(new ByteArrayInputStream(bytes,
             offset, this.size));
@@ -83,6 +89,12 @@ public class CentralDirectory extends AbstractPart
             for (int i = 0; i < 16; i++)
             {
                 this.actionClassMasterTable[i] = bitStream.readWord();
+            }
+            this.nibble6Offset = bitStream.readWord();
+            this.npcOffset = bitStream.readWord();
+            if (bitStream.readWord() != 0)
+            {
+                throw new GameException("The unknown offset is not zero");
             }
         }
         catch (IOException e)
@@ -104,19 +116,24 @@ public class CentralDirectory extends AbstractPart
     {
         super();
 
-        this.stringsOffset = Integer.parseInt(element.attributeValue(
-            "stringsOffset"));
-        this.monsterNamesOffset = Integer.parseInt(element.attributeValue(
-            "monsterNamesOffset"));
-        this.monsterDataOffset = Integer.parseInt(element.attributeValue(
-            "monsterDataOffset"));
+        this.stringsOffset = Integer.parseInt(element
+            .attributeValue("stringsOffset"));
+        this.monsterNamesOffset = Integer.parseInt(element
+            .attributeValue("monsterNamesOffset"));
+        this.monsterDataOffset = Integer.parseInt(element
+            .attributeValue("monsterDataOffset"));
+        this.nibble6Offset = Integer.parseInt(element
+            .attributeValue("nibble6Offset"));
+        this.npcOffset = Integer.parseInt(element
+            .attributeValue("npcOffset"));
 
         for (Element subElement: (List<Element>) element.elements())
         {
             int actionClass;
             int offset;
 
-            actionClass = Integer.parseInt(subElement.attributeValue("actionClass"));
+            actionClass = Integer.parseInt(subElement
+                .attributeValue("actionClass"));
             offset = Integer.parseInt(subElement.attributeValue("offset"));
             this.actionClassMasterTable[actionClass] = offset;
         }
@@ -133,15 +150,23 @@ public class CentralDirectory extends AbstractPart
 
         element = DocumentHelper.createElement("centralDirectory");
         element.addAttribute("offset", Integer.toString(this.offset));
-        element.addAttribute("stringsOffset",  Integer.toString(this.stringsOffset));
-        element.addAttribute("monsterNamesOffset", Integer.toString(this.monsterNamesOffset));
-        element.addAttribute("monsterDataOffset", Integer.toString(this.monsterDataOffset));
+        element.addAttribute("stringsOffset", Integer
+            .toString(this.stringsOffset));
+        element.addAttribute("monsterNamesOffset", Integer
+            .toString(this.monsterNamesOffset));
+        element.addAttribute("monsterDataOffset", Integer
+            .toString(this.monsterDataOffset));
+        element.addAttribute("nibble6Offset", Integer
+            .toString(this.nibble6Offset));
+        element.addAttribute("npcOffset", Integer
+            .toString(this.npcOffset));
 
         for (int i = 0; i < 16; i++)
         {
             subElement = DocumentHelper.createElement("actionClassOffset");
             subElement.addAttribute("actionClass", Integer.toString(i));
-            subElement.addAttribute("offset", Integer.toString(this.actionClassMasterTable[i]));
+            subElement.addAttribute("offset", Integer
+                .toString(this.actionClassMasterTable[i]));
             element.add(subElement);
         }
 
@@ -165,6 +190,9 @@ public class CentralDirectory extends AbstractPart
         {
             bitStream.writeWord(offset);
         }
+        bitStream.writeWord(this.nibble6Offset);
+        bitStream.writeWord(this.npcOffset);
+        bitStream.writeWord(0);
         bitStream.flush();
     }
 
@@ -269,5 +297,55 @@ public class CentralDirectory extends AbstractPart
     public void setActionClassOffset(byte actionClass, int offset)
     {
         this.actionClassMasterTable[actionClass] = offset;
+    }
+
+
+    /**
+     * Returns the nibble6Offset.
+     *
+     * @return The nibble6Offset
+     */
+    
+    public int getNibble6Offset()
+    {
+        return this.nibble6Offset;
+    }
+
+
+    /**
+     * Sets the nibble6Offset.
+     *
+     * @param nibble6Offset 
+     *            The nibble6Offset to set
+     */
+    
+    public void setNibble6Offset(int nibble6Offset)
+    {
+        this.nibble6Offset = nibble6Offset;
+    }
+
+
+    /**
+     * Returns the npcOffset.
+     *
+     * @return The npcOffset
+     */
+    
+    public int getNpcOffset()
+    {
+        return this.npcOffset;
+    }
+
+
+    /**
+     * Sets the npcOffset.
+     *
+     * @param npcOffset 
+     *            The npcOffset to set
+     */
+    
+    public void setNpcOffset(int npcOffset)
+    {
+        this.npcOffset = npcOffset;
     }
 }

@@ -21,7 +21,7 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.wlf;
+package de.ailis.wlandsuite.masks;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

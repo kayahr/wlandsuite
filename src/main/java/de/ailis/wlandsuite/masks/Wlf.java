@@ -21,7 +21,7 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.wlf;
+package de.ailis.wlandsuite.masks;
 
 import java.io.IOException;
 import java.io.InputStream;

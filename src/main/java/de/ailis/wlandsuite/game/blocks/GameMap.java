@@ -39,6 +39,7 @@ import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionSelectorMap;
 import de.ailis.wlandsuite.game.parts.CentralDirectory;
 import de.ailis.wlandsuite.game.parts.CodePointerTable;
+import de.ailis.wlandsuite.game.parts.MapInfo;
 import de.ailis.wlandsuite.game.parts.MonsterData;
 import de.ailis.wlandsuite.game.parts.MonsterNames;
 import de.ailis.wlandsuite.game.parts.Part;
@@ -74,9 +75,12 @@ public class GameMap extends AbstractGameBlock
     /** The central directory */
     private CentralDirectory centralDirectory;
 
+    /** The map info */
+    private MapInfo mapInfo;
+
     /** The action class code pointer tables */
     private Map<Integer, CodePointerTable> codePointerTables;
-
+    
 
     /**
      * Constructor
@@ -166,6 +170,10 @@ public class GameMap extends AbstractGameBlock
             {
                 part = new Strings(child);
             }
+            else if (tagName.equals("mapInfo"))
+            {
+                part = new MapInfo(child);
+            }
             else
             {
                 throw new GameException("Unknown game part type: " + tagName);
@@ -224,6 +232,10 @@ public class GameMap extends AbstractGameBlock
         offset = mapSize * mapSize * 3 / 2;
         this.centralDirectory = new CentralDirectory(bytes, offset);
         this.parts.add(this.centralDirectory);
+        
+        // Read map info
+        this.mapInfo = new MapInfo(bytes, offset + this.centralDirectory.getSize());
+        this.parts.add(this.mapInfo);
 
         int monsters = (this.centralDirectory.getStringsOffset() - this.centralDirectory
             .getMonsterDataOffset()) / 8;

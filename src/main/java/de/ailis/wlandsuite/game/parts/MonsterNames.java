@@ -26,9 +26,6 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +35,7 @@ import org.dom4j.Element;
 import de.ailis.wlandsuite.game.GameException;
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
+import de.ailis.wlandsuite.utils.StringUtils;
 
 
 /**
@@ -114,14 +112,7 @@ public class MonsterNames extends AbstractPart
 
         for (Element subElement: (List<Element>) element.elements("name"))
         {
-            try
-            {
-                this.names.add(URLDecoder.decode(subElement.getText(), "ASCII"));
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                // Ignored, can't happen
-            }
+            this.names.add(StringUtils.unescape(subElement.getText(), "ASCII"));
         }
     }
 
@@ -140,14 +131,7 @@ public class MonsterNames extends AbstractPart
         for (String name: this.names)
         {
             subElement = DocumentHelper.createElement("name");
-            try
-            {
-                subElement.setText(URLEncoder.encode(name, "ASCII"));
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                // Ignored, can't happen
-            }
+            subElement.setText(StringUtils.escape(name, "ASCII"));
             element.add(subElement);
         }
         return element;

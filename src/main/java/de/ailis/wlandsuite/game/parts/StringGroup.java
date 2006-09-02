@@ -26,9 +26,6 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,7 @@ import de.ailis.wlandsuite.game.GameException;
 import de.ailis.wlandsuite.game.chartable.CharTable;
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
+import de.ailis.wlandsuite.utils.StringUtils;
 
 
 /**
@@ -110,8 +108,8 @@ public class StringGroup
                             {
                                 break outer;
                             }
-                            String s = new String(new byte[] { (byte) character },
-                                    "ASCII");
+                            String s = new String(
+                                new byte[] { (byte) character }, "ASCII");
                             if (upper) s = s.toUpperCase();
                             string.append(s);
                             upper = false;
@@ -142,15 +140,8 @@ public class StringGroup
 
         for (Element subElement: (List<Element>) element.elements("string"))
         {
-            try
-            {
-                this.strings.add(URLDecoder.decode(subElement.getText(),
-                    "ASCII"));
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                // Ignored, Can't happen
-            }
+            this.strings.add(StringUtils
+                .unescape(subElement.getText(), "ASCII"));
         }
     }
 
@@ -171,14 +162,7 @@ public class StringGroup
         for (String string: this.strings)
         {
             subElement = DocumentHelper.createElement("string");
-            try
-            {
-                subElement.addText(URLEncoder.encode(string, "ASCII"));
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                // Ignored, Can't happen
-            }
+            subElement.addText(StringUtils.escape(string, "ASCII"));
             element.add(subElement);
         }
         return element;
@@ -211,24 +195,25 @@ public class StringGroup
                     bitStream.writeBits(0x1e, 5, true);
                     b += 32;
                 }
-                     
+
                 // Get the character index in the char table
-                int index = charTable.getIndex(b); 
+                int index = charTable.getIndex(b);
                 if (index == -1)
                 {
-                    throw new GameException("Unable to find index for character " + b);
+                    throw new GameException(
+                        "Unable to find index for character " + b);
                 }
-               
+
                 // Handle high characters
                 if (index >= 0x1e)
                 {
                     bitStream.writeBits(0x1f, 5, true);
                     index -= 0x1e;
                 }
-                
+
                 // Write the character
                 bitStream.writeBits(index, 5, true);
-            }       
+            }
             bitStream.writeBits(charTable.getIndex(0), 5, true);
         }
         bitStream.flush(true);

@@ -79,6 +79,7 @@ public class TilesMap extends AbstractPart
         int b;
 
         this.unknown = Integer.parseInt(element.attributeValue("unknown"));
+        this.size = Integer.parseInt(element.attributeValue("size"));
         data = element.getTextTrim();
         i = 0;
         for (int y = 0; y < mapSize; y++)
@@ -190,6 +191,7 @@ public class TilesMap extends AbstractPart
 
         element = DocumentHelper.createElement("tilesMap");
         element.addAttribute("offset", Integer.toString(this.offset));
+        element.addAttribute("size", Integer.toString(this.size));
         element.addAttribute("unknown", Integer.toString(this.unknown));
 
         text = new StringWriter();
@@ -257,10 +259,24 @@ public class TilesMap extends AbstractPart
         }
         bytes = byteStream.toByteArray();
 
+        byteStream = new ByteArrayOutputStream();
         HuffmanTree tree = HuffmanTree.create(bytes);
-        HuffmanOutputStream hstream = new HuffmanOutputStream(stream, tree);
+        HuffmanOutputStream hstream = new HuffmanOutputStream(byteStream, tree);
         hstream.write(bytes);
         hstream.flush();
+        bytes = byteStream.toByteArray();
+        
+        // Add padding bytes and complain if new compressed data is too large 
+        int padding = this.size - 8 - bytes.length;
+        if (padding < 0)
+        {
+            throw new GameException("Tile map is " + (-padding) + " bytes too large");
+        }
+        stream.write(bytes);
+        for (int i = 0; i < padding; i++)
+        {
+            stream.write(0);
+        }
     }
 
 

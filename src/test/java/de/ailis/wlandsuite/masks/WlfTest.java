@@ -21,7 +21,7 @@
  * IN THE SOFTWARE. 
  */
 
-package de.ailis.wlandsuite.wlf;
+package de.ailis.wlandsuite.masks;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,6 +34,8 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import de.ailis.wlandsuite.masks.Wlf;
+import de.ailis.wlandsuite.masks.WlfMask;
 import de.ailis.wlandsuite.test.WSTestCase;
 
 

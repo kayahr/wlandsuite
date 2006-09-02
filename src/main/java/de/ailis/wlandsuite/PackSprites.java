@@ -32,18 +32,18 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import de.ailis.wlandsuite.cli.PackProg;
-import de.ailis.wlandsuite.masks.Wlf;
-import de.ailis.wlandsuite.masks.WlfMask;
+import de.ailis.wlandsuite.sprites.Sprite;
+import de.ailis.wlandsuite.sprites.Sprites;
 
 
 /**
- * Packs bit mask files from a directory into a Wasteland WLF file.
+ * Packs sprite files from a directory into a Wasteland ic0_9.wlf file.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class PackWlf extends PackProg
+public class PackSprites extends PackProg
 {
     /**
      * @see de.ailis.wlandsuite.cli.PackProg#pack(java.io.File, java.io.OutputStream)
@@ -53,12 +53,12 @@ public class PackWlf extends PackProg
     protected void pack(File directory, OutputStream output)
         throws IOException
     {
-        List<WlfMask> masks;
+        List<Sprite> sprites;
         int maskNo;
         File maskFile;
         
         // Read the animation frames
-        masks = new ArrayList<WlfMask>();
+        sprites = new ArrayList<Sprite>();
         maskNo = 0;
         while (true)
         {
@@ -68,11 +68,11 @@ public class PackWlf extends PackProg
             {
                 break;
             }
-            masks.add(new WlfMask(ImageIO.read(maskFile)));
+            sprites.add(new Sprite(ImageIO.read(maskFile)));
             maskNo++;
         }
         
-        new Wlf(masks).write(output);
+        new Sprites(sprites).write(output);
     }
 
 
@@ -85,11 +85,11 @@ public class PackWlf extends PackProg
 
     public static void main(String[] args)
     {
-        PackWlf app;
+        PackSprites app;
 
-        app = new PackWlf();
-        app.setHelp("help/packwlf.txt");
-        app.setProgName("packwlf");
+        app = new PackSprites();
+        app.setHelp("help/packsprites.txt");
+        app.setProgName("packsprites");
         app.start(args);
     }
 }
