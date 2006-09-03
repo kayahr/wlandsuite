@@ -42,6 +42,7 @@ import de.ailis.wlandsuite.game.parts.CodePointerTable;
 import de.ailis.wlandsuite.game.parts.MapInfo;
 import de.ailis.wlandsuite.game.parts.MonsterData;
 import de.ailis.wlandsuite.game.parts.MonsterNames;
+import de.ailis.wlandsuite.game.parts.NPCList;
 import de.ailis.wlandsuite.game.parts.Part;
 import de.ailis.wlandsuite.game.parts.RadiationCode;
 import de.ailis.wlandsuite.game.parts.SimpleCode;
@@ -77,6 +78,9 @@ public class GameMap extends AbstractGameBlock
 
     /** The map info */
     private MapInfo mapInfo;
+    
+    /** The NPC list */
+    private NPCList npcList;
 
     /** The action class code pointer tables */
     private Map<Integer, CodePointerTable> codePointerTables;
@@ -174,6 +178,10 @@ public class GameMap extends AbstractGameBlock
             {
                 part = new MapInfo(child);
             }
+            else if (tagName.equals("npcList"))
+            {
+                part = new NPCList(child);
+            }
             else
             {
                 throw new GameException("Unknown game part type: " + tagName);
@@ -237,6 +245,14 @@ public class GameMap extends AbstractGameBlock
         this.mapInfo = new MapInfo(bytes, offset + this.centralDirectory.getSize());
         this.parts.add(this.mapInfo);
 
+        // Read NPC list if present
+        offset = this.centralDirectory.getNpcOffset();
+        if (offset != 0)
+        {
+            this.npcList = new NPCList(bytes, offset);
+            this.parts.add(this.npcList);
+        }
+        
         int monsters = (this.centralDirectory.getStringsOffset() - this.centralDirectory
             .getMonsterDataOffset()) / 8;
 
@@ -627,5 +643,29 @@ public class GameMap extends AbstractGameBlock
         }
         this.actionSelectorMap = actionSelectorMap;
         this.parts.add(actionSelectorMap);
+    }
+
+
+    /**
+     * Returns the tilesMap.
+     *
+     * @return The tilesMap
+     */
+    
+    public TilesMap getTilesMap()
+    {
+        return this.tilesMap;
+    }
+
+
+    /**
+     * Returns the mapInfo.
+     *
+     * @return The mapInfo
+     */
+    
+    public MapInfo getMapInfo()
+    {
+        return this.mapInfo;
     }
 }

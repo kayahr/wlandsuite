@@ -222,6 +222,31 @@ public abstract class BitInputStream extends InputStream
 
 
     /**
+     * Reads a 3-byte integer from the stream. Returns -1 if the end of the
+     * stream has been reached. The method don't need a byte-aligned stream. So
+     * if you have read 4 bits from the stream the the next 24 bits are the int
+     * which is read by this method.
+     * 
+     * @return The integer value
+     * @throws IOException
+     */
+
+    public int readInt3() throws IOException
+    {
+        int b1, b2, b3;
+
+        b1 = readByte();
+        b2 = readByte();
+        b3 = readByte();
+        if (b1 == -1 || b2 == -1 || b3 == -1)
+        {
+            return -1;
+        }
+        return b1 | (b2 << 8) | (b3 << 16);
+    }
+
+
+    /**
      * Reads a 2-byte word from the stream. Returns -1 if the end of the stream
      * has been reached. The method don't need a byte-aligned stream. So if you
      * have read 4 bits from the stream the the next 16 bits are the word which

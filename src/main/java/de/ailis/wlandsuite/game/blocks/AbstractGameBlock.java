@@ -210,13 +210,12 @@ public abstract class AbstractGameBlock implements GameBlock
         byteStream = new ByteArrayOutputStream();
         for (Part part: this.parts)
         {
+            int realOffset = byteStream.size();
+            
             // Verify offset of unknown block
             if (part instanceof UnknownPart)
             {
-                int realOffset, targetOffset;
-
-                realOffset = byteStream.size();
-                targetOffset = part.getOffset();
+                int targetOffset = part.getOffset();
 
                 // Pad with zeros to match target offset
                 /*
@@ -233,7 +232,7 @@ public abstract class AbstractGameBlock implements GameBlock
 
             try
             {
-                part.write(byteStream);
+                part.write(byteStream, realOffset);
             }
             catch (IOException e)
             {

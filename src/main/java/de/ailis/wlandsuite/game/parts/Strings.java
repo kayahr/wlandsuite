@@ -170,10 +170,10 @@ public class Strings extends AbstractPart
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream)
+     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream, int)
      */
-
-    public void write(OutputStream stream) throws IOException
+    
+    public void write(OutputStream stream, int blockOffset) throws IOException
     {
         BitOutputStreamWrapper bitStream;
         CharTable charTable;

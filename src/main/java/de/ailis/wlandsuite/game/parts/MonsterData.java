@@ -140,10 +140,10 @@ public class MonsterData extends AbstractPart
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream)
+     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream, int)
      */
-
-    public void write(OutputStream stream) throws IOException
+    
+    public void write(OutputStream stream, int offset) throws IOException
     {
         BitOutputStreamWrapper bitStream;
 

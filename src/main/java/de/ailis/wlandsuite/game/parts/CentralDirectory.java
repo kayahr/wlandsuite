@@ -96,13 +96,36 @@ public class CentralDirectory extends AbstractPart
             {
                 throw new GameException("The unknown offset is not zero");
             }
+            
+            // Validate NPC list and fix all offsets pointing wrongly to the list
+            if (this.npcOffset != 0)
+            {
+                if (NPCList.isNPCList(bytes, this.npcOffset))
+                {
+                    if (this.monsterNamesOffset == this.npcOffset)
+                    {
+                        System.out.println("Here");
+                    }
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (this.actionClassMasterTable[i] == this.npcOffset)
+                        {
+                            this.actionClassMasterTable[i] = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    this.npcOffset = 0;
+                }
+            }
         }
         catch (IOException e)
         {
             throw new GameException(e.toString(), e);
         }
     }
-
+    
 
     /**
      * Creates the central directory from XML.
@@ -175,10 +198,10 @@ public class CentralDirectory extends AbstractPart
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream)
+     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream, int)
      */
-
-    public void write(OutputStream stream) throws IOException
+    
+    public void write(OutputStream stream, int blockOffset) throws IOException
     {
         BitOutputStreamWrapper bitStream;
 

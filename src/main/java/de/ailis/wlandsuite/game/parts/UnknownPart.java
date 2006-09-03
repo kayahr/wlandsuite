@@ -180,11 +180,10 @@ public class UnknownPart extends AbstractPart
 
 
     /**
-     * @throws IOException
-     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream)
+     * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream, int)
      */
-
-    public void write(OutputStream stream) throws IOException
+    
+    public void write(OutputStream stream, int offset) throws IOException
     {
         stream.write(this.bytes);
     }

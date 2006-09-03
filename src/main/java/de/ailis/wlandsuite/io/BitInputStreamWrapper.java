@@ -62,4 +62,15 @@ public class BitInputStreamWrapper extends BitInputStream
     {
         return this.stream.read();
     }
+    
+    
+    /**
+     * @see java.io.InputStream#available()
+     */
+    
+    @Override
+    public int available() throws IOException
+    {
+        return this.stream.available();
+    }
 }

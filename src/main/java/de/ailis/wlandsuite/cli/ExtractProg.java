@@ -24,51 +24,46 @@
 package de.ailis.wlandsuite.cli;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 /**
- * A base class for unpack programs. Unpack programs are meant for unpacking
- * a single file into a directory.
+ * A base class for extract programs. Extract programs are meant for extracting
+ * information from the wasteland directory into a target directory.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public abstract class UnpackProg extends CLIProg
+public abstract class ExtractProg extends CLIProg
 {
-    /** The input filename (or null for stdin) */
+    /** The input filename (or null for current directory) */
     protected String input = null;
-    
+
     /** The output directory */
     protected File output;
 
-    
+
     /**
-     * Returns the input stream where the input data can be read from.
+     * Returns the source directory where the input data can be read from.
      * 
      * @param input
      *            The input file name or null for stdin
      * @return The input stream
-     * @throws FileNotFoundException
      */
 
-    private InputStream getInputStream(String input)
-        throws FileNotFoundException
+    private File getSourceDirectory(String input)
     {
         if (input == null)
         {
-            return System.in;
+            return new File(".");
         }
         else
         {
-            return new FileInputStream(new File(input));
+            return new File(input);
         }
     }
-    
+
 
     /**
      * Runs the program
@@ -81,8 +76,8 @@ public abstract class UnpackProg extends CLIProg
     @Override
     public void run(String[] params) throws IOException
     {
-        InputStream inputStream;
-        
+        File sourceDirectory;
+
         if (params.length == 0)
         {
             wrongUsage("No output directory specified");
@@ -94,10 +89,6 @@ public abstract class UnpackProg extends CLIProg
         if (params.length > 1)
         {
             this.input = params[1];
-            if ("-".equals(this.input))
-            {
-                this.input = null;
-            }
         }
 
         // Too many parameters?
@@ -106,28 +97,22 @@ public abstract class UnpackProg extends CLIProg
             wrongUsage("Too many parameters");
         }
 
-        // Read the input file
-        inputStream = getInputStream(this.input);
-        try
-        {
-            unpack(inputStream, this.output);
-        }
-        finally
-        {
-            inputStream.close();
-        }
+        // Read the source directory
+        sourceDirectory = getSourceDirectory(this.input);
+        extract(sourceDirectory, this.output);
     }
 
 
     /**
-     * Converts some input into some output.
+     * Extracts some data from input directory into some output.
      * 
-     * @param input
-     *            The input stream
-     * @param directory
+     * @param sourceDirectory
+     *            The input directory
+     * @param targetDirectory
      *            The output directory
-     * @throws IOException 
+     * @throws IOException
      */
 
-    protected abstract void unpack(InputStream input, File directory) throws IOException;
+    protected abstract void extract(File sourceDirectory, File targetDirectory)
+        throws IOException;
 }

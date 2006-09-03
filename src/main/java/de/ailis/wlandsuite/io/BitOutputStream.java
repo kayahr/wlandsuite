@@ -223,6 +223,22 @@ public abstract class BitOutputStream extends OutputStream
 
 
     /**
+     * Writes a 3-byte integer to the stream.
+     * 
+     * @param integer
+     *            The integer to write
+     * @throws IOException
+     */
+
+    public void writeInt3(int integer) throws IOException
+    {
+        writeByte(integer & 0xff);
+        writeByte((integer >> 8) & 0xff);
+        writeByte((integer >> 16) & 0xff);
+    }
+
+
+    /**
      * Flush the output to make sure all bits are written even if they don't
      * fill a whole byte.
      * 

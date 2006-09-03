@@ -33,22 +33,22 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.game.GameException;
+import de.ailis.wlandsuite.io.BitInputStream;
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
-import de.ailis.wlandsuite.utils.StringUtils;
 
 
 /**
- * Monster names
+ * The NPC list
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class MonsterNames extends AbstractPart
+public class NPCList extends AbstractPart
 {
-    /** The monster names */
-    private List<String> names = new ArrayList<String>();
+    /** The npcs */
+    private List<Char> npcs = new ArrayList<Char>();
 
 
     /**
@@ -58,37 +58,31 @@ public class MonsterNames extends AbstractPart
      *            The game block data
      * @param offset
      *            The offset of the part in the game block
-     * @param monsters
-     *            The number of monsters 
      */
 
-    public MonsterNames(byte[] bytes, int offset, int monsters)
+    public NPCList(byte[] bytes, int offset)
     {
-        int b;
+        ByteArrayInputStream byteStream;
         BitInputStreamWrapper bitStream;
-        
-        this.size = 0;
+
         this.offset = offset;
+        byteStream = new ByteArrayInputStream(bytes, offset, bytes.length
+            - offset);
+        bitStream = new BitInputStreamWrapper(byteStream);
         try
         {
-            bitStream = new BitInputStreamWrapper(new ByteArrayInputStream(bytes,
-                offset, bytes.length - offset));
+            // Skip first offset. It's always 0
+            bitStream.readWord();
+            offset += 2;
 
-            for (int i = 0; i < monsters; i++)
+            int quantity = (bitStream.readWord() - offset) / 2;
+
+            this.size = 2 + quantity * 0x102;
+
+            for (int i = 0; i < quantity; i++)
             {
-                StringBuilder name = new StringBuilder();
-                while (true)
-                {
-                    String s;
-                    
-                    b = bitStream.readByte();
-                    this.size++;
-                    offset++;
-                    if (b == 0) break;
-                    s = new String(new byte[] { (byte) b }, "ASCII");
-                    name.append(s);
-                }
-                this.names.add(name.toString());
+                this.npcs.add(new Char(bytes, offset + quantity * 2));
+                offset += 0x100;
             }
         }
         catch (IOException e)
@@ -106,13 +100,13 @@ public class MonsterNames extends AbstractPart
      */
 
     @SuppressWarnings("unchecked")
-    public MonsterNames(Element element)
+    public NPCList(Element element)
     {
         super();
 
-        for (Element subElement: (List<Element>) element.elements("name"))
+        for (Element subElement: (List<Element>) element.elements("character"))
         {
-            this.names.add(StringUtils.unescape(subElement.getText(), "ASCII"));
+            this.npcs.add(new Char(subElement));
         }
     }
 
@@ -125,13 +119,12 @@ public class MonsterNames extends AbstractPart
     {
         Element element, subElement;
 
-        element = DocumentHelper.createElement("monsterNames");
+        element = DocumentHelper.createElement("npcList");
         element.addAttribute("offset", Integer.toString(this.offset));
-        
-        for (String name: this.names)
+        element.addAttribute("size", Integer.toString(this.size));
+        for (Char character: this.npcs)
         {
-            subElement = DocumentHelper.createElement("name");
-            subElement.setText(StringUtils.escape(name, "ASCII"));
+            subElement = character.toXml();
             element.add(subElement);
         }
         return element;
@@ -141,42 +134,67 @@ public class MonsterNames extends AbstractPart
     /**
      * @see de.ailis.wlandsuite.game.parts.Part#write(java.io.OutputStream, int)
      */
-    
-    public void write(OutputStream stream, int offset) throws IOException
+
+    public void write(OutputStream stream, int blockOffset) throws IOException
     {
         BitOutputStreamWrapper bitStream;
 
         bitStream = new BitOutputStreamWrapper(stream);
-        for (String name: this.names)
+        bitStream.writeWord(0);
+        for (int i = 0; i < this.npcs.size(); i++)
         {
-            bitStream.write(name.getBytes("ASCII"));
-            bitStream.write(0);
+            bitStream.writeWord(blockOffset + 2 + this.npcs.size() * 2 + i
+                * 0x100);
+        }
+
+        for (Char npc: this.npcs)
+        {
+            npc.write(bitStream, 0);
         }
         bitStream.flush();
     }
 
 
     /**
-     * Returns the monsterNames.
-     *
-     * @return The monsterNames
+     * Checks if the specified block is a NPC list. This is needed because the
+     * central directory sometimes have the same offsets for different parts.
+     * This check can be used to ensure that the NPC list offset is correct.
+     * 
+     * @param bytes
+     *            The bytes array
+     * @param offset
+     *            The offset in the bytes array
+     * @return If block is a NPC list
      */
-    
-    public List<String> getNames()
+
+    public static boolean isNPCList(byte[] bytes, int offset)
     {
-        return this.names;
+        BitInputStream bitStream = new BitInputStreamWrapper(
+            new ByteArrayInputStream(bytes, offset, bytes.length - offset));
+
+        try
+        {
+            // First offset must be 0
+            if (bitStream.readWord() != 0) return false;
+
+            // Maximum quantity is 255
+            offset += 2;
+            int quantity = (bitStream.readWord() - offset) / 2;
+            if (quantity > 255) return false;
+
+            // All offsets of the characters must be 0x100 bytes apart
+            offset += quantity * 2;
+            for (int i = 1; i < quantity; i++)
+            {
+                int tmp = bitStream.readWord();
+                if (tmp != (offset + i * 0x100)) return false;
+            }
+
+            return true;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
     }
-
-
-    /**
-     * Sets the monsterNames.
-     *
-     * @param monsterNames 
-     *            The monsterNames to set
-     */
-    
-    public void setNames(List<String> monsterNames)
-    {
-        this.names = monsterNames;
-    }       
 }

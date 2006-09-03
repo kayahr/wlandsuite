@@ -52,10 +52,12 @@ public interface Part extends Comparable<Part>
      * 
      * @param stream
      *            The output stream
+     * @param offset
+     *            The offset the part is written to
      * @throws IOException
      */
 
-    public void write(OutputStream stream) throws IOException;
+    public void write(OutputStream stream, int offset) throws IOException;
 
 
     /**
