@@ -33,13 +33,13 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import de.ailis.wlandsuite.cli.ExtractProg;
-import de.ailis.wlandsuite.game.Game;
-import de.ailis.wlandsuite.game.blocks.GameBlock;
-import de.ailis.wlandsuite.game.blocks.GameMap;
-import de.ailis.wlandsuite.game.parts.TilesMap;
 import de.ailis.wlandsuite.htds.Htds;
 import de.ailis.wlandsuite.image.EgaImage;
 import de.ailis.wlandsuite.pic.Pic;
+import de.ailis.wlandsuite.rawgame.Game;
+import de.ailis.wlandsuite.rawgame.blocks.GameBlock;
+import de.ailis.wlandsuite.rawgame.blocks.GameMap;
+import de.ailis.wlandsuite.rawgame.parts.TilesMap;
 import de.ailis.wlandsuite.sprites.Sprites;
 
 

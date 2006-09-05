@@ -35,9 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.ailis.wlandsuite.cli.PackProg;
-import de.ailis.wlandsuite.game.BlockFactory;
-import de.ailis.wlandsuite.game.Game;
-import de.ailis.wlandsuite.game.blocks.GameBlock;
+import de.ailis.wlandsuite.rawgame.BlockFactory;
+import de.ailis.wlandsuite.rawgame.Game;
+import de.ailis.wlandsuite.rawgame.blocks.GameBlock;
 
 
 /**

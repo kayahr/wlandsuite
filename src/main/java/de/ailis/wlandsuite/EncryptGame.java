@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import de.ailis.wlandsuite.cli.ConvertProg;
-import de.ailis.wlandsuite.game.Game;
+import de.ailis.wlandsuite.rawgame.Game;
 
 
 /**
