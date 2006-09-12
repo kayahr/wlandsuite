@@ -35,8 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.ailis.wlandsuite.cli.PackProg;
-import de.ailis.wlandsuite.game.Game;
-import de.ailis.wlandsuite.game.blocks.GameMap;
+import de.ailis.wlandsuite.rawgame.BlockFactory;
+import de.ailis.wlandsuite.rawgame.Game;
+import de.ailis.wlandsuite.rawgame.blocks.GameBlock;
 
 
 /**
@@ -46,7 +47,7 @@ import de.ailis.wlandsuite.game.blocks.GameMap;
  * @version $Revision$
  */
 
-public class PackGame extends PackProg
+public class PackRawGame extends PackProg
 {
     /** The disk index */
     private byte disk = -1;
@@ -79,35 +80,36 @@ public class PackGame extends PackProg
     public void pack(File directory, OutputStream output) throws IOException
     {
         Game game;
-        int mapNo;
+        List<GameBlock> blocks;
+        int blockNo;
+        File blockFile;
         InputStream stream;
 
-        game = new Game();
-        mapNo = 0;
+        blocks = new ArrayList<GameBlock>();
+        blockNo = 0;
         while (true)
         {
-            File mapFile;
-            
-            mapFile = new File(String.format("%s%cmap%02d.xml", new Object[] {
-                directory.getPath(), File.separatorChar, mapNo }));
-            if (!mapFile.exists())
+            blockFile = new File(String.format("%s%c%03d.xml", new Object[] {
+                directory.getPath(), File.separatorChar, blockNo }));
+            if (!blockFile.exists())
             {
                 break;
             }
-            stream = new FileInputStream(mapFile);
+            stream = new FileInputStream(blockFile);
             try
             {
-                System.out.println("Reading map " + mapNo);
-                game.addMap(GameMap.readXml(stream));
+                System.out.println("Block " + blockNo);
+                blocks.add(BlockFactory.readXml(stream));
             }
             finally
             {
                 stream.close();
             }
-            mapNo++;
+            blockNo++;
         }
 
-        game.write(output, this.disk == -1 ? 0 : this.disk);
+        game = new Game(blocks, this.disk == -1 ? 0 : this.disk);
+        game.write(output);
     }
 
 
@@ -120,13 +122,13 @@ public class PackGame extends PackProg
 
     public static void main(String[] args)
     {
-        PackGame app;
+        PackRawGame app;
         LongOpt[] longOpts;
 
         longOpts = new LongOpt[1];
         longOpts[0] = new LongOpt("disk", LongOpt.REQUIRED_ARGUMENT, null, 'D');
 
-        app = new PackGame();
+        app = new PackRawGame();
         app.setHelp("help/packgame.txt");
         app.setProgName("packgame");
         app.setLongOpts(longOpts);

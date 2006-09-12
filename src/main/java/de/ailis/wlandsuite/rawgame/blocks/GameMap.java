@@ -37,9 +37,14 @@ import de.ailis.wlandsuite.rawgame.GameException;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
 import de.ailis.wlandsuite.rawgame.parts.ActionClassMap;
 import de.ailis.wlandsuite.rawgame.parts.ActionSelectorMap;
+import de.ailis.wlandsuite.rawgame.parts.AlterCode;
+import de.ailis.wlandsuite.rawgame.parts.Alteration;
 import de.ailis.wlandsuite.rawgame.parts.CentralDirectory;
+import de.ailis.wlandsuite.rawgame.parts.CheckCode;
 import de.ailis.wlandsuite.rawgame.parts.CodePointerTable;
+import de.ailis.wlandsuite.rawgame.parts.ImpassableCode;
 import de.ailis.wlandsuite.rawgame.parts.MapInfo;
+import de.ailis.wlandsuite.rawgame.parts.MaskCode;
 import de.ailis.wlandsuite.rawgame.parts.MonsterData;
 import de.ailis.wlandsuite.rawgame.parts.MonsterNames;
 import de.ailis.wlandsuite.rawgame.parts.NPCList;
@@ -63,28 +68,28 @@ public class GameMap extends AbstractGameBlock
 {
     /** The map size. Only when block type is "map" */
     private int mapSize;
-    
+
     /** The action class map */
     private ActionClassMap actionClassMap;
 
     /** The action selector map */
     private ActionSelectorMap actionSelectorMap;
-    
+
     /** The tiles map */
-    private TilesMap tilesMap; 
+    private TilesMap tilesMap;
 
     /** The central directory */
     private CentralDirectory centralDirectory;
 
     /** The map info */
     private MapInfo mapInfo;
-    
+
     /** The NPC list */
     private NPCList npcList;
 
     /** The action class code pointer tables */
     private Map<Integer, CodePointerTable> codePointerTables;
-    
+
 
     /**
      * Constructor
@@ -124,8 +129,7 @@ public class GameMap extends AbstractGameBlock
             }
             else if (tagName.equals("tilesMap"))
             {
-                part = this.tilesMap = new TilesMap(child,
-                    this.mapSize);
+                part = this.tilesMap = new TilesMap(child, this.mapSize);
             }
             else if (tagName.equals("actionClassMap"))
             {
@@ -161,6 +165,22 @@ public class GameMap extends AbstractGameBlock
             else if (tagName.equals("simple"))
             {
                 part = new SimpleCode(child);
+            }
+            else if (tagName.equals("check"))
+            {
+                part = new CheckCode(child);
+            }
+            else if (tagName.equals("impassable"))
+            {
+                part = new ImpassableCode(child);
+            }
+            else if (tagName.equals("mask"))
+            {
+                part = new MaskCode(child);
+            }
+            else if (tagName.equals("alter"))
+            {
+                part = new AlterCode(child);
             }
             else if (tagName.equals("monsterNames"))
             {
@@ -222,7 +242,7 @@ public class GameMap extends AbstractGameBlock
 
         // Remember the map size
         this.mapSize = mapSize;
-        
+
         // Read the tiles map
         this.tilesMap = new TilesMap(bytes, this.mapSize);
         this.parts.add(this.tilesMap);
@@ -240,9 +260,10 @@ public class GameMap extends AbstractGameBlock
         offset = mapSize * mapSize * 3 / 2;
         this.centralDirectory = new CentralDirectory(bytes, offset);
         this.parts.add(this.centralDirectory);
-        
+
         // Read map info
-        this.mapInfo = new MapInfo(bytes, offset + this.centralDirectory.getSize());
+        this.mapInfo = new MapInfo(bytes, offset
+            + this.centralDirectory.getSize());
         this.parts.add(this.mapInfo);
 
         // Read NPC list if present
@@ -257,20 +278,20 @@ public class GameMap extends AbstractGameBlock
         {
             int monsters = (this.centralDirectory.getStringsOffset() - this.centralDirectory
                 .getMonsterDataOffset()) / 8;
-    
+
             // Parse monster names
             this.parts.add(new MonsterNames(bytes, this.centralDirectory
                 .getMonsterNamesOffset(), monsters));
-    
+
             this.parts.add(new MonsterData(bytes, this.centralDirectory
                 .getMonsterDataOffset(), monsters));
         }
 
         // Parse the strings
-        this.parts.add(new Strings(bytes,
-            this.centralDirectory.getStringsOffset(), this.tilesMap.getOffset()));
+        this.parts.add(new Strings(bytes, this.centralDirectory
+            .getStringsOffset(), this.tilesMap.getOffset()));
 
-        // Cycle through all action class offsets and build code pointer tables        
+        // Cycle through all action class offsets and build code pointer tables
         Map<Integer, CodePointerTable> tables;
         tables = new HashMap<Integer, CodePointerTable>(16);
         this.codePointerTables = new HashMap<Integer, CodePointerTable>(16);
@@ -334,6 +355,7 @@ public class GameMap extends AbstractGameBlock
         while (actionClass != 255 && actionClass != 0)
         {
             CodePointerTable table = this.codePointerTables.get(actionClass);
+            if (table == null) break;
             int pointer = table.getCodePointer(actionSelector);
             if (hasPart(pointer)) return;
             switch (actionClass)
@@ -343,6 +365,22 @@ public class GameMap extends AbstractGameBlock
                     this.parts.add(simple);
                     actionClass = simple.getActionClass();
                     actionSelector = simple.getActionSelector();
+                    break;
+
+                case 2:
+                    CheckCode check = new CheckCode(bytes, pointer);
+                    this.parts.add(check);
+                    parseCode(bytes, check.getFailActionClass(), check
+                        .getFailActionSelector());
+                    actionClass = check.getPassActionClass();
+                    actionSelector = check.getPassActionSelector();
+                    break;
+
+                case 4:
+                    MaskCode mask = new MaskCode(bytes, pointer);
+                    this.parts.add(mask);
+                    actionClass = mask.getActionClass();
+                    actionSelector = mask.getActionSelector();
                     break;
 
                 case 9:
@@ -358,6 +396,28 @@ public class GameMap extends AbstractGameBlock
                     this.parts.add(transition);
                     actionClass = transition.getActionClass();
                     actionSelector = transition.getActionSelector();
+                    break;
+
+                case 11:
+                    ImpassableCode impassable = new ImpassableCode(bytes,
+                        pointer);
+                    this.parts.add(impassable);
+                    actionClass = impassable.getActionClass();
+                    actionSelector = impassable.getActionSelector();
+                    break;
+
+                case 12:
+                    AlterCode alter = new AlterCode(bytes,
+                        pointer);
+                    this.parts.add(alter);
+                    for (Alteration alteration: alter.getAlterations())
+                    {
+                        parseCode(bytes, alteration.getActionClass(), alteration
+                            .getActionSelector());
+                        
+                    }
+                    actionClass = alter.getActionClass();
+                    actionSelector = alter.getActionSelector();
                     break;
 
                 default:
@@ -445,7 +505,8 @@ public class GameMap extends AbstractGameBlock
 
 
     /**
-     * @see de.ailis.wlandsuite.rawgame.blocks.GameBlock#write(java.io.OutputStream, boolean)
+     * @see de.ailis.wlandsuite.rawgame.blocks.GameBlock#write(java.io.OutputStream,
+     *      boolean)
      */
 
     public void write(OutputStream stream, boolean encrypt) throws IOException
@@ -473,7 +534,7 @@ public class GameMap extends AbstractGameBlock
         else
         {
             gameStream = stream;
-            
+
             // Write dummy checksum to keep the filesize
             gameStream.write(0);
             gameStream.write(0);
@@ -509,59 +570,57 @@ public class GameMap extends AbstractGameBlock
 
 
     /**
-     * Returns the map size. This method does not look for the map size in the
-     * EXE file. Instead it tries to "guess" it by looking at some
-     * characteristics of the byte array. This is not totaly safe but it works
-     * fine.
-     * 
-     * If the map size could not be determined then a GameException is thrown.
+     * Determines the map size by just looking at the MSQ block bytes. For this
+     * it needs at least 6189 unencrypted bytes. Throws a GameException if it
+     * was not able to determine the map size.
      * 
      * @param bytes
-     *            The bytes of the map block
-     * @return The map size
-     * @throws GameException
-     *             If size could not be determined
+     *            The MSQ block bytes
+     * @return The map size.
      */
 
-    private static int getMapSize(byte[] bytes) throws GameException
+    private static int getMapSize(byte[] bytes)
     {
-        int start;
         int offset;
+        boolean is32, is64;
 
-        // Cycle over possible map sizes
-        size: for (int size = 32; size <= 64; size *= 2)
+        // Check if map can be size 64
+        is64 = false;
+        offset = 64 * 64 * 3 / 2;
+        if (offset + 44 < bytes.length)
         {
-            // Calculate start of central directory
-            start = size * size * 3 / 2;
-
-            // Read 19 offsets of the central directory and validate them
-            for (int i = 0; i < 19; i++)
+            if (bytes[offset + 44] == 64 && bytes[offset + 6] == 0
+                && bytes[offset + 7] == 0)
             {
-                // Read offset
-                try
-                {
-                    offset = (bytes[start + i * 2] & 0xff)
-                        | ((bytes[start + i * 2 + 1] & 0xff) << 8);
-                }
-                catch (IndexOutOfBoundsException e)
-                {
-                    // Out of bounds? Size must be wrong
-                    continue size;
-                }
-
-                // Validate offset
-                if (offset != 0 && (offset < start || offset > bytes.length))
-                {
-                    continue size;
-                }
+                is64 = true;
             }
-
-            // Everything looks fine. This size is correct
-            return size;
         }
 
-        // Found no valid size? Strange. Throw exception
-        throw new GameException("Unable to determine map size");
+        // Check if map can be size 3
+        is32 = false;
+        offset = 32 * 32 * 3 / 2;
+        if (offset + 44 < bytes.length && bytes[offset + 6] == 0
+            && bytes[offset + 7] == 0)
+        {
+            if (bytes[offset + 44] == 32)
+            {
+                is32 = true;
+            }
+        }
+
+        // Complain if map can be both sizes
+        if (!is32 && !is64)
+        {
+            throw new GameException(
+                "Cannot determine map size: Map is not a 32 or 64 size map");
+        }
+        if (is32 && is64)
+        {
+            throw new GameException(
+                "Cannot determine map size: Map could be a 32 or 64 size map");
+        }
+
+        return is32 ? 32 : 64;
     }
 
 
@@ -651,10 +710,10 @@ public class GameMap extends AbstractGameBlock
 
     /**
      * Returns the tilesMap.
-     *
+     * 
      * @return The tilesMap
      */
-    
+
     public TilesMap getTilesMap()
     {
         return this.tilesMap;
@@ -663,10 +722,10 @@ public class GameMap extends AbstractGameBlock
 
     /**
      * Returns the mapInfo.
-     *
+     * 
      * @return The mapInfo
      */
-    
+
     public MapInfo getMapInfo()
     {
         return this.mapInfo;

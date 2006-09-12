@@ -27,13 +27,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import de.ailis.wlandsuite.cli.UnpackProg;
-import de.ailis.wlandsuite.game.Game;
-import de.ailis.wlandsuite.game.blocks.GameMap;
-import de.ailis.wlandsuite.io.SeekableInputStream;
-import de.ailis.wlandsuite.rawgame.GameBlockType;
+import de.ailis.wlandsuite.rawgame.Game;
+import de.ailis.wlandsuite.rawgame.blocks.GameBlock;
 
 
 /**
@@ -43,7 +42,7 @@ import de.ailis.wlandsuite.rawgame.GameBlockType;
  * @version $Revision$
  */
 
-public class UnpackGame extends UnpackProg
+public class UnpackRawGame extends UnpackProg
 {
     /**
      * @see de.ailis.wlandsuite.cli.UnpackProg#unpack(java.io.InputStream,
@@ -53,39 +52,30 @@ public class UnpackGame extends UnpackProg
     @Override
     public void unpack(InputStream input, File output) throws IOException
     {
-        List<Integer> sizes;
-        SeekableInputStream gameStream;
-        int mapNo;
-        int offset;
-        GameBlockType type;
         Game game;
-        File mapsDir;
+        List<GameBlock> blocks;
+        int blockNo;
+        File blockFile;
 
-        // Parse the game file
         game = Game.read(input);
-
-        // Write all maps as XML to disk
-        mapNo = 0;
-        for (GameMap map: game.getMaps())
+        blocks = game.getBlocks();
+        blockNo = 0;
+        for (GameBlock block: blocks)
         {
-            File mapFile;
-            FileOutputStream outputStream;
-
-            mapFile = new File(String.format("%s%cmap%02d.xml", new Object[] {
-                output.getPath(), File.separatorChar, mapNo }));
+            OutputStream stream;
             
-            outputStream = new FileOutputStream(mapFile);
+            blockFile = new File(String.format("%s%c%03d.xml", new Object[] {
+                output, File.separatorChar, blockNo }));
+            stream = new FileOutputStream(blockFile);
             try
             {
-                map.writeXml(outputStream);
+                block.writeXml(stream);
             }
             finally
             {
-                outputStream.close();
+                stream.close();
             }
-            
-            // Increase map counter
-            mapNo++;
+            blockNo++;
         }
     }
 
@@ -99,8 +89,8 @@ public class UnpackGame extends UnpackProg
 
     public static void main(String[] args)
     {
-        UnpackGame app;
-        app = new UnpackGame();
+        UnpackRawGame app;
+        app = new UnpackRawGame();
         app.setHelp("help/unpackgame.txt");
         app.setProgName("unpackgame");
         app.start(args);

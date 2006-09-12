@@ -144,7 +144,8 @@ public class TilesMap extends AbstractPart
         while (i > 0)
         {
             if ((bytes[i] == 0) && (bytes[i + 1] == ((mapSize * mapSize) >> 8))
-                && (bytes[i + 2] == 0) && (bytes[i + 3] == 0))
+                && (bytes[i + 2] == 0) && (bytes[i + 3] == 0)
+                && (bytes[i + 6] == 0) && (bytes[i + 7] == 0))
             {
                 try
                 {
@@ -175,10 +176,10 @@ public class TilesMap extends AbstractPart
             }
             i--;
         }
-        if (i == 0)
+        /*if (i == 0)
         {
             throw new GameException("No tilesMap found in map");
-        }
+        }*/
         this.size = bytes.length - this.offset;
     }
 
@@ -238,7 +239,7 @@ public class TilesMap extends AbstractPart
 
         byteStream = new ByteArrayOutputStream();
         bitStream = new BitOutputStreamWrapper(stream);
-
+/*
         for (int y = 0, yMax = this.map.length; y < yMax; y++)
         {
             for (int x = 0, xMax = this.map[y].length; x < xMax; x++)
@@ -249,7 +250,7 @@ public class TilesMap extends AbstractPart
         bytes = byteStream.toByteArray();
         bitStream.write(bytes);
         if (1==1) return;
-
+*/
         // Write padding bytes
         int padding = this.offset - offset;
         if (padding < 0)
