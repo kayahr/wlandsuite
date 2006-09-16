@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -38,13 +40,16 @@ import org.dom4j.io.SAXReader;
 
 import de.ailis.wlandsuite.game.RotatingXorInputStream;
 import de.ailis.wlandsuite.game.parts.ActionMap;
+import de.ailis.wlandsuite.game.parts.Actions;
 import de.ailis.wlandsuite.game.parts.BattleStrings;
 import de.ailis.wlandsuite.game.parts.CentralDirectory;
 import de.ailis.wlandsuite.game.parts.Info;
 import de.ailis.wlandsuite.game.parts.Monsters;
 import de.ailis.wlandsuite.game.parts.NPCs;
+import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.game.parts.Strings;
 import de.ailis.wlandsuite.game.parts.TileMap;
+import de.ailis.wlandsuite.game.parts.actions.SpecialAction;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.GameException;
@@ -92,6 +97,9 @@ public class GameMap extends GameBlock implements Serializable
 
     /** The monsters */
     private Monsters monsters;
+    
+    /** The actions */
+    private Map<Integer, Actions> actions;
 
 
     /**
@@ -126,6 +134,7 @@ public class GameMap extends GameBlock implements Serializable
         this.msqSize = msqBlockSize;
         this.tilemapOffset = tilemapOffset;
         this.actionMap = new ActionMap(mapSize);
+        this.actions = new HashMap<Integer, Actions>(15);
     }
 
 
@@ -159,6 +168,7 @@ public class GameMap extends GameBlock implements Serializable
         GameMap gameMap;
         long startOffset;
         CentralDirectory centralDirectory;
+        SpecialActionTable specialActionTable;
 
         // Read the MSQ block header and validate it
         headerBytes = new byte[4];
@@ -243,6 +253,25 @@ public class GameMap extends GameBlock implements Serializable
 
         // Sanitizes the central directory
         centralDirectory.sanitizeCentralDirectory(gameMap);
+        
+        // Read the special action table
+        stream.seek(centralDirectory.getNibble6Offset());
+        specialActionTable = SpecialActionTable.read(stream, 128);
+        
+        // Read the actions
+        for (int i = 1; i < 16; i++)
+        {
+            int offset = centralDirectory.getActionClassOffset(i);
+            if (offset != 0)
+            {
+                stream.seek(offset);
+                gameMap.actions.put(i, Actions.read(i, stream, specialActionTable));
+            }
+            else
+            {
+                gameMap.actions.put(i, new Actions());
+            }
+        }
 
         // Return the newly created Game Map
         return gameMap;
@@ -268,6 +297,7 @@ public class GameMap extends GameBlock implements Serializable
         long directoryOffset;
         RotatingXorOutputStream xorStream;
         byte[] bytes;
+        SpecialActionTable specialActionTable;
 
         byteStream = new ByteArrayOutputStream();
         plainStream = new SeekableOutputStream(byteStream);
@@ -288,6 +318,31 @@ public class GameMap extends GameBlock implements Serializable
 
         // Write the battle strings
         this.battleStrings.write(plainStream);
+        
+        // Build the special action table
+        specialActionTable = buildSpecialActionTable();
+
+        // Write the actions
+        for (int i = 1; i < 16; i++)
+        {
+            Actions actions;
+            
+            actions = this.actions.get(i);
+            if (actions == null || actions.countActions() == 0)
+            {
+                continue;
+            }
+
+            centralDirectory.setActionClassOffset(i, (int) plainStream.tell());
+            actions.write(plainStream, specialActionTable);
+        }
+        
+        // Write the special action table
+        if (specialActionTable.size() > 0)
+        {
+            centralDirectory.setNibble6Offset((int) plainStream.tell());
+            specialActionTable.write(plainStream);
+        }
 
         // Write the NPCs
         centralDirectory.setNpcOffset((int) plainStream.tell());
@@ -351,6 +406,48 @@ public class GameMap extends GameBlock implements Serializable
         // Write the unencrypted data
         stream.write(bytes, stringsOffset, bytes.length - stringsOffset);
     }
+    
+    
+    /**
+     * Builds the special action table by looking at the actions in 
+     * action class 6.
+     *
+     * @return The special action table
+     */
+    
+    private SpecialActionTable buildSpecialActionTable()
+    {
+        Actions actions;
+        SpecialActionTable specialActionTable;
+        
+        specialActionTable = new SpecialActionTable();
+        
+        actions = this.actions.get(6);
+        if (actions != null)
+        {
+            for (int i = 0, max = actions.countActions(); i < max; i++)
+            {
+                try
+                {
+                    SpecialAction action = (SpecialAction) actions.getAction(i);
+                    if (action != null)
+                    {
+                        int id = action.getAction();
+                        if (!specialActionTable.contains(id))
+                        {
+                            specialActionTable.add(id);
+                        }
+                    }
+                }
+                catch (ClassCastException e)
+                {
+                    // Ignored
+                }
+            }
+        }
+        
+        return specialActionTable;
+    }
 
 
     /**
@@ -387,6 +484,16 @@ public class GameMap extends GameBlock implements Serializable
         // Parse the battle strings
         gameMap.battleStrings = BattleStrings.read(element
             .element("battleStrings"));
+        
+        // Read the actions
+        for (Object item: element.elements("actions"))
+        {
+            Element subElement = (Element) item;
+            int actionClass;
+            
+            actionClass = Integer.valueOf(subElement.attributeValue("actionClass"));
+            gameMap.actions.put(actionClass, Actions.read(subElement));
+        }        
 
         // Parse the tile map
         gameMap.tileMap = TileMap.read(element.element("tileMap"), mapSize);
@@ -459,6 +566,18 @@ public class GameMap extends GameBlock implements Serializable
 
         // Add the battle strings
         element.add(this.battleStrings.toXml());
+        
+        // Add the actions
+        for (int i = 1; i < 16; i++)
+        {
+            Actions actions;
+            
+            actions = this.actions.get(i);
+            if (actions != null && actions.countActions() > 0)
+            {
+                element.add(actions.toXml(i));
+            }
+        }
 
         // Add the NPCs
         element.add(this.npcs.toXml());

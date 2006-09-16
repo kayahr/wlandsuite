@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE game SYSTEM "game.dtd">
+<game mapSize="32" msqSize="32">
+	<tileMap>
+		
+	</tileMap>
+</game>

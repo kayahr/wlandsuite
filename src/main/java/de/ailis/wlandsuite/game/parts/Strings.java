@@ -170,7 +170,7 @@ public class Strings extends ArrayList<String>
             StringBuilder string = new StringBuilder();
             outer: while (true)
             {
-                if (stream.tell() >= endOffset)
+                if (stream.tell() > endOffset)
                 {
                     return;
                 }

@@ -416,5 +416,17 @@ public class WlExe
             sizes.add(Integer.valueOf(size));
         }
         return sizes;        
+    }
+
+
+    /**
+     * Returns the seg2Offset.
+     *
+     * @return The seg2Offset
+     */
+    
+    public int getSeg2Offset()
+    {
+        return this.seg2Offset;
     }    
 }

@@ -229,7 +229,7 @@ public class CentralDirectory
      *            The offset
      */
 
-    public void setActionClassOffset(byte actionClass, int offset)
+    public void setActionClassOffset(int actionClass, int offset)
     {
         this.actionClassMasterTable[actionClass] = offset;
     }
