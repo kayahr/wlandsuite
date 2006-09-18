@@ -39,6 +39,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import de.ailis.wlandsuite.game.RotatingXorInputStream;
+import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionMap;
 import de.ailis.wlandsuite.game.parts.Actions;
 import de.ailis.wlandsuite.game.parts.BattleStrings;
@@ -82,6 +83,9 @@ public class GameMap extends GameBlock implements Serializable
 
     /** The battle strings */
     private BattleStrings battleStrings;
+
+    /** The action map */
+    private ActionClassMap actionClassMap;
 
     /** The action map */
     private ActionMap actionMap;
@@ -133,6 +137,7 @@ public class GameMap extends GameBlock implements Serializable
         this.mapSize = mapSize;
         this.msqSize = msqBlockSize;
         this.tilemapOffset = tilemapOffset;
+        this.actionClassMap = new ActionClassMap(mapSize);
         this.actionMap = new ActionMap(mapSize);
         this.actions = new HashMap<Integer, Actions>(15);
     }
@@ -208,6 +213,9 @@ public class GameMap extends GameBlock implements Serializable
 
         // Create the Game Map
         gameMap = new GameMap(mapSize, msqBlockSize, tilemapOffset);
+
+        // Read the action map
+        gameMap.actionClassMap = ActionClassMap.read(stream, mapSize);
 
         // Read the action map
         gameMap.actionMap = ActionMap.read(stream, mapSize);
@@ -302,6 +310,9 @@ public class GameMap extends GameBlock implements Serializable
         byteStream = new ByteArrayOutputStream();
         plainStream = new SeekableOutputStream(byteStream);
 
+        // Write the action class map
+        this.actionClassMap.write(plainStream);
+
         // Write the action map
         this.actionMap.write(plainStream);
 
@@ -345,8 +356,11 @@ public class GameMap extends GameBlock implements Serializable
         }
 
         // Write the NPCs
-        centralDirectory.setNpcOffset((int) plainStream.tell());
-        this.npcs.write(plainStream);
+        if (this.npcs.size() > 0)
+        {
+            centralDirectory.setNpcOffset((int) plainStream.tell());
+            this.npcs.write(plainStream);
+        }
 
         // Write the monster names
         centralDirectory.setMonsterNamesOffset((int) plainStream.tell());
@@ -445,7 +459,6 @@ public class GameMap extends GameBlock implements Serializable
                 }
             }
         }
-        
         return specialActionTable;
     }
 
@@ -473,6 +486,10 @@ public class GameMap extends GameBlock implements Serializable
 
         // Create the new map
         gameMap = new GameMap(mapSize, msqSize, tilemapOffset);
+
+        // Parse the action map
+        gameMap.actionClassMap = ActionClassMap.read(element.element("actionClassMap"),
+            mapSize);
 
         // Parse the action map
         gameMap.actionMap = ActionMap.read(element.element("actionMap"),
@@ -559,7 +576,10 @@ public class GameMap extends GameBlock implements Serializable
             .toString(this.tilemapOffset));
 
         // Add the action map
-        element.add(this.actionMap.toXml());
+        element.add(this.actionClassMap.toXml());
+
+        // Add the action map
+        element.add(this.actionMap.toXml(this.actionClassMap));
 
         // Add the map info
         element.add(this.info.toXml());
@@ -721,6 +741,31 @@ public class GameMap extends GameBlock implements Serializable
     public int getMsqSize()
     {
         return this.msqSize;
+    }
+
+
+    /**
+     * Returns the action class map.
+     *
+     * @return The action class map
+     */
+    
+    public ActionClassMap getActionClassMap()
+    {
+        return this.actionClassMap;
+    }
+
+
+    /**
+     * Sets the action class map.
+     *
+     * @param actionClassMap 
+     *            The action class map to set
+     */
+    
+    public void setActionClassMap(ActionClassMap actionClassMap)
+    {
+        this.actionClassMap = actionClassMap;
     }
 
 

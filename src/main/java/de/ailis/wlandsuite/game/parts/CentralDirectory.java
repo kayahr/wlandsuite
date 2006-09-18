@@ -370,7 +370,7 @@ public class CentralDirectory
             {
                 boolean used;
 
-                used = gameMap.getActionMap().hasActionClass(c);
+                used = gameMap.getActionClassMap().hasActionClass(c);
                 if (used)
                 {
                     if (usedClass >= 0)

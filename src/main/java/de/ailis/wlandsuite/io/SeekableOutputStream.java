@@ -311,6 +311,7 @@ public class SeekableOutputStream extends OutputStream
         }
 
         this.stream.write(this.cache, 0, this.size);
+        this.stream.flush();
     }
 
 

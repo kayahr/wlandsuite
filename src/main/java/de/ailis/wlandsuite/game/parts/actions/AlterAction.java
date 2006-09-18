@@ -98,6 +98,18 @@ public class AlterAction implements Action
         {
             action.newAction = 255;
         }
+        
+        // Bugfix for Alter-check on map 8 of game1
+        if (action.message == 0 && action.newAction == 0 && action.newActionClass == 0 && action.alterations.size() == 13 && action.alterations.get(4).getUnknown() == 2 && action.alterations.get(12).getUnknown() == 78)
+        {
+            System.out.println("Patching alter-check (7) on map 8");
+            action.newActionClass = action.alterations.get(4).getUnknown();
+            action.newAction = action.alterations.get(4).getX();
+            while (action.alterations.size() != 4)
+            {
+                action.alterations.remove(action.alterations.size() - 1);
+            }                
+        }
 
         return action;
     }

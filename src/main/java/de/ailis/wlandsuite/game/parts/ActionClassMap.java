@@ -36,21 +36,21 @@ import de.ailis.wlandsuite.rawgame.GameException;
 
 
 /**
- * The Action Map describes the actions of all the map squares.
+ * The Action Class Map describes the action classes of all the map squares.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class ActionMap
+public class ActionClassMap
 {
-    /** The actions */
-    private int[][] actions;
+    /** The action classes */
+    private int[][] actionClasses;
 
 
     /**
-     * Constructs a new action map with the specified map size. Map size must be
-     * 32 or 64. Any other value throws an IllegalArgumentException.
+     * Constructs a new action classes map with the specified map size. Map size
+     * must be 32 or 64. Any other value throws an IllegalArgumentException.
      * 
      * @param mapSize
      *            The map size
@@ -58,7 +58,7 @@ public class ActionMap
      *             If specified size is not 32 and not 64.
      */
 
-    public ActionMap(int mapSize)
+    public ActionClassMap(int mapSize)
     {
         // Validate the map size
         if (mapSize != 32 && mapSize != 64)
@@ -67,55 +67,61 @@ public class ActionMap
                 + mapSize);
         }
 
-        // Initialize the internal arrays
-        this.actions = new int[mapSize][mapSize];
+        // Initialize the internal array
+        this.actionClasses = new int[mapSize][mapSize];
     }
 
 
     /**
-     * Creates a new Action Map by reading it from the specified input stream.
-     * The map size must be specified because it can't be read from the stream
-     * automatically. Map size must be 32 or 64. Any other value throws an
-     * IllegalArgumentException.
+     * Creates a new Action Classes Map by reading it from the specified input
+     * stream. The map size must be specified because it can't be read from the
+     * stream automatically. Map size must be 32 or 64. Any other value throws
+     * an IllegalArgumentException.
      * 
      * @param stream
-     *            The input stream to read the action map from
+     *            The input stream to read the action classes map from
      * @param mapSize
      *            The map size (Must be 32 or 64)
-     * @return The newly constructed Action Map
+     * @return The newly constructed Action Classes Map
      * @throws IOException
      * @throws IllegalArgumentException
      *             If specified size is not 32 and not 64.
      */
 
-    public static ActionMap read(InputStream stream, int mapSize)
+    public static ActionClassMap read(InputStream stream, int mapSize)
         throws IOException
     {
-        ActionMap actionMap;
+        ActionClassMap actionClassMap;
 
         // Create the action map
-        actionMap = new ActionMap(mapSize);
+        actionClassMap = new ActionClassMap(mapSize);
 
-        // Parse the actions from the stream
+        // Parse the action classes from the stream
         for (int y = 0; y < mapSize; y++)
         {
-            for (int x = 0; x < mapSize; x++)
+            for (int x = 0; x < mapSize; x += 2)
             {
-                // Read the action from the stream
-                actionMap.actions[y][x] = stream.read();
+                int b;
+
+                // Read the byte from the stream (Contains two classes)
+                b = stream.read();
+
+                // Set the action classes for two squares
+                actionClassMap.actionClasses[y][x + 0] = (b >> 4) & 0x0f;
+                actionClassMap.actionClasses[y][x + 1] = (b >> 0) & 0x0f;
             }
         }
 
         // Return the newly constructed action map
-        return actionMap;
+        return actionClassMap;
     }
 
 
     /**
-     * Writes the action map to the specified output stream.
+     * Writes the action classes map to the specified output stream.
      * 
      * @param stream
-     *            The output stream to write the action map to
+     *            The output stream to write the action classes map to
      * @throws IOException
      */
 
@@ -124,41 +130,45 @@ public class ActionMap
         int mapSize;
 
         // Determine the map size;
-        mapSize = this.actions.length;
+        mapSize = this.actionClasses.length;
 
-        // Write the actions
+        // Write the action classes
         for (int y = 0; y < mapSize; y++)
         {
-            for (int x = 0; x < mapSize; x++)
+            for (int x = 0; x < mapSize; x += 2)
             {
-                stream.write(this.actions[y][x]);
+                int b;
+
+                b = (this.actionClasses[y][x] << 4)
+                    | this.actionClasses[y][x + 1];
+                stream.write(b);
             }
         }
     }
 
 
     /**
-     * Creates and returns a new action map read from XML.
+     * Creates and returns a new action classes map read from XML.
      * 
      * @param element
      *            The XML element
      * @param mapSize
      *            The map size
-     * @return The action map
+     * @return The action classes map
      */
 
-    public static ActionMap read(Element element, int mapSize)
+    public static ActionClassMap read(Element element, int mapSize)
     {
-        ActionMap actionMap;
+        ActionClassMap actionClassMap;
         String data;
+        char c;
         int i;
         int b;
-        String s;
 
         // Create the new action map
-        actionMap = new ActionMap(mapSize);
+        actionClassMap = new ActionClassMap(mapSize);
 
-        // Parse the actions
+        // Parse the action classes
         data = element.getTextTrim();
         i = 0;
         for (int y = 0; y < mapSize; y++)
@@ -167,44 +177,43 @@ public class ActionMap
             {
                 try
                 {
-                    s = data.substring(i * 3, i * 3 + 2);
+                    c = data.charAt(i);
                 }
                 catch (StringIndexOutOfBoundsException e)
                 {
-                    throw new GameException("Action selector map is corrupt: "
+                    throw new GameException("Action class map is corrupt: "
                         + (mapSize * mapSize - (y * mapSize + x))
                         + " bytes missing");
                 }
-                if (s.equals("..")) s = "00";
+                if (c == '.') c = '0';
                 try
                 {
-                    b = Integer.valueOf(s, 16);
+                    b = Byte.valueOf(Character.toString(c), 16);
                 }
                 catch (NumberFormatException e)
                 {
                     throw new GameException(
-                        "Illegal data in action selector map at y=" + y + " x="
-                            + x);
+                        "Illegal character in action class map at y=" + y
+                            + " x=" + x);
                 }
-                actionMap.actions[y][x] = b;
+                actionClassMap.actionClasses[y][x] = b;
                 i++;
             }
+            i++;
         }
 
         // Return the newly created action map
-        return actionMap;
+        return actionClassMap;
     }
 
 
     /**
-     * Returns the action map in XML format.
+     * Returns the action classes map in XML format.
      * 
-     * @param actionClassMap
-     *            The action class map
-     * @return The action map in XML
+     * @return The action classes map in XML
      */
 
-    public Element toXml(ActionClassMap actionClassMap)
+    public Element toXml()
     {
         Element element;
         StringWriter text;
@@ -212,35 +221,34 @@ public class ActionMap
         int mapSize;
 
         // Determine the map size
-        mapSize = this.actions.length;
+        mapSize = this.actionClasses.length;
 
         // Create the root XML element
-        element = DocumentHelper.createElement("actionMap");
+        element = DocumentHelper.createElement("actionClassMap");
 
-        // Write the actions content
+        // Write the actionClasses content
         text = new StringWriter();
         writer = new PrintWriter(text);
         writer.println();
         for (int y = 0; y < mapSize; y++)
         {
+            // Write indentation
             writer.print("    ");
+
             for (int x = 0; x < mapSize; x++)
             {
                 int b;
 
-                if (x > 0)
+                b = this.actionClasses[y][x];
+                if (b == 0)
                 {
-                    writer.print(" ");
-                }
-
-                b = this.actions[y][x];
-                if (b == 0 && (actionClassMap.getActionClass(x, y) == 0))
-                {
-                    writer.print("..");
+                    // For action class 0 it's ok to write a dot instead of 0.
+                    writer.print('.');
                 }
                 else
                 {
-                    writer.format("%02x", new Object[] { b });
+                    // For all other action classes write the hex character
+                    writer.print(Integer.toHexString(b));
                 }
             }
             writer.println();
@@ -254,34 +262,60 @@ public class ActionMap
 
 
     /**
-     * Returns the action at the specified position
+     * Checks if the specified action class exists in the action class map.
      * 
-     * @param x
-     *            The x position
-     * @param y
-     *            The y position
-     * @return The action
+     * @param actionClass
+     *            The action class to search
+     * @return If the action class exists or not
      */
 
-    public int getAction(int x, int y)
+    public boolean hasActionClass(int actionClass)
     {
-        return this.actions[y][x];
+        int mapSize = this.actionClasses.length;
+
+        for (int y = 0; y < mapSize; y++)
+        {
+            for (int x = 0; x < mapSize; x++)
+            {
+                if (this.actionClasses[y][x] == actionClass)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
     /**
-     * Sets the action at the specified position.
+     * Returns the action class at the specified position
      * 
      * @param x
      *            The x position
      * @param y
      *            The y position
-     * @param action
-     *            The action to set
+     * @return The action class
      */
 
-    public void setAction(int x, int y, int action)
+    public int getActionClass(int x, int y)
     {
-        this.actions[y][x] = action;
+        return this.actionClasses[y][x];
+    }
+
+
+    /**
+     * Sets the action class at the specified position.
+     * 
+     * @param x
+     *            The x position
+     * @param y
+     *            The y position
+     * @param actionClass
+     *            The action class to set
+     */
+
+    public void setActionClass(int x, int y, int actionClass)
+    {
+        this.actionClasses[y][x] = actionClass;
     }
 }

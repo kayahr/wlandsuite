@@ -31,12 +31,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.blocks.GameMap;
+import de.ailis.wlandsuite.game.blocks.Savegame;
+import de.ailis.wlandsuite.game.blocks.ShopItemList;
 
 
 /**
@@ -79,22 +79,21 @@ public class PackGame extends PackProg
     public void pack(File directory, OutputStream output) throws IOException
     {
         Game game;
-        int mapNo;
+        int mapNo, listNo;
         InputStream stream;
+        File file;
 
         game = new Game();
         mapNo = 0;
         while (true)
         {
-            File mapFile;
-            
-            mapFile = new File(String.format("%s%cmap%02d.xml", new Object[] {
+            file = new File(String.format("%s%cmap%02d.xml", new Object[] {
                 directory.getPath(), File.separatorChar, mapNo }));
-            if (!mapFile.exists())
+            if (!file.exists())
             {
                 break;
             }
-            stream = new FileInputStream(mapFile);
+            stream = new FileInputStream(file);
             try
             {
                 System.out.println("Reading map " + mapNo);
@@ -105,6 +104,43 @@ public class PackGame extends PackProg
                 stream.close();
             }
             mapNo++;
+        }
+        
+        file = new File(String.format("%s%csavegame.xml", new Object[] {
+            directory.getPath(), File.separatorChar }));
+        if (file.exists())
+        {
+            stream = new FileInputStream(file);
+            try
+            {
+                game.setSavegame(Savegame.readXml(stream));
+            }
+            finally
+            {
+                stream.close();
+            }
+        }
+
+        listNo = 0;
+        while (true)
+        {
+            file = new File(String.format("%s%cshopitems%d.xml", new Object[] {
+                directory.getPath(), File.separatorChar, listNo }));
+            if (!file.exists())
+            {
+                break;
+            }
+            stream = new FileInputStream(file);
+            try
+            {
+                System.out.println("Reading shop list " + listNo);
+                game.addShopItemList(ShopItemList.readXml(stream));
+            }
+            finally
+            {
+                stream.close();
+            }
+            listNo++;
         }
 
         game.write(output, this.disk == -1 ? 0 : this.disk);

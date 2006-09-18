@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.ailis.wlandsuite.game.blocks.GameMap;
+import de.ailis.wlandsuite.game.blocks.Savegame;
+import de.ailis.wlandsuite.game.blocks.ShopItemList;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 
 
@@ -54,6 +56,12 @@ public class Game
     /** The game maps */
     private List<GameMap> maps;
 
+    /** The save game */
+    private Savegame savegame;
+
+    /** The shop item lists */
+    private List<ShopItemList> shopItemLists;
+
 
     /**
      * Constructor
@@ -62,6 +70,7 @@ public class Game
     public Game()
     {
         this.maps = new ArrayList<GameMap>(21);
+        this.shopItemLists = new ArrayList<ShopItemList>();
     }
 
 
@@ -80,6 +89,7 @@ public class Game
         Game game;
         SeekableInputStream gameStream;
         int mapNo;
+        int listNo;
 
         // Construct a new Game object
         game = new Game();
@@ -89,6 +99,7 @@ public class Game
 
         // Cycle over all msq blocks
         mapNo = 0;
+        listNo = 0;
         for (GameMsqBlock block: getMsqBlocks(gameStream))
         {
             int type;
@@ -97,13 +108,25 @@ public class Game
             type = getType(gameStream, block.getSize());
             gameStream.seek(block.getOffset());
 
-
             switch (type)
             {
                 case TYPE_MAP:
-                    System.out.println("Parsing map " + mapNo + " from game file");
+                    System.out.println("Parsing map " + mapNo
+                        + " from game file");
                     mapNo++;
                     game.maps.add(GameMap.read(gameStream, block.getSize()));
+                    break;
+
+                case TYPE_SAVEGAME:
+                    System.out.println("Parsing savegame from game file");
+                    game.savegame = Savegame.read(gameStream);
+                    break;
+
+                case TYPE_SHOPLIST:
+                    System.out.println("Parsing shop items list " + listNo
+                        + " from game file");
+                    listNo++;
+                    game.shopItemLists.add(ShopItemList.read(gameStream));
                     break;
             }
         }
@@ -120,14 +143,33 @@ public class Game
      *            The output stream
      * @param disk
      *            The disk id (0 or 1)
-     * @throws IOException 
+     * @throws IOException
      */
 
     public void write(OutputStream stream, int disk) throws IOException
     {
+        int i;
+        
+        // Write the maps
+        i = 0;
         for (GameMap map: this.maps)
         {
+            System.out.println("Writing map " + i);
             map.write(stream, disk);
+            i++;
+        }
+
+        // Write the savegame
+        System.out.println("Writing savegame");
+        this.savegame.write(stream, disk);
+
+        // Write the shop item lists
+        i = 0;
+        for (ShopItemList list: this.shopItemLists)
+        {
+            System.out.println("Writing shop item list " + i);
+            list.write(stream, disk);
+            i++;
         }
     }
 
@@ -141,6 +183,18 @@ public class Game
     public GameMap[] getMaps()
     {
         return this.maps.toArray(new GameMap[0]);
+    }
+
+
+    /**
+     * Returns the shop item lists of the game file.
+     * 
+     * @return The shop item lists
+     */
+
+    public ShopItemList[] getShopItemLists()
+    {
+        return this.shopItemLists.toArray(new ShopItemList[0]);
     }
 
 
@@ -350,5 +404,43 @@ public class Game
     public void addMap(GameMap map)
     {
         this.maps.add(map);
+    }
+
+
+    /**
+     * Adds a new shop item list to the game.
+     * 
+     * @param shopItemList
+     *            The shop item list to add
+     */
+
+    public void addShopItemList(ShopItemList shopItemList)
+    {
+        this.shopItemLists.add(shopItemList);
+    }
+
+
+    /**
+     * Returns the savegame.
+     * 
+     * @return The savegame
+     */
+
+    public Savegame getSavegame()
+    {
+        return this.savegame;
+    }
+
+
+    /**
+     * Sets the savegame.
+     * 
+     * @param savegame
+     *            The savegame to set
+     */
+
+    public void setSavegame(Savegame savegame)
+    {
+        this.savegame = savegame;
     }
 }

@@ -79,24 +79,11 @@ public class Check
     /** The difficulty */
     private int difficulty;
 
+    /** The new action class to apply when check succeeds */
+    private int newActionClass = -1;
 
-    /**
-     * Constructor
-     * 
-     * @param type
-     *            The check type
-     * @param difficulty
-     *            The difficulty
-     * @param value
-     *            The check value
-     */
-
-    public Check(int type, int value, int difficulty)
-    {
-        this.type = type;
-        this.value = value;
-        this.difficulty = difficulty;
-    }
+    /** The new action to apply when check succeeds */
+    private int newAction = -1;
 
 
     /**
@@ -147,16 +134,33 @@ public class Check
 
     public static Check read(InputStream stream) throws IOException
     {
-        int type, value, difficulty, b;
+        int b;
+        Check check;
+        
+        check = new Check();
 
         b = stream.read();
         if (b == 255) return null;
-        type = b >> 5;
-        difficulty = b & 31;
-        value = stream.read();
+        check.type = b >> 5;
+        check.difficulty = b & 31;
+        check.value = stream.read();
 
-        return new Check(type, value, difficulty);
+        return check;
+    }
 
+
+    /**
+     * Reads the replacement action class/action for this check.
+     * 
+     * @param stream
+     *            The input stream
+     * @throws IOException
+     */
+
+    public void readReplacement(InputStream stream) throws IOException
+    {
+        this.newActionClass = stream.read();
+        this.newAction = stream.read();
     }
 
 
@@ -176,6 +180,21 @@ public class Check
 
 
     /**
+     * Writes the replacement data of the check.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void writeReplacement(OutputStream stream) throws IOException
+    {
+        stream.write(this.newActionClass);
+        stream.write(this.newAction);
+    }
+
+
+    /**
      * Returns the check data as XML.
      * 
      * @return The check data as XML
@@ -188,6 +207,14 @@ public class Check
         element = DocumentHelper.createElement(getXmlName(this.type));
         element.addAttribute("value", Integer.toString(this.value));
         element.addAttribute("difficulty", Integer.toString(this.difficulty));
+        if (this.newActionClass != -1)
+        {
+            element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
+        }
+        if (this.newAction != -1)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
         return element;
     }
 
@@ -202,16 +229,21 @@ public class Check
 
     public static Check read(Element element)
     {
-        int type, difficulty, value;
+        Check check;
+        
+        check = new Check();
 
-        type = getType(element.getName());
-        if (type == -1)
+        check.type = getType(element.getName());
+        if (check.type == -1)
         {
             throw new GameException("Unknown check type: " + element.getName());
         }
-        value = Integer.parseInt(element.attributeValue("value"));
-        difficulty = Integer.parseInt(element.attributeValue("difficulty"));
-        return new Check(type, value, difficulty);
+        check.value = Integer.parseInt(element.attributeValue("value"));
+        check.difficulty = Integer.parseInt(element.attributeValue("difficulty"));
+        check.newActionClass = Integer.parseInt(element.attributeValue("newActionClass", "-1"));
+        check.newAction = Integer.parseInt(element.attributeValue("newAction", "-1"));
+        
+        return check;
     }
 
 
@@ -248,5 +280,94 @@ public class Check
     private static String getXmlName(int type)
     {
         return xmlNames[type];
+    }
+
+
+    /**
+     * Returns the newAction.
+     *
+     * @return The newAction
+     */
+    
+    public int getNewAction()
+    {
+        return this.newAction;
+    }
+
+
+    /**
+     * Sets the newAction.
+     *
+     * @param newAction 
+     *            The newAction to set
+     */
+    
+    public void setNewAction(int newAction)
+    {
+        this.newAction = newAction;
+    }
+
+
+    /**
+     * Returns the newActionClass.
+     *
+     * @return The newActionClass
+     */
+    
+    public int getNewActionClass()
+    {
+        return this.newActionClass;
+    }
+
+
+    /**
+     * Sets the newActionClass.
+     *
+     * @param newActionClass 
+     *            The newActionClass to set
+     */
+    
+    public void setNewActionClass(int newActionClass)
+    {
+        this.newActionClass = newActionClass;
+    }
+
+
+    /**
+     * Sets the difficulty.
+     *
+     * @param difficulty 
+     *            The difficulty to set
+     */
+    
+    public void setDifficulty(int difficulty)
+    {
+        this.difficulty = difficulty;
+    }
+
+
+    /**
+     * Sets the type.
+     *
+     * @param type 
+     *            The type to set
+     */
+    
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+
+
+    /**
+     * Sets the value.
+     *
+     * @param value 
+     *            The value to set
+     */
+    
+    public void setValue(int value)
+    {
+        this.value = value;
     }
 }

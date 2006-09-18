@@ -27,13 +27,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import de.ailis.wlandsuite.cli.UnpackProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.blocks.GameMap;
-import de.ailis.wlandsuite.io.SeekableInputStream;
-import de.ailis.wlandsuite.rawgame.GameBlockType;
+import de.ailis.wlandsuite.game.blocks.ShopItemList;
 
 
 /**
@@ -53,13 +51,10 @@ public class UnpackGame extends UnpackProg
     @Override
     public void unpack(InputStream input, File output) throws IOException
     {
-        List<Integer> sizes;
-        SeekableInputStream gameStream;
-        int mapNo;
-        int offset;
-        GameBlockType type;
+        int mapNo, listNo;
         Game game;
-        File mapsDir;
+        File file;
+        FileOutputStream outputStream;
 
         // Parse the game file
         game = Game.read(input);
@@ -68,13 +63,10 @@ public class UnpackGame extends UnpackProg
         mapNo = 0;
         for (GameMap map: game.getMaps())
         {
-            File mapFile;
-            FileOutputStream outputStream;
-
-            mapFile = new File(String.format("%s%cmap%02d.xml", new Object[] {
+            file = new File(String.format("%s%cmap%02d.xml", new Object[] {
                 output.getPath(), File.separatorChar, mapNo }));
             
-            outputStream = new FileOutputStream(mapFile);
+            outputStream = new FileOutputStream(file);
             try
             {
                 map.writeXml(outputStream);
@@ -86,6 +78,40 @@ public class UnpackGame extends UnpackProg
             
             // Increase map counter
             mapNo++;
+        }
+
+        // Write the save game
+        file = new File(String.format("%s%csavegame.xml", new Object[] {
+            output.getPath(), File.separatorChar }));
+        outputStream = new FileOutputStream(file);
+        try
+        {
+            game.getSavegame().writeXml(outputStream);
+        }
+        finally
+        {
+            outputStream.close();
+        }
+        
+        // Write all shop lists
+        listNo = 0;
+        for (ShopItemList list: game.getShopItemLists())
+        {
+            file = new File(String.format("%s%cshopitems%d.xml", new Object[] {
+                output.getPath(), File.separatorChar, listNo }));
+            
+            outputStream = new FileOutputStream(file);
+            try
+            {
+                list.writeXml(outputStream);
+            }
+            finally
+            {
+                outputStream.close();
+            }
+            
+            // Increase map counter
+            listNo++;
         }
     }
 

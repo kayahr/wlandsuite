@@ -92,6 +92,12 @@ public class EncounterAction implements Action
     /** The NPC number (0 if not hireable) */
     private int npc;
     
+    /** The new action class to set after the encounter */
+    private int newActionClass;
+    
+    /** The action class to set after the encounter */
+    private int newAction;
+    
 
     /**
      * Creates and returns a new Encounter Action by reading its data from the
@@ -135,6 +141,9 @@ public class EncounterAction implements Action
             throw new GameException("unknown094 is set!");
         }
         action.npc = b >> 4;
+        
+        action.newActionClass = stream.read();
+        action.newAction = stream.read();
 
         return action;
     }
@@ -170,6 +179,8 @@ public class EncounterAction implements Action
         action.friendly = Boolean.parseBoolean(element.attributeValue("friendly"));
         action.unknown093 = Boolean.parseBoolean(element.attributeValue("unknown093"));
         action.npc = Integer.parseInt(element.attributeValue("npc"));
+        action.newActionClass =Integer.parseInt(element.attributeValue("newActionClass")); 
+        action.newAction =Integer.parseInt(element.attributeValue("newAction")); 
 
         // Return the check action
         return action;
@@ -202,6 +213,8 @@ public class EncounterAction implements Action
         element.addAttribute("friendly", this.friendly ? "true" : "false");
         element.addAttribute("unknown093", this.unknown093 ? "true" : "false");
         element.addAttribute("npc", Integer.toString(this.npc));
+        element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
+        element.addAttribute("newAction", Integer.toString(this.newAction));
 
         return element;
     }
@@ -225,6 +238,8 @@ public class EncounterAction implements Action
         stream.write(this.monster3);
         stream.write((this.maxGroupSize3 & 127) | (this.random3 ? 128 : 0));
         stream.write((this.npc << 4) | (this.properName ? 1 : 0) | (this.friendly ? 2 : 0) | (this.unknown093 ? 4 : 0));
+        stream.write(this.newActionClass);
+        stream.write(this.newAction);
     }
 
 
@@ -625,5 +640,55 @@ public class EncounterAction implements Action
     public void setVisibleDistance(int visibleDistance)
     {
         this.visibleDistance = visibleDistance;
+    }
+
+
+    /**
+     * Returns the newAction.
+     *
+     * @return The newAction
+     */
+    
+    public int getNewAction()
+    {
+        return this.newAction;
+    }
+
+
+    /**
+     * Sets the newAction.
+     *
+     * @param newAction 
+     *            The newAction to set
+     */
+    
+    public void setNewAction(int newAction)
+    {
+        this.newAction = newAction;
+    }
+
+
+    /**
+     * Returns the newActionClass.
+     *
+     * @return The newActionClass
+     */
+    
+    public int getNewActionClass()
+    {
+        return this.newActionClass;
+    }
+
+
+    /**
+     * Sets the newActionClass.
+     *
+     * @param newActionClass 
+     *            The newActionClass to set
+     */
+    
+    public void setNewActionClass(int newActionClass)
+    {
+        this.newActionClass = newActionClass;
     }
 }

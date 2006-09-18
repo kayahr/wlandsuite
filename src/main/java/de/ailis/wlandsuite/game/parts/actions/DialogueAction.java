@@ -189,7 +189,7 @@ public class DialogueAction implements Action
             .toString(this.otherNewActionClass));
         element.addAttribute("otherNewAction", Integer
             .toString(this.otherNewAction));
-
+            
         for (Answer answer: this.answers)
         {
             element.add(answer.toXml());
@@ -223,7 +223,10 @@ public class DialogueAction implements Action
         }
     
         stream.write(this.otherNewActionClass);
-        stream.write(this.otherNewAction);
+        if (this.otherNewActionClass < 253)
+        {
+            stream.write(this.otherNewAction);
+        }
     }
 
 
