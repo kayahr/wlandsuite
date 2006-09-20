@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -157,11 +157,11 @@ public class StringGroup
     {
         Element element, subElement;
 
-        element = DocumentHelper.createElement("stringGroup");
+        element = XMLUtils.createElement("stringGroup");
         element.addAttribute("offset", Integer.toString(this.offset));
         for (String string: this.strings)
         {
-            subElement = DocumentHelper.createElement("string");
+            subElement = XMLUtils.createElement("string");
             subElement.addText(StringUtils.escape(string, "ASCII"));
             element.add(subElement);
         }

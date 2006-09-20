@@ -26,7 +26,7 @@ package de.ailis.wlandsuite.rawgame.blocks;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.rawgame.GameBlockType;
@@ -152,7 +152,7 @@ public class Savegame extends AbstractGameBlock
     {
         Element element;
         
-        element = DocumentHelper.createElement("savegame");
+        element = XMLUtils.createElement("savegame");
         for (Part part: this.parts)
         {
             element.add(part.toXml());

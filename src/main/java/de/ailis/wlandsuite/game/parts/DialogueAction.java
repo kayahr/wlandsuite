@@ -21,23 +21,22 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
 /**
- * The dialogue action is used to interact with the player. The player
- * can choose answers and each answer triggers a different action.
+ * The dialogue action is used to interact with the player. The player can
+ * choose answers and each answer triggers a different action.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
@@ -47,38 +46,38 @@ public class DialogueAction implements Action
 {
     /** If conversation is done by menus */
     private boolean menu;
-    
+
     /** The starting message */
     private int message;
 
     /**
-     * The new action class to set when the dialogue is canceled (255 means setting no
-     * new action class)
+     * The new action class to set when the dialogue is canceled (255 means
+     * setting no new action class)
      */
     private int cancelNewActionClass;
 
     /**
-     * The new action to set when the dialogue is canceled (255 means setting no new
-     * action)
+     * The new action to set when the dialogue is canceled (255 means setting no
+     * new action)
      */
     private int cancelNewAction;
 
     /**
-     * The new action class to set when an other answer is selected (255 means setting no
-     * new action class)
+     * The new action class to set when an other answer is selected (255 means
+     * setting no new action class)
      */
     private int otherNewActionClass;
 
     /**
-     * The new action to set when an other answer is selected (255 means setting no new
-     * action)
+     * The new action to set when an other answer is selected (255 means setting
+     * no new action)
      */
     private int otherNewAction;
-    
+
     /** The answers */
     private List<Answer> answers = new ArrayList<Answer>();
 
-    
+
     /**
      * Creates and returns a new Dialogue Action by reading its data from the
      * specified stream.
@@ -105,20 +104,20 @@ public class DialogueAction implements Action
         do
         {
             Answer answer;
-            
+
             b = stream.read();
             answer = new Answer();
             answer.setMessage(b & 127);
             action.answers.add(answer);
         }
         while ((b & 128) == 0);
-        
+
         for (Answer answer: action.answers)
         {
             answer.setNewActionClass(stream.read());
             answer.setNewAction(stream.read());
         }
-        
+
         action.otherNewActionClass = stream.read();
         if (action.otherNewActionClass < 253)
         {
@@ -128,7 +127,7 @@ public class DialogueAction implements Action
         {
             action.otherNewAction = 255;
         }
-        
+
         return action;
     }
 
@@ -147,12 +146,16 @@ public class DialogueAction implements Action
 
         action = new DialogueAction();
 
-        action.menu = Boolean.parseBoolean(element.attributeValue("menu"));
-        action.message =  Integer.parseInt(element.attributeValue("message"));
-        action.cancelNewActionClass =  Integer.parseInt(element.attributeValue("cancelNewActionClass"));
-        action.cancelNewAction =  Integer.parseInt(element.attributeValue("cancelNewAction"));
-        action.otherNewActionClass =  Integer.parseInt(element.attributeValue("otherNewActionClass"));
-        action.otherNewAction =  Integer.parseInt(element.attributeValue("otherNewAction"));
+        action.menu = Boolean.parseBoolean(element.attributeValue("menu", "false"));
+        action.message = Integer.parseInt(element.attributeValue("message", "0"));
+        action.cancelNewActionClass = Integer.parseInt(element
+            .attributeValue("cancelNewActionClass", "255"));
+        action.cancelNewAction = Integer.parseInt(element
+            .attributeValue("cancelNewAction", "255"));
+        action.otherNewActionClass = Integer.parseInt(element
+            .attributeValue("otherNewActionClass", "255"));
+        action.otherNewAction = Integer.parseInt(element
+            .attributeValue("otherNewAction", "255"));
 
         // Read the checks
         for (Object answer: element.elements())
@@ -169,27 +172,44 @@ public class DialogueAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("dialogue");
+        element = XMLUtils.createElement("dialogue");
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("menu", this.menu ? "true" : "false");
-        element.addAttribute("message", Integer
-            .toString(this.message));
-        element.addAttribute("cancelNewActionClass", Integer
-            .toString(this.cancelNewActionClass));
-        element.addAttribute("cancelNewAction", Integer
-            .toString(this.cancelNewAction));
-        element.addAttribute("otherNewActionClass", Integer
-            .toString(this.otherNewActionClass));
-        element.addAttribute("otherNewAction", Integer
-            .toString(this.otherNewAction));
-            
+        if (this.menu)
+        {
+            element.addAttribute("menu", "true");
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.cancelNewActionClass != 255)
+        {
+            element.addAttribute("cancelNewActionClass", Integer
+                .toString(this.cancelNewActionClass));
+        }
+        if (this.cancelNewAction != 255)
+        {
+            element.addAttribute("cancelNewAction", Integer
+                .toString(this.cancelNewAction));
+        }
+        if (this.otherNewActionClass != 255)
+        {
+            element.addAttribute("otherNewActionClass", Integer
+                .toString(this.otherNewActionClass));
+        }
+        if (this.otherNewAction != 255)
+        {
+            element.addAttribute("otherNewAction", Integer
+                .toString(this.otherNewAction));
+        }
+
         for (Answer answer: this.answers)
         {
             element.add(answer.toXml());
@@ -200,7 +220,7 @@ public class DialogueAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -214,14 +234,15 @@ public class DialogueAction implements Action
         for (int i = 0, max = this.answers.size(); i < max; i++)
         {
             Answer answer = this.answers.get(i);
-            stream.write((answer.getMessage() & 127) | ((i == max - 1) ? 128 : 0));
+            stream.write((answer.getMessage() & 127)
+                | ((i == max - 1) ? 128 : 0));
         }
         for (Answer answer: this.answers)
         {
             stream.write(answer.getNewActionClass());
             stream.write(answer.getNewAction());
         }
-    
+
         stream.write(this.otherNewActionClass);
         if (this.otherNewActionClass < 253)
         {
@@ -232,10 +253,10 @@ public class DialogueAction implements Action
 
     /**
      * Returns the cancelNewAction.
-     *
+     * 
      * @return The cancelNewAction
      */
-    
+
     public int getCancelNewAction()
     {
         return this.cancelNewAction;
@@ -244,11 +265,11 @@ public class DialogueAction implements Action
 
     /**
      * Sets the cancelNewAction.
-     *
-     * @param cancelNewAction 
+     * 
+     * @param cancelNewAction
      *            The cancelNewAction to set
      */
-    
+
     public void setCancelNewAction(int cancelNewAction)
     {
         this.cancelNewAction = cancelNewAction;
@@ -257,10 +278,10 @@ public class DialogueAction implements Action
 
     /**
      * Returns the cancelNewActionClass.
-     *
+     * 
      * @return The cancelNewActionClass
      */
-    
+
     public int getCancelNewActionClass()
     {
         return this.cancelNewActionClass;
@@ -269,11 +290,11 @@ public class DialogueAction implements Action
 
     /**
      * Sets the cancelNewActionClass.
-     *
-     * @param cancelNewActionClass 
+     * 
+     * @param cancelNewActionClass
      *            The cancelNewActionClass to set
      */
-    
+
     public void setCancelNewActionClass(int cancelNewActionClass)
     {
         this.cancelNewActionClass = cancelNewActionClass;
@@ -282,10 +303,10 @@ public class DialogueAction implements Action
 
     /**
      * Returns the menu.
-     *
+     * 
      * @return The menu
      */
-    
+
     public boolean isMenu()
     {
         return this.menu;
@@ -294,11 +315,11 @@ public class DialogueAction implements Action
 
     /**
      * Sets the menu.
-     *
-     * @param menu 
+     * 
+     * @param menu
      *            The menu to set
      */
-    
+
     public void setMenu(boolean menu)
     {
         this.menu = menu;
@@ -307,10 +328,10 @@ public class DialogueAction implements Action
 
     /**
      * Returns the message.
-     *
+     * 
      * @return The message
      */
-    
+
     public int getMessage()
     {
         return this.message;
@@ -319,11 +340,11 @@ public class DialogueAction implements Action
 
     /**
      * Sets the message.
-     *
-     * @param message 
+     * 
+     * @param message
      *            The message to set
      */
-    
+
     public void setMessage(int message)
     {
         this.message = message;
@@ -332,10 +353,10 @@ public class DialogueAction implements Action
 
     /**
      * Returns the otherNewAction.
-     *
+     * 
      * @return The otherNewAction
      */
-    
+
     public int getOtherNewAction()
     {
         return this.otherNewAction;
@@ -344,11 +365,11 @@ public class DialogueAction implements Action
 
     /**
      * Sets the otherNewAction.
-     *
-     * @param otherNewAction 
+     * 
+     * @param otherNewAction
      *            The otherNewAction to set
      */
-    
+
     public void setOtherNewAction(int otherNewAction)
     {
         this.otherNewAction = otherNewAction;
@@ -357,10 +378,10 @@ public class DialogueAction implements Action
 
     /**
      * Returns the otherNewActionClass.
-     *
+     * 
      * @return The otherNewActionClass
      */
-    
+
     public int getOtherNewActionClass()
     {
         return this.otherNewActionClass;
@@ -369,11 +390,11 @@ public class DialogueAction implements Action
 
     /**
      * Sets the otherNewActionClass.
-     *
-     * @param otherNewActionClass 
+     * 
+     * @param otherNewActionClass
      *            The otherNewActionClass to set
      */
-    
+
     public void setOtherNewActionClass(int otherNewActionClass)
     {
         this.otherNewActionClass = otherNewActionClass;

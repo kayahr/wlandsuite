@@ -21,16 +21,15 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.GameException;
 
@@ -150,7 +149,7 @@ public class SpecialAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
@@ -158,7 +157,7 @@ public class SpecialAction implements Action
         Element element;
         StringBuilder data;
 
-        element = DocumentHelper.createElement("special");
+        element = XMLUtils.createElement("special");
         element.addAttribute("id", Integer.toString(id));
         element.addAttribute("action", Integer.toString(this.action));
         data = new StringBuilder();
@@ -173,7 +172,7 @@ public class SpecialAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 

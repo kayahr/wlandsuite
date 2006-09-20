@@ -21,11 +21,11 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -204,12 +204,15 @@ public class LootItem
     {
         Element element;
 
-        element = DocumentHelper.createElement(getXmlName(this.type));
+        element = XMLUtils.createElement(getXmlName(this.type));
         if (this.value != 0x5e)
         {
             element.addAttribute("value", Integer.toString(this.value));
         }
-        element.addAttribute("quantity", Integer.toString(this.quantity));
+        if (this.quantity != 1)
+        {
+            element.addAttribute("quantity", Integer.toString(this.quantity));
+        }
         return element;
     }
 
@@ -239,7 +242,7 @@ public class LootItem
         {
             value = 0x5e;
         }
-        quantity = Integer.parseInt(element.attributeValue("quantity"));
+        quantity = Integer.parseInt(element.attributeValue("quantity", "1"));
         return new LootItem(type, value, quantity);
     }
 

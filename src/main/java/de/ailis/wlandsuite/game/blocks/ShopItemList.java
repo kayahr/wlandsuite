@@ -41,6 +41,7 @@ import de.ailis.wlandsuite.game.RotatingXorInputStream;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
+import de.ailis.wlandsuite.utils.XMLUtils;
 
 
 /**
@@ -198,7 +199,7 @@ public class ShopItemList extends GameBlock implements Serializable
         PrintWriter writer;
 
         // Create the root element
-        element = DocumentHelper.createElement("shopItemList");
+        element = XMLUtils.createElement("shopItemList");
 
         text = new StringWriter();
         writer = new PrintWriter(text);

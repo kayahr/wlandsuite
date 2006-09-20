@@ -21,29 +21,35 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.rawgame.GameException;
 
 
 /**
- * Impassable action
+ * Radiation action
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class ImpassableAction implements Action
+public class RadiationAction implements Action
 {
-    /** The message to print */
+    /** If armor is ignored */
+    private boolean ignoreArmor;
+
+    /** The id of the message to print */
     private int message;
+
+    /** The damage (Number of d6 dices) */
+    private int damage;
 
     /** The new action class to set (255 means setting no new action) */
     private int newActionClass;
@@ -53,22 +59,29 @@ public class ImpassableAction implements Action
 
 
     /**
-     * Creates a new Impassable Action by reading the data from a stream.
+     * Creates a new Radiation Action by reading its data from the specified
+     * input stream.
      * 
      * @param stream
      *            The input stream
-     * @return The Impassable Action
+     * @return The new Radiation Action
      * @throws IOException
      */
 
-    public static ImpassableAction read(InputStream stream) throws IOException
+    public static RadiationAction read(InputStream stream) throws IOException
     {
-        ImpassableAction action;
+        int b;
+        RadiationAction action;
 
-        action = new ImpassableAction();
+        action = new RadiationAction();
 
-        // Read the message
-        action.message = stream.read();
+        // Read first byte
+        b = stream.read();
+        action.message = b;
+        action.ignoreArmor = (b & 1) == 1;
+
+        // Read the damage
+        action.damage = stream.read();
 
         // Read the action class
         action.newActionClass = stream.read();
@@ -88,40 +101,68 @@ public class ImpassableAction implements Action
 
 
     /**
-     * Creates a new Impassable Action by reading the data from XML.
+     * Creates a new Radiation Action by reading the data from the specified XML
+     * element
      * 
      * @param element
      *            The XML element
-     * @return The new Impassable Action
+     * @return The Radiation Action
      */
 
-    public static ImpassableAction read(Element element)
+    public static RadiationAction read(Element element)
     {
-        ImpassableAction action;
+        RadiationAction action;
 
-        action = new ImpassableAction();
+        action = new RadiationAction();
 
-        action.message = Integer.parseInt(element.attributeValue("message"));
+        action.ignoreArmor = Boolean.parseBoolean(element.attributeValue(
+            "ignoreArmor", "false"));
+        action.message = Integer.parseInt(element
+            .attributeValue("message", "0"));
+        action.damage = Integer.parseInt(element.attributeValue("damage", "0"));
         action.newActionClass = Integer.parseInt(element.attributeValue(
-            "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
+            "class", "255"));
+        action.newAction = Integer.parseInt(element.attributeValue("selector",
             "255"));
+
+        // Validate ignoreArmor flag
+        if (action.ignoreArmor && (action.message & 1) == 0)
+        {
+            throw new GameException(
+                "Invalid radiation data: Ignore armor flag can only be true when an odd message id is used");
+        }
+        if (!action.ignoreArmor && (action.message & 1) != 0)
+        {
+            throw new GameException(
+                "Invalid radiation data: Ignore armor flag can only be false when an even message id is used");
+        }
 
         return action;
     }
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("impassable");
+        element = XMLUtils.createElement("radiation");
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("message", Integer.toString(this.message));
+        if (this.ignoreArmor)
+        {
+            element.addAttribute("ignoreArmor", "true");
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.damage != 0)
+        {
+            element.addAttribute("damage", Integer.toString(this.damage));
+        }
         if (this.newActionClass != 255)
         {
             element.addAttribute("newActionClass", Integer
@@ -136,18 +177,19 @@ public class ImpassableAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
     public void write(SeekableOutputStream stream,
         SpecialActionTable specialActionTable)
     {
-        stream.writeByte(this.message);
-        stream.writeByte(this.newActionClass);
+        stream.write(this.message);
+        stream.write(this.damage);
+        stream.write(this.newActionClass);
         if (this.newActionClass < 253)
         {
-            stream.writeByte(this.newAction);
+            stream.write(this.newAction);
         }
     }
 
@@ -203,9 +245,34 @@ public class ImpassableAction implements Action
 
 
     /**
-     * Returns the message.
+     * Returns the ignoreArmor flag
      * 
-     * @return The message
+     * @return The ignorArmor flag
+     */
+
+    public boolean isIgnoreArmor()
+    {
+        return this.ignoreArmor;
+    }
+
+
+    /**
+     * Sets the ignoreArmor flag.
+     * 
+     * @param ignoreArmor
+     *            The ignoreArmor flag to set
+     */
+
+    public void setIgnoreArmor(boolean ignoreArmor)
+    {
+        this.ignoreArmor = ignoreArmor;
+    }
+
+
+    /**
+     * Returns the message id.
+     * 
+     * @return The message id
      */
 
     public int getMessage()
@@ -215,14 +282,39 @@ public class ImpassableAction implements Action
 
 
     /**
-     * Sets the message.
+     * Sets the message id.
      * 
      * @param message
-     *            The message to set
+     *            The message id to set
      */
 
     public void setMessage(int message)
     {
         this.message = message;
+    }
+
+
+    /**
+     * Returns the damage.
+     * 
+     * @return The damage
+     */
+
+    public int getDamage()
+    {
+        return this.damage;
+    }
+
+
+    /**
+     * Sets the damage.
+     * 
+     * @param damage
+     *            The damage to set
+     */
+
+    public void setTargetMap(int damage)
+    {
+        this.damage = damage;
     }
 }

@@ -25,11 +25,9 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -47,6 +45,10 @@ import de.ailis.wlandsuite.utils.StringUtils;
 
 public class Char
 {
+    /** The nationalities */
+    private static final String[] nationalities = { "US", "Russian", "Mexican",
+        "Indian", "Chinese" };
+
     /** The character name */
     private String name;
 
@@ -147,17 +149,17 @@ public class Char
     private String rank;
 
     /** The skill list */
-    private byte[] skills;
+    private Skills skills;
 
     /** The item list */
-    private byte[] items;
+    private Items items;
 
 
     /**
-     * Constructor
+     * Private Constructor
      */
 
-    public Char()
+    private Char()
     {
         super();
     }
@@ -218,15 +220,16 @@ public class Char
         stream.read(tmp);
         character.rank = getString(tmp);
 
+        // Skip unknown bytes which are always 0
         stream.skip(53);
 
-        character.skills = new byte[60];
-        stream.read(character.skills);
+        // Read the skills
+        character.skills = Skills.read(stream);
 
         stream.skip(1);
 
-        character.items = new byte[60];
-        stream.read(character.items);
+        // Read the items
+        character.items = Items.read(stream);
 
         stream.skip(7);
 
@@ -274,7 +277,6 @@ public class Char
     public static Char read(Element element)
     {
         Char character;
-        ByteArrayOutputStream stream;
 
         // Create new character;
         character = new Char();
@@ -290,70 +292,50 @@ public class Char
             .attributeValue("dexterity"));
         character.charisma = Integer.parseInt(element
             .attributeValue("charisma"));
-        character.money = Integer.parseInt(element.attributeValue("money"));
-        character.gender = Integer.parseInt(element.attributeValue("gender"));
-        character.nationality = Integer.parseInt(element
-            .attributeValue("nationality"));
-        character.ac = Integer.parseInt(element.attributeValue("ac"));
+        character.money = Integer
+            .parseInt(element.attributeValue("money", "0"));
+        character.gender = element.attributeValue("gender", "male").equals(
+            "male") ? 0 : 1;
+        character.nationality = getNationality(element
+            .attributeValue("nationality", "US"));
+        character.ac = Integer.parseInt(element.attributeValue("ac", "0"));
         character.maxCon = Integer.parseInt(element.attributeValue("maxCon"));
         character.con = Integer.parseInt(element.attributeValue("con"));
-        character.weapon = Integer.parseInt(element.attributeValue("weapon"));
+        character.weapon = Integer.parseInt(element.attributeValue("weapon", "0"));
         character.skillPoints = Integer.parseInt(element
-            .attributeValue("skillPoints"));
+            .attributeValue("skillPoints", "0"));
         character.experience = Integer.parseInt(element
-            .attributeValue("experience"));
-        character.level = Integer.parseInt(element.attributeValue("level"));
-        character.armor = Integer.parseInt(element.attributeValue("armor"));
-        character.lastCon = Integer.parseInt(element.attributeValue("lastCon"));
+            .attributeValue("experience", "0"));
+        character.level = Integer.parseInt(element.attributeValue("level", "1"));
+        character.armor = Integer.parseInt(element.attributeValue("armor", "0"));
+        character.lastCon = Integer.parseInt(element.attributeValue("lastCon", "0"));
         character.afflictions = Integer.parseInt(element
-            .attributeValue("afflictions"));
-        character.npc = Boolean.parseBoolean(element.attributeValue("npc"));
+            .attributeValue("afflictions", "0"));
+        character.npc = Boolean.parseBoolean(element.attributeValue("npc", "false"));
         character.unknown2A = Integer.parseInt(element
-            .attributeValue("unknown2A"));
+            .attributeValue("unknown2A", "0"));
         character.itemRefuse = Integer.parseInt(element
-            .attributeValue("itemRefuse"));
+            .attributeValue("itemRefuse", "0"));
         character.skillRefuse = Integer.parseInt(element
-            .attributeValue("skillRefuse"));
+            .attributeValue("skillRefuse", "0"));
         character.attribRefuse = Integer.parseInt(element
-            .attributeValue("attribRefuse"));
+            .attributeValue("attribRefuse", "0"));
         character.tradeRefuse = Integer.parseInt(element
-            .attributeValue("tradeRefuse"));
+            .attributeValue("tradeRefuse", "0"));
         character.unknown2F = Integer.parseInt(element
-            .attributeValue("unknown2F"));
+            .attributeValue("unknown2F", "0"));
         character.joinString = Integer.parseInt(element
-            .attributeValue("joinString"));
+            .attributeValue("joinString", "0"));
         character.willingness = Integer.parseInt(element
-            .attributeValue("willingness"));
-        character.rank = StringUtils.unescape(element.attributeValue("rank"),
+            .attributeValue("willingness", "0"));
+        character.rank = StringUtils.unescape(element.attributeValue("rank", "Private"),
             "ASCII");
 
         // Read skills
-        stream = new ByteArrayOutputStream();
-        for (String c: element.element("skills").getTextTrim().split("\\s"))
-        {
-            int b = Integer.valueOf(c, 16);
-            stream.write(b);
-        }
-        character.skills = stream.toByteArray();
-        if (character.skills.length != 60)
-        {
-            throw new GameException("Skill list of character " + character.name
-                + " to large");
-        }
+        character.skills = Skills.read(element.element("skills"));
 
         // Read items
-        stream = new ByteArrayOutputStream();
-        for (String c: element.element("items").getTextTrim().split("\\s"))
-        {
-            int b = Integer.valueOf(c, 16);
-            stream.write(b);
-        }
-        character.items = stream.toByteArray();
-        if (character.items.length != 60)
-        {
-            throw new GameException("Item list of character " + character.name
-                + " to large");
-        }
+        character.items = Items.read(element.element("items"));
 
         // Return the newly created character
         return character;
@@ -370,9 +352,9 @@ public class Char
 
     public Element toXml(int id)
     {
-        Element element, subElement;
+        Element element;
 
-        element = DocumentHelper.createElement("character");
+        element = XMLUtils.createElement("character");
         element.addAttribute("id", Integer.toString(id));
         element.addAttribute("name", StringUtils.escape(this.name, "ASCII"));
         element.addAttribute("strength", Integer.toString(this.strength));
@@ -383,38 +365,86 @@ public class Char
         element.addAttribute("dexterity", Integer.toString(this.dexterity));
         element.addAttribute("charisma", Integer.toString(this.charisma));
         element.addAttribute("money", Integer.toString(this.money));
-        element.addAttribute("gender", Integer.toString(this.gender));
-        element.addAttribute("nationality", Integer.toString(this.nationality));
+        element.addAttribute("gender", this.gender == 0 ? "male" : "female");
+        element.addAttribute("nationality", getNationality(this.nationality));
         element.addAttribute("ac", Integer.toString(this.ac));
         element.addAttribute("maxCon", Integer.toString(this.maxCon));
         element.addAttribute("con", Integer.toString(this.con));
-        element.addAttribute("weapon", Integer.toString(this.weapon));
-        element.addAttribute("skillPoints", Integer.toString(this.skillPoints));
-        element.addAttribute("experience", Integer.toString(this.experience));
-        element.addAttribute("level", Integer.toString(this.level));
-        element.addAttribute("armor", Integer.toString(this.armor));
-        element.addAttribute("lastCon", Integer.toString(this.lastCon));
-        element.addAttribute("afflictions", Integer.toString(this.afflictions));
-        element.addAttribute("npc", Boolean.toString(this.npc));
-        element.addAttribute("afflictions", Integer.toString(this.afflictions));
-        element.addAttribute("unknown2A", Integer.toString(this.unknown2A));
-        element.addAttribute("itemRefuse", Integer.toString(this.itemRefuse));
-        element.addAttribute("skillRefuse", Integer.toString(this.skillRefuse));
-        element.addAttribute("attribRefuse", Integer
-            .toString(this.attribRefuse));
-        element.addAttribute("tradeRefuse", Integer.toString(this.tradeRefuse));
-        element.addAttribute("unknown2F", Integer.toString(this.unknown2F));
-        element.addAttribute("joinString", Integer.toString(this.joinString));
-        element.addAttribute("willingness", Integer.toString(this.willingness));
-        element.addAttribute("rank", StringUtils.escape(this.rank, "ASCII"));
+        if (this.weapon != 0)
+        {
+            element.addAttribute("weapon", Integer.toString(this.weapon));
+        }
+        if (this.skillPoints != 0)
+        {
+            element.addAttribute("skillPoints", Integer.toString(this.skillPoints));
+        }
+        if (this.experience != 0)
+        {
+            element.addAttribute("experience", Integer.toString(this.experience));
+        }
+        if (this.level != 1)
+        {
+            element.addAttribute("level", Integer.toString(this.level));
+        }
+        if (this.armor != 0)
+        {
+            element.addAttribute("armor", Integer.toString(this.armor));
+        }
+        if (this.lastCon != 0)
+        {
+            element.addAttribute("lastCon", Integer.toString(this.lastCon));
+        }
+        if (this.afflictions != 0)
+        {
+            element.addAttribute("afflictions", Integer.toString(this.afflictions));
+        }
+        if (this.npc)
+        {
+            element.addAttribute("npc", "true");
+        }
+        if (this.unknown2A != 0)
+        {
+            element.addAttribute("unknown2A", Integer.toString(this.unknown2A));
+        }
+        if (this.itemRefuse != 0)
+        {
+            element.addAttribute("itemRefuse", Integer.toString(this.itemRefuse));
+        }
+        if (this.skillRefuse != 0)
+        {
+            element.addAttribute("skillRefuse", Integer.toString(this.skillRefuse));
+        }
+        if (this.attribRefuse != 0)
+        {
+            element.addAttribute("attribRefuse", Integer
+                .toString(this.attribRefuse));
+        }
+        if (this.tradeRefuse != 0)
+        {
+            element.addAttribute("tradeRefuse", Integer.toString(this.tradeRefuse));
+        }
+        if (this.unknown2F != 0)
+        {
+            element.addAttribute("unknown2F", Integer.toString(this.unknown2F));
+        }
+        if (this.joinString != 0)
+        {
+            element.addAttribute("joinString", Integer.toString(this.joinString));
+        }
+        if (this.willingness != 0)
+        {
+            element.addAttribute("willingness", Integer.toString(this.willingness));
+        }
+        if (!this.rank.equals("Private"))
+        {
+            element.addAttribute("rank", StringUtils.escape(this.rank, "ASCII"));
+        }
 
-        subElement = DocumentHelper.createElement("skills");
-        subElement.setText(toByteString(this.skills));
-        element.add(subElement);
+        // Add the skills
+        element.add(this.skills.toXml());
 
-        subElement = DocumentHelper.createElement("items");
-        subElement.setText(toByteString(this.items));
-        element.add(subElement);
+        // Add the items
+        element.add(this.items.toXml());
 
         return element;
     }
@@ -467,11 +497,13 @@ public class Char
             stream.write(0);
         }
 
-        stream.write(this.skills);
+        // Write the skills
+        this.skills.write(stream);
 
         stream.write(0);
 
-        stream.write(this.items);
+        // Write the items
+        this.items.write(stream);
 
         for (int i = 0; i < 7; i++)
         {
@@ -507,54 +539,6 @@ public class Char
             stream.write(0);
         }
         return stream.toByteArray();
-    }
-
-
-    /**
-     * Creates a bytes list block.
-     * 
-     * @param bytes
-     *            The bytes
-     * @return The bytes list block
-     */
-
-    private String toByteString(byte[] bytes)
-    {
-        StringWriter text = new StringWriter();
-        PrintWriter writer = new PrintWriter(text);
-        int size = bytes.length;
-
-        if (size > 9)
-        {
-            writer.println();
-            writer.print("        ");
-        }
-        for (int i = 0; i < size; i++)
-        {
-            if (i > 0)
-            {
-                if (i % 16 == 0)
-                {
-                    writer.println();
-                }
-                if ((i < size) && (size > 9) && (i % 4 == 0))
-                {
-                    writer.print("        ");
-                }
-                else
-                {
-                    writer.print(" ");
-                }
-            }
-            writer.format("%02x", new Object[] { bytes[i] });
-        }
-        if (size > 9)
-        {
-            writer.println();
-            writer.print("      ");
-        }
-
-        return text.toString();
     }
 
 
@@ -864,22 +848,9 @@ public class Char
      * @return The items
      */
 
-    public byte[] getItems()
+    public Items getItems()
     {
         return this.items;
-    }
-
-
-    /**
-     * Sets the items.
-     * 
-     * @param items
-     *            The items to set
-     */
-
-    public void setItems(byte[] items)
-    {
-        this.items = items;
     }
 
 
@@ -1189,22 +1160,9 @@ public class Char
      * @return The skills
      */
 
-    public byte[] getSkills()
+    public Skills getSkills()
     {
         return this.skills;
-    }
-
-
-    /**
-     * Sets the skills.
-     * 
-     * @param skills
-     *            The skills to set
-     */
-
-    public void setSkills(byte[] skills)
-    {
-        this.skills = skills;
     }
 
 
@@ -1380,5 +1338,40 @@ public class Char
     public void setWillingness(int willingness)
     {
         this.willingness = willingness;
+    }
+
+
+    /**
+     * Returns the text represenation of a numeric nationality.
+     * 
+     * @param nationality
+     *            The numeric nationality
+     * @return The text nationality
+     */
+
+    public static String getNationality(int nationality)
+    {
+        return nationalities[nationality];
+    }
+
+
+    /**
+     * Returns the numeric represenation of a textual nationality.
+     * 
+     * @param nationality
+     *            The textual nationality
+     * @return The numeric nationality
+     */
+
+    public static int getNationality(String nationality)
+    {
+        for (int i = 0; i < nationalities.length; i++)
+        {
+            if (nationalities[i].equals(nationality))
+            {
+                return i;
+            }
+        }
+        throw new GameException("Unknown nationality: " + nationality);
     }
 }

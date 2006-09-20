@@ -21,16 +21,15 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
@@ -42,13 +41,13 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
  * @version $Revision$
  */
 
-public class AlterAction implements Action
+public class AlterationAction implements Action
 {
     /** The message to print when player enters the square */
     private int message;
 
     /** The alterations */
-    private List<Alteration> alterations = new ArrayList<Alteration>();
+    private List<Alter> alterations = new ArrayList<Alter>();
 
     /** The new action class to set (255 means setting no new action) */
     private int newActionClass;
@@ -67,13 +66,13 @@ public class AlterAction implements Action
      * @throws IOException
      */
 
-    public static AlterAction read(SeekableInputStream stream)
+    public static AlterationAction read(SeekableInputStream stream)
         throws IOException
     {
         int b;
-        AlterAction action;
+        AlterationAction action;
 
-        action = new AlterAction();
+        action = new AlterationAction();
 
         // Read the message
         action.message = stream.read();
@@ -82,7 +81,7 @@ public class AlterAction implements Action
         do
         {
             b = stream.read();
-            action.alterations.add(Alteration.read(stream, b & 0x7f));
+            action.alterations.add(Alter.read(stream, b & 0x7f));
         }
         while ((b & 0x80) == 0);
 
@@ -98,9 +97,12 @@ public class AlterAction implements Action
         {
             action.newAction = 255;
         }
-        
+
         // Bugfix for Alter-check on map 8 of game1
-        if (action.message == 0 && action.newAction == 0 && action.newActionClass == 0 && action.alterations.size() == 13 && action.alterations.get(4).getUnknown() == 2 && action.alterations.get(12).getUnknown() == 78)
+        if (action.message == 0 && action.newAction == 0
+            && action.newActionClass == 0 && action.alterations.size() == 13
+            && action.alterations.get(4).getUnknown() == 2
+            && action.alterations.get(12).getUnknown() == 78)
         {
             System.out.println("Patching alter-check (7) on map 8");
             action.newActionClass = action.alterations.get(4).getUnknown();
@@ -108,7 +110,7 @@ public class AlterAction implements Action
             while (action.alterations.size() != 4)
             {
                 action.alterations.remove(action.alterations.size() - 1);
-            }                
+            }
         }
 
         return action;
@@ -123,21 +125,22 @@ public class AlterAction implements Action
      * @return The new Alter Action
      */
 
-    public static AlterAction read(Element element)
+    public static AlterationAction read(Element element)
     {
-        AlterAction action;
+        AlterationAction action;
 
-        action = new AlterAction();
+        action = new AlterationAction();
 
-        action.message = Integer.parseInt(element.attributeValue("message"));
+        action.message = Integer.parseInt(element
+            .attributeValue("message", "0"));
         action.newActionClass = Integer.parseInt(element.attributeValue(
             "newActionClass", "255"));
         action.newAction = Integer.parseInt(element.attributeValue("newAction",
             "255"));
-        for (Object item: element.elements("alteration"))
+        for (Object item: element.elements("alter"))
         {
             Element subElement = (Element) item;
-            action.alterations.add(Alteration.read(subElement));
+            action.alterations.add(Alter.read(subElement));
         }
 
         return action;
@@ -145,16 +148,19 @@ public class AlterAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("alter");
+        element = XMLUtils.createElement("alteration");
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("message", Integer.toString(this.message));
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
         if (this.newActionClass != 255)
         {
             element.addAttribute("newActionClass", Integer
@@ -164,7 +170,7 @@ public class AlterAction implements Action
         {
             element.addAttribute("newAction", Integer.toString(this.newAction));
         }
-        for (Alteration alteration: this.alterations)
+        for (Alter alteration: this.alterations)
         {
             element.add(alteration.toXml());
         }
@@ -174,7 +180,7 @@ public class AlterAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -251,7 +257,7 @@ public class AlterAction implements Action
      * @return The alterations
      */
 
-    public List<Alteration> getAlterations()
+    public List<Alter> getAlterations()
     {
         return this.alterations;
     }
@@ -264,7 +270,7 @@ public class AlterAction implements Action
      *            The alterations to set
      */
 
-    public void setAlterations(List<Alteration> alterations)
+    public void setAlterations(List<Alter> alterations)
     {
         this.alterations = alterations;
     }

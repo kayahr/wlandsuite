@@ -25,7 +25,7 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -150,23 +150,23 @@ public class Monster
 
         monster = new Monster();
 
-        monster.name = StringUtils.unescape(element.attributeValue("name"),
+        monster.name = StringUtils.unescape(element.attributeValue("name", ""),
             "ASCII");
         monster.experience = Integer.parseInt(element
-            .attributeValue("experience"));
-        monster.ac = Integer.parseInt(element.attributeValue("ac"));
-        monster.skill = Integer.parseInt(element.attributeValue("skill"));
+            .attributeValue("experience", "0"));
+        monster.ac = Integer.parseInt(element.attributeValue("ac", "0"));
+        monster.skill = Integer.parseInt(element.attributeValue("skill", "0"));
         monster.fixedDamage = Integer.parseInt(element
-            .attributeValue("fixedDamage"));
+            .attributeValue("fixedDamage", "0"));
         monster.randomDamage = Integer.parseInt(element
-            .attributeValue("randomDamage"));
+            .attributeValue("randomDamage", "0"));
         monster.maxGroupSize = Integer.parseInt(element
-            .attributeValue("maxGroupSize"));
+            .attributeValue("maxGroupSize", "0"));
         monster.weaponType = Integer.parseInt(element
-            .attributeValue("weaponType"));
+            .attributeValue("weaponType", "0"));
         monster.monsterType = Integer.parseInt(element
-            .attributeValue("monsterType"));
-        monster.picture = Integer.parseInt(element.attributeValue("picture"));
+            .attributeValue("monsterType", "0"));
+        monster.picture = Integer.parseInt(element.attributeValue("picture", "0"));
 
         return monster;
     }
@@ -204,20 +204,50 @@ public class Monster
     {
         Element element;
 
-        element = DocumentHelper.createElement("monster");
+        element = XMLUtils.createElement("monster");
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("name", StringUtils.escape(this.name, "ASCII"));
-        element.addAttribute("experience", Integer.toString(this.experience));
-        element.addAttribute("ac", Integer.toString(this.ac));
-        element.addAttribute("skill", Integer.toString(this.skill));
-        element.addAttribute("fixedDamage", Integer.toString(this.fixedDamage));
-        element.addAttribute("randomDamage", Integer
-            .toString(this.randomDamage));
-        element.addAttribute("maxGroupSize", Integer
-            .toString(this.maxGroupSize));
-        element.addAttribute("weaponType", Integer.toString(this.weaponType));
-        element.addAttribute("monsterType", Integer.toString(this.monsterType));
-        element.addAttribute("picture", Integer.toString(this.picture));
+        if (this.name != null && this.name.length() != 0)
+        {
+            element.addAttribute("name", StringUtils.escape(this.name, "ASCII"));
+        }
+        if (this.experience != 0)
+        {
+            element.addAttribute("experience", Integer.toString(this.experience));
+        }
+        if (this.ac != 0)
+        {
+            element.addAttribute("ac", Integer.toString(this.ac));
+        }
+        if (this.skill != 0)
+        {
+            element.addAttribute("skill", Integer.toString(this.skill));
+        }
+        if (this.fixedDamage != 0)
+        {
+            element.addAttribute("fixedDamage", Integer.toString(this.fixedDamage));
+        }
+        if (this.randomDamage != 0)
+        {
+            element.addAttribute("randomDamage", Integer
+                .toString(this.randomDamage));
+        }
+        if (this.maxGroupSize != 0)
+        {
+            element.addAttribute("maxGroupSize", Integer
+                .toString(this.maxGroupSize));
+        }
+        if (this.weaponType != 0)
+        {
+            element.addAttribute("weaponType", Integer.toString(this.weaponType));
+        }
+        if (this.monsterType != 0)
+        {
+            element.addAttribute("monsterType", Integer.toString(this.monsterType));
+        }
+        if (this.picture != 0)
+        {
+            element.addAttribute("picture", Integer.toString(this.picture));
+        }
 
         return element;
     }

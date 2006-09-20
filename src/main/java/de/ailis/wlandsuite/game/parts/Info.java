@@ -25,7 +25,7 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -146,20 +146,20 @@ public class Info
 
         info = new Info();
 
-        info.unknown0 = Integer.parseInt(element.attributeValue("unknown0"));
-        info.unknown1 = Integer.parseInt(element.attributeValue("unknown1"));
-        info.encounterFrequency = Integer.parseInt(element
-            .attributeValue("encounterFrequency"));
         info.tileset = Integer.parseInt(element.attributeValue("tileset"));
+        info.backgroundTile = Integer.parseInt(element
+            .attributeValue("backgroundTile", "0"));
+        info.timeFactor = Integer
+            .parseInt(element.attributeValue("timeFactor", "256"));
+        info.encounterFrequency = Integer.parseInt(element
+            .attributeValue("encounterFrequency", "0"));
         info.lastMonster = Integer.parseInt(element
-            .attributeValue("lastMonster"));
+            .attributeValue("lastMonster", "1"));
         info.maxEncounters = Integer.parseInt(element
             .attributeValue("maxEncounters"));
-        info.backgroundTile = Integer.parseInt(element
-            .attributeValue("backgroundTile"));
-        info.timeFactor = Integer
-            .parseInt(element.attributeValue("timeFactor"));
-        info.unknown9 = Integer.parseInt(element.attributeValue("unknown9"));
+        info.unknown0 = Integer.parseInt(element.attributeValue("unknown0", "0"));
+        info.unknown1 = Integer.parseInt(element.attributeValue("unknown1", "0"));
+        info.unknown9 = Integer.parseInt(element.attributeValue("unknown9", "0"));
 
         return info;
     }
@@ -174,19 +174,43 @@ public class Info
     {
         Element element;
 
-        element = DocumentHelper.createElement("info");
-        element.addAttribute("unknown0", Integer.toString(this.unknown0));
-        element.addAttribute("unknown1", Integer.toString(this.unknown1));
-        element.addAttribute("encounterFrequency", Integer
-            .toString(this.encounterFrequency));
+        element = XMLUtils.createElement("info");
         element.addAttribute("tileset", Integer.toString(this.tileset));
-        element.addAttribute("lastMonster", Integer.toString(this.lastMonster));
-        element.addAttribute("maxEncounters", Integer
-            .toString(this.maxEncounters));
-        element.addAttribute("backgroundTile", Integer
-            .toString(this.backgroundTile));
-        element.addAttribute("timeFactor", Integer.toString(this.timeFactor));
-        element.addAttribute("unknown9", Integer.toString(this.unknown9));
+        if (this.backgroundTile != 0)
+        {
+            element.addAttribute("backgroundTile", Integer
+                .toString(this.backgroundTile));
+        }
+        if (this.timeFactor != 256)
+        {
+            element.addAttribute("timeFactor", Integer.toString(this.timeFactor));
+        }
+        if (this.encounterFrequency != 0)
+        {
+            element.addAttribute("encounterFrequency", Integer
+                .toString(this.encounterFrequency));
+        }
+        if (this.lastMonster != 1)
+        {
+            element.addAttribute("lastMonster", Integer.toString(this.lastMonster));
+        }
+        if (this.maxEncounters != 1)
+        {
+            element.addAttribute("maxEncounters", Integer
+                .toString(this.maxEncounters));
+        }
+        if (this.unknown0 != 0)
+        {
+            element.addAttribute("unknown0", Integer.toString(this.unknown0));
+        }
+        if (this.unknown1 != 0)
+        {
+            element.addAttribute("unknown1", Integer.toString(this.unknown1));
+        }
+        if (this.unknown9 != 0)
+        {
+            element.addAttribute("unknown9", Integer.toString(this.unknown9));
+        }
 
         return element;
     }

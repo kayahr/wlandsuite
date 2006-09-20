@@ -21,17 +21,16 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
@@ -123,7 +122,7 @@ public class StoreAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -166,23 +165,44 @@ public class StoreAction implements Action
     {
         Element element;
 
-        element = DocumentHelper.createElement("store");
+        element = XMLUtils.createElement("store");
 
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("name", this.name);
-        element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("buyFactor", Integer.toString(this.buyFactor));
-        element.addAttribute("sellFactor", Integer.toString(this.sellFactor));
-        element.addAttribute("itemList", Integer.toString(this.itemList));
-        element.addAttribute("newActionClass", Integer
-            .toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
+        if (this.name != null && this.name.length() > 0)
+        {
+            element.addAttribute("name", this.name);
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.buyFactor != 0)
+        {
+            element.addAttribute("buyFactor", Integer.toString(this.buyFactor));
+        }
+        if (this.sellFactor != 0)
+        {
+            element.addAttribute("sellFactor", Integer.toString(this.sellFactor));
+        }
+        if (this.itemList != 0)
+        {
+            element.addAttribute("itemList", Integer.toString(this.itemList));
+        }
+        if (this.newActionClass != 255)
+        {
+            element.addAttribute("newActionClass", Integer
+                .toString(this.newActionClass));
+        }
+        if (this.newActionClass != 255)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
 
         for (int itemType: this.itemTypes)
         {
             Element subElement;
 
-            subElement = DocumentHelper.createElement("itemType");
+            subElement = XMLUtils.createElement("itemType");
             subElement.addText(Integer.toString(itemType));
 
             element.add(subElement);
@@ -204,15 +224,15 @@ public class StoreAction implements Action
         StoreAction store;
 
         store = new StoreAction();
-        store.name = element.attributeValue("name");
-        store.message = Integer.parseInt(element.attributeValue("message"));
-        store.buyFactor = Integer.parseInt(element.attributeValue("buyFactor"));
+        store.name = element.attributeValue("name", "");
+        store.message = Integer.parseInt(element.attributeValue("message", "0"));
+        store.buyFactor = Integer.parseInt(element.attributeValue("buyFactor", "0"));
         store.sellFactor = Integer.parseInt(element
-            .attributeValue("sellFactor"));
-        store.itemList = Integer.parseInt(element.attributeValue("itemList"));
+            .attributeValue("sellFactor", "1"));
+        store.itemList = Integer.parseInt(element.attributeValue("itemList", "0"));
         store.newActionClass = Integer.parseInt(element
-            .attributeValue("newActionClass"));
-        store.newAction = Integer.parseInt(element.attributeValue("newAction"));
+            .attributeValue("newActionClass", "255"));
+        store.newAction = Integer.parseInt(element.attributeValue("newAction", "255"));
 
         List<?> elements = element.elements("itemType");
         store.itemTypes = new int[elements.size()];

@@ -21,16 +21,15 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
@@ -119,14 +118,14 @@ public class LootAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("loot");
+        element = XMLUtils.createElement("loot");
         element.addAttribute("id", Integer.toString(id));
         element.addAttribute("newActionClass", Integer
             .toString(this.newActionClass));
@@ -143,7 +142,7 @@ public class LootAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 

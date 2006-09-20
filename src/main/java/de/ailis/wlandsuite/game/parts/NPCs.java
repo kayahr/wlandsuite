@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -166,7 +166,7 @@ public class NPCs extends ArrayList<Char>
         int npcNo;
 
         // Create the root XML element
-        element = DocumentHelper.createElement("npcs");
+        element = XMLUtils.createElement("npcs");
 
         // Add all the npcs
         npcNo = 0;

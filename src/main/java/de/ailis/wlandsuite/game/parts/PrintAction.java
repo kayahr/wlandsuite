@@ -21,17 +21,16 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
@@ -125,11 +124,12 @@ public class PrintAction implements Action
         action = new PrintAction();
 
         // Parse the data
-        String[] parts = element.attributeValue("messages", "0").split(",");
-        for (String part: parts)
+        for (Object item: element.elements("message"))
         {
-            action.messages.add(Integer.valueOf(part.trim()));
+            Element subElement = (Element) item;
+            action.messages.add(Integer.valueOf(subElement.getTextTrim()));
         }
+        
         action.newActionClass = Integer.parseInt(element.attributeValue(
             "newActionClass", "255"));
         action.newAction = Integer.parseInt(element.attributeValue("newAction",
@@ -141,23 +141,21 @@ public class PrintAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
     
     public Element toXml(int id)
     {
-        Element element;
-        StringBuilder messages;
+        Element element, subElement;
 
-        element = DocumentHelper.createElement("print");
+        element = XMLUtils.createElement("print");
         element.addAttribute("id", Integer.toString(id));
-        messages = new StringBuilder();
-        messages.append(this.messages.get(0));
-        for (int i = 1; i < this.messages.size(); i++)
+        for (int message: this.messages)
         {
-            messages.append(",").append(this.messages.get(i));
+            subElement = XMLUtils.createElement("message");
+            subElement.setText(Integer.toString(message));
+            element.add(subElement);
         }
-        element.addAttribute("messages", messages.toString());
         if (this.newActionClass != 255)
         {
             element.addAttribute("newActionClass", Integer
@@ -173,7 +171,7 @@ public class PrintAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 

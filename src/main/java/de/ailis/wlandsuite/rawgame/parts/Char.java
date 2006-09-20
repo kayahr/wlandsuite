@@ -31,7 +31,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -356,7 +356,7 @@ public class Char extends AbstractPart
     {
         Element element, subElement;
 
-        element = DocumentHelper.createElement("character");
+        element = XMLUtils.createElement("character");
         element.addAttribute("name", StringUtils.escape(this.name, "ASCII"));
         element.addAttribute("strength", Integer.toString(this.strength));
         element.addAttribute("iq", Integer.toString(this.iq));
@@ -391,11 +391,11 @@ public class Char extends AbstractPart
         element.addAttribute("willingness", Integer.toString(this.willingness));
         element.addAttribute("rank", StringUtils.escape(this.rank, "ASCII"));
 
-        subElement = DocumentHelper.createElement("skills");
+        subElement = XMLUtils.createElement("skills");
         subElement.setText(toByteString(this.skills));
         element.add(subElement);
 
-        subElement = DocumentHelper.createElement("items");
+        subElement = XMLUtils.createElement("items");
         subElement.setText(toByteString(this.items));
         element.add(subElement);
 

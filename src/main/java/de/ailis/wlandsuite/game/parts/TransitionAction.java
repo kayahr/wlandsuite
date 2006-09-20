@@ -21,14 +21,13 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
@@ -152,22 +151,22 @@ public class TransitionAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("transition");
+        element = XMLUtils.createElement("transition");
         element.addAttribute("id", Integer.toString(id));
         if (this.relative)
         {
-            element.addAttribute("relative", this.relative ? "true" : "false");
+            element.addAttribute("relative", "true");
         }
         if (this.confirm)
         {
-            element.addAttribute("confirm", this.confirm ? "true" : "false");
+            element.addAttribute("confirm", "true");
         }
         if (this.message != 0)
         {
@@ -199,7 +198,7 @@ public class TransitionAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 

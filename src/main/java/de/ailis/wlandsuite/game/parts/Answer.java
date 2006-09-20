@@ -21,9 +21,9 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 
@@ -85,7 +85,7 @@ public class Answer
     {
         Element element;
 
-        element = DocumentHelper.createElement("answer");
+        element = XMLUtils.createElement("answer");
         element.addAttribute("message", Integer.toString(this.message));
         element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
         element.addAttribute("newAction", Integer.toString(this.newAction));

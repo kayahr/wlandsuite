@@ -21,15 +21,14 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
@@ -102,7 +101,7 @@ public class DoctorAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -139,18 +138,39 @@ public class DoctorAction implements Action
     {
         Element element;
 
-        element = DocumentHelper.createElement("doctor");
+        element = XMLUtils.createElement("doctor");
 
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("name", this.name);
-        element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("healPrice", Integer.toString(this.healPrice));
-        element.addAttribute("examinePrice", Integer
-            .toString(this.examinePrice));
-        element.addAttribute("curePrice", Integer.toString(this.curePrice));
-        element.addAttribute("newActionClass", Integer
-            .toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
+        if (this.name != null && this.name.length() > 0)
+        {
+            element.addAttribute("name", this.name);
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.healPrice != 10)
+        {
+            element.addAttribute("healPrice", Integer.toString(this.healPrice));
+        }
+        if (this.examinePrice != 100)
+        {
+            element.addAttribute("examinePrice", Integer
+                .toString(this.examinePrice));
+        }
+        if (this.curePrice != 150)
+        {
+            element.addAttribute("curePrice", Integer.toString(this.curePrice));
+        }
+        if (this.newActionClass != 255)
+        {
+            element.addAttribute("newActionClass", Integer
+                .toString(this.newActionClass));
+        }
+        if (this.newAction != 255)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
         return element;
     }
 
@@ -168,18 +188,18 @@ public class DoctorAction implements Action
         DoctorAction doctor;
 
         doctor = new DoctorAction();
-        doctor.name = element.attributeValue("name");
-        doctor.message = Integer.parseInt(element.attributeValue("message"));
+        doctor.name = element.attributeValue("name", "");
+        doctor.message = Integer.parseInt(element.attributeValue("message", "0"));
         doctor.healPrice = Integer
-            .parseInt(element.attributeValue("healPrice"));
+            .parseInt(element.attributeValue("healPrice", "10"));
         doctor.examinePrice = Integer.parseInt(element
-            .attributeValue("examinePrice"));
+            .attributeValue("examinePrice", "100"));
         doctor.curePrice = Integer
-            .parseInt(element.attributeValue("curePrice"));
+            .parseInt(element.attributeValue("curePrice", "150"));
         doctor.newActionClass = Integer.parseInt(element
-            .attributeValue("newActionClass"));
+            .attributeValue("newActionClass", "255"));
         doctor.newAction = Integer
-            .parseInt(element.attributeValue("newAction"));
+            .parseInt(element.attributeValue("newAction", "255"));
 
         return doctor;
     }

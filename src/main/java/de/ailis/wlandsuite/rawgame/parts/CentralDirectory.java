@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -171,7 +171,7 @@ public class CentralDirectory extends AbstractPart
     {
         Element element, subElement;
 
-        element = DocumentHelper.createElement("centralDirectory");
+        element = XMLUtils.createElement("centralDirectory");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("stringsOffset", Integer
             .toString(this.stringsOffset));
@@ -186,7 +186,7 @@ public class CentralDirectory extends AbstractPart
 
         for (int i = 0; i < 16; i++)
         {
-            subElement = DocumentHelper.createElement("actionClassOffset");
+            subElement = XMLUtils.createElement("actionClassOffset");
             subElement.addAttribute("actionClass", Integer.toString(i));
             subElement.addAttribute("offset", Integer
                 .toString(this.actionClassMasterTable[i]));

@@ -21,15 +21,14 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
@@ -86,7 +85,7 @@ public class RangerCenterAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -119,13 +118,22 @@ public class RangerCenterAction implements Action
     {
         Element element;
 
-        element = DocumentHelper.createElement("rangerCenter");
+        element = XMLUtils.createElement("rangerCenter");
 
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("name", this.name);
-        element.addAttribute("newActionClass", Integer
-            .toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
+        if (this.name != null && this.name.length() != 0)
+        {
+            element.addAttribute("name", this.name);
+        }
+        if (this.newActionClass == 255)
+        {
+            element.addAttribute("newActionClass", Integer
+                .toString(this.newActionClass));
+        }
+        if (this.newAction == 255)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
         
         return element;
     }
@@ -144,11 +152,11 @@ public class RangerCenterAction implements Action
         RangerCenterAction library;
 
         library = new RangerCenterAction();
-        library.name = element.attributeValue("name");
+        library.name = element.attributeValue("name", "");
         library.newActionClass = Integer.parseInt(element
-            .attributeValue("newActionClass"));
+            .attributeValue("newActionClass", "255"));
         library.newAction = Integer
-            .parseInt(element.attributeValue("newAction"));
+            .parseInt(element.attributeValue("newAction", "255"));
 
         return library;
     }

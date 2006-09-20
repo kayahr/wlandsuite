@@ -62,7 +62,14 @@ public abstract class GameBlock
         writer = new XMLWriter(stream, format);
         try
         {
-            document = DocumentHelper.createDocument(toXml());
+            Element rootElement = toXml();
+            rootElement.addNamespace("xsi",
+                "http://www.w3.org/2001/XMLSchema-instance");
+            rootElement
+                .addAttribute(
+                    "xsi:schemaLocation",
+                    "http://www.ailis.de/~k/software/projects/wlandsuite/schemas http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd");
+            document = DocumentHelper.createDocument(rootElement);
             writer.write(document);
         }
         finally
@@ -70,13 +77,13 @@ public abstract class GameBlock
             writer.close();
         }
     }
-           
-    
+
+
     /**
      * Returns the game map as XML.
      * 
      * @return The map as XML
      */
-    
+
     public abstract Element toXml();
 }

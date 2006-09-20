@@ -44,6 +44,7 @@ import de.ailis.wlandsuite.game.parts.Char;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
+import de.ailis.wlandsuite.utils.XMLUtils;
 
 
 /**
@@ -238,10 +239,10 @@ public class Savegame extends GameBlock implements Serializable
         PrintWriter writer;
 
         // Create the root element
-        element = DocumentHelper.createElement("savegame");
+        element = XMLUtils.createElement("savegame");
 
         // Create the header element
-        subElement = DocumentHelper.createElement("header");
+        subElement = XMLUtils.createElement("header");
 
         text = new StringWriter();
         writer = new PrintWriter(text);
@@ -274,7 +275,7 @@ public class Savegame extends GameBlock implements Serializable
         element.add(subElement);
         
         // Write the characters
-        subElement = DocumentHelper.createElement("characters");
+        subElement = XMLUtils.createElement("characters");
         int id = 0;
         for (Char characters: this.characters)
         {

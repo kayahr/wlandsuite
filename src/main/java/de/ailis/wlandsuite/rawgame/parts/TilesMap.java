@@ -30,6 +30,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import de.ailis.wlandsuite.utils.XMLUtils;
+
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
@@ -194,7 +196,7 @@ public class TilesMap extends AbstractPart
         StringWriter text;
         PrintWriter writer;
 
-        element = DocumentHelper.createElement("tilesMap");
+        element = XMLUtils.createElement("tilesMap");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("size", Integer.toString(this.size));
         element.addAttribute("unknown", Integer.toString(this.unknown));

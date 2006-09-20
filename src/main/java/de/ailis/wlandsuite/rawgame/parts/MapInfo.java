@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -149,7 +149,7 @@ public class MapInfo extends AbstractPart
     {
         Element element;
 
-        element = DocumentHelper.createElement("mapInfo");
+        element = XMLUtils.createElement("mapInfo");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("size", Integer.toString(this.size));
         element.addAttribute("mapSize", Integer

@@ -21,17 +21,16 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
@@ -55,7 +54,7 @@ public class LibraryAction implements Action
 
     /** The library name */
     private String name;
-    
+
     /** The skills that can be learned at this library */
     private int[] skills;
 
@@ -82,7 +81,7 @@ public class LibraryAction implements Action
         library.newActionClass = stream.read();
         library.newAction = stream.read();
         library.message = stream.read();
-        
+
         // Read the name
         bytes = new byte[13];
         stream.read(bytes);
@@ -111,7 +110,7 @@ public class LibraryAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -130,7 +129,7 @@ public class LibraryAction implements Action
         {
             stream.write(0);
         }
-        
+
         for (int itemType: this.skills)
         {
             stream.write(itemType);
@@ -151,22 +150,34 @@ public class LibraryAction implements Action
     {
         Element element;
 
-        element = DocumentHelper.createElement("library");
+        element = XMLUtils.createElement("library");
 
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("name", this.name);
-        element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("newActionClass", Integer
-            .toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
-        
+        if (this.name != null && this.name.length() > 0)
+        {
+            element.addAttribute("name", this.name);
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.newActionClass != 255)
+        {
+            element.addAttribute("newActionClass", Integer
+                .toString(this.newActionClass));
+        }
+        if (this.newAction != 255)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
+
         for (int skill: this.skills)
         {
             Element subElement;
-            
-            subElement = DocumentHelper.createElement("skill");
+
+            subElement = XMLUtils.createElement("skill");
             subElement.addText(Integer.toString(skill));
-            
+
             element.add(subElement);
         }
         return element;
@@ -186,12 +197,13 @@ public class LibraryAction implements Action
         LibraryAction library;
 
         library = new LibraryAction();
-        library.name = element.attributeValue("name");
-        library.message = Integer.parseInt(element.attributeValue("message"));
-        library.newActionClass = Integer.parseInt(element
-            .attributeValue("newActionClass"));
-        library.newAction = Integer
-            .parseInt(element.attributeValue("newAction"));
+        library.name = element.attributeValue("name", "");
+        library.message = Integer.parseInt(element.attributeValue("message",
+            "0"));
+        library.newActionClass = Integer.parseInt(element.attributeValue(
+            "newActionClass", "255"));
+        library.newAction = Integer.parseInt(element.attributeValue(
+            "newAction", "255"));
 
         List<?> elements = element.elements("skill");
         library.skills = new int[elements.size()];
@@ -200,7 +212,7 @@ public class LibraryAction implements Action
         {
             Element subElement = (Element) item;
             library.skills[i] = Integer.parseInt(subElement.getText());
-            i++;            
+            i++;
         }
 
         return library;
@@ -209,10 +221,10 @@ public class LibraryAction implements Action
 
     /**
      * Returns the message.
-     *
+     * 
      * @return The message
      */
-    
+
     public int getMessage()
     {
         return this.message;
@@ -221,11 +233,11 @@ public class LibraryAction implements Action
 
     /**
      * Sets the message.
-     *
-     * @param message 
+     * 
+     * @param message
      *            The message to set
      */
-    
+
     public void setMessage(int message)
     {
         this.message = message;
@@ -234,10 +246,10 @@ public class LibraryAction implements Action
 
     /**
      * Returns the name.
-     *
+     * 
      * @return The name
      */
-    
+
     public String getName()
     {
         return this.name;
@@ -246,11 +258,11 @@ public class LibraryAction implements Action
 
     /**
      * Sets the name.
-     *
-     * @param name 
+     * 
+     * @param name
      *            The name to set
      */
-    
+
     public void setName(String name)
     {
         this.name = name;
@@ -259,10 +271,10 @@ public class LibraryAction implements Action
 
     /**
      * Returns the newAction.
-     *
+     * 
      * @return The newAction
      */
-    
+
     public int getNewAction()
     {
         return this.newAction;
@@ -271,11 +283,11 @@ public class LibraryAction implements Action
 
     /**
      * Sets the newAction.
-     *
-     * @param newAction 
+     * 
+     * @param newAction
      *            The newAction to set
      */
-    
+
     public void setNewAction(int newAction)
     {
         this.newAction = newAction;
@@ -284,10 +296,10 @@ public class LibraryAction implements Action
 
     /**
      * Returns the newActionClass.
-     *
+     * 
      * @return The newActionClass
      */
-    
+
     public int getNewActionClass()
     {
         return this.newActionClass;
@@ -296,11 +308,11 @@ public class LibraryAction implements Action
 
     /**
      * Sets the newActionClass.
-     *
-     * @param newActionClass 
+     * 
+     * @param newActionClass
      *            The newActionClass to set
      */
-    
+
     public void setNewActionClass(int newActionClass)
     {
         this.newActionClass = newActionClass;
@@ -309,10 +321,10 @@ public class LibraryAction implements Action
 
     /**
      * Returns the skills.
-     *
+     * 
      * @return The skills
      */
-    
+
     public int[] getSkills()
     {
         return this.skills;
@@ -321,11 +333,11 @@ public class LibraryAction implements Action
 
     /**
      * Sets the skills.
-     *
-     * @param skills 
+     * 
+     * @param skills
      *            The skills to set
      */
-    
+
     public void setSkills(int[] skills)
     {
         this.skills = skills;

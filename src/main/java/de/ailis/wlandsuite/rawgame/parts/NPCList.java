@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStream;
@@ -119,7 +119,7 @@ public class NPCList extends AbstractPart
     {
         Element element, subElement;
 
-        element = DocumentHelper.createElement("npcList");
+        element = XMLUtils.createElement("npcList");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("size", Integer.toString(this.size));
         for (Char character: this.npcs)

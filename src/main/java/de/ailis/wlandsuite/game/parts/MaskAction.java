@@ -21,15 +21,14 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 
@@ -113,10 +112,10 @@ public class MaskAction implements Action
 
         action = new MaskAction();
 
-        action.message = Integer.parseInt(element.attributeValue("message"));
+        action.message = Integer.parseInt(element.attributeValue("message", "0"));
         action.tile = Integer.parseInt(element.attributeValue("tile"));
         action.impassable = Boolean.parseBoolean(element
-            .attributeValue("impassable"));
+            .attributeValue("impassable", "false"));
         action.newActionClass = Integer.parseInt(element.attributeValue(
             "newActionClass", "255"));
         action.newAction = Integer.parseInt(element.attributeValue("newAction",
@@ -127,26 +126,38 @@ public class MaskAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("mask");
+        element = XMLUtils.createElement("mask");
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("impassable", this.impassable ? "true" : "false");
         element.addAttribute("tile", Integer.toString(this.tile));
-        element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
+        if (this.impassable)
+        {
+            element.addAttribute("impassable", "true");
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.newActionClass != 255)
+        {
+            element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
+        }
+        if (this.newAction != 255)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
         return element;
     }
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 

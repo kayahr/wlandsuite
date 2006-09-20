@@ -25,7 +25,7 @@ package de.ailis.wlandsuite.rawgame.parts;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStream;
@@ -115,7 +115,7 @@ public class Alteration
     {
         Element element;
 
-        element = DocumentHelper.createElement("alteration");
+        element = XMLUtils.createElement("alteration");
         element.addAttribute("unknown", Integer.toString(this.unknown));
         element.addAttribute("relative", this.relative ? "true" : "false");
         element.addAttribute("x", Integer.toString(this.x));

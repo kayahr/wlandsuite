@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -148,7 +148,7 @@ public class CodePointerTable extends AbstractPart
         Element element, subElement;
         StringBuilder builder;
 
-        element = DocumentHelper.createElement("codePointers");
+        element = XMLUtils.createElement("codePointers");
 
         builder = new StringBuilder();
         for (int i = 0, max = this.actionClasses.size(); i < max; i++)
@@ -163,7 +163,7 @@ public class CodePointerTable extends AbstractPart
 
         for (int i = 0; i < this.codePointers.size(); i++)
         {
-            subElement = DocumentHelper.createElement("codePointer");
+            subElement = XMLUtils.createElement("codePointer");
             subElement.addAttribute("codeId", Integer.toString(i));
             subElement.addAttribute("offset", Integer.toString(this.codePointers.get(i)));
             element.add(subElement);

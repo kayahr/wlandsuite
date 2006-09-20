@@ -21,11 +21,11 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -39,7 +39,7 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
  * @version $Revision$
  */
 
-public class Alteration
+public class Alter
 {
     /** The flags */
     private int unknown;
@@ -72,11 +72,12 @@ public class Alteration
      * @throws IOException
      */
 
-    public static Alteration read(SeekableInputStream stream, int flags) throws IOException
+    public static Alter read(SeekableInputStream stream, int flags)
+        throws IOException
     {
-        Alteration alteration;
-        
-        alteration = new Alteration();
+        Alter alteration;
+
+        alteration = new Alter();
         alteration.unknown = flags & 0x7e;
         alteration.relative = (flags & 1) == 1;
         alteration.x = stream.readSignedByte();
@@ -92,21 +93,22 @@ public class Alteration
      * 
      * @param element
      *            The XML element
-     * @return The alteration. 
+     * @return The alteration.
      */
 
-    public static Alteration read(Element element)
+    public static Alter read(Element element)
     {
-        Alteration alteration;
+        Alter alteration;
 
-        alteration = new Alteration();
-        alteration.unknown = Integer.parseInt(element.attributeValue("unknown"));
-        alteration.relative = Boolean
-            .parseBoolean(element.attributeValue("relative"));
-        alteration.x = Integer.parseInt(element.attributeValue("x"));
-        alteration.y = Integer.parseInt(element.attributeValue("y"));
-        alteration.newActionClass = Integer.parseInt(element.attributeValue("newActionClass",
-            "255"));
+        alteration = new Alter();
+        alteration.unknown = Integer.parseInt(element.attributeValue("unknown",
+            "0"));
+        alteration.relative = Boolean.parseBoolean(element.attributeValue(
+            "relative", "false"));
+        alteration.x = Integer.parseInt(element.attributeValue("x", "0"));
+        alteration.y = Integer.parseInt(element.attributeValue("y", "0"));
+        alteration.newActionClass = Integer.parseInt(element.attributeValue(
+            "newActionClass", "255"));
         alteration.newAction = Integer.parseInt(element.attributeValue(
             "newAction", "255"));
         return alteration;
@@ -123,14 +125,27 @@ public class Alteration
     {
         Element element;
 
-        element = DocumentHelper.createElement("alteration");
-        element.addAttribute("unknown", Integer.toString(this.unknown));
-        element.addAttribute("relative", this.relative ? "true" : "false");
-        element.addAttribute("x", Integer.toString(this.x));
-        element.addAttribute("y", Integer.toString(this.y));
+        element = XMLUtils.createElement("alter");
+        if (this.unknown != 0)
+        {
+            element.addAttribute("unknown", Integer.toString(this.unknown));
+        }
+        if (this.relative)
+        {
+            element.addAttribute("relative", "true");
+        }
+        if (this.x != 0)
+        {
+            element.addAttribute("x", Integer.toString(this.x));
+        }
+        if (this.y != 0)
+        {
+            element.addAttribute("y", Integer.toString(this.y));
+        }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
+            element.addAttribute("newActionClass", Integer
+                .toString(this.newActionClass));
         }
         if (this.newAction != 255)
         {
@@ -287,10 +302,10 @@ public class Alteration
 
     /**
      * Returns the relative.
-     *
+     * 
      * @return The relative
      */
-    
+
     public boolean isRelative()
     {
         return this.relative;
@@ -299,11 +314,11 @@ public class Alteration
 
     /**
      * Sets the relative.
-     *
-     * @param relative 
+     * 
+     * @param relative
      *            The relative to set
      */
-    
+
     public void setRelative(boolean relative)
     {
         this.relative = relative;

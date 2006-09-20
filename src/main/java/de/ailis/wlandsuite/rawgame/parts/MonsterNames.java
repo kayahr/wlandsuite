@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -125,12 +125,12 @@ public class MonsterNames extends AbstractPart
     {
         Element element, subElement;
 
-        element = DocumentHelper.createElement("monsterNames");
+        element = XMLUtils.createElement("monsterNames");
         element.addAttribute("offset", Integer.toString(this.offset));
         
         for (String name: this.names)
         {
-            subElement = DocumentHelper.createElement("name");
+            subElement = XMLUtils.createElement("name");
             subElement.setText(StringUtils.escape(name, "ASCII"));
             element.add(subElement);
         }

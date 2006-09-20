@@ -21,13 +21,12 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.rawgame.GameException;
 
@@ -102,7 +101,7 @@ public class ActionFactory
                 return ImpassableAction.read(stream);
 
             case 0xc:
-                return AlterAction.read(stream);
+                return AlterationAction.read(stream);
 
             case 0xf:
                 return EncounterAction.read(stream);
@@ -160,7 +159,7 @@ public class ActionFactory
                 return ImpassableAction.read(element);
 
             case 0xc:
-                return AlterAction.read(element);
+                return AlterationAction.read(element);
 
             case 0xf:
                 return EncounterAction.read(element);

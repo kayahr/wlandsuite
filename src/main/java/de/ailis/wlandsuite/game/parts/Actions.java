@@ -28,13 +28,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.actions.Action;
-import de.ailis.wlandsuite.game.parts.actions.ActionFactory;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.XMLUtils;
 
 
 /**
@@ -188,7 +186,7 @@ public class Actions
         Element element;
         int id;
 
-        element = DocumentHelper.createElement("actions");
+        element = XMLUtils.createElement("actions");
         element.addAttribute("actionClass", Integer.toString(actionClass));
         id = 0;
         for (Action action: this.actions)

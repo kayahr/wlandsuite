@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -151,7 +151,7 @@ public class RadiationCode extends AbstractPart
     {
         Element element;
 
-        element = DocumentHelper.createElement("radiation");
+        element = XMLUtils.createElement("radiation");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("ignoreArmor", this.ignoreArmor ? "true" : "false");
         element.addAttribute("message", Integer.toString(this.message));

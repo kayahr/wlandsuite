@@ -21,13 +21,13 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.rawgame.GameException;
@@ -204,9 +204,12 @@ public class Check
     {
         Element element;
 
-        element = DocumentHelper.createElement(getXmlName(this.type));
+        element = XMLUtils.createElement(getXmlName(this.type));
         element.addAttribute("value", Integer.toString(this.value));
-        element.addAttribute("difficulty", Integer.toString(this.difficulty));
+        if (this.difficulty != 0)
+        {
+            element.addAttribute("difficulty", Integer.toString(this.difficulty));
+        }
         if (this.newActionClass != -1)
         {
             element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
@@ -239,7 +242,7 @@ public class Check
             throw new GameException("Unknown check type: " + element.getName());
         }
         check.value = Integer.parseInt(element.attributeValue("value"));
-        check.difficulty = Integer.parseInt(element.attributeValue("difficulty"));
+        check.difficulty = Integer.parseInt(element.attributeValue("difficulty", "0"));
         check.newActionClass = Integer.parseInt(element.attributeValue("newActionClass", "-1"));
         check.newAction = Integer.parseInt(element.attributeValue("newAction", "-1"));
         

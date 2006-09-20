@@ -21,15 +21,14 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.GameException;
 
@@ -44,60 +43,60 @@ import de.ailis.wlandsuite.rawgame.GameException;
 
 public class EncounterAction implements Action
 {
-    /** The minimum distance in feet for the encounter to start */ 
+    /** The minimum distance in feet for the encounter to start */
     private int visibleDistance;
-    
+
     /** The minimum hit distance for the monsters in the encounter */
     private int hitDistance;
-    
+
     /** The message to print when the encounter begins */
     private int message;
-    
+
     /** The monster type of the first group */
     private int monster1;
-    
+
     /** If the number of monsters in the first group is random */
     private boolean random1;
-    
+
     /** The number of monsters in the first group */
     private int maxGroupSize1;
-    
+
     /** The monster type of the second group */
     private int monster2;
-    
+
     /** If the number of monsters in the second group is random */
     private boolean random2;
-    
+
     /** The number of monsters in the second group */
     private int maxGroupSize2;
-    
+
     /** The monster type of the third group */
     private int monster3;
-    
+
     /** If the number of monsters in the third group is random */
     private boolean random3;
-    
+
     /** The number of monsters in the third group */
     private int maxGroupSize3;
-    
+
     /** If the proper name should be displayed instead of a generic one */
     private boolean properName;
-    
+
     /** If the monster is friendly until attacked */
     private boolean friendly;
-    
-    /** Unknown bit 3 in byte 09 */ 
+
+    /** Unknown bit 3 in byte 09 */
     private boolean unknown093;
-    
+
     /** The NPC number (0 if not hireable) */
     private int npc;
-    
+
     /** The new action class to set after the encounter */
     private int newActionClass;
-    
+
     /** The action class to set after the encounter */
     private int newAction;
-    
+
 
     /**
      * Creates and returns a new Encounter Action by reading its data from the
@@ -109,8 +108,7 @@ public class EncounterAction implements Action
      * @throws IOException
      */
 
-    public static EncounterAction read(InputStream stream)
-        throws IOException
+    public static EncounterAction read(InputStream stream) throws IOException
     {
         EncounterAction action;
         int b;
@@ -141,7 +139,7 @@ public class EncounterAction implements Action
             throw new GameException("unknown094 is set!");
         }
         action.npc = b >> 4;
-        
+
         action.newActionClass = stream.read();
         action.newAction = stream.read();
 
@@ -163,24 +161,41 @@ public class EncounterAction implements Action
 
         action = new EncounterAction();
 
-        action.visibleDistance = Integer.parseInt(element.attributeValue("visibleDistance"));
-        action.hitDistance = Integer.parseInt(element.attributeValue("hitDistance"));
-        action.message = Integer.parseInt(element.attributeValue("message"));
-        action.monster1 = Integer.parseInt(element.attributeValue("monster1"));
-        action.maxGroupSize1 = Integer.parseInt(element.attributeValue("maxGroupSize1"));
-        action.random1 = Boolean.parseBoolean(element.attributeValue("random1"));
-        action.monster2 = Integer.parseInt(element.attributeValue("monster2"));
-        action.maxGroupSize2 = Integer.parseInt(element.attributeValue("maxGroupSize2"));
-        action.random2 = Boolean.parseBoolean(element.attributeValue("random2"));
-        action.monster3 = Integer.parseInt(element.attributeValue("monster3"));
-        action.maxGroupSize3 = Integer.parseInt(element.attributeValue("maxGroupSize3"));
-        action.random3 = Boolean.parseBoolean(element.attributeValue("random3"));
-        action.properName = Boolean.parseBoolean(element.attributeValue("properName"));
-        action.friendly = Boolean.parseBoolean(element.attributeValue("friendly"));
-        action.unknown093 = Boolean.parseBoolean(element.attributeValue("unknown093"));
-        action.npc = Integer.parseInt(element.attributeValue("npc"));
-        action.newActionClass =Integer.parseInt(element.attributeValue("newActionClass")); 
-        action.newAction =Integer.parseInt(element.attributeValue("newAction")); 
+        action.visibleDistance = Integer.parseInt(element.attributeValue(
+            "visibleDistance", "0"));
+        action.hitDistance = Integer.parseInt(element.attributeValue(
+            "hitDistance", "0"));
+        action.message = Integer.parseInt(element
+            .attributeValue("message", "0"));
+        action.monster1 = Integer.parseInt(element.attributeValue("monster1",
+            "0"));
+        action.maxGroupSize1 = Integer.parseInt(element.attributeValue(
+            "maxGroupSize1", "0"));
+        action.random1 = Boolean.parseBoolean(element.attributeValue("random1",
+            "false"));
+        action.monster2 = Integer.parseInt(element.attributeValue("monster2",
+            "0"));
+        action.maxGroupSize2 = Integer.parseInt(element.attributeValue(
+            "maxGroupSize2", "0"));
+        action.random2 = Boolean.parseBoolean(element.attributeValue("random2",
+            "false"));
+        action.monster3 = Integer.parseInt(element.attributeValue("monster3",
+            "0"));
+        action.maxGroupSize3 = Integer.parseInt(element.attributeValue(
+            "maxGroupSize3", "0"));
+        action.random3 = Boolean.parseBoolean(element.attributeValue("random3",
+            "false"));
+        action.properName = Boolean.parseBoolean(element.attributeValue(
+            "properName", "false"));
+        action.friendly = Boolean.parseBoolean(element.attributeValue(
+            "friendly", "false"));
+        action.unknown093 = Boolean.parseBoolean(element.attributeValue(
+            "unknown093", "false"));
+        action.npc = Integer.parseInt(element.attributeValue("npc", "0"));
+        action.newActionClass = Integer.parseInt(element.attributeValue(
+            "newActionClass", "255"));
+        action.newAction = Integer.parseInt(element.attributeValue("newAction",
+            "255"));
 
         // Return the check action
         return action;
@@ -188,40 +203,101 @@ public class EncounterAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("encounter");
+        element = XMLUtils.createElement("encounter");
         element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("visibleDistance", Integer.toString(this.visibleDistance));
-        element.addAttribute("hitDistance", Integer.toString(this.hitDistance));
-        element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("monster1", Integer.toString(this.monster1));
-        element.addAttribute("maxGroupSize1", Integer.toString(this.maxGroupSize1));
-        element.addAttribute("random1", this.random1 ? "true" : "false");
-        element.addAttribute("monster2", Integer.toString(this.monster2));
-        element.addAttribute("maxGroupSize2", Integer.toString(this.maxGroupSize2));
-        element.addAttribute("random2", this.random2 ? "true" : "false");
-        element.addAttribute("monster3", Integer.toString(this.monster3));
-        element.addAttribute("maxGroupSize3", Integer.toString(this.maxGroupSize3));
-        element.addAttribute("random3", this.random3 ? "true" : "false");
-        element.addAttribute("properName", this.properName ? "true" : "false");
-        element.addAttribute("friendly", this.friendly ? "true" : "false");
-        element.addAttribute("unknown093", this.unknown093 ? "true" : "false");
-        element.addAttribute("npc", Integer.toString(this.npc));
-        element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
-
+        if (this.visibleDistance != 0)
+        {
+            element.addAttribute("visibleDistance", Integer
+                .toString(this.visibleDistance));
+        }
+        if (this.hitDistance != 0)
+        {
+            element.addAttribute("hitDistance", Integer
+                .toString(this.hitDistance));
+        }
+        if (this.message != 0)
+        {
+            element.addAttribute("message", Integer.toString(this.message));
+        }
+        if (this.monster1 != 0)
+        {
+            element.addAttribute("monster1", Integer.toString(this.monster1));
+        }
+        if (this.maxGroupSize1 != 0)
+        {
+            element.addAttribute("maxGroupSize1", Integer
+                .toString(this.maxGroupSize1));
+        }
+        if (this.random1)
+        {
+            element.addAttribute("random1", this.random1 ? "true" : "false");
+        }
+        if (this.monster2 != 0)
+        {
+            element.addAttribute("monster2", Integer.toString(this.monster2));
+        }
+        if (this.maxGroupSize2 != 0)
+        {
+            element.addAttribute("maxGroupSize2", Integer
+                .toString(this.maxGroupSize2));
+        }
+        if (this.random2)
+        {
+            element.addAttribute("random2", this.random2 ? "true" : "false");
+        }
+        if (this.monster3 != 0)
+        {
+            element.addAttribute("monster3", Integer.toString(this.monster3));
+        }
+        if (this.maxGroupSize3 != 0)
+        {
+            element.addAttribute("maxGroupSize3", Integer
+                .toString(this.maxGroupSize3));
+        }
+        if (this.random3)
+        {
+            element.addAttribute("random3", this.random3 ? "true" : "false");
+        }
+        if (this.properName)
+        {
+            element.addAttribute("properName", this.properName ? "true"
+                : "false");
+        }
+        if (this.friendly)
+        {
+            element.addAttribute("friendly", this.friendly ? "true" : "false");
+        }
+        if (this.unknown093)
+        {
+            element.addAttribute("unknown093", this.unknown093 ? "true"
+                : "false");
+        }
+        if (this.npc != 0)
+        {
+            element.addAttribute("npc", Integer.toString(this.npc));
+        }
+        if (this.newActionClass != 255)
+        {
+            element.addAttribute("newActionClass", Integer
+                .toString(this.newActionClass));
+        }
+        if (this.newAction != 255)
+        {
+            element.addAttribute("newAction", Integer.toString(this.newAction));
+        }
         return element;
     }
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -237,7 +313,8 @@ public class EncounterAction implements Action
         stream.write((this.maxGroupSize2 & 127) | (this.random2 ? 128 : 0));
         stream.write(this.monster3);
         stream.write((this.maxGroupSize3 & 127) | (this.random3 ? 128 : 0));
-        stream.write((this.npc << 4) | (this.properName ? 1 : 0) | (this.friendly ? 2 : 0) | (this.unknown093 ? 4 : 0));
+        stream.write((this.npc << 4) | (this.properName ? 1 : 0)
+            | (this.friendly ? 2 : 0) | (this.unknown093 ? 4 : 0));
         stream.write(this.newActionClass);
         stream.write(this.newAction);
     }
@@ -245,10 +322,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the friendly.
-     *
+     * 
      * @return The friendly
      */
-    
+
     public boolean isFriendly()
     {
         return this.friendly;
@@ -257,11 +334,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the friendly.
-     *
-     * @param friendly 
+     * 
+     * @param friendly
      *            The friendly to set
      */
-    
+
     public void setFriendly(boolean friendly)
     {
         this.friendly = friendly;
@@ -270,10 +347,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the hitDistance.
-     *
+     * 
      * @return The hitDistance
      */
-    
+
     public int getHitDistance()
     {
         return this.hitDistance;
@@ -282,11 +359,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the hitDistance.
-     *
-     * @param hitDistance 
+     * 
+     * @param hitDistance
      *            The hitDistance to set
      */
-    
+
     public void setHitDistance(int hitDistance)
     {
         this.hitDistance = hitDistance;
@@ -295,10 +372,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the maxGroupSize1.
-     *
+     * 
      * @return The maxGroupSize1
      */
-    
+
     public int getMaxGroupSize1()
     {
         return this.maxGroupSize1;
@@ -307,11 +384,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the maxGroupSize1.
-     *
-     * @param maxGroupSize1 
+     * 
+     * @param maxGroupSize1
      *            The maxGroupSize1 to set
      */
-    
+
     public void setMaxGroupSize1(int maxGroupSize1)
     {
         this.maxGroupSize1 = maxGroupSize1;
@@ -320,10 +397,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the maxGroupSize2.
-     *
+     * 
      * @return The maxGroupSize2
      */
-    
+
     public int getMaxGroupSize2()
     {
         return this.maxGroupSize2;
@@ -332,11 +409,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the maxGroupSize2.
-     *
-     * @param maxGroupSize2 
+     * 
+     * @param maxGroupSize2
      *            The maxGroupSize2 to set
      */
-    
+
     public void setMaxGroupSize2(int maxGroupSize2)
     {
         this.maxGroupSize2 = maxGroupSize2;
@@ -345,10 +422,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the maxGroupSize3.
-     *
+     * 
      * @return The maxGroupSize3
      */
-    
+
     public int getMaxGroupSize3()
     {
         return this.maxGroupSize3;
@@ -357,11 +434,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the maxGroupSize3.
-     *
-     * @param maxGroupSize3 
+     * 
+     * @param maxGroupSize3
      *            The maxGroupSize3 to set
      */
-    
+
     public void setMaxGroupSize3(int maxGroupSize3)
     {
         this.maxGroupSize3 = maxGroupSize3;
@@ -370,10 +447,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the message.
-     *
+     * 
      * @return The message
      */
-    
+
     public int getMessage()
     {
         return this.message;
@@ -382,11 +459,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the message.
-     *
-     * @param message 
+     * 
+     * @param message
      *            The message to set
      */
-    
+
     public void setMessage(int message)
     {
         this.message = message;
@@ -395,10 +472,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the monster1.
-     *
+     * 
      * @return The monster1
      */
-    
+
     public int getMonster1()
     {
         return this.monster1;
@@ -407,11 +484,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the monster1.
-     *
-     * @param monster1 
+     * 
+     * @param monster1
      *            The monster1 to set
      */
-    
+
     public void setMonster1(int monster1)
     {
         this.monster1 = monster1;
@@ -420,10 +497,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the monster2.
-     *
+     * 
      * @return The monster2
      */
-    
+
     public int getMonster2()
     {
         return this.monster2;
@@ -432,11 +509,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the monster2.
-     *
-     * @param monster2 
+     * 
+     * @param monster2
      *            The monster2 to set
      */
-    
+
     public void setMonster2(int monster2)
     {
         this.monster2 = monster2;
@@ -445,10 +522,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the monster3.
-     *
+     * 
      * @return The monster3
      */
-    
+
     public int getMonster3()
     {
         return this.monster3;
@@ -457,11 +534,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the monster3.
-     *
-     * @param monster3 
+     * 
+     * @param monster3
      *            The monster3 to set
      */
-    
+
     public void setMonster3(int monster3)
     {
         this.monster3 = monster3;
@@ -470,10 +547,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the npc.
-     *
+     * 
      * @return The npc
      */
-    
+
     public int getNpc()
     {
         return this.npc;
@@ -482,11 +559,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the npc.
-     *
-     * @param npc 
+     * 
+     * @param npc
      *            The npc to set
      */
-    
+
     public void setNpc(int npc)
     {
         this.npc = npc;
@@ -495,10 +572,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the properName.
-     *
+     * 
      * @return The properName
      */
-    
+
     public boolean isProperName()
     {
         return this.properName;
@@ -507,11 +584,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the properName.
-     *
-     * @param properName 
+     * 
+     * @param properName
      *            The properName to set
      */
-    
+
     public void setProperName(boolean properName)
     {
         this.properName = properName;
@@ -520,10 +597,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the random1.
-     *
+     * 
      * @return The random1
      */
-    
+
     public boolean isRandom1()
     {
         return this.random1;
@@ -532,11 +609,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the random1.
-     *
-     * @param random1 
+     * 
+     * @param random1
      *            The random1 to set
      */
-    
+
     public void setRandom1(boolean random1)
     {
         this.random1 = random1;
@@ -545,10 +622,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the random2.
-     *
+     * 
      * @return The random2
      */
-    
+
     public boolean isRandom2()
     {
         return this.random2;
@@ -557,11 +634,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the random2.
-     *
-     * @param random2 
+     * 
+     * @param random2
      *            The random2 to set
      */
-    
+
     public void setRandom2(boolean random2)
     {
         this.random2 = random2;
@@ -570,10 +647,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the random3.
-     *
+     * 
      * @return The random3
      */
-    
+
     public boolean isRandom3()
     {
         return this.random3;
@@ -582,11 +659,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the random3.
-     *
-     * @param random3 
+     * 
+     * @param random3
      *            The random3 to set
      */
-    
+
     public void setRandom3(boolean random3)
     {
         this.random3 = random3;
@@ -595,10 +672,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the unknown093.
-     *
+     * 
      * @return The unknown093
      */
-    
+
     public boolean isUnknown093()
     {
         return this.unknown093;
@@ -607,11 +684,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the unknown093.
-     *
-     * @param unknown093 
+     * 
+     * @param unknown093
      *            The unknown093 to set
      */
-    
+
     public void setUnknown093(boolean unknown093)
     {
         this.unknown093 = unknown093;
@@ -620,10 +697,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the visibleDistance.
-     *
+     * 
      * @return The visibleDistance
      */
-    
+
     public int getVisibleDistance()
     {
         return this.visibleDistance;
@@ -632,11 +709,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the visibleDistance.
-     *
-     * @param visibleDistance 
+     * 
+     * @param visibleDistance
      *            The visibleDistance to set
      */
-    
+
     public void setVisibleDistance(int visibleDistance)
     {
         this.visibleDistance = visibleDistance;
@@ -645,10 +722,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the newAction.
-     *
+     * 
      * @return The newAction
      */
-    
+
     public int getNewAction()
     {
         return this.newAction;
@@ -657,11 +734,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the newAction.
-     *
-     * @param newAction 
+     * 
+     * @param newAction
      *            The newAction to set
      */
-    
+
     public void setNewAction(int newAction)
     {
         this.newAction = newAction;
@@ -670,10 +747,10 @@ public class EncounterAction implements Action
 
     /**
      * Returns the newActionClass.
-     *
+     * 
      * @return The newActionClass
      */
-    
+
     public int getNewActionClass()
     {
         return this.newActionClass;
@@ -682,11 +759,11 @@ public class EncounterAction implements Action
 
     /**
      * Sets the newActionClass.
-     *
-     * @param newActionClass 
+     * 
+     * @param newActionClass
      *            The newActionClass to set
      */
-    
+
     public void setNewActionClass(int newActionClass)
     {
         this.newActionClass = newActionClass;

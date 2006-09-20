@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import de.ailis.wlandsuite.utils.XMLUtils;
+
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
@@ -98,7 +100,7 @@ public class TileMap
         // Create the new Tile Map
         tileMap = new TileMap(mapSize);
 
-        tileMap.unknown = Integer.parseInt(element.attributeValue("unknown"));
+        tileMap.unknown = Integer.parseInt(element.attributeValue("unknown", "0"));
         data = element.getTextTrim();
         i = 0;
         for (int y = 0; y < mapSize; y++)
@@ -202,8 +204,11 @@ public class TileMap
         int mapSize;
 
         // Create the root element
-        element = DocumentHelper.createElement("tileMap");
-        element.addAttribute("unknown", Integer.toString(this.unknown));
+        element = XMLUtils.createElement("tileMap");
+        if (this.unknown != 0)
+        {
+            element.addAttribute("unknown", Integer.toString(this.unknown));
+        }
 
         // Determine the map size
         mapSize = this.map.length;

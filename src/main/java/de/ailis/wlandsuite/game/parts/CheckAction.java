@@ -21,16 +21,15 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.game.parts.actions;
+package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.DocumentHelper;
+import de.ailis.wlandsuite.utils.XMLUtils;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.game.parts.SpecialActionTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 
@@ -46,25 +45,25 @@ public class CheckAction implements Action
 {
     /** If the square is passable even without a successful check */
     private boolean passable;
-    
+
     /** If auto check should be used */
     private boolean autoCheck;
-    
-    /** If all party members must pass the check */
+
+    /** If all party members are checked or only the first viable character */
     private boolean party;
-    
+
     /** If damage should be applied to all members when check fails */
     private boolean damageAll;
-    
+
     /** If all members must pass the check to succeed */
     private boolean passAll;
-    
+
     /** Unknown bit in check */
     private boolean unknown1;
-    
+
     /** Bypass armor when calculating damage */
     private boolean bypassArmor;
-       
+
     /** The message to display when entering the square */
     private int startMessage;
 
@@ -151,7 +150,7 @@ public class CheckAction implements Action
         {
             action.checks.add(check);
         }
-        
+
         // Read replacement data if present
         if (checkBased)
         {
@@ -196,12 +195,11 @@ public class CheckAction implements Action
         }
 
         // Bugfix for Barrier-check on map 7 of game2
-        if (flags == 0 && action.startMessage == 36
-            && action.passMessage == 0 && action.failMessage == 0
-            && action.passNewActionClass == 255 && action.passNewAction == 255
-            && action.failNewActionClass == 255 && action.failNewAction == 255
-            && action.unknown08 == 0 && action.unknown09 == 0
-            && action.checks.size() > 2
+        if (flags == 0 && action.startMessage == 36 && action.passMessage == 0
+            && action.failMessage == 0 && action.passNewActionClass == 255
+            && action.passNewAction == 255 && action.failNewActionClass == 255
+            && action.failNewAction == 255 && action.unknown08 == 0
+            && action.unknown09 == 0 && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN4)
         {
             System.out.println("Patching barrier-check (15) on map 4");
@@ -226,31 +224,38 @@ public class CheckAction implements Action
 
         action = new CheckAction();
 
-        action.passable = Boolean.parseBoolean(element.attributeValue("passable", "false"));
-        action.autoCheck = Boolean.parseBoolean(element.attributeValue("autoCheck", "false"));
-        action.party = Boolean.parseBoolean(element.attributeValue("party", "false"));
-        action.damageAll = Boolean.parseBoolean(element.attributeValue("damageAll", "false"));
-        action.passAll = Boolean.parseBoolean(element.attributeValue("passAll", "false"));
-        action.unknown1 = Boolean.parseBoolean(element.attributeValue("unknown1", "false"));
-        action.bypassArmor = Boolean.parseBoolean(element.attributeValue("bypassArmor", "false"));
-        action.startMessage = Integer.parseInt(element
-            .attributeValue("startMessage"));
-        action.passMessage = Integer.parseInt(element
-            .attributeValue("passMessage"));
-        action.failMessage = Integer.parseInt(element
-            .attributeValue("failMessage"));
-        action.passNewActionClass = Integer.parseInt(element
-            .attributeValue("passNewActionClass"));
-        action.passNewAction = Integer.parseInt(element
-            .attributeValue("passNewAction"));
-        action.failNewActionClass = Integer.parseInt(element
-            .attributeValue("failNewActionClass"));
-        action.failNewAction = Integer.parseInt(element
-            .attributeValue("failNewAction"));
-        action.unknown08 = Integer
-            .parseInt(element.attributeValue("unknown08"));
-        action.unknown09 = Integer
-            .parseInt(element.attributeValue("unknown09"));
+        action.passable = Boolean.parseBoolean(element.attributeValue(
+            "passable", "false"));
+        action.autoCheck = Boolean.parseBoolean(element.attributeValue(
+            "autoCheck", "false"));
+        action.party = Boolean.parseBoolean(element.attributeValue("party",
+            "false"));
+        action.damageAll = Boolean.parseBoolean(element.attributeValue(
+            "damageAll", "false"));
+        action.passAll = Boolean.parseBoolean(element.attributeValue("passAll",
+            "false"));
+        action.unknown1 = Boolean.parseBoolean(element.attributeValue(
+            "unknown1", "false"));
+        action.bypassArmor = Boolean.parseBoolean(element.attributeValue(
+            "bypassArmor", "false"));
+        action.startMessage = Integer.parseInt(element.attributeValue(
+            "startMessage", "0"));
+        action.passMessage = Integer.parseInt(element.attributeValue(
+            "passMessage", "0"));
+        action.failMessage = Integer.parseInt(element.attributeValue(
+            "failMessage", "0"));
+        action.passNewActionClass = Integer.parseInt(element.attributeValue(
+            "passNewActionClass", "255"));
+        action.passNewAction = Integer.parseInt(element.attributeValue(
+            "passNewAction", "255"));
+        action.failNewActionClass = Integer.parseInt(element.attributeValue(
+            "failNewActionClass", "255"));
+        action.failNewAction = Integer.parseInt(element.attributeValue(
+            "failNewAction", "255"));
+        action.unknown08 = Integer.parseInt(element.attributeValue("unknown08",
+            "0"));
+        action.unknown09 = Integer.parseInt(element.attributeValue("unknown09",
+            "0"));
 
         // Read the checks
         for (Object check: element.elements())
@@ -267,14 +272,14 @@ public class CheckAction implements Action
 
 
     /**
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#toXml(int)
+     * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
     public Element toXml(int id)
     {
         Element element;
 
-        element = DocumentHelper.createElement("check");
+        element = XMLUtils.createElement("check");
         element.addAttribute("id", Integer.toString(id));
         if (this.passable) element.addAttribute("passable", "true");
         if (this.autoCheck) element.addAttribute("autoCheck", "true");
@@ -283,21 +288,49 @@ public class CheckAction implements Action
         if (this.passAll) element.addAttribute("passAll", "true");
         if (this.unknown1) element.addAttribute("unknown1", "true");
         if (this.bypassArmor) element.addAttribute("bypassArmor", "true");
-        element.addAttribute("startMessage", Integer
-            .toString(this.startMessage));
-        element.addAttribute("passMessage", Integer.toString(this.passMessage));
-        element.addAttribute("failMessage", Integer.toString(this.failMessage));
-        element.addAttribute("passNewActionClass", Integer
-            .toString(this.passNewActionClass));
-        element.addAttribute("passNewAction", Integer
-            .toString(this.passNewAction));
-        element.addAttribute("failNewActionClass", Integer
-            .toString(this.failNewActionClass));
-        element.addAttribute("failNewAction", Integer
-            .toString(this.failNewAction));
-        element.addAttribute("unknown08", Integer.toString(this.unknown08));
-        element.addAttribute("unknown09", Integer.toString(this.unknown09));
-
+        if (this.startMessage != 0)
+        {
+            element.addAttribute("startMessage", Integer
+                .toString(this.startMessage));
+        }
+        if (this.passMessage != 0)
+        {
+            element.addAttribute("passMessage", Integer
+                .toString(this.passMessage));
+        }
+        if (this.failMessage != 0)
+        {
+            element.addAttribute("failMessage", Integer
+                .toString(this.failMessage));
+        }
+        if (this.passNewActionClass != 255)
+        {
+            element.addAttribute("passNewActionClass", Integer
+                .toString(this.passNewActionClass));
+        }
+        if (this.passNewAction != 255)
+        {
+            element.addAttribute("passNewAction", Integer
+                .toString(this.passNewAction));
+        }
+        if (this.failNewActionClass != 255)
+        {
+            element.addAttribute("failNewActionClass", Integer
+                .toString(this.failNewActionClass));
+        }
+        if (this.failNewAction != 255)
+        {
+            element.addAttribute("failNewAction", Integer
+                .toString(this.failNewAction));
+        }
+        if (this.unknown08 != 0)
+        {
+            element.addAttribute("unknown08", Integer.toString(this.unknown08));
+        }
+        if (this.unknown09 != 0)
+        {
+            element.addAttribute("unknown09", Integer.toString(this.unknown09));
+        }
         for (Check check: this.checks)
         {
             element.add(check.toXml());
@@ -309,7 +342,7 @@ public class CheckAction implements Action
 
     /**
      * @throws IOException
-     * @see de.ailis.wlandsuite.game.parts.actions.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
+     * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
@@ -318,7 +351,7 @@ public class CheckAction implements Action
     {
         int b;
         boolean checkBased = this.checks.get(0).getNewActionClass() != -1;
-        
+
         b = this.passable ? 128 : 0;
         b |= this.autoCheck ? 64 : 0;
         b |= this.party ? 32 : 0;
@@ -343,7 +376,7 @@ public class CheckAction implements Action
             check.write(stream);
         }
         stream.write(255);
-        
+
         if (checkBased)
         {
             for (Check check: this.checks)
@@ -672,10 +705,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the autoCheck.
-     *
+     * 
      * @return The autoCheck
      */
-    
+
     public boolean isAutoCheck()
     {
         return this.autoCheck;
@@ -683,11 +716,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the autoCheck.
-     *
-     * @param autoCheck 
+     * 
+     * @param autoCheck
      *            The autoCheck to set
      */
-    
+
     public void setAutoCheck(boolean autoCheck)
     {
         this.autoCheck = autoCheck;
@@ -695,10 +728,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the bypassArmor.
-     *
+     * 
      * @return The bypassArmor
      */
-    
+
     public boolean isBypassArmor()
     {
         return this.bypassArmor;
@@ -706,11 +739,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the bypassArmor.
-     *
-     * @param bypassArmor 
+     * 
+     * @param bypassArmor
      *            The bypassArmor to set
      */
-    
+
     public void setBypassArmor(boolean bypassArmor)
     {
         this.bypassArmor = bypassArmor;
@@ -718,10 +751,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the checks.
-     *
+     * 
      * @return The checks
      */
-    
+
     public List<Check> getChecks()
     {
         return this.checks;
@@ -729,11 +762,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the checks.
-     *
-     * @param checks 
+     * 
+     * @param checks
      *            The checks to set
      */
-    
+
     public void setChecks(List<Check> checks)
     {
         this.checks = checks;
@@ -741,10 +774,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the damageAll.
-     *
+     * 
      * @return The damageAll
      */
-    
+
     public boolean isDamageAll()
     {
         return this.damageAll;
@@ -752,11 +785,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the damageAll.
-     *
-     * @param damageAll 
+     * 
+     * @param damageAll
      *            The damageAll to set
      */
-    
+
     public void setDamageAll(boolean damageAll)
     {
         this.damageAll = damageAll;
@@ -764,10 +797,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the party.
-     *
+     * 
      * @return The party
      */
-    
+
     public boolean isParty()
     {
         return this.party;
@@ -775,11 +808,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the party.
-     *
-     * @param party 
+     * 
+     * @param party
      *            The party to set
      */
-    
+
     public void setParty(boolean party)
     {
         this.party = party;
@@ -787,10 +820,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the passable.
-     *
+     * 
      * @return The passable
      */
-    
+
     public boolean isPassable()
     {
         return this.passable;
@@ -798,11 +831,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the passable.
-     *
-     * @param passable 
+     * 
+     * @param passable
      *            The passable to set
      */
-    
+
     public void setPassable(boolean passable)
     {
         this.passable = passable;
@@ -810,10 +843,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the passAll.
-     *
+     * 
      * @return The passAll
      */
-    
+
     public boolean isPassAll()
     {
         return this.passAll;
@@ -821,11 +854,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the passAll.
-     *
-     * @param passAll 
+     * 
+     * @param passAll
      *            The passAll to set
      */
-    
+
     public void setPassAll(boolean passAll)
     {
         this.passAll = passAll;
@@ -833,10 +866,10 @@ public class CheckAction implements Action
 
     /**
      * Returns the unknown1.
-     *
+     * 
      * @return The unknown1
      */
-    
+
     public boolean isUnknown1()
     {
         return this.unknown1;
@@ -844,11 +877,11 @@ public class CheckAction implements Action
 
     /**
      * Sets the unknown1.
-     *
-     * @param unknown1 
+     * 
+     * @param unknown1
      *            The unknown1 to set
      */
-    
+
     public void setUnknown1(boolean unknown1)
     {
         this.unknown1 = unknown1;
