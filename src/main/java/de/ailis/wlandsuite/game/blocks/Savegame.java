@@ -43,6 +43,7 @@ import de.ailis.wlandsuite.game.RotatingXorInputStream;
 import de.ailis.wlandsuite.game.parts.Char;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.rawgame.GameException;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
 import de.ailis.wlandsuite.utils.XMLUtils;
 
@@ -183,6 +184,11 @@ public class Savegame extends GameBlock implements Serializable
             byteStream.write(Integer.parseInt(b, 16));
         }
         savegame.header = byteStream.toByteArray();
+        if (savegame.header.length != 0x100)
+        {
+            throw new GameException("Invalid savegame header size: " + savegame.header.length);
+        }
+            
 
         // Read the characters
         for (Object item: element.element("characters").elements("character"))

@@ -140,11 +140,14 @@ public class Monsters extends ArrayList<Monster>
         Monsters monsters;
         List<Element> subElements;
         
-        subElements = element.elements("monster");
-        monsters = new Monsters(subElements.size());
-        for (Element subElement: subElements)
+        monsters = new Monsters();
+        if (element != null)
         {
-            monsters.add(Monster.read(subElement));
+            subElements = element.elements("monster");
+            for (Element subElement: subElements)
+            {
+                monsters.add(Monster.read(subElement));
+            }
         }
         return monsters;
     }

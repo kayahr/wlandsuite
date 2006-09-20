@@ -513,7 +513,8 @@ public class GameMap extends GameBlock implements Serializable
         }
 
         // Parse the tile map
-        gameMap.tileMap = TileMap.read(element.element("tileMap"), mapSize);
+        gameMap.tileMap = TileMap.read(element.element("tileMap"), mapSize,
+            gameMap.info.getBackgroundTile());
 
         // Parse the strings
         gameMap.strings = Strings.read(element.element("strings"));
@@ -597,7 +598,7 @@ public class GameMap extends GameBlock implements Serializable
         element.add(this.strings.toXml());
 
         // Add the tiles map
-        element.add(this.tileMap.toXml());
+        element.add(this.tileMap.toXml(this.info.getBackgroundTile()));
 
         // Return the XMl element
         return element;

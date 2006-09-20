@@ -86,10 +86,12 @@ public class TileMap
      *            The XML element
      * @param mapSize
      *            The map size
+     * @param backgroundTile
+     *            The background tile which is used for ".." bytes
      * @return The new Tile Map
      */
 
-    public static TileMap read(Element element, int mapSize)
+    public static TileMap read(Element element, int mapSize, int backgroundTile)
     {
         TileMap tileMap;
         String data;
@@ -100,7 +102,8 @@ public class TileMap
         // Create the new Tile Map
         tileMap = new TileMap(mapSize);
 
-        tileMap.unknown = Integer.parseInt(element.attributeValue("unknown", "0"));
+        tileMap.unknown = Integer.parseInt(element.attributeValue("unknown",
+            "0"));
         data = element.getTextTrim();
         i = 0;
         for (int y = 0; y < mapSize; y++)
@@ -117,15 +120,21 @@ public class TileMap
                         + (mapSize * mapSize - (y * mapSize + x))
                         + " bytes missing");
                 }
-                if (c.equals("..")) c = "00";
-                try
+                if (c.equals(".."))
                 {
-                    b = Integer.valueOf(c, 16);
+                    b = backgroundTile;
                 }
-                catch (NumberFormatException e)
+                else
                 {
-                    throw new GameException("Illegal data in tile map at y="
-                        + y + " x=" + x);
+                    try
+                    {
+                        b = Integer.valueOf(c, 16);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        throw new GameException(
+                            "Illegal data in tile map at y=" + y + " x=" + x);
+                    }
                 }
                 tileMap.map[y][x] = b;
                 i++;
@@ -193,10 +202,12 @@ public class TileMap
     /**
      * Returns the tile map as XML.
      * 
+     * @param backgroundTile
+     *            The background tile for which ".." is printed
      * @return The tile map as XML
      */
 
-    public Element toXml()
+    public Element toXml(int backgroundTile)
     {
         Element element;
         StringWriter text;
@@ -230,7 +241,14 @@ public class TileMap
                 }
 
                 b = this.map[y][x];
-                writer.format("%02x", new Object[] { b });
+                if (b == backgroundTile)
+                {
+                    writer.append("..");
+                }
+                else
+                {
+                    writer.format("%02x", new Object[] { b });
+                }
             }
             writer.println();
         }

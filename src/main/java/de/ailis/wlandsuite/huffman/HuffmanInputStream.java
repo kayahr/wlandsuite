@@ -75,10 +75,6 @@ public class HuffmanInputStream extends BitInputStream
         int payload;
 
         node = this.tree.getRootNode();
-        if (node.getLeft() == null)
-        {
-            throw new IOException("Huffman tree is empty");
-        }
         while ((payload = node.getPayload()) == -1)
         {
             bit = this.bitStream.readBit();

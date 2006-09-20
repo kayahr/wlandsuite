@@ -81,10 +81,10 @@ public class XMLUtils
             reader.setFeature("http://xml.org/sax/features/validation", true);
             reader.setFeature(
                 "http://apache.org/xml/features/validation/schema", true);
-            /*reader
+            reader
                 .setFeature(
                     "http://apache.org/xml/features/validation/schema-full-checking",
-                    true);*/
+                    true);
             reader
                 .setProperty(
                     "http://apache.org/xml/properties/schema/external-schemaLocation",

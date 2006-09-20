@@ -144,11 +144,14 @@ public class NPCs extends ArrayList<Char>
         NPCs npcs;
         List<Element> subElements;
 
-        subElements = element.elements("character");
-        npcs = new NPCs(subElements.size());
-        for (Element subElement: subElements)
+        npcs = new NPCs();
+        if (element != null)
         {
-            npcs.add(Char.read(subElement));
+            subElements = element.elements("character");
+            for (Element subElement: subElements)
+            {
+                npcs.add(Char.read(subElement));
+            }
         }
         return npcs;
     }
