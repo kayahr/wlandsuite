@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 
@@ -95,7 +96,7 @@ public class Item
     {
         Element element;
 
-        element = XMLUtils.createElement("item");
+        element = XmlUtils.createElement("item");
         element.addAttribute("id", Integer.toString(this.id));
         if (this.load != 0)
         {
@@ -120,8 +121,8 @@ public class Item
 
         item = new Item();
 
-        item.id = Integer.parseInt(element.attributeValue("id"));
-        item.load = Integer.parseInt(element.attributeValue("load", "0"));
+        item.id = StringUtils.toInt(element.attributeValue("id"));
+        item.load = StringUtils.toInt(element.attributeValue("load", "0"));
 
         return item;
     }

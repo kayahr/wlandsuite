@@ -30,7 +30,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -121,12 +121,12 @@ public class MonsterData extends AbstractPart
     {
         Element element, subElement;
 
-        element = XMLUtils.createElement("monsterData");
+        element = XmlUtils.createElement("monsterData");
         element.addAttribute("offset", Integer.toString(this.offset));
         
         for (byte[] data: this.data)
         {
-            subElement = XMLUtils.createElement("data");
+            subElement = XmlUtils.createElement("data");
             StringBuilder builder = new StringBuilder();
             for (byte b: data)
             {

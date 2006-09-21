@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
@@ -140,7 +140,7 @@ public class MaskCode extends AbstractPart
     {
         Element element;
 
-        element = XMLUtils.createElement("mask");
+        element = XmlUtils.createElement("mask");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("message", Integer.toString(this.message));
         element.addAttribute("impassable", this.impassable ? "true" : "false");

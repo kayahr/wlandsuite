@@ -27,7 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -282,51 +282,50 @@ public class Char
         character = new Char();
         character.name = StringUtils.unescape(element.attributeValue("name"),
             "ASCII");
-        character.strength = Integer.parseInt(element
+        character.strength = StringUtils.toInt(element
             .attributeValue("strength"));
-        character.iq = Integer.parseInt(element.attributeValue("iq"));
-        character.luck = Integer.parseInt(element.attributeValue("luck"));
-        character.speed = Integer.parseInt(element.attributeValue("speed"));
-        character.agility = Integer.parseInt(element.attributeValue("agility"));
-        character.dexterity = Integer.parseInt(element
+        character.iq = StringUtils.toInt(element.attributeValue("iq"));
+        character.luck = StringUtils.toInt(element.attributeValue("luck"));
+        character.speed = StringUtils.toInt(element.attributeValue("speed"));
+        character.agility = StringUtils.toInt(element.attributeValue("agility"));
+        character.dexterity = StringUtils.toInt(element
             .attributeValue("dexterity"));
-        character.charisma = Integer.parseInt(element
+        character.charisma = StringUtils.toInt(element
             .attributeValue("charisma"));
-        character.money = Integer
-            .parseInt(element.attributeValue("money", "0"));
+        character.money = StringUtils.toInt(element.attributeValue("money", "0"));
         character.gender = element.attributeValue("gender", "male").equals(
             "male") ? 0 : 1;
         character.nationality = getNationality(element
             .attributeValue("nationality", "US"));
-        character.ac = Integer.parseInt(element.attributeValue("ac", "0"));
-        character.maxCon = Integer.parseInt(element.attributeValue("maxCon"));
-        character.con = Integer.parseInt(element.attributeValue("con"));
-        character.weapon = Integer.parseInt(element.attributeValue("weapon", "0"));
-        character.skillPoints = Integer.parseInt(element
+        character.ac = StringUtils.toInt(element.attributeValue("ac", "0"));
+        character.maxCon = StringUtils.toInt(element.attributeValue("maxCon"));
+        character.con = StringUtils.toInt(element.attributeValue("con"));
+        character.weapon = StringUtils.toInt(element.attributeValue("weapon", "0"));
+        character.skillPoints = StringUtils.toInt(element
             .attributeValue("skillPoints", "0"));
-        character.experience = Integer.parseInt(element
+        character.experience = StringUtils.toInt(element
             .attributeValue("experience", "0"));
-        character.level = Integer.parseInt(element.attributeValue("level", "1"));
-        character.armor = Integer.parseInt(element.attributeValue("armor", "0"));
-        character.lastCon = Integer.parseInt(element.attributeValue("lastCon", "0"));
-        character.afflictions = Integer.parseInt(element
+        character.level = StringUtils.toInt(element.attributeValue("level", "1"));
+        character.armor = StringUtils.toInt(element.attributeValue("armor", "0"));
+        character.lastCon = StringUtils.toInt(element.attributeValue("lastCon", "0"));
+        character.afflictions = StringUtils.toInt(element
             .attributeValue("afflictions", "0"));
         character.npc = Boolean.parseBoolean(element.attributeValue("npc", "false"));
-        character.unknown2A = Integer.parseInt(element
+        character.unknown2A = StringUtils.toInt(element
             .attributeValue("unknown2A", "0"));
-        character.itemRefuse = Integer.parseInt(element
+        character.itemRefuse = StringUtils.toInt(element
             .attributeValue("itemRefuse", "0"));
-        character.skillRefuse = Integer.parseInt(element
+        character.skillRefuse = StringUtils.toInt(element
             .attributeValue("skillRefuse", "0"));
-        character.attribRefuse = Integer.parseInt(element
+        character.attribRefuse = StringUtils.toInt(element
             .attributeValue("attribRefuse", "0"));
-        character.tradeRefuse = Integer.parseInt(element
+        character.tradeRefuse = StringUtils.toInt(element
             .attributeValue("tradeRefuse", "0"));
-        character.unknown2F = Integer.parseInt(element
+        character.unknown2F = StringUtils.toInt(element
             .attributeValue("unknown2F", "0"));
-        character.joinString = Integer.parseInt(element
+        character.joinString = StringUtils.toInt(element
             .attributeValue("joinString", "0"));
-        character.willingness = Integer.parseInt(element
+        character.willingness = StringUtils.toInt(element
             .attributeValue("willingness", "0"));
         character.rank = StringUtils.unescape(element.attributeValue("rank", "Private"),
             "ASCII");
@@ -354,8 +353,8 @@ public class Char
     {
         Element element;
 
-        element = XMLUtils.createElement("character");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("character");
+        element.addAttribute("id", StringUtils.toHex(id));
         element.addAttribute("name", StringUtils.escape(this.name, "ASCII"));
         element.addAttribute("strength", Integer.toString(this.strength));
         element.addAttribute("iq", Integer.toString(this.iq));
@@ -404,7 +403,7 @@ public class Char
         }
         if (this.unknown2A != 0)
         {
-            element.addAttribute("unknown2A", Integer.toString(this.unknown2A));
+            element.addAttribute("unknown2A", StringUtils.toHex(this.unknown2A));
         }
         if (this.itemRefuse != 0)
         {
@@ -425,7 +424,7 @@ public class Char
         }
         if (this.unknown2F != 0)
         {
-            element.addAttribute("unknown2F", Integer.toString(this.unknown2F));
+            element.addAttribute("unknown2F", StringUtils.toHex(this.unknown2F));
         }
         if (this.joinString != 0)
         {

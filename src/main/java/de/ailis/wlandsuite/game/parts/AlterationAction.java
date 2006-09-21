@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -131,11 +132,11 @@ public class AlterationAction implements Action
 
         action = new AlterationAction();
 
-        action.message = Integer.parseInt(element
+        action.message = StringUtils.toInt(element
             .attributeValue("message", "0"));
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
+        action.newAction = StringUtils.toInt(element.attributeValue("newAction",
             "255"));
         for (Object item: element.elements("alter"))
         {
@@ -155,20 +156,20 @@ public class AlterationAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("alteration");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("alteration");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.message != 0)
         {
             element.addAttribute("message", Integer.toString(this.message));
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex
+                (this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         for (Alter alteration: this.alterations)
         {

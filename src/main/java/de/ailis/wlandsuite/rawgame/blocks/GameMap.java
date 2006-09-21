@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.rawgame.GameBlockType;
@@ -555,7 +555,7 @@ public class GameMap extends AbstractGameBlock
     {
         Element element, partElement;
 
-        element = XMLUtils.createElement("map");
+        element = XmlUtils.createElement("map");
         element.addAttribute("size", Integer.toString(this.mapSize));
         for (Part part: this.parts)
         {

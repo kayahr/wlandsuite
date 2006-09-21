@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.game.chartable.CharTable;
@@ -344,7 +344,7 @@ public class Strings extends ArrayList<String>
 
             string = (Element) subElement;
             text = StringUtils.unescape(string.getText(), "ASCII");
-            id = Integer.parseInt(string.attributeValue("id"));
+            id = StringUtils.toInt(string.attributeValue("id"));
             if (id == strings.size())
             {
                 strings.add(text);
@@ -380,14 +380,14 @@ public class Strings extends ArrayList<String>
         int stringNo;
 
         // Create the root XML element
-        element = XMLUtils.createElement("strings");
+        element = XmlUtils.createElement("strings");
 
         // Add all the strings
         stringNo = 0;
         for (String string: this)
         {
             // Create and append string element
-            subElement = XMLUtils.createElement("string");
+            subElement = XmlUtils.createElement("string");
             subElement.addAttribute("id", Integer.toString(stringNo));
             subElement.addText(StringUtils.escape(string, "ASCII"));
             element.add(subElement);

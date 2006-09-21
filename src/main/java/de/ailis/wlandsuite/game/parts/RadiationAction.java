@@ -26,7 +26,8 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -117,12 +118,12 @@ public class RadiationAction implements Action
 
         action.ignoreArmor = Boolean.parseBoolean(element.attributeValue(
             "ignoreArmor", "false"));
-        action.message = Integer.parseInt(element
+        action.message = StringUtils.toInt(element
             .attributeValue("message", "0"));
-        action.damage = Integer.parseInt(element.attributeValue("damage", "0"));
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.damage = StringUtils.toInt(element.attributeValue("damage", "0"));
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "class", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("selector",
+        action.newAction = StringUtils.toInt(element.attributeValue("selector",
             "255"));
 
         // Validate ignoreArmor flag
@@ -149,8 +150,8 @@ public class RadiationAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("radiation");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("radiation");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.ignoreArmor)
         {
             element.addAttribute("ignoreArmor", "true");
@@ -165,12 +166,11 @@ public class RadiationAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }

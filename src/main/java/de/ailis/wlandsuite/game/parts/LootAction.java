@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -98,9 +99,9 @@ public class LootAction implements Action
 
         action = new LootAction();
 
-        action.newActionClass = Integer.parseInt(element
+        action.newActionClass = StringUtils.toInt(element
             .attributeValue("newActionClass"));
-        action.newAction = Integer.parseInt(element
+        action.newAction = StringUtils.toInt(element
             .attributeValue("newAction"));
 
         // Read the items
@@ -125,12 +126,10 @@ public class LootAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("loot");
-        element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("newActionClass", Integer
-            .toString(this.newActionClass));
-        element.addAttribute("newAction", Integer
-            .toString(this.newAction));
+        element = XmlUtils.createElement("loot");
+        element.addAttribute("id", StringUtils.toHex(id));
+        element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
+        element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         
         for (LootItem item: this.items)
         {

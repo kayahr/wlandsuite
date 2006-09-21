@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 
@@ -98,7 +99,7 @@ public class Skill
     {
         Element element;
 
-        element = XMLUtils.createElement("skill");
+        element = XmlUtils.createElement("skill");
         element.addAttribute("id", Integer.toString(this.id));
         element.addAttribute("level", Integer.toString(this.level));
         if (this.special)
@@ -124,8 +125,8 @@ public class Skill
 
         skill = new Skill();
 
-        skill.id = Integer.parseInt(element.attributeValue("id"));
-        skill.level = Integer.parseInt(element.attributeValue("level"));
+        skill.id = StringUtils.toInt(element.attributeValue("id"));
+        skill.level = StringUtils.toInt(element.attributeValue("level"));
         skill.special = Boolean.parseBoolean(element.attributeValue("special",
             "false"));
 

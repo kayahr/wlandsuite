@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -238,23 +239,23 @@ public class CheckAction implements Action
             "unknown1", "false"));
         action.bypassArmor = Boolean.parseBoolean(element.attributeValue(
             "bypassArmor", "false"));
-        action.startMessage = Integer.parseInt(element.attributeValue(
+        action.startMessage = StringUtils.toInt(element.attributeValue(
             "startMessage", "0"));
-        action.passMessage = Integer.parseInt(element.attributeValue(
+        action.passMessage = StringUtils.toInt(element.attributeValue(
             "passMessage", "0"));
-        action.failMessage = Integer.parseInt(element.attributeValue(
+        action.failMessage = StringUtils.toInt(element.attributeValue(
             "failMessage", "0"));
-        action.passNewActionClass = Integer.parseInt(element.attributeValue(
+        action.passNewActionClass = StringUtils.toInt(element.attributeValue(
             "passNewActionClass", "255"));
-        action.passNewAction = Integer.parseInt(element.attributeValue(
+        action.passNewAction = StringUtils.toInt(element.attributeValue(
             "passNewAction", "255"));
-        action.failNewActionClass = Integer.parseInt(element.attributeValue(
+        action.failNewActionClass = StringUtils.toInt(element.attributeValue(
             "failNewActionClass", "255"));
-        action.failNewAction = Integer.parseInt(element.attributeValue(
+        action.failNewAction = StringUtils.toInt(element.attributeValue(
             "failNewAction", "255"));
-        action.unknown08 = Integer.parseInt(element.attributeValue("unknown08",
+        action.unknown08 = StringUtils.toInt(element.attributeValue("unknown08",
             "0"));
-        action.unknown09 = Integer.parseInt(element.attributeValue("unknown09",
+        action.unknown09 = StringUtils.toInt(element.attributeValue("unknown09",
             "0"));
 
         // Read the checks
@@ -279,8 +280,8 @@ public class CheckAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("check");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("check");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.passable) element.addAttribute("passable", "true");
         if (this.autoCheck) element.addAttribute("autoCheck", "true");
         if (this.party) element.addAttribute("party", "true");
@@ -305,31 +306,31 @@ public class CheckAction implements Action
         }
         if (this.passNewActionClass != 255)
         {
-            element.addAttribute("passNewActionClass", Integer
-                .toString(this.passNewActionClass));
+            element.addAttribute("passNewActionClass", StringUtils.toHex
+                (this.passNewActionClass));
         }
         if (this.passNewAction != 255)
         {
-            element.addAttribute("passNewAction", Integer
-                .toString(this.passNewAction));
+            element.addAttribute("passNewAction", StringUtils.toHex
+                (this.passNewAction));
         }
         if (this.failNewActionClass != 255)
         {
-            element.addAttribute("failNewActionClass", Integer
-                .toString(this.failNewActionClass));
+            element.addAttribute("failNewActionClass", StringUtils.toHex
+                (this.failNewActionClass));
         }
         if (this.failNewAction != 255)
         {
-            element.addAttribute("failNewAction", Integer
-                .toString(this.failNewAction));
+            element.addAttribute("failNewAction", StringUtils.toHex
+                (this.failNewAction));
         }
         if (this.unknown08 != 0)
         {
-            element.addAttribute("unknown08", Integer.toString(this.unknown08));
+            element.addAttribute("unknown08", StringUtils.toHex(this.unknown08));
         }
         if (this.unknown09 != 0)
         {
-            element.addAttribute("unknown09", Integer.toString(this.unknown09));
+            element.addAttribute("unknown09", StringUtils.toHex(this.unknown09));
         }
         for (Check check: this.checks)
         {

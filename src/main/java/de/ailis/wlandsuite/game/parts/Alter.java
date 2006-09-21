@@ -25,7 +25,8 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -101,15 +102,15 @@ public class Alter
         Alter alteration;
 
         alteration = new Alter();
-        alteration.unknown = Integer.parseInt(element.attributeValue("unknown",
+        alteration.unknown = StringUtils.toInt(element.attributeValue("unknown",
             "0"));
         alteration.relative = Boolean.parseBoolean(element.attributeValue(
             "relative", "false"));
-        alteration.x = Integer.parseInt(element.attributeValue("x", "0"));
-        alteration.y = Integer.parseInt(element.attributeValue("y", "0"));
-        alteration.newActionClass = Integer.parseInt(element.attributeValue(
+        alteration.x = StringUtils.toInt(element.attributeValue("x", "0"));
+        alteration.y = StringUtils.toInt(element.attributeValue("y", "0"));
+        alteration.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        alteration.newAction = Integer.parseInt(element.attributeValue(
+        alteration.newAction = StringUtils.toInt(element.attributeValue(
             "newAction", "255"));
         return alteration;
     }
@@ -125,10 +126,10 @@ public class Alter
     {
         Element element;
 
-        element = XMLUtils.createElement("alter");
+        element = XmlUtils.createElement("alter");
         if (this.unknown != 0)
         {
-            element.addAttribute("unknown", Integer.toString(this.unknown));
+            element.addAttribute("unknown", StringUtils.toHex(this.unknown));
         }
         if (this.relative)
         {
@@ -144,12 +145,11 @@ public class Alter
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }

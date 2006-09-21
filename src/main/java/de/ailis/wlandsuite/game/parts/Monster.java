@@ -25,7 +25,7 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -152,21 +152,21 @@ public class Monster
 
         monster.name = StringUtils.unescape(element.attributeValue("name", ""),
             "ASCII");
-        monster.experience = Integer.parseInt(element
+        monster.experience = StringUtils.toInt(element
             .attributeValue("experience", "0"));
-        monster.ac = Integer.parseInt(element.attributeValue("ac", "0"));
-        monster.skill = Integer.parseInt(element.attributeValue("skill", "0"));
-        monster.fixedDamage = Integer.parseInt(element
+        monster.ac = StringUtils.toInt(element.attributeValue("ac", "0"));
+        monster.skill = StringUtils.toInt(element.attributeValue("skill", "0"));
+        monster.fixedDamage = StringUtils.toInt(element
             .attributeValue("fixedDamage", "0"));
-        monster.randomDamage = Integer.parseInt(element
+        monster.randomDamage = StringUtils.toInt(element
             .attributeValue("randomDamage", "0"));
-        monster.maxGroupSize = Integer.parseInt(element
+        monster.maxGroupSize = StringUtils.toInt(element
             .attributeValue("maxGroupSize", "0"));
-        monster.weaponType = Integer.parseInt(element
+        monster.weaponType = StringUtils.toInt(element
             .attributeValue("weaponType", "0"));
-        monster.monsterType = Integer.parseInt(element
+        monster.monsterType = StringUtils.toInt(element
             .attributeValue("monsterType", "0"));
-        monster.picture = Integer.parseInt(element.attributeValue("picture", "0"));
+        monster.picture = StringUtils.toInt(element.attributeValue("picture", "0"));
 
         return monster;
     }
@@ -204,7 +204,7 @@ public class Monster
     {
         Element element;
 
-        element = XMLUtils.createElement("monster");
+        element = XmlUtils.createElement("monster");
         element.addAttribute("id", Integer.toString(id));
         if (this.name != null && this.name.length() != 0)
         {

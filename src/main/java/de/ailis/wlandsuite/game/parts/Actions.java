@@ -32,7 +32,8 @@ import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
@@ -186,8 +187,8 @@ public class Actions
         Element element;
         int id;
 
-        element = XMLUtils.createElement("actions");
-        element.addAttribute("actionClass", Integer.toString(actionClass));
+        element = XmlUtils.createElement("actions");
+        element.addAttribute("actionClass", StringUtils.toHex(actionClass));
         id = 0;
         for (Action action: this.actions)
         {
@@ -217,13 +218,13 @@ public class Actions
 
         actions = new Actions();
 
-        actionClass = Integer.parseInt(element.attributeValue("actionClass"));
+        actionClass = StringUtils.toInt(element.attributeValue("actionClass"));
         for (Object item: element.elements())
         {
             Element subElement = (Element) item;
             int id;
 
-            id = Integer.parseInt(subElement.attributeValue("id"));
+            id = StringUtils.toInt(subElement.attributeValue("id"));
             while (id >= actions.actions.size())
             {
                 actions.actions.add(null);

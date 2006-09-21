@@ -189,4 +189,54 @@ public class StringUtils
             return null;
         }
     }
+
+
+    /**
+     * Converts a string into an int. The string can be written in hexadecimal
+     * (0x prefix), binary (b suffix) or decimal. If value is null then 0 is
+     * returned. If value is not parsable then a NumberFormatException is
+     * thrown.
+     * 
+     * @param value
+     *            The value as string
+     * @return The int value
+     */
+
+    public static int toInt(String value)
+    {
+        // NULL is 0
+        if (value == null)
+        {
+            return 0;
+        }
+
+        // Parse hexadecimal value
+        if (value.startsWith("0x"))
+        {
+            return Integer.parseInt(value.substring(2), 16);
+        }
+
+        // Parse binary value
+        if (value.endsWith("b"))
+        {
+            return Integer.parseInt(value.substring(0, value.length() - 1), 2);
+        }
+
+        // Parse decimal value
+        return Integer.parseInt(value);
+    }
+
+
+    /**
+     * Converts the specified int to a hex string with a 0x prefix.
+     * 
+     * @param value
+     *            The decimal value
+     * @return The hex string with 0x prefix
+     */
+
+    public static String toHex(int value)
+    {
+        return "0x" + Integer.toString(value, 16);
+    }
 }

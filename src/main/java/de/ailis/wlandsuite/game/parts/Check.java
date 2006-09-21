@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.rawgame.GameException;
@@ -204,7 +205,7 @@ public class Check
     {
         Element element;
 
-        element = XMLUtils.createElement(getXmlName(this.type));
+        element = XmlUtils.createElement(getXmlName(this.type));
         element.addAttribute("value", Integer.toString(this.value));
         if (this.difficulty != 0)
         {
@@ -212,11 +213,11 @@ public class Check
         }
         if (this.newActionClass != -1)
         {
-            element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newAction != -1)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }
@@ -241,10 +242,10 @@ public class Check
         {
             throw new GameException("Unknown check type: " + element.getName());
         }
-        check.value = Integer.parseInt(element.attributeValue("value"));
-        check.difficulty = Integer.parseInt(element.attributeValue("difficulty", "0"));
-        check.newActionClass = Integer.parseInt(element.attributeValue("newActionClass", "-1"));
-        check.newAction = Integer.parseInt(element.attributeValue("newAction", "-1"));
+        check.value = StringUtils.toInt(element.attributeValue("value"));
+        check.difficulty = StringUtils.toInt(element.attributeValue("difficulty", "0"));
+        check.newActionClass = StringUtils.toInt(element.attributeValue("newActionClass", "-1"));
+        check.newAction = StringUtils.toInt(element.attributeValue("newAction", "-1"));
         
         return check;
     }

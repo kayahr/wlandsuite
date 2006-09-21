@@ -25,7 +25,8 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -204,7 +205,7 @@ public class LootItem
     {
         Element element;
 
-        element = XMLUtils.createElement(getXmlName(this.type));
+        element = XmlUtils.createElement(getXmlName(this.type));
         if (this.value != 0x5e)
         {
             element.addAttribute("value", Integer.toString(this.value));
@@ -236,13 +237,13 @@ public class LootItem
         }
         if (type != TYPE_FIXEDMONEY && type != TYPE_RANDOMMONEY)
         {
-            value = Integer.parseInt(element.attributeValue("value"));
+            value = StringUtils.toInt(element.attributeValue("value"));
         }
         else
         {
             value = 0x5e;
         }
-        quantity = Integer.parseInt(element.attributeValue("quantity", "1"));
+        quantity = StringUtils.toInt(element.attributeValue("quantity", "1"));
         return new LootItem(type, value, quantity);
     }
 

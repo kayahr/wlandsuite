@@ -23,7 +23,8 @@
 
 package de.ailis.wlandsuite.game.parts;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 
@@ -85,10 +86,10 @@ public class Answer
     {
         Element element;
 
-        element = XMLUtils.createElement("answer");
+        element = XmlUtils.createElement("answer");
         element.addAttribute("message", Integer.toString(this.message));
-        element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
-        element.addAttribute("newAction", Integer.toString(this.newAction));
+        element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
+        element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         return element;
     }
 
@@ -105,9 +106,9 @@ public class Answer
     {
         int message, newActionClass, newAction;
 
-        message = Integer.parseInt(element.attributeValue("message"));
-        newActionClass = Integer.parseInt(element.attributeValue("newActionClass"));
-        newAction = Integer.parseInt(element.attributeValue("newAction"));
+        message = StringUtils.toInt(element.attributeValue("message"));
+        newActionClass = StringUtils.toInt(element.attributeValue("newActionClass"));
+        newAction = StringUtils.toInt(element.attributeValue("newAction"));
         return new Answer(message, newActionClass, newAction);
     }
 

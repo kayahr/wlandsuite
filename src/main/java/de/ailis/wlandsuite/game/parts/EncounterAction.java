@@ -26,7 +26,8 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -161,27 +162,27 @@ public class EncounterAction implements Action
 
         action = new EncounterAction();
 
-        action.visibleDistance = Integer.parseInt(element.attributeValue(
+        action.visibleDistance = StringUtils.toInt(element.attributeValue(
             "visibleDistance", "0"));
-        action.hitDistance = Integer.parseInt(element.attributeValue(
+        action.hitDistance = StringUtils.toInt(element.attributeValue(
             "hitDistance", "0"));
-        action.message = Integer.parseInt(element
-            .attributeValue("message", "0"));
-        action.monster1 = Integer.parseInt(element.attributeValue("monster1",
+        action.message = StringUtils.toInt(element.attributeValue("message",
             "0"));
-        action.maxGroupSize1 = Integer.parseInt(element.attributeValue(
+        action.monster1 = StringUtils.toInt(element.attributeValue("monster1",
+            "0"));
+        action.maxGroupSize1 = StringUtils.toInt(element.attributeValue(
             "maxGroupSize1", "0"));
         action.random1 = Boolean.parseBoolean(element.attributeValue("random1",
             "false"));
-        action.monster2 = Integer.parseInt(element.attributeValue("monster2",
+        action.monster2 = StringUtils.toInt(element.attributeValue("monster2",
             "0"));
-        action.maxGroupSize2 = Integer.parseInt(element.attributeValue(
+        action.maxGroupSize2 = StringUtils.toInt(element.attributeValue(
             "maxGroupSize2", "0"));
         action.random2 = Boolean.parseBoolean(element.attributeValue("random2",
             "false"));
-        action.monster3 = Integer.parseInt(element.attributeValue("monster3",
+        action.monster3 = StringUtils.toInt(element.attributeValue("monster3",
             "0"));
-        action.maxGroupSize3 = Integer.parseInt(element.attributeValue(
+        action.maxGroupSize3 = StringUtils.toInt(element.attributeValue(
             "maxGroupSize3", "0"));
         action.random3 = Boolean.parseBoolean(element.attributeValue("random3",
             "false"));
@@ -191,11 +192,11 @@ public class EncounterAction implements Action
             "friendly", "false"));
         action.unknown093 = Boolean.parseBoolean(element.attributeValue(
             "unknown093", "false"));
-        action.npc = Integer.parseInt(element.attributeValue("npc", "0"));
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.npc = StringUtils.toInt(element.attributeValue("npc", "0"));
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
-            "255"));
+        action.newAction = StringUtils.toInt(element.attributeValue(
+            "newAction", "255"));
 
         // Return the check action
         return action;
@@ -210,8 +211,8 @@ public class EncounterAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("encounter");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("encounter");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.visibleDistance != 0)
         {
             element.addAttribute("visibleDistance", Integer
@@ -285,12 +286,13 @@ public class EncounterAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils
+                .toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element
+                .addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }

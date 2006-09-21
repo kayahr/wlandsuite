@@ -26,7 +26,8 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -138,9 +139,9 @@ public class DoctorAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("doctor");
+        element = XmlUtils.createElement("doctor");
 
-        element.addAttribute("id", Integer.toString(id));
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.name != null && this.name.length() > 0)
         {
             element.addAttribute("name", this.name);
@@ -164,12 +165,13 @@ public class DoctorAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils
+                .toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element
+                .addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }
@@ -189,17 +191,18 @@ public class DoctorAction implements Action
 
         doctor = new DoctorAction();
         doctor.name = element.attributeValue("name", "");
-        doctor.message = Integer.parseInt(element.attributeValue("message", "0"));
-        doctor.healPrice = Integer
-            .parseInt(element.attributeValue("healPrice", "10"));
-        doctor.examinePrice = Integer.parseInt(element
-            .attributeValue("examinePrice", "100"));
-        doctor.curePrice = Integer
-            .parseInt(element.attributeValue("curePrice", "150"));
-        doctor.newActionClass = Integer.parseInt(element
-            .attributeValue("newActionClass", "255"));
-        doctor.newAction = Integer
-            .parseInt(element.attributeValue("newAction", "255"));
+        doctor.message = StringUtils.toInt(element.attributeValue("message",
+            "0"));
+        doctor.healPrice = StringUtils.toInt(element.attributeValue("healPrice",
+            "10"));
+        doctor.examinePrice = StringUtils.toInt(element.attributeValue(
+            "examinePrice", "100"));
+        doctor.curePrice = StringUtils.toInt(element.attributeValue(
+            "curePrice", "150"));
+        doctor.newActionClass = StringUtils.toInt(element.attributeValue(
+            "newActionClass", "255"));
+        doctor.newAction = StringUtils.toInt(element.attributeValue(
+            "newAction", "255"));
 
         return doctor;
     }

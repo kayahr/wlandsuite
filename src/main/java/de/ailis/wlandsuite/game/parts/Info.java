@@ -25,7 +25,8 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -146,20 +147,23 @@ public class Info
 
         info = new Info();
 
-        info.tileset = Integer.parseInt(element.attributeValue("tileset"));
-        info.backgroundTile = Integer.parseInt(element
-            .attributeValue("backgroundTile", "0"));
-        info.timeFactor = Integer
-            .parseInt(element.attributeValue("timeFactor", "256"));
-        info.encounterFrequency = Integer.parseInt(element
-            .attributeValue("encounterFrequency", "0"));
-        info.lastMonster = Integer.parseInt(element
-            .attributeValue("lastMonster", "1"));
-        info.maxEncounters = Integer.parseInt(element
+        info.tileset = StringUtils.toInt(element.attributeValue("tileset"));
+        info.backgroundTile = StringUtils.toInt(element.attributeValue(
+            "backgroundTile", "0"));
+        info.timeFactor = StringUtils.toInt(element.attributeValue(
+            "timeFactor", "256"));
+        info.encounterFrequency = StringUtils.toInt(element.attributeValue(
+            "encounterFrequency", "0"));
+        info.lastMonster = StringUtils.toInt(element.attributeValue(
+            "lastMonster", "1"));
+        info.maxEncounters = StringUtils.toInt(element
             .attributeValue("maxEncounters"));
-        info.unknown0 = Integer.parseInt(element.attributeValue("unknown0", "0"));
-        info.unknown1 = Integer.parseInt(element.attributeValue("unknown1", "0"));
-        info.unknown9 = Integer.parseInt(element.attributeValue("unknown9", "0"));
+        info.unknown0 = StringUtils.toInt(element.attributeValue("unknown0",
+            "0"));
+        info.unknown1 = StringUtils.toInt(element.attributeValue("unknown1",
+            "0"));
+        info.unknown9 = StringUtils.toInt(element.attributeValue("unknown9",
+            "0"));
 
         return info;
     }
@@ -174,7 +178,7 @@ public class Info
     {
         Element element;
 
-        element = XMLUtils.createElement("info");
+        element = XmlUtils.createElement("info");
         element.addAttribute("tileset", Integer.toString(this.tileset));
         if (this.backgroundTile != 0)
         {
@@ -183,7 +187,8 @@ public class Info
         }
         if (this.timeFactor != 256)
         {
-            element.addAttribute("timeFactor", Integer.toString(this.timeFactor));
+            element.addAttribute("timeFactor", Integer
+                .toString(this.timeFactor));
         }
         if (this.encounterFrequency != 0)
         {
@@ -192,7 +197,8 @@ public class Info
         }
         if (this.lastMonster != 1)
         {
-            element.addAttribute("lastMonster", Integer.toString(this.lastMonster));
+            element.addAttribute("lastMonster", Integer
+                .toString(this.lastMonster));
         }
         if (this.maxEncounters != 1)
         {
@@ -201,15 +207,15 @@ public class Info
         }
         if (this.unknown0 != 0)
         {
-            element.addAttribute("unknown0", Integer.toString(this.unknown0));
+            element.addAttribute("unknown0", StringUtils.toHex(this.unknown0));
         }
         if (this.unknown1 != 0)
         {
-            element.addAttribute("unknown1", Integer.toString(this.unknown1));
+            element.addAttribute("unknown1", StringUtils.toHex(this.unknown1));
         }
         if (this.unknown9 != 0)
         {
-            element.addAttribute("unknown9", Integer.toString(this.unknown9));
+            element.addAttribute("unknown9", StringUtils.toHex(this.unknown9));
         }
 
         return element;
@@ -218,10 +224,10 @@ public class Info
 
     /**
      * Returns the backgroundTile.
-     *
+     * 
      * @return The backgroundTile
      */
-    
+
     public int getBackgroundTile()
     {
         return this.backgroundTile;
@@ -230,11 +236,11 @@ public class Info
 
     /**
      * Sets the backgroundTile.
-     *
-     * @param backgroundTile 
+     * 
+     * @param backgroundTile
      *            The backgroundTile to set
      */
-    
+
     public void setBackgroundTile(int backgroundTile)
     {
         this.backgroundTile = backgroundTile;
@@ -243,10 +249,10 @@ public class Info
 
     /**
      * Returns the encounterFrequency.
-     *
+     * 
      * @return The encounterFrequency
      */
-    
+
     public int getEncounterFrequency()
     {
         return this.encounterFrequency;
@@ -255,11 +261,11 @@ public class Info
 
     /**
      * Sets the encounterFrequency.
-     *
-     * @param encounterFrequency 
+     * 
+     * @param encounterFrequency
      *            The encounterFrequency to set
      */
-    
+
     public void setEncounterFrequency(int encounterFrequency)
     {
         this.encounterFrequency = encounterFrequency;
@@ -268,10 +274,10 @@ public class Info
 
     /**
      * Returns the lastMonster.
-     *
+     * 
      * @return The lastMonster
      */
-    
+
     public int getLastMonster()
     {
         return this.lastMonster;
@@ -280,11 +286,11 @@ public class Info
 
     /**
      * Sets the lastMonster.
-     *
-     * @param lastMonster 
+     * 
+     * @param lastMonster
      *            The lastMonster to set
      */
-    
+
     public void setLastMonster(int lastMonster)
     {
         this.lastMonster = lastMonster;
@@ -293,10 +299,10 @@ public class Info
 
     /**
      * Returns the maxEncounters.
-     *
+     * 
      * @return The maxEncounters
      */
-    
+
     public int getMaxEncounters()
     {
         return this.maxEncounters;
@@ -305,11 +311,11 @@ public class Info
 
     /**
      * Sets the maxEncounters.
-     *
-     * @param maxEncounters 
+     * 
+     * @param maxEncounters
      *            The maxEncounters to set
      */
-    
+
     public void setMaxEncounters(int maxEncounters)
     {
         this.maxEncounters = maxEncounters;
@@ -318,10 +324,10 @@ public class Info
 
     /**
      * Returns the tileset.
-     *
+     * 
      * @return The tileset
      */
-    
+
     public int getTileset()
     {
         return this.tileset;
@@ -330,11 +336,11 @@ public class Info
 
     /**
      * Sets the tileset.
-     *
-     * @param tileset 
+     * 
+     * @param tileset
      *            The tileset to set
      */
-    
+
     public void setTileset(int tileset)
     {
         this.tileset = tileset;
@@ -343,10 +349,10 @@ public class Info
 
     /**
      * Returns the timeFactor.
-     *
+     * 
      * @return The timeFactor
      */
-    
+
     public int getTimeFactor()
     {
         return this.timeFactor;
@@ -355,11 +361,11 @@ public class Info
 
     /**
      * Sets the timeFactor.
-     *
-     * @param timeFactor 
+     * 
+     * @param timeFactor
      *            The timeFactor to set
      */
-    
+
     public void setTimeFactor(int timeFactor)
     {
         this.timeFactor = timeFactor;
@@ -368,10 +374,10 @@ public class Info
 
     /**
      * Returns the unknown0.
-     *
+     * 
      * @return The unknown0
      */
-    
+
     public int getUnknown0()
     {
         return this.unknown0;
@@ -380,11 +386,11 @@ public class Info
 
     /**
      * Sets the unknown0.
-     *
-     * @param unknown0 
+     * 
+     * @param unknown0
      *            The unknown0 to set
      */
-    
+
     public void setUnknown0(int unknown0)
     {
         this.unknown0 = unknown0;
@@ -393,10 +399,10 @@ public class Info
 
     /**
      * Returns the unknown1.
-     *
+     * 
      * @return The unknown1
      */
-    
+
     public int getUnknown1()
     {
         return this.unknown1;
@@ -405,11 +411,11 @@ public class Info
 
     /**
      * Sets the unknown1.
-     *
-     * @param unknown1 
+     * 
+     * @param unknown1
      *            The unknown1 to set
      */
-    
+
     public void setUnknown1(int unknown1)
     {
         this.unknown1 = unknown1;
@@ -418,10 +424,10 @@ public class Info
 
     /**
      * Returns the unknown9.
-     *
+     * 
      * @return The unknown9
      */
-    
+
     public int getUnknown9()
     {
         return this.unknown9;
@@ -430,11 +436,11 @@ public class Info
 
     /**
      * Sets the unknown9.
-     *
-     * @param unknown9 
+     * 
+     * @param unknown9
      *            The unknown9 to set
      */
-    
+
     public void setUnknown9(int unknown9)
     {
         this.unknown9 = unknown9;

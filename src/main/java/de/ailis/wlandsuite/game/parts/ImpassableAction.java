@@ -26,7 +26,8 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -100,10 +101,10 @@ public class ImpassableAction implements Action
 
         action = new ImpassableAction();
 
-        action.message = Integer.parseInt(element.attributeValue("message", "0"));
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.message = StringUtils.toInt(element.attributeValue("message", "0"));
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
+        action.newAction = StringUtils.toInt(element.attributeValue("newAction",
             "255"));
 
         return action;
@@ -118,20 +119,19 @@ public class ImpassableAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("impassable");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("impassable");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.message != 0)
         {
             element.addAttribute("message", Integer.toString(this.message));
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }

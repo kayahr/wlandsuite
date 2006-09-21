@@ -26,7 +26,7 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -165,7 +165,7 @@ public class Items extends ArrayList<Item>
         Element element;
 
         // Create the root XML element
-        element = XMLUtils.createElement("items");
+        element = XmlUtils.createElement("items");
 
         // Add all the items
         for (Item item: this)

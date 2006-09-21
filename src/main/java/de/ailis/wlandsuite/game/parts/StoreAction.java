@@ -28,7 +28,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -165,9 +166,9 @@ public class StoreAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("store");
+        element = XmlUtils.createElement("store");
 
-        element.addAttribute("id", Integer.toString(id));
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.name != null && this.name.length() > 0)
         {
             element.addAttribute("name", this.name);
@@ -190,19 +191,18 @@ public class StoreAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
 
         for (int itemType: this.itemTypes)
         {
             Element subElement;
 
-            subElement = XMLUtils.createElement("itemType");
+            subElement = XmlUtils.createElement("itemType");
             subElement.addText(Integer.toString(itemType));
 
             element.add(subElement);
@@ -225,14 +225,14 @@ public class StoreAction implements Action
 
         store = new StoreAction();
         store.name = element.attributeValue("name", "");
-        store.message = Integer.parseInt(element.attributeValue("message", "0"));
-        store.buyFactor = Integer.parseInt(element.attributeValue("buyFactor", "0"));
-        store.sellFactor = Integer.parseInt(element
+        store.message = StringUtils.toInt(element.attributeValue("message", "0"));
+        store.buyFactor = StringUtils.toInt(element.attributeValue("buyFactor", "0"));
+        store.sellFactor = StringUtils.toInt(element
             .attributeValue("sellFactor", "1"));
-        store.itemList = Integer.parseInt(element.attributeValue("itemList", "0"));
-        store.newActionClass = Integer.parseInt(element
+        store.itemList = StringUtils.toInt(element.attributeValue("itemList", "0"));
+        store.newActionClass = StringUtils.toInt(element
             .attributeValue("newActionClass", "255"));
-        store.newAction = Integer.parseInt(element.attributeValue("newAction", "255"));
+        store.newAction = StringUtils.toInt(element.attributeValue("newAction", "255"));
 
         List<?> elements = element.elements("itemType");
         store.itemTypes = new int[elements.size()];
@@ -240,7 +240,7 @@ public class StoreAction implements Action
         for (Object item: elements)
         {
             Element subElement = (Element) item;
-            store.itemTypes[i] = Integer.parseInt(subElement.getText());
+            store.itemTypes[i] = StringUtils.toInt(subElement.getText());
             i++;
         }
 

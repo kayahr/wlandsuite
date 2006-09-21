@@ -30,7 +30,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -220,7 +220,7 @@ public class CheckCode extends AbstractPart
     {
         Element element;
 
-        element = XMLUtils.createElement("check");
+        element = XmlUtils.createElement("check");
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("flags", Integer.toString(this.flags));
         element.addAttribute("enterString", Integer.toString(this.enterString));

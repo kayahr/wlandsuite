@@ -52,7 +52,8 @@ import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.GameException;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
@@ -478,9 +479,9 @@ public class GameMap extends GameBlock implements Serializable
         int tilemapOffset;
 
         // Read map configuration
-        mapSize = Integer.parseInt(element.attributeValue("mapSize"));
-        msqSize = Integer.parseInt(element.attributeValue("msqSize"));
-        tilemapOffset = Integer.parseInt(element
+        mapSize = StringUtils.toInt(element.attributeValue("mapSize"));
+        msqSize = StringUtils.toInt(element.attributeValue("msqSize"));
+        tilemapOffset = StringUtils.toInt(element
             .attributeValue("tilemapOffset"));
 
         // Create the new map
@@ -507,7 +508,7 @@ public class GameMap extends GameBlock implements Serializable
             Element subElement = (Element) item;
             int actionClass;
 
-            actionClass = Integer.valueOf(subElement
+            actionClass = StringUtils.toInt(subElement
                 .attributeValue("actionClass"));
             gameMap.actions.put(actionClass, Actions.read(subElement));
         }
@@ -542,7 +543,7 @@ public class GameMap extends GameBlock implements Serializable
         Document document;
         Element element;
 
-        document = XMLUtils.readDocument(stream);
+        document = XmlUtils.readDocument(stream);
         element = document.getRootElement();
         return read(element);
     }
@@ -558,7 +559,7 @@ public class GameMap extends GameBlock implements Serializable
         Element element;
 
         // Create the root element
-        element = XMLUtils.createElement("map");
+        element = XmlUtils.createElement("map");
         element.addAttribute("mapSize", Integer.toString(this.mapSize));
         element.addAttribute("msqSize", Integer.toString(this.msqSize));
         element.addAttribute("tilemapOffset", Integer

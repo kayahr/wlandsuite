@@ -28,7 +28,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -153,7 +153,7 @@ public class ActionClassMap extends AbstractPart
         StringWriter text;
         PrintWriter writer;
 
-        element = XMLUtils.createElement("actionClassMap");
+        element = XmlUtils.createElement("actionClassMap");
 
         text = new StringWriter();
         writer = new PrintWriter(text);

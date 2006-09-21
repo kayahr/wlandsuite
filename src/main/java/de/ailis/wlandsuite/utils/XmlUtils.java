@@ -42,7 +42,7 @@ import de.ailis.wlandsuite.rawgame.GameException;
  * @version $Revision$
  */
 
-public class XMLUtils
+public class XmlUtils
 {
     /** Tje wlandsuite XML namespace */
     private static final String namespace = "http://ailis.de/wlandsuite";

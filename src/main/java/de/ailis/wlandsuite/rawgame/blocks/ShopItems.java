@@ -26,7 +26,7 @@ package de.ailis.wlandsuite.rawgame.blocks;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.rawgame.GameBlockType;
@@ -133,7 +133,7 @@ public class ShopItems extends AbstractGameBlock
     {
         Element element;
         
-        element = XMLUtils.createElement("shopitems");
+        element = XmlUtils.createElement("shopitems");
         for (Part part: this.parts)
         {
             element.add(part.toXml());

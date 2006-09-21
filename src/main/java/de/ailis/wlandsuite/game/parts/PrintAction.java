@@ -28,7 +28,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -127,12 +128,12 @@ public class PrintAction implements Action
         for (Object item: element.elements("message"))
         {
             Element subElement = (Element) item;
-            action.messages.add(Integer.valueOf(subElement.getTextTrim()));
+            action.messages.add(StringUtils.toInt(subElement.getTextTrim()));
         }
         
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
+        action.newAction = StringUtils.toInt(element.attributeValue("newAction",
             "255"));
 
         // Return the new action
@@ -148,22 +149,21 @@ public class PrintAction implements Action
     {
         Element element, subElement;
 
-        element = XMLUtils.createElement("print");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("print");
+        element.addAttribute("id", StringUtils.toHex(id));
         for (int message: this.messages)
         {
-            subElement = XMLUtils.createElement("message");
+            subElement = XmlUtils.createElement("message");
             subElement.setText(Integer.toString(message));
             element.add(subElement);
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
 
         return element;

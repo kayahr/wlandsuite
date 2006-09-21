@@ -27,7 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -134,7 +135,7 @@ public class SpecialAction implements Action
         // Create new message action
         action = new SpecialAction();
 
-        action.action = Integer.parseInt(element.attributeValue("action"));
+        action.action = StringUtils.toInt(element.attributeValue("action"));
 
         stream = new ByteArrayOutputStream();
         for (String c: element.getTextTrim().split("\\s"))
@@ -157,9 +158,9 @@ public class SpecialAction implements Action
         Element element;
         StringBuilder data;
 
-        element = XMLUtils.createElement("special");
-        element.addAttribute("id", Integer.toString(id));
-        element.addAttribute("action", Integer.toString(this.action));
+        element = XmlUtils.createElement("special");
+        element.addAttribute("id", StringUtils.toHex(id));
+        element.addAttribute("action", StringUtils.toHex(this.action));
         data = new StringBuilder();
         for (byte b: this.data)
         {

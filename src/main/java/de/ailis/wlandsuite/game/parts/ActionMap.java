@@ -33,7 +33,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.rawgame.GameException;
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
@@ -216,7 +216,7 @@ public class ActionMap
         mapSize = this.actions.length;
 
         // Create the root XML element
-        element = XMLUtils.createElement("actionMap");
+        element = XmlUtils.createElement("actionMap");
 
         // Write the actions content
         text = new StringWriter();

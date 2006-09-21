@@ -25,7 +25,8 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -118,7 +119,7 @@ public class BattleStrings
 
         for (int i = 0; i < 37; i++)
         {
-            info.strings[i] = Integer.parseInt(element.attributeValue("s" + i));
+            info.strings[i] = StringUtils.toInt(element.attributeValue("s" + i));
         }
 
         return info;
@@ -134,7 +135,7 @@ public class BattleStrings
     {
         Element element;
 
-        element = XMLUtils.createElement("battleStrings");
+        element = XmlUtils.createElement("battleStrings");
         for (int i = 0; i < 37; i++)
         {
             element.addAttribute("s" + i, Integer.toString(this.strings[i]));

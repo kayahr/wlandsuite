@@ -25,7 +25,8 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -134,18 +135,18 @@ public class TransitionAction implements Action
             "relative", "false"));
         action.confirm = Boolean.parseBoolean(element.attributeValue("confirm",
             "false"));
-        action.message = Integer.parseInt(element
-            .attributeValue("message", "0"));
-        action.targetX = Integer.parseInt(element
-            .attributeValue("targetX", "0"));
-        action.targetY = Integer.parseInt(element
-            .attributeValue("targetY", "0"));
-        action.targetMap = Integer.parseInt(element.attributeValue("targetMap",
-            "255"));
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.message = StringUtils.toInt(element.attributeValue("message",
+            "0"));
+        action.targetX = StringUtils.toInt(element.attributeValue("targetX",
+            "0"));
+        action.targetY = StringUtils.toInt(element.attributeValue("targetY",
+            "0"));
+        action.targetMap = StringUtils.toInt(element.attributeValue(
+            "targetMap", "255"));
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
-            "255"));
+        action.newAction = StringUtils.toInt(element.attributeValue(
+            "newAction", "255"));
         return action;
     }
 
@@ -158,8 +159,8 @@ public class TransitionAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("transition");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("transition");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.relative)
         {
             element.addAttribute("relative", "true");
@@ -186,12 +187,13 @@ public class TransitionAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils
+                .toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element
+                .addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }

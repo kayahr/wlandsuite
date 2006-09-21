@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -141,7 +141,7 @@ public class UnknownPart extends AbstractPart
 
         size = this.bytes.length;
 
-        element = XMLUtils.createElement(this.tagName);
+        element = XmlUtils.createElement(this.tagName);
         element.addAttribute("offset", Integer.toString(this.offset));
         element.addAttribute("size", Integer.toString(size));
 

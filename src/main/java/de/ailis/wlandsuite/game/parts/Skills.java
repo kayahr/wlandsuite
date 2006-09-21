@@ -26,7 +26,7 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -201,7 +201,7 @@ public class Skills extends ArrayList<Skill>
         Element element;
 
         // Create the root XML element
-        element = XMLUtils.createElement("skills");
+        element = XmlUtils.createElement("skills");
 
         // Add all the skills
         for (Skill skill: this)

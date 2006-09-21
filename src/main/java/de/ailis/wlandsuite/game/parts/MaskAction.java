@@ -26,7 +26,8 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -112,13 +113,13 @@ public class MaskAction implements Action
 
         action = new MaskAction();
 
-        action.message = Integer.parseInt(element.attributeValue("message", "0"));
-        action.tile = Integer.parseInt(element.attributeValue("tile"));
+        action.message = StringUtils.toInt(element.attributeValue("message", "0"));
+        action.tile = StringUtils.toInt(element.attributeValue("tile"));
         action.impassable = Boolean.parseBoolean(element
             .attributeValue("impassable", "false"));
-        action.newActionClass = Integer.parseInt(element.attributeValue(
+        action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        action.newAction = Integer.parseInt(element.attributeValue("newAction",
+        action.newAction = StringUtils.toInt(element.attributeValue("newAction",
             "255"));
 
         return action;
@@ -133,8 +134,8 @@ public class MaskAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("mask");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("mask");
+        element.addAttribute("id", StringUtils.toHex(id));
         element.addAttribute("tile", Integer.toString(this.tile));
         if (this.impassable)
         {
@@ -146,11 +147,11 @@ public class MaskAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer.toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
         return element;
     }

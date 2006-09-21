@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -146,16 +147,18 @@ public class DialogueAction implements Action
 
         action = new DialogueAction();
 
-        action.menu = Boolean.parseBoolean(element.attributeValue("menu", "false"));
-        action.message = Integer.parseInt(element.attributeValue("message", "0"));
-        action.cancelNewActionClass = Integer.parseInt(element
-            .attributeValue("cancelNewActionClass", "255"));
-        action.cancelNewAction = Integer.parseInt(element
-            .attributeValue("cancelNewAction", "255"));
-        action.otherNewActionClass = Integer.parseInt(element
-            .attributeValue("otherNewActionClass", "255"));
-        action.otherNewAction = Integer.parseInt(element
-            .attributeValue("otherNewAction", "255"));
+        action.menu = Boolean.parseBoolean(element.attributeValue("menu",
+            "false"));
+        action.message = StringUtils.toInt(element.attributeValue("message",
+            "0"));
+        action.cancelNewActionClass = StringUtils.toInt(element.attributeValue(
+            "cancelNewActionClass", "255"));
+        action.cancelNewAction = StringUtils.toInt(element.attributeValue(
+            "cancelNewAction", "255"));
+        action.otherNewActionClass = StringUtils.toInt(element.attributeValue(
+            "otherNewActionClass", "255"));
+        action.otherNewAction = StringUtils.toInt(element.attributeValue(
+            "otherNewAction", "255"));
 
         // Read the checks
         for (Object answer: element.elements())
@@ -179,8 +182,8 @@ public class DialogueAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("dialogue");
-        element.addAttribute("id", Integer.toString(id));
+        element = XmlUtils.createElement("dialogue");
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.menu)
         {
             element.addAttribute("menu", "true");
@@ -191,23 +194,23 @@ public class DialogueAction implements Action
         }
         if (this.cancelNewActionClass != 255)
         {
-            element.addAttribute("cancelNewActionClass", Integer
-                .toString(this.cancelNewActionClass));
+            element.addAttribute("cancelNewActionClass", StringUtils
+                .toHex(this.cancelNewActionClass));
         }
         if (this.cancelNewAction != 255)
         {
-            element.addAttribute("cancelNewAction", Integer
-                .toString(this.cancelNewAction));
+            element.addAttribute("cancelNewAction", StringUtils
+                .toHex(this.cancelNewAction));
         }
         if (this.otherNewActionClass != 255)
         {
-            element.addAttribute("otherNewActionClass", Integer
-                .toString(this.otherNewActionClass));
+            element.addAttribute("otherNewActionClass", StringUtils
+                .toHex(this.otherNewActionClass));
         }
         if (this.otherNewAction != 255)
         {
-            element.addAttribute("otherNewAction", Integer
-                .toString(this.otherNewAction));
+            element.addAttribute("otherNewAction", StringUtils
+                .toHex(this.otherNewAction));
         }
 
         for (Answer answer: this.answers)

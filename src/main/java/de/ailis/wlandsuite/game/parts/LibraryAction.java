@@ -28,7 +28,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XMLUtils;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
@@ -150,9 +151,9 @@ public class LibraryAction implements Action
     {
         Element element;
 
-        element = XMLUtils.createElement("library");
+        element = XmlUtils.createElement("library");
 
-        element.addAttribute("id", Integer.toString(id));
+        element.addAttribute("id", StringUtils.toHex(id));
         if (this.name != null && this.name.length() > 0)
         {
             element.addAttribute("name", this.name);
@@ -163,19 +164,19 @@ public class LibraryAction implements Action
         }
         if (this.newActionClass != 255)
         {
-            element.addAttribute("newActionClass", Integer
-                .toString(this.newActionClass));
+            element.addAttribute("newActionClass", StringUtils.toHex
+                (this.newActionClass));
         }
         if (this.newAction != 255)
         {
-            element.addAttribute("newAction", Integer.toString(this.newAction));
+            element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
 
         for (int skill: this.skills)
         {
             Element subElement;
 
-            subElement = XMLUtils.createElement("skill");
+            subElement = XmlUtils.createElement("skill");
             subElement.addText(Integer.toString(skill));
 
             element.add(subElement);
@@ -198,11 +199,11 @@ public class LibraryAction implements Action
 
         library = new LibraryAction();
         library.name = element.attributeValue("name", "");
-        library.message = Integer.parseInt(element.attributeValue("message",
+        library.message = StringUtils.toInt(element.attributeValue("message",
             "0"));
-        library.newActionClass = Integer.parseInt(element.attributeValue(
+        library.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
-        library.newAction = Integer.parseInt(element.attributeValue(
+        library.newAction = StringUtils.toInt(element.attributeValue(
             "newAction", "255"));
 
         List<?> elements = element.elements("skill");
@@ -211,7 +212,7 @@ public class LibraryAction implements Action
         for (Object item: elements)
         {
             Element subElement = (Element) item;
-            library.skills[i] = Integer.parseInt(subElement.getText());
+            library.skills[i] = StringUtils.toInt(subElement.getText());
             i++;
         }
 
