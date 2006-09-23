@@ -1886,4 +1886,119 @@ This attribute is optional and defaults to 1.</xs:documentation>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
+    <xs:element name="savegame" type="Savegame">
+        <xs:annotation>
+            <xs:documentation>The root element of a savegame.</xs:documentation>
+        </xs:annotation></xs:element>
+
+    <xs:complexType name="Savegame">
+        <xs:sequence>
+            <xs:element name="parties" type="Parties">
+                <xs:annotation>
+                    <xs:documentation>The parties.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="unknown38" type="Bytes">
+                <xs:annotation>
+                    <xs:documentation>Unknown bytes at offset 0x38. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="unknown7A" type="Bytes">
+                <xs:annotation>
+                    <xs:documentation>Unknown bytes at offset 0x7A. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="unknown7F" type="Bytes">
+                <xs:annotation>
+                    <xs:documentation>Unknown bytes at offset 0x7F. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="unknown82" type="Bytes">
+                <xs:annotation>
+                    <xs:documentation>Unknown bytes at offset 0x82. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="unknown85" type="Bytes">
+                <xs:annotation>
+                    <xs:documentation>Unknown bytes at offset 0x85. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="unknownF9" type="Bytes">
+                <xs:annotation>
+                    <xs:documentation>Unknown bytes at offset 0xF9. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="characters" type="Characters">
+                <xs:annotation>
+                    <xs:documentation>The characters.</xs:documentation>
+                </xs:annotation></xs:element>
+        </xs:sequence>
+        <xs:attribute name="time" type="Time" default="12:00">
+            <xs:annotation>
+                <xs:documentation>The current time of the game. Defaults to 12:00</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="serial" type="xs:long" default="0">
+            <xs:annotation>
+                <xs:documentation>The serial number of the game. The game always uses the savegame with the highest serial number. Defaults to 0.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    
+    <xs:simpleType name="Time">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(2[0-3]|[0-1][0-9]):[0-5][0-9]"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="Parties">
+        <xs:sequence>
+            <xs:element name="party" type="Party" minOccurs="1" maxOccurs="4">
+                <xs:annotation>
+                    <xs:documentation>A party definition in the savegame.</xs:documentation>
+                </xs:annotation></xs:element>
+        </xs:sequence>
+        <xs:attribute name="currentParty" type="Byte" use="required">
+            <xs:annotation>
+                <xs:documentation>The active party. References a party by it's id. Defaults to 0.</xs:documentation>
+            </xs:annotation></xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="Characters">
+        <xs:sequence>
+            <xs:element name="character" type="Character" minOccurs="1" maxOccurs="7">
+                <xs:annotation>
+                    <xs:documentation>A character in the savegame.</xs:documentation>
+                </xs:annotation></xs:element>
+        </xs:sequence></xs:complexType>
+
+    <xs:complexType name="Party">
+        <xs:sequence>
+            <xs:element name="member" type="Byte" minOccurs="0" maxOccurs="7">
+                <xs:annotation>
+                    <xs:documentation>A member in the party. References the id of a character.</xs:documentation>
+                </xs:annotation></xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="Byte" use="required">
+            <xs:annotation>
+                <xs:documentation>The party id. First party must have id 0.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="x" type="Byte" use="required">
+            <xs:annotation>
+                <xs:documentation>The X position on the map.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="y" type="Byte" use="required">
+            <xs:annotation>
+                <xs:documentation>The Y position on the map.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="map" type="Byte" use="required">
+            <xs:annotation>
+                <xs:documentation>The map the party is currently on.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="prevX" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The previous X position before transitioning to new location. Used for FF transitions. Defaults to 0.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="prevY" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The previous Y position before transitioning to new location. Used for FF transitions. Defaults to 0.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="prevMap" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The previous map before transitioning to new location. Used for FF transitions. Defaults to 0.</xs:documentation>
+            </xs:annotation></xs:attribute>
+    </xs:complexType>
 </xs:schema>

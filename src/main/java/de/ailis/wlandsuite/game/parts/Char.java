@@ -354,7 +354,7 @@ public class Char
         Element element;
 
         element = XmlUtils.createElement("character");
-        element.addAttribute("id", StringUtils.toHex(id));
+        element.addAttribute("id", Integer.toString(id));
         element.addAttribute("name", StringUtils.escape(this.name, "ASCII"));
         element.addAttribute("strength", Integer.toString(this.strength));
         element.addAttribute("iq", Integer.toString(this.iq));

@@ -23,28 +23,25 @@
 
 package de.ailis.wlandsuite.game.blocks;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import de.ailis.wlandsuite.game.RotatingXorInputStream;
 import de.ailis.wlandsuite.game.parts.Char;
+import de.ailis.wlandsuite.game.parts.Parties;
+import de.ailis.wlandsuite.game.parts.Unknown;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.rawgame.GameException;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
 
 
@@ -59,10 +56,37 @@ public class Savegame extends GameBlock implements Serializable
 {
     /** Serial version UID */
     private static final long serialVersionUID = -7700742752700695254L;
-    
-    /** The header at the beginning of the savegame */
-    private byte[] header = new byte[0x100];
-    
+
+    /** The unknown data at position 0x38 */
+    private Unknown unknown38;
+
+    /** The unknown data at position 0x7A */
+    private Unknown unknown7A;
+
+    /** The unknown data at position 0x7F */
+    private Unknown unknown7F;
+
+    /** The unknown data at position 0x82 */
+    private Unknown unknown82;
+
+    /** The unknown data at position 0x85 */
+    private Unknown unknown85;
+
+    /** The unknown data at position 0xF9 */
+    private Unknown unknownF9;
+
+    /** The minute of the current time */
+    private int minute;
+
+    /** The hour of the current time */
+    private int hour;
+
+    /** The serial number of the savegame */
+    private long serial;
+
+    /** The parties */
+    private Parties parties;
+
     /** The characters */
     private List<Char> characters = new ArrayList<Char>(7);
 
@@ -88,14 +112,15 @@ public class Savegame extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    public static Savegame read(SeekableInputStream stream)
-        throws IOException
+    public static Savegame read(SeekableInputStream stream) throws IOException
     {
         byte[] headerBytes;
         String header;
         SeekableInputStream xorStream;
         Savegame savegame;
-        
+        int viewportX, viewportY;
+        int currentMembers, currentParty, totalMembers, totalGroups;
+
         // Read the MSQ block header and validate it
         headerBytes = new byte[4];
         stream.read(headerBytes);
@@ -107,19 +132,67 @@ public class Savegame extends GameBlock implements Serializable
 
         // Read/Decrypt the MSQ block
         xorStream = new SeekableInputStream(new RotatingXorInputStream(stream));
-        
+
         savegame = new Savegame();
-        
-        // Read the unknown block
-        xorStream.read(savegame.header);
-        
+
+        // Read the parties
+        savegame.parties = Parties.read(xorStream);
+
+        // Read the unknown block at position 0x38
+        savegame.unknown38 = Unknown.read(xorStream, 64);
+
+        // Read the viewport coordinates
+        viewportX = xorStream.readSignedByte();
+        viewportY = xorStream.readSignedByte();
+
+        // Read the unknown block at position 0x7A
+        savegame.unknown7A = Unknown.read(xorStream, 3);
+
+        currentMembers = xorStream.read();
+        currentParty = xorStream.read();
+
+        savegame.unknown7F = Unknown.read(xorStream, 1);
+
+        totalMembers = xorStream.read();
+        totalGroups = xorStream.read();
+
+        savegame.unknown82 = Unknown.read(xorStream, 1);
+
+        savegame.minute = xorStream.read();
+        savegame.hour = xorStream.read();
+
+        savegame.unknown85 = Unknown.read(xorStream, 112);
+
+        savegame.serial = xorStream.readInt();
+
+        savegame.unknownF9 = Unknown.read(xorStream, 7);
+
+        // Correct the parties object
+        savegame.parties.get(currentParty).setX(viewportX + 9);
+        savegame.parties.get(currentParty).setY(viewportY + 4);
+        while (savegame.parties.size() > totalGroups + 1)
+        {
+            savegame.parties.remove(savegame.parties.size() - 1);
+        }
+        savegame.parties.setCurrentParty(currentParty);
+        if (savegame.parties.getTotalMembers() != totalMembers)
+        {
+            throw new GameException(
+                "Total members mismatch. Looks like we did not understand this field...");
+        }
+        if (currentMembers != savegame.parties.get(currentParty).size())
+        {
+            throw new GameException(
+                "Current members mismatch. Looks like we did not understand this field...");
+        }
+
         // Read the seven characters
         for (int i = 0; i < 7; i++)
         {
             savegame.characters.add(Char.read(xorStream));
         }
-        
-        // Skip the padding 
+
+        // Skip the padding
         stream.skip(2560);
 
         // Return the newly created Game Map
@@ -145,9 +218,45 @@ public class Savegame extends GameBlock implements Serializable
         stream.write("msq".getBytes());
         stream.write('0' + disk);
 
-        // Write the header and the characters
-        seekStream = new SeekableOutputStream(new RotatingXorOutputStream(stream));
-        seekStream.write(this.header);
+        seekStream = new SeekableOutputStream(new RotatingXorOutputStream(
+            stream));
+
+        // Write the parties
+        this.parties.write(seekStream);
+
+        // Write the unknown data at position 0x38
+        this.unknown38.write(seekStream);
+
+        // Write the view port position
+        seekStream.write(this.parties.get(this.parties.getCurrentParty())
+            .getX() - 9);
+        seekStream.write(this.parties.get(this.parties.getCurrentParty())
+            .getY() - 4);
+
+        // Write the unknown data at position 0x7A
+        this.unknown7A.write(seekStream);
+
+        seekStream.write(this.parties.get(this.parties.getCurrentParty())
+            .size());
+        seekStream.write(this.parties.getCurrentParty());
+
+        this.unknown7F.write(seekStream);
+
+        seekStream.write(this.parties.getTotalMembers());
+        seekStream.write(this.parties.size() - 1);
+
+        this.unknown82.write(seekStream);
+
+        seekStream.write(this.minute);
+        seekStream.write(this.hour);
+
+        this.unknown85.write(seekStream);
+
+        seekStream.writeInt(this.serial);
+
+        this.unknownF9.write(seekStream);
+
+        // Write the characters
         for (Char character: this.characters)
         {
             character.write(seekStream);
@@ -171,30 +280,42 @@ public class Savegame extends GameBlock implements Serializable
     public static Savegame read(Element element)
     {
         Savegame savegame;
-        String data;
-        ByteArrayOutputStream byteStream;
-        
+        String[] parts;
+
         savegame = new Savegame();
-        
-        // Read the header
-        data = element.element("header").getTextTrim();
-        byteStream = new ByteArrayOutputStream();
-        for (String b: data.split("\\s"))
-        {
-            byteStream.write(Integer.parseInt(b, 16));
-        }
-        savegame.header = byteStream.toByteArray();
-        if (savegame.header.length != 0x100)
-        {
-            throw new GameException("Invalid savegame header size: " + savegame.header.length);
-        }
-            
+
+        parts = element.attributeValue("time", "12:00").split(":");
+        savegame.hour = Integer.parseInt(parts[0]);
+        savegame.minute = Integer.parseInt(parts[1]);
+        savegame.serial = StringUtils.toInt(element.attributeValue("serial",
+            "0"));
+
+        // Read the parties
+        savegame.parties = Parties.read(element.element("parties"));
+
+        // Read the unknown data at position 0x38
+        savegame.unknown38 = Unknown.read(element.element("unknown38"), 64);
+
+        // Read the unknown data at position 0x7A
+        savegame.unknown7A = Unknown.read(element.element("unknown7A"), 3);
+
+        // Read the unknown data at position 0x7F
+        savegame.unknown7F = Unknown.read(element.element("unknown7F"), 1);
+
+        // Read the unknown data at position 0x82
+        savegame.unknown82 = Unknown.read(element.element("unknown82"), 1);
+
+        // Read the unknown data at position 0x85
+        savegame.unknown85 = Unknown.read(element.element("unknown85"), 112);
+
+        // Read the unknown data at position 0xF9
+        savegame.unknownF9 = Unknown.read(element.element("unknownF9"), 7);
 
         // Read the characters
         for (Object item: element.element("characters").elements("character"))
         {
             Element subElement = (Element) item;
-            
+
             savegame.characters.add(Char.read(subElement));
         }
 
@@ -208,28 +329,16 @@ public class Savegame extends GameBlock implements Serializable
      * @param stream
      *            The input stream
      * @return The savegame
-     * @throws IOException
      */
 
-    public static Savegame readXml(InputStream stream) throws IOException
+    public static Savegame readXml(InputStream stream)
     {
-        SAXReader reader;
         Document document;
         Element element;
 
-        reader = new SAXReader();
-        try
-        {
-            document = reader.read(stream);
-            element = document.getRootElement();
-
-            return read(element);
-        }
-        catch (DocumentException e)
-        {
-            throw new IOException("Unable to parse game map from XML: "
-                + e.getMessage());
-        }
+        document = XmlUtils.readDocument(stream);
+        element = document.getRootElement();
+        return read(element);
     }
 
 
@@ -241,48 +350,37 @@ public class Savegame extends GameBlock implements Serializable
     public Element toXml()
     {
         Element element, subElement;
-        StringWriter text;
-        PrintWriter writer;
 
         // Create the root element
         element = XmlUtils.createElement("savegame");
+        element.addAttribute("time", String.format("%02d:%02d", new Object[] {
+            this.hour, this.minute }));
+        element.addAttribute("serial", Long.toString(this.serial));
 
-        // Create the header element
-        subElement = XmlUtils.createElement("header");
+        // Add the parties element
+        element.add(this.parties.toXml());
 
-        text = new StringWriter();
-        writer = new PrintWriter(text);
+        // Add the unknown block at position 0x38
+        element.add(this.unknown38.toXml("unknown38"));
 
-        writer.println();
-        writer.print("    ");
-        for (int i = 0; i < this.header.length; i++)
-        {
-            if (i > 0)
-            {
-                if (i % 16 == 0)
-                {
-                    writer.println();
-                }
-                if ((i < this.header.length) && (i % 4 == 0))
-                {
-                    writer.print("    ");
-                }
-                else
-                {
-                    writer.print(" ");
-                }
-            }
-            writer.format("%02x", new Object[] { this.header[i] });
-        }
-        writer.println();
-        writer.print("  ");
+        // Add the unknown block at position 0x7A
+        element.add(this.unknown7A.toXml("unknown7A"));
 
-        subElement.add(DocumentHelper.createText(text.toString()));
-        element.add(subElement);
-        
+        // Add the unknown block at position 0x7F
+        element.add(this.unknown7F.toXml("unknown7F"));
+
+        // Add the unknown block at position 0x82
+        element.add(this.unknown82.toXml("unknown82"));
+
+        // Add the unknown block at position 0x85
+        element.add(this.unknown85.toXml("unknown85"));
+
+        // Add the unknown block at position 0xF9
+        element.add(this.unknownF9.toXml("unknownF9"));
+
         // Write the characters
         subElement = XmlUtils.createElement("characters");
-        int id = 0;
+        int id = 1;
         for (Char characters: this.characters)
         {
             subElement.add(characters.toXml(id));

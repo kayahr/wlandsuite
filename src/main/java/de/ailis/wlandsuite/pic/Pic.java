@@ -126,18 +126,28 @@ public class Pic extends EgaImage implements Cloneable
      * 
      * @param stream
      *            The output stream
+     * @param xorEncode
+     *            If the picture data should be vertical-xor encoded
      * @throws IOException
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(OutputStream stream, boolean xorEncode)
+        throws IOException
     {
         int width, height;
         int x, y;
-        VerticalXorOutputStream xorStream;
+        OutputStream xorStream;
 
         width = getWidth();
         height = getHeight();
-        xorStream = new VerticalXorOutputStream(stream, width);
+        if (xorEncode)
+        {
+            xorStream = new VerticalXorOutputStream(stream, width);
+        }
+        else
+        {
+            xorStream = stream;
+        }
         for (y = 0; y < height; y++)
         {
             for (x = 0; x < width; x += 2)
@@ -149,12 +159,29 @@ public class Pic extends EgaImage implements Cloneable
 
 
     /**
+     * Writes the picture to the specified output stream. The picture data is
+     * vertical-xor encoded.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void write(OutputStream stream) throws IOException
+    {
+        write(stream, true);
+    }
+
+
+    /**
      * Returns the bytes of the picture.
      * 
+     * @param xorEncode
+     *            If picture data should be vertical-xor encoded
      * @return The picture bytes
      */
 
-    public byte[] getBytes()
+    public byte[] getBytes(boolean xorEncode)
     {
         ByteArrayOutputStream stream;
 
@@ -163,7 +190,7 @@ public class Pic extends EgaImage implements Cloneable
         {
             try
             {
-                write(stream);
+                write(stream, xorEncode);
                 return stream.toByteArray();
             }
             finally
@@ -179,6 +206,19 @@ public class Pic extends EgaImage implements Cloneable
     }
 
 
+    /**
+     * Returns the bytes of the picture. The picture data is vertical-xor
+     * encoded.
+     * 
+     * @return The picture bytes
+     */
+
+    public byte[] getBytes()
+    {
+        return getBytes(true);
+    }
+    
+    
     /**
      * Returns a copy of the picture.
      * 

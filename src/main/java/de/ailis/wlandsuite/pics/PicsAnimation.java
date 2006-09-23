@@ -247,7 +247,7 @@ public class PicsAnimation
         ByteArrayOutputStream headerStream;
         ByteArrayOutputStream dataStream;
         ByteArrayOutputStream animStream;
-
+        
         // Write the base frame MSQ header
         bytes = this.baseFrame.getBytes();
         header = new MsqHeader(MsqType.Compressed, disk, bytes.length);
