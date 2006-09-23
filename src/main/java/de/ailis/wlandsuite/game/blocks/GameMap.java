@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -67,6 +69,9 @@ public class GameMap extends GameBlock implements Serializable
 {
     /** Serial version UID */
     private static final long serialVersionUID = 3535759235422069966L;
+
+    /** The logger */
+    private static final Log log = LogFactory.getLog(GameMap.class);
 
     /** The map size */
     private int mapSize;
@@ -378,8 +383,8 @@ public class GameMap extends GameBlock implements Serializable
         // Add padding
         if (plainStream.tell() > this.tilemapOffset)
         {
-            System.out
-                .println("Warning! Too much data before tile map. Fixing offsets in wl.exe is needed to run this game file");
+            log.warn("Too much data before tile map. Fixing "
+                + "offsets in wl.exe is needed to run this game file");
         }
         else
         {
@@ -392,8 +397,8 @@ public class GameMap extends GameBlock implements Serializable
         // Add padding
         if (plainStream.tell() > this.msqSize - 6)
         {
-            System.out
-                .println("Warning! Tilemap too large. Fixing offsets in wl.exe is needed to run this game file");
+            log.warn("Tilemap too large. Fixing offsets in wl.exe is needed "
+                + "to run this game file");
         }
         else
         {

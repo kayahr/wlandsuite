@@ -33,6 +33,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.cpa.Cpa;
 import de.ailis.wlandsuite.cpa.CpaFrame;
@@ -48,6 +51,10 @@ import de.ailis.wlandsuite.pic.Pic;
 
 public class PackCpa extends PackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(PackCpa.class);
+    
+    
     /**
      * @see de.ailis.wlandsuite.cli.PackProg#pack(java.io.File,
      *      java.io.OutputStream)
@@ -72,7 +79,7 @@ public class PackCpa extends PackProg
         file = new File(directory.getPath() + File.separatorChar + "000.png");
         if (!file.exists())
         {
-            error("Base frame PNG '" + file.getPath() + "' not found");
+            log.error("Base frame PNG '" + file.getPath() + "' not found");
         }
         baseFrame = new Pic(ImageIO.read(file));
 
@@ -101,7 +108,7 @@ public class PackCpa extends PackProg
         }
         else
         {
-            warn("Delays file '" + file.getPath() + "' not found");
+            log.warn("Delays file '" + file.getPath() + "' not found");
         }
 
         // Read the animation frames
@@ -118,7 +125,7 @@ public class PackCpa extends PackProg
             pic = new Pic(ImageIO.read(frameFile));
             if (frameNo > delays.size())
             {
-                warn("No delay found for frame " + frameNo
+                log.warn("No delay found for frame " + frameNo
                     + ". Using default delay 2");
                 delay = 2;
             }
@@ -131,7 +138,7 @@ public class PackCpa extends PackProg
         }
         if (frameNo != 16)
         {
-            warn("Wasteland needs 15 animation frames. But " + (frameNo - 1)
+            log.warn("Wasteland needs 15 animation frames. But " + (frameNo - 1)
                 + " frames were found. This may cause trouble.");
         }
 

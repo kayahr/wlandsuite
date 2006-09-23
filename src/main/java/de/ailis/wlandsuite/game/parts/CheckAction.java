@@ -29,6 +29,9 @@ import java.util.List;
 
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -44,6 +47,9 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 public class CheckAction implements Action
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(CheckAction.class);
+    
     /** If the square is passable even without a successful check */
     private boolean passable;
 
@@ -170,7 +176,7 @@ public class CheckAction implements Action
             && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN6)
         {
-            System.out.println("Patching safe-check (5) on map 3");
+            log.info("Patching safe-check (5) on map 3");
             action.checks.remove(3);
             action.checks.remove(2);
         }
@@ -184,7 +190,7 @@ public class CheckAction implements Action
             && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN7)
         {
-            System.out.println("Patching safe-check (20) on map 4");
+            log.info("Patching safe-check (20) on map 4");
             action.checks.remove(9);
             action.checks.remove(8);
             action.checks.remove(7);
@@ -203,7 +209,7 @@ public class CheckAction implements Action
             && action.unknown09 == 0 && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN4)
         {
-            System.out.println("Patching barrier-check (15) on map 4");
+            log.info("Patching barrier-check (15) on map 4");
             action.checks.clear();
             action.checks.add(new Check());
         }

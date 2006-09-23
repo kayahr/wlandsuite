@@ -29,6 +29,9 @@ import java.util.List;
 
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
@@ -44,6 +47,9 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 public class AlterationAction implements Action
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(AlterationAction.class);
+    
     /** The message to print when player enters the square */
     private int message;
 
@@ -105,7 +111,7 @@ public class AlterationAction implements Action
             && action.alterations.get(4).getUnknown() == 2
             && action.alterations.get(12).getUnknown() == 78)
         {
-            System.out.println("Patching alter-check (7) on map 8");
+            log.info("Patching alter-check (7) on map 8");
             action.newActionClass = action.alterations.get(4).getUnknown();
             action.newAction = action.alterations.get(4).getX();
             while (action.alterations.size() != 4)

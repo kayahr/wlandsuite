@@ -36,6 +36,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.pic.Pic;
 import de.ailis.wlandsuite.pics.PicsAnimation;
@@ -53,6 +56,9 @@ import de.ailis.wlandsuite.pics.PicsAnimationInstruction;
 
 public class PackPics extends PackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(PackPics.class);
+    
     /** The disk index */
     private byte disk = -1;
 
@@ -131,7 +137,7 @@ public class PackPics extends PackProg
                     + "animation.txt");
                 if (!file.exists())
                 {
-                    error("Animation file '" + file.getPath() + "' not found");
+                    log.error("Animation file '" + file.getPath() + "' not found");
                 }
                 reader = new BufferedReader(new FileReader(file));
                 lineNo = 0;
@@ -150,7 +156,7 @@ public class PackPics extends PackProg
                     }
                     catch (Exception e)
                     {
-                        error("Syntax error in animation file '"
+                        log.error("Syntax error in animation file '"
                             + file.getPath() + "' line " + lineNo);
                     }
                 }

@@ -28,6 +28,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.UnpackProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.blocks.GameMap;
@@ -43,6 +46,10 @@ import de.ailis.wlandsuite.game.blocks.ShopItemList;
 
 public class UnpackGame extends UnpackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(UnpackGame.class);
+        
+    
     /**
      * @see de.ailis.wlandsuite.cli.UnpackProg#unpack(java.io.InputStream,
      *      java.io.File)
@@ -69,6 +76,7 @@ public class UnpackGame extends UnpackProg
             outputStream = new FileOutputStream(file);
             try
             {
+                log.info("Writing map " + mapNo);
                 map.writeXml(outputStream);
             }
             finally
@@ -86,6 +94,7 @@ public class UnpackGame extends UnpackProg
         outputStream = new FileOutputStream(file);
         try
         {
+            log.info("Writing savegame");
             game.getSavegame().writeXml(outputStream);
         }
         finally
@@ -103,6 +112,7 @@ public class UnpackGame extends UnpackProg
             outputStream = new FileOutputStream(file);
             try
             {
+                log.info("Writing shop item list " + listNo);
                 list.writeXml(outputStream);
             }
             finally

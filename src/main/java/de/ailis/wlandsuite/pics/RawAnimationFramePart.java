@@ -271,9 +271,6 @@ public class RawAnimationFramePart
     {
         int nulls;
         int[] newDiff;
-        int vorher, nachher;
-
-        vorher = this.diff.length + 2 + other.diff.length + 2;
 
         nulls = other.offset - this.offset - this.diff.length;
         newDiff = new int[nulls + this.diff.length + other.diff.length];
@@ -290,11 +287,5 @@ public class RawAnimationFramePart
             newDiff[this.diff.length + nulls + i] = other.diff[i];
         }
         this.diff = newDiff;
-
-        nachher = this.diff.length + 2;
-        if (nachher >= vorher)
-        {
-            System.out.println("Vorher = " + vorher + ", Nachher = " + nachher);
-        }
     }
 }

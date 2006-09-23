@@ -27,6 +27,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.CLIProg;
 import de.ailis.wlandsuite.exe.WlExe;
 import de.ailis.wlandsuite.htds.Htds;
@@ -42,6 +45,9 @@ import de.ailis.wlandsuite.pics.Pics;
 
 public class FixWlOffsets extends CLIProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(FixWlOffsets.class);
+    
     /** The wasteland directory */
     private String wlDir;
 
@@ -78,7 +84,7 @@ public class FixWlOffsets extends CLIProg
             file = new File(this.wlDir + "allhtds1");
             if (file.length() > 34307)
             {
-                warn("allhtds1 file is larger then 34307 bytes. This can cause trouble");
+                log.warn("allhtds1 file is larger then 34307 bytes. This can cause trouble");
             }
             oldOffsets = wl.getHtds1Offsets();
             newOffsets = Htds.getMsqOffsets(file);
@@ -90,7 +96,7 @@ public class FixWlOffsets extends CLIProg
                     newOffset = newOffsets.get(i).intValue();
                     if (oldOffset != newOffset)
                     {
-                        info("Adjusting HTDS1 bank " + i
+                        log.info("Adjusting HTDS1 bank " + i
                             + " offset from " + oldOffset + " to " + newOffset);
                     }
                     wl.setHtds1Offsets(newOffsets);
@@ -102,7 +108,7 @@ public class FixWlOffsets extends CLIProg
             file = new File(this.wlDir + "allhtds2");
             if (file.length() > 39230)
             {
-                warn("allhtds2 file is larger then 39230 bytes. This can cause trouble");
+                log.warn("allhtds2 file is larger then 39230 bytes. This can cause trouble");
             }
             oldOffsets = wl.getHtds2Offsets();
             newOffsets = Htds.getMsqOffsets(new File(this.wlDir + "allhtds2"));
@@ -114,7 +120,7 @@ public class FixWlOffsets extends CLIProg
                     newOffset = newOffsets.get(i).intValue();
                     if (oldOffset != newOffset)
                     {
-                        info("Adjusting HTDS2 bank " + i
+                        log.info("Adjusting HTDS2 bank " + i
                             + " offset from " + oldOffset + " to " + newOffset);
                     }
                     wl.setHtds2Offsets(newOffsets);
@@ -126,7 +132,7 @@ public class FixWlOffsets extends CLIProg
             file = new File(this.wlDir + "allpics1");
             if (file.length() > 105866)
             {
-                warn("allpics1 file is larger then 105866 bytes. This can cause trouble");
+                log.warn("allpics1 file is larger then 105866 bytes. This can cause trouble");
             }
             oldOffsets = wl.getPics1Offsets();
             newOffsets = Pics.getMsqOffsets(file);
@@ -138,7 +144,7 @@ public class FixWlOffsets extends CLIProg
                     newOffset = newOffsets.get(i).intValue();
                     if (oldOffset != newOffset)
                     {
-                        info("Adjusting PICS1 offset " + i
+                        log.info("Adjusting PICS1 offset " + i
                             + " from " + oldOffset + " to " + newOffset);
                     }
                     wl.setPics1Offsets(newOffsets);
@@ -158,7 +164,7 @@ public class FixWlOffsets extends CLIProg
                     newOffset = newOffsets.get(i).intValue();
                     if (oldOffset != newOffset)
                     {
-                        info("Adjusting PICS2 offset " + i
+                        log.info("Adjusting PICS2 offset " + i
                             + " from " + oldOffset + " to " + newOffset);
                     }
                     wl.setPics2Offsets(newOffsets);
@@ -173,7 +179,7 @@ public class FixWlOffsets extends CLIProg
         
         if (!changed)
         {
-            info("No offsets need to be fixed");
+            log.info("No offsets need to be fixed");
         }
     }
 

@@ -29,6 +29,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.game.blocks.GameMap;
 import de.ailis.wlandsuite.game.blocks.Savegame;
 import de.ailis.wlandsuite.game.blocks.ShopItemList;
@@ -44,6 +47,9 @@ import de.ailis.wlandsuite.io.SeekableInputStream;
 
 public class Game
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(Game.class);
+    
     /** The map block type */
     private static final int TYPE_MAP = 0;
 
@@ -111,20 +117,18 @@ public class Game
             switch (type)
             {
                 case TYPE_MAP:
-                    System.out.println("Parsing map " + mapNo
-                        + " from game file");
+                    log.info("Reading map " + mapNo);
                     mapNo++;
                     game.maps.add(GameMap.read(gameStream, block.getSize()));
                     break;
 
                 case TYPE_SAVEGAME:
-                    System.out.println("Parsing savegame from game file");
+                    log.info("Reading savegame");
                     game.savegame = Savegame.read(gameStream);
                     break;
 
                 case TYPE_SHOPLIST:
-                    System.out.println("Parsing shop items list " + listNo
-                        + " from game file");
+                    log.info("Reading shop item list " + listNo);
                     listNo++;
                     game.shopItemLists.add(ShopItemList.read(gameStream));
                     break;
@@ -154,20 +158,20 @@ public class Game
         i = 0;
         for (GameMap map: this.maps)
         {
-            System.out.println("Writing map " + i);
+            log.info("Writing map " + i);
             map.write(stream, disk);
             i++;
         }
 
         // Write the savegame
-        System.out.println("Writing savegame");
+        log.info("Writing savegame");
         this.savegame.write(stream, disk);
 
         // Write the shop item lists
         i = 0;
         for (ShopItemList list: this.shopItemLists)
         {
-            System.out.println("Writing shop item list " + i);
+            log.info("Writing shop item list " + i);
             list.write(stream, disk);
             i++;
         }

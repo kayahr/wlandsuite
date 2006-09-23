@@ -31,6 +31,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.curs.Curs;
 import de.ailis.wlandsuite.curs.Cursor;
@@ -46,6 +49,10 @@ import de.ailis.wlandsuite.image.EgaImage;
 
 public class PackCurs extends PackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(PackCurs.class);
+    
+    
     /**
      * @see de.ailis.wlandsuite.cli.PackProg#pack(java.io.File,
      *      java.io.OutputStream)
@@ -77,7 +84,7 @@ public class PackCurs extends PackProg
                 directory.getPath(), File.separatorChar, cursorNo }));
             if (!file.exists())
             {
-                error("Mask file '" + file.getPath() + "' not found");
+                log.error("Mask file '" + file.getPath() + "' not found");
             }
             mask = new EgaImage(ImageIO.read(file));
             cursors.add(new Cursor(cursor, mask));

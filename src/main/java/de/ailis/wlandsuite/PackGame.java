@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.blocks.GameMap;
@@ -48,6 +51,9 @@ import de.ailis.wlandsuite.game.blocks.ShopItemList;
 
 public class PackGame extends PackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(PackGame.class);
+    
     /** The disk index */
     private byte disk = -1;
 
@@ -82,7 +88,7 @@ public class PackGame extends PackProg
         int mapNo, listNo;
         InputStream stream;
         File file;
-
+        
         game = new Game();
         mapNo = 0;
         while (true)
@@ -96,7 +102,7 @@ public class PackGame extends PackProg
             stream = new FileInputStream(file);
             try
             {
-                System.out.println("Reading map " + mapNo);
+                log.info("Reading map " + mapNo);
                 game.addMap(GameMap.readXml(stream));
             }
             finally
@@ -113,6 +119,7 @@ public class PackGame extends PackProg
             stream = new FileInputStream(file);
             try
             {
+                log.info("Reading savegame");
                 game.setSavegame(Savegame.readXml(stream));
             }
             finally
@@ -133,7 +140,7 @@ public class PackGame extends PackProg
             stream = new FileInputStream(file);
             try
             {
-                System.out.println("Reading shop list " + listNo);
+                log.info("Reading shop list " + listNo);
                 game.addShopItemList(ShopItemList.readXml(stream));
             }
             finally

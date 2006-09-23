@@ -24,6 +24,11 @@
 package de.ailis.wlandsuite.cli;
 
 import java.io.IOException;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
@@ -39,6 +44,9 @@ import de.ailis.wlandsuite.utils.ResourceUtils;
 
 public abstract class CLIProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(CLIProg.class);
+    
     /** The help text resource */
     private String help = "help/launcher.txt";
 
@@ -86,50 +94,9 @@ public abstract class CLIProg
 
     protected void wrongUsage(String message)
     {
-        System.err.println(this.progName + ": " + message);
-        System.err.println("Try '" + this.progName
+        log.info(message + "\nTry '" + this.progName
             + " --help' for more information.");
         System.exit(2);
-    }
-
-
-    /**
-     * Aborts the program with an error message and exit code 1
-     * 
-     * @param message
-     *            The error message
-     */
-
-    protected void error(String message)
-    {
-        System.err.println(this.progName + ": ERROR! " + message);
-        System.exit(1);
-    }
-
-
-    /**
-     * Displays a warning message and continues the program
-     * 
-     * @param message
-     *            The warning message
-     */
-
-    protected void warn(String message)
-    {
-        System.err.println(this.progName + ": WARNING! " + message);
-    }
-
-
-    /**
-     * Outputs an informational message
-     * 
-     * @param message
-     *            The informational message
-     */
-
-    protected void info(String message)
-    {
-        System.err.println(this.progName + ": " + message);
     }
 
 
@@ -243,11 +210,12 @@ public abstract class CLIProg
 
     protected void start(String[] args)
     {
+        setupLogging();
         try
         {
             // Process command line arguments and run the program
             run(processOptions(args));
-            info("Success");
+            log.info("Success");
         }
         catch (Exception e)
         {
@@ -258,9 +226,26 @@ public abstract class CLIProg
             }
             else
             {
-                error(e.getMessage());
+                log.error(e.getMessage());
             }
         }
+    }
+    
+    
+    /**
+     * Setups loggings.
+     */
+    
+    private void setupLogging()
+    {
+        Logger logger;
+        
+        logger = Logger.getLogger("");
+        for (Handler handler: logger.getHandlers())
+        {
+            logger.removeHandler(handler);
+        }
+        logger.addHandler(new LogHandler(this.progName));
     }
 
 
