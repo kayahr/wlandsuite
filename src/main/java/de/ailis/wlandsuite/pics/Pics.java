@@ -32,6 +32,9 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.huffman.HuffmanInputStream;
 import de.ailis.wlandsuite.msq.MsqHeader;
 
@@ -46,6 +49,9 @@ import de.ailis.wlandsuite.msq.MsqHeader;
 
 public class Pics
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(Pics.class);
+    
     /** The tilesets */
     private List<PicsAnimation> animations;
 
@@ -97,11 +103,16 @@ public class Pics
     {
         List<PicsAnimation> animations;
         PicsAnimation animation;
+        int picNo;
 
         animations = new ArrayList<PicsAnimation>();
+        picNo = 0;
+        log.info("Reading pic " + picNo);
         while ((animation = PicsAnimation.read(stream, width)) != null)
         {
-            animations.add(animation);
+            animations.add(animation);            
+            picNo++;
+            log.info("Reading pic " + picNo);
         }
         return new Pics(animations);
     }
@@ -134,9 +145,12 @@ public class Pics
 
     public void write(OutputStream stream, int disk) throws IOException
     {
+        int picNo = 0;
         for (PicsAnimation animation: this.animations)
         {
+            log.info("Writing pic " + picNo);
             animation.write(stream, disk);
+            picNo++;
         }
     }
 

@@ -34,6 +34,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.PackProg;
 import de.ailis.wlandsuite.htds.Htds;
 import de.ailis.wlandsuite.htds.HtdsTileset;
@@ -49,6 +52,9 @@ import de.ailis.wlandsuite.pic.Pic;
 
 public class PackHtds extends PackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(PackHtds.class);
+    
     /** The disk index */
     private byte disk = -1;
 
@@ -97,6 +103,7 @@ public class PackHtds extends PackProg
             {
                 break;
             }
+            log.info("Reading tileset " + tilesetNo);
             tiles = new ArrayList<Pic>();
             while (true)
             {

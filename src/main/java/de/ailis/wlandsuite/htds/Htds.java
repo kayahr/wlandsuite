@@ -32,6 +32,9 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.huffman.HuffmanInputStream;
 import de.ailis.wlandsuite.msq.MsqHeader;
 
@@ -46,6 +49,9 @@ import de.ailis.wlandsuite.msq.MsqHeader;
 
 public class Htds
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(Htds.class);
+    
     /** The tilesets */
     private List<HtdsTileset> tilesets;
 
@@ -99,11 +105,15 @@ public class Htds
     {
         List<HtdsTileset> tilesets;
         HtdsTileset tileset;
+        int tilesetNo;
 
         tilesets = new ArrayList<HtdsTileset>();
+        tilesetNo = 0;
         while ((tileset = HtdsTileset.read(stream, width, height)) != null)
         {
+            log.info("Reading tileset " + tilesetNo);
             tilesets.add(tileset);
+            tilesetNo++;
         }
         return new Htds(tilesets);
     }
@@ -136,9 +146,12 @@ public class Htds
 
     public void write(OutputStream stream, int disk) throws IOException
     {
+        int tilesetNo = 0;
         for (HtdsTileset tileset: this.tilesets)
         {
+            log.info("Writing tileset " + tilesetNo);
             tileset.write(stream, disk);
+            tilesetNo++;
         }
     }
 

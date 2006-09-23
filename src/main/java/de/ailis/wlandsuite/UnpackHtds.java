@@ -33,6 +33,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.UnpackProg;
 import de.ailis.wlandsuite.htds.Htds;
 import de.ailis.wlandsuite.htds.HtdsTileset;
@@ -48,6 +51,9 @@ import de.ailis.wlandsuite.pic.Pic;
 
 public class UnpackHtds extends UnpackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(UnpackHtds.class);
+    
     /** The width */
     private int width = 16;
 
@@ -94,6 +100,7 @@ public class UnpackHtds extends UnpackProg
         tilesetNo = 0;
         for (HtdsTileset tileset: tilesets)
         {
+            log.info("Writing tileset " + tilesetNo);
             bankDir = new File(String.format("%s%c%03d", new Object[] { 
                 directory.getPath(), File.separatorChar,  tilesetNo}));
             bankDir.mkdirs();

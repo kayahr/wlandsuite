@@ -115,6 +115,8 @@ public class PackPics extends PackProg
                 break;
             }
 
+            log.info("Reading pic " + picNo);
+
             // Read the base frame
             baseFrame = new Pic(ImageIO.read(new File(picDirectory.getPath()
                 + File.separatorChar + "000.png")));

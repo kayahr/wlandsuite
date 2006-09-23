@@ -32,6 +32,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.ExtractProg;
 import de.ailis.wlandsuite.game.Game;
 import de.ailis.wlandsuite.game.blocks.GameMap;
@@ -51,6 +54,10 @@ import de.ailis.wlandsuite.sprites.Sprites;
 
 public class ExtractMaps extends ExtractProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(ExtractMaps.class);
+    
+    
     /**
      * @see de.ailis.wlandsuite.cli.ExtractProg#extract(java.io.File,
      *      java.io.File)
@@ -65,6 +72,7 @@ public class ExtractMaps extends ExtractProg
         InputStream stream;
 
         // Read game 1
+        log.info("Reading game1");
         stream = new FileInputStream(new File(input.getAbsolutePath()
             + File.separatorChar + "game1"));
         try
@@ -77,6 +85,7 @@ public class ExtractMaps extends ExtractProg
         }
 
         // Read game 2
+        log.info("Reading game2");
         stream = new FileInputStream(new File(input.getAbsolutePath()
             + File.separatorChar + "game2"));
         try
@@ -89,6 +98,7 @@ public class ExtractMaps extends ExtractProg
         }
 
         // Read tileset 1
+        log.info("Reading allhtds1");
         stream = new FileInputStream(new File(input.getAbsolutePath()
             + File.separatorChar + "allhtds1"));
         try
@@ -101,6 +111,7 @@ public class ExtractMaps extends ExtractProg
         }
 
         // Read tileset 2
+        log.info("Reading allhtds2");
         stream = new FileInputStream(new File(input.getAbsolutePath()
             + File.separatorChar + "allhtds2"));
         try
@@ -117,6 +128,7 @@ public class ExtractMaps extends ExtractProg
             + File.separatorChar + "ic0_9.wlf"));
         try
         {
+            log.info("Reading sprites");
             sprites = Sprites.read(stream);
         }
         finally
@@ -131,6 +143,7 @@ public class ExtractMaps extends ExtractProg
             // Iterate over all maps of the current game file
             for (GameMap gameMap: game.getMaps())
             {
+                log.info("Writing map " + fileNo);
                 int tilesetId = gameMap.getInfo().getTileset();
                 int size = gameMap.getMapSize();
                 EgaImage image = new EgaImage(size * 16, size * 16);

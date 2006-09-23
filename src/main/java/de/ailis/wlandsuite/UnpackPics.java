@@ -35,6 +35,9 @@ import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.ailis.wlandsuite.cli.UnpackProg;
 import de.ailis.wlandsuite.pics.PicsAnimation;
 import de.ailis.wlandsuite.pics.PicsAnimationFrameSet;
@@ -51,6 +54,9 @@ import de.ailis.wlandsuite.pics.Pics;
 
 public class UnpackPics extends UnpackProg
 {
+    /** The logger */
+    private static final Log log = LogFactory.getLog(UnpackPics.class);
+    
     /** The width */
     private int width = 96;
 
@@ -93,6 +99,7 @@ public class UnpackPics extends UnpackProg
         picNo = 0;
         for (PicsAnimation pic: pics.getAnimations())
         {
+            log.info("Writing pic " + picNo);
             picDirectory = new File(String.format("%s%c%03d", new Object[] {
                 directory.getPath(), File.separatorChar, picNo }));
             picDirectory.mkdirs();
