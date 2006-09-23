@@ -32,7 +32,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.SAXException;
 
-import de.ailis.wlandsuite.rawgame.GameException;
+import de.ailis.wlandsuite.common.exceptions.XmlException;
 
 
 /**
@@ -94,12 +94,12 @@ public class XmlUtils
         }
         catch (SAXException e)
         {
-            throw new GameException("Unable to configure XML reader: "
+            throw new XmlException("Unable to configure XML reader: "
                 + e.toString(), e);
         }
         catch (DocumentException e)
         {
-            throw new GameException("Unable to read XML document: "
+            throw new XmlException("Unable to read XML document: "
                 + e.toString(), e);
         }
     }

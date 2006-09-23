@@ -34,12 +34,12 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.huffman.HuffmanInputStream;
 import de.ailis.wlandsuite.huffman.HuffmanOutputStream;
 import de.ailis.wlandsuite.huffman.HuffmanTree;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
-import de.ailis.wlandsuite.rawgame.GameException;
 
 
 /**

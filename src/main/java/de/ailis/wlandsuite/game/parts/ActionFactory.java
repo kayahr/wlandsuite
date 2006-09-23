@@ -27,8 +27,8 @@ import java.io.IOException;
 
 import org.dom4j.Element;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableInputStream;
-import de.ailis.wlandsuite.rawgame.GameException;
 
 
 /**

@@ -60,7 +60,7 @@ public class Launcher extends CLIProg
         
         if ("decodepic".equals(command))
         {
-            DecryptGame.main(newArgs);
+            DecodePic.main(newArgs);
             System.exit(0);
         }
         else if ("encodepic".equals(command))
@@ -68,14 +68,24 @@ public class Launcher extends CLIProg
             EncodePic.main(newArgs);
             System.exit(0);
         }
-        else if ("unpackwlf".equals(command))
+        else if ("unpackmasks".equals(command))
         {
             UnpackMasks.main(newArgs);
             System.exit(0);
         }
-        else if ("packwlf".equals(command))
+        else if ("packmasks".equals(command))
         {
             PackMasks.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpacksprites".equals(command))
+        {
+            UnpackSprites.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packsprites".equals(command))
+        {
+            PackSprites.main(newArgs);
             System.exit(0);
         }
         else if ("unpackcpa".equals(command))
@@ -121,6 +131,16 @@ public class Launcher extends CLIProg
         else if ("packpics".equals(command))
         {
             PackPics.main(newArgs);
+            System.exit(0);
+        }
+        else if ("unpackgame".equals(command))
+        {
+            UnpackGame.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packgame".equals(command))
+        {
+            PackGame.main(newArgs);
             System.exit(0);
         }
         else if ("unpackpics".equals(command))

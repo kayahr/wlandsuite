@@ -21,7 +21,7 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.rawgame;
+package de.ailis.wlandsuite.game;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

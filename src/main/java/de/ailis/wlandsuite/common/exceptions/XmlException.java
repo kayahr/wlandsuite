@@ -21,66 +21,68 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.rawgame;
+package de.ailis.wlandsuite.common.exceptions;
 
 
 /**
- * GameException is thrown if something goes wrong while processing a game
- * file.
- *
+ * Exception thrown when something goes wrong while handling XML.
+ * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class GameException extends RuntimeException
+public class XmlException extends WlandsuiteException
 {
     /** Serial version UID */
-    private static final long serialVersionUID = 8799477700027088646L;
+    private static final long serialVersionUID = -1037070912080251527L;
 
 
     /**
      * Constructor
      */
 
-    public GameException()
+    public XmlException()
     {
         super();
     }
 
-    
     /**
      * Constructor
-     *
-     * @param message The exception message
+     * 
+     * @param message
+     *            The exception message
      */
 
-    public GameException(String message)
+    public XmlException(String message)
     {
         super(message);
     }
 
-    
+
     /**
      * Constructor
-     *
-     * @param message The exception message
-     * @param cause The exception root cause
+     * 
+     * @param cause
+     *            The root cause
      */
 
-    public GameException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    
-    /**
-     * Constructor
-     *
-     * @param cause The exception root cause
-     */
-
-    public GameException(Throwable cause)
+    public XmlException(Throwable cause)
     {
         super(cause);
+    }
+
+
+    /**
+     * Constructor
+     * 
+     * @param message
+     *            The exception message
+     * @param cause
+     *            The root cause
+     */
+
+    public XmlException(String message, Throwable cause)
+    {
+        super(message, cause);
     }
 }

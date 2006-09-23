@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
-import de.ailis.wlandsuite.rawgame.GameException;
 
 
 /**

@@ -35,7 +35,9 @@ import java.util.Map;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.game.RotatingXorInputStream;
+import de.ailis.wlandsuite.game.RotatingXorOutputStream;
 import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionMap;
 import de.ailis.wlandsuite.game.parts.Actions;
@@ -50,8 +52,6 @@ import de.ailis.wlandsuite.game.parts.Strings;
 import de.ailis.wlandsuite.game.parts.TileMap;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
-import de.ailis.wlandsuite.rawgame.GameException;
-import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
 

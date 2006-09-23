@@ -21,64 +21,68 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.rawgame.blocks;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.dom4j.Element;
-
-import de.ailis.wlandsuite.rawgame.GameBlockType;
+package de.ailis.wlandsuite.common.exceptions;
 
 
 /**
- * The interface for game blocks.
+ * The base exceptions for all wlandsuite exceptions.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public interface GameBlock
+public class WlandsuiteException extends RuntimeException
 {
-    /**
-     * Writes the game block to the specified output stream.
-     * 
-     * @param stream
-     *            The output stream
-     * @param encrypt
-     *            If the data should be encrypted
-     * @throws IOException
-     */
-
-    public void write(OutputStream stream, boolean encrypt)
-        throws IOException;
+    /** Serial version UID */
+    private static final long serialVersionUID = -1984234567527763567L;
 
 
     /**
-     * Writes the game block to the specified output stream in XML format.
-     * 
-     * @param stream
-     *            The output stream
-     * @throws IOException
+     * Constructor
      */
 
-    public void writeXml(OutputStream stream) throws IOException;
+    public WlandsuiteException()
+    {
+        super();
+    }
+
+    /**
+     * Constructor
+     * 
+     * @param message
+     *            The exception message
+     */
+
+    public WlandsuiteException(String message)
+    {
+        super(message);
+    }
 
 
     /**
-     * Converts the game block into an XML element and returns it.
+     * Constructor
      * 
-     * @return The XML element
+     * @param cause
+     *            The root cause
      */
 
-    public Element toXml();
+    public WlandsuiteException(Throwable cause)
+    {
+        super(cause);
+    }
 
 
     /**
-     * Returns the game block type.
+     * Constructor
      * 
-     * @return The game block type
+     * @param message
+     *            The exception message
+     * @param cause
+     *            The root cause
      */
 
-    public GameBlockType getType();
+    public WlandsuiteException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

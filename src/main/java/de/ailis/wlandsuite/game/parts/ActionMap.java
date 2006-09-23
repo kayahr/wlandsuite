@@ -32,7 +32,7 @@ import java.io.StringWriter;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.ailis.wlandsuite.rawgame.GameException;
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.utils.XmlUtils;
 
 

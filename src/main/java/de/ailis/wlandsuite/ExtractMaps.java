@@ -33,13 +33,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import de.ailis.wlandsuite.cli.ExtractProg;
+import de.ailis.wlandsuite.game.Game;
+import de.ailis.wlandsuite.game.blocks.GameMap;
+import de.ailis.wlandsuite.game.parts.TileMap;
 import de.ailis.wlandsuite.htds.Htds;
 import de.ailis.wlandsuite.image.EgaImage;
 import de.ailis.wlandsuite.pic.Pic;
-import de.ailis.wlandsuite.rawgame.Game;
-import de.ailis.wlandsuite.rawgame.blocks.GameBlock;
-import de.ailis.wlandsuite.rawgame.blocks.GameMap;
-import de.ailis.wlandsuite.rawgame.parts.TilesMap;
 import de.ailis.wlandsuite.sprites.Sprites;
 
 
@@ -130,11 +129,9 @@ public class ExtractMaps extends ExtractProg
         for (Game game: new Game[] { game1, game2 })
         {
             // Iterate over all maps of the current game file
-            for (GameBlock block: game.getBlocks())
+            for (GameMap gameMap: game.getMaps())
             {
-                if (!(block instanceof GameMap)) continue;
-                GameMap gameMap = (GameMap) block;
-                int tilesetId = gameMap.getMapInfo().getTileset();
+                int tilesetId = gameMap.getInfo().getTileset();
                 int size = gameMap.getMapSize();
                 EgaImage image = new EgaImage(size * 16, size * 16);
                 Graphics2D graphics = image.createGraphics();
@@ -148,7 +145,7 @@ public class ExtractMaps extends ExtractProg
                 {
                     tiles = htds2.getTilesets().get(tilesetId - 4).getTiles();
                 }
-                TilesMap map = gameMap.getTilesMap();
+                TileMap map = gameMap.getTileMap();
 
                 for (int y = 0; y < size; y++)
                 {

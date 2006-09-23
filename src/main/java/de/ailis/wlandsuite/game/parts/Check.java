@@ -27,11 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
-
-import de.ailis.wlandsuite.rawgame.GameException;
 
 
 /**

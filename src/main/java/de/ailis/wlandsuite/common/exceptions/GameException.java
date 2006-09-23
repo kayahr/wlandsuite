@@ -21,64 +21,68 @@
  * IN THE SOFTWARE.
  */
 
-package de.ailis.wlandsuite.rawgame.parts;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.dom4j.Element;
+package de.ailis.wlandsuite.common.exceptions;
 
 
 /**
- * Part
+ * Exception thrown when something goes wrong while handling a game file.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public interface Part extends Comparable<Part>
+public class GameException extends WlandsuiteException
 {
-    /**
-     * Converts the game block part into a XML element.
-     * 
-     * @return The XML element
-     */
-
-    public Element toXml();
+    /** Serial version UID */
+    private static final long serialVersionUID = -5279351594699018309L;
 
 
     /**
-     * Writes the part to the specified output stream.
-     * 
-     * @param stream
-     *            The output stream
-     * @param offset
-     *            The offset the part is written to
-     * @throws IOException
+     * Constructor
      */
 
-    public void write(OutputStream stream, int offset) throws IOException;
+    public GameException()
+    {
+        super();
+    }
+
+    /**
+     * Constructor
+     * 
+     * @param message
+     *            The exception message
+     */
+
+    public GameException(String message)
+    {
+        super(message);
+    }
 
 
     /**
-     * Returns the offset from which the part was read. This is only possible
-     * (and needed) if the part was read from a game file or is an unknown
-     * block (for which the offset is also stored in the XML file). Otherwise it
-     * will return -1.
+     * Constructor
      * 
-     * @return The offset of the part or -1 if not available
+     * @param cause
+     *            The root cause
      */
 
-    public int getOffset();
+    public GameException(Throwable cause)
+    {
+        super(cause);
+    }
 
 
     /**
-     * Returns the size of the read part. This is only possible (and needed) if
-     * the part was read from a game file or is an unknown block (for which
-     * the size is also stored in the XML file). Otherwise it will return -1.
+     * Constructor
      * 
-     * @return The size of the part or -1 if not available
+     * @param message
+     *            The exception message
+     * @param cause
+     *            The root cause
      */
 
-    public int getSize();
+    public GameException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }
