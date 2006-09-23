@@ -153,6 +153,11 @@ public class Launcher extends CLIProg
             FixWlOffsets.main(newArgs);
             System.exit(0);
         }
+        else if ("extractmaps".equals(command))
+        {
+            ExtractMaps.main(newArgs);
+            System.exit(0);
+        }
         else
         {
             wrongUsage("Unknown command: " + command);
