@@ -5,8 +5,28 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
-    <release version="1.2.0" date="2006-08-03" desc="Minor update">
-      <action dev="k" type="change">
+    <release version="1.2.0" date="2006-09-24" desc="Major update">
+      <action dev="k" type="add">
+        Added full read and write support for the game files. unpackgame
+        and packgame can be used to edit the maps in every respect (but within
+        the limits of wasteland) with a simple text editor. A good XML
+        editor is recommended to take advantage of the documented XML schema
+        file.
+      </action>
+      <action dev="k" type="add">
+        Added an extractmaps program which can be used to extract the maps
+        of wasteland as PNG files. It reads the tilemaps from the game files,
+        the tiles from the allhtds files and the sprites from the ic0_9.wlf
+        file and then merges them into graphical maps and saves them into PNG
+        files.
+      </action>
+      <action dev="k" type="fix">
+        Replaced unpackwlf and packwlf with unpackmasks, packmasks,
+        unpacksprites and packsprites because I found out that the two WLF
+        files of wasteland have different formats and ic0_9.wlf does 
+        contain sprite images and not animation bit masks. 
+      </action>
+      <action dev="k" type="fix">
         Fixed fixwloffsets problems with different EXE files unpacked with
         different EXE unpackers.
       </action>

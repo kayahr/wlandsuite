@@ -1,4 +1,4 @@
-wlandsuite 1.1.0
+wlandsuite 1.2.0
 
 Copyright (C) 2006 by Klaus Reimer
 

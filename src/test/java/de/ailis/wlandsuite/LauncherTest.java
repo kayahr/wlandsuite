@@ -43,7 +43,7 @@ public class LauncherTest extends WSTestCase
     protected String progName;
 
     /** The program version */
-    protected String version = "1.1.0";
+    protected String version = "1.2.0";
 
 
     /**
