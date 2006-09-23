@@ -210,7 +210,8 @@ public class LootItem
         {
             element.addAttribute("value", Integer.toString(this.value));
         }
-        if (this.quantity != 1)
+        if (this.quantity != 1 || this.type == TYPE_RANDOMMONEY
+            || this.type == TYPE_FIXEDMONEY)
         {
             element.addAttribute("quantity", Integer.toString(this.quantity));
         }

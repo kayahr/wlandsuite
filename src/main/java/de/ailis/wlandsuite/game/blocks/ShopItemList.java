@@ -23,23 +23,21 @@
 
 package de.ailis.wlandsuite.game.blocks;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import de.ailis.wlandsuite.game.RotatingXorInputStream;
+import de.ailis.wlandsuite.game.parts.ShopItem;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.rawgame.GameException;
 import de.ailis.wlandsuite.rawgame.RotatingXorOutputStream;
 import de.ailis.wlandsuite.utils.XmlUtils;
 
@@ -56,8 +54,8 @@ public class ShopItemList extends GameBlock implements Serializable
     /** Serial version UID */
     private static final long serialVersionUID = 1004046023232273188L;
 
-    /** The data */
-    private byte[] data;
+    /** The shop items */
+    private List<ShopItem> items = new ArrayList<ShopItem>();
 
 
     /**
@@ -71,7 +69,8 @@ public class ShopItemList extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    public static ShopItemList read(SeekableInputStream stream) throws IOException
+    public static ShopItemList read(SeekableInputStream stream)
+        throws IOException
     {
         byte[] headerBytes;
         String header;
@@ -92,9 +91,14 @@ public class ShopItemList extends GameBlock implements Serializable
 
         shopItems = new ShopItemList();
 
-        // Read the unknown block
-        shopItems.data = new byte[760];
-        xorStream.read(shopItems.data);
+        // Skip first 8 bytes. They are always the same
+        xorStream.skip(8);
+
+        // Read the shop items
+        for (int i = 0; i < 94; i++)
+        {
+            shopItems.items.add(ShopItem.read(xorStream));
+        }
 
         // Return the newly created shop items object
         return shopItems;
@@ -119,10 +123,37 @@ public class ShopItemList extends GameBlock implements Serializable
         stream.write("msq".getBytes());
         stream.write('0' + disk);
 
-        // Write the header and the characters
+        // Write the header
         seekStream = new SeekableOutputStream(new RotatingXorOutputStream(
             stream));
-        seekStream.write(this.data);
+        seekStream.write(0x60);
+        seekStream.write(0x60);
+        seekStream.write(0x60);
+        seekStream.write(0x00);
+        seekStream.write(0x37);
+        seekStream.write(0x08);
+        seekStream.write(0xf8);
+        seekStream.write(0x39);
+
+        // Make sure there are not too much shop items
+        if (this.items.size() > 94)
+        {
+            throw new GameException("To many shop items");
+        }
+
+        // Write the shop items
+        for (ShopItem item: this.items)
+        {
+            item.write(seekStream);
+        }
+
+        // Write padding
+        for (int i = this.items.size(); i < 94; i++)
+        {
+            seekStream.writeInt(0);
+            seekStream.writeInt(0);
+        }
+
         seekStream.flush();
     }
 
@@ -138,19 +169,15 @@ public class ShopItemList extends GameBlock implements Serializable
     public static ShopItemList read(Element element)
     {
         ShopItemList shopItems;
-        String data;
-        ByteArrayOutputStream byteStream;
 
         shopItems = new ShopItemList();
 
-        // Read the header
-        data = element.getTextTrim();
-        byteStream = new ByteArrayOutputStream();
-        for (String b: data.split("\\s"))
+        // Read the shop items
+        for (Object item: element.elements("shopItem"))
         {
-            byteStream.write(Integer.parseInt(b, 16));
+            Element subElement = (Element) item;
+            shopItems.items.add(ShopItem.read(subElement));
         }
-        shopItems.data = byteStream.toByteArray();
 
         return shopItems;
     }
@@ -162,28 +189,16 @@ public class ShopItemList extends GameBlock implements Serializable
      * @param stream
      *            The input stream
      * @return The shop items object
-     * @throws IOException
      */
 
-    public static ShopItemList readXml(InputStream stream) throws IOException
+    public static ShopItemList readXml(InputStream stream)
     {
-        SAXReader reader;
         Document document;
         Element element;
+        document = XmlUtils.readDocument(stream);
+        element = document.getRootElement();
 
-        reader = new SAXReader();
-        try
-        {
-            document = reader.read(stream);
-            element = document.getRootElement();
-
-            return read(element);
-        }
-        catch (DocumentException e)
-        {
-            throw new IOException("Unable to parse game map from XML: "
-                + e.getMessage());
-        }
+        return read(element);
     }
 
 
@@ -195,46 +210,17 @@ public class ShopItemList extends GameBlock implements Serializable
     public Element toXml()
     {
         Element element;
-        StringWriter text;
-        PrintWriter writer;
+        int id;
 
         // Create the root element
-        element = XmlUtils.createElement("shopItemList");
+        element = XmlUtils.createElement("shopItems");
 
-        text = new StringWriter();
-        writer = new PrintWriter(text);
-
-        writer.println();
-        writer.print("  ");
-        for (int i = 0; i < this.data.length; i++)
+        id = 0;
+        for (ShopItem item: this.items)
         {
-            if (i > 0)
-            {
-                if (i % 16 == 0)
-                {
-                    writer.println();
-                }
-                if ((i < this.data.length) && (i % 4 == 0))
-                {
-                    if (i % 16 == 0)
-                    {
-                        writer.print("  ");
-                    }
-                    else
-                    {
-                        writer.print("    ");
-                    }
-                }
-                else
-                {
-                    writer.print(" ");
-                }
-            }
-            writer.format("%02x", new Object[] { this.data[i] });
+            element.add(item.toXml(id));
+            id++;
         }
-        writer.println();
-
-        element.add(DocumentHelper.createText(text.toString()));
 
         // Return the XMl element
         return element;

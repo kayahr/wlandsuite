@@ -582,13 +582,13 @@ This attribute is optional and defaults to 1.</xs:documentation>
         <xs:complexContent>
             <xs:extension base="Action">
                 <xs:sequence></xs:sequence>
-                <xs:attribute name="newActionClass" type="Byte">
+                <xs:attribute name="newActionClass" type="Byte" default="255">
                     <xs:annotation>
-                        <xs:documentation>The new action class to set for the square after the action has been executed. 255 (0xff) means no change. This is also the default value when this attribute is not used.</xs:documentation>
+                        <xs:documentation>The new action class to set for the square after the action has been executed. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
                     </xs:annotation></xs:attribute>
-                <xs:attribute name="newAction" type="Byte">
+                <xs:attribute name="newAction" type="Byte" default="255">
                     <xs:annotation>
-                        <xs:documentation>The new action to set for the square after the action has been executed. 255 (0xff) means no change. This is also the default value when this attribute is not used.</xs:documentation>
+                        <xs:documentation>The new action to set for the square after the action has been executed. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
                     </xs:annotation></xs:attribute>
             </xs:extension>
         </xs:complexContent>
@@ -697,7 +697,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action class to set to the square when the
-                            check passed.
+                            check passed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -705,7 +705,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action to set to the square when the check
-                            passed.
+                            passed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -722,7 +722,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action class to set to the square when the
-                            check failed.
+                            check failed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -730,7 +730,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action to set to the square when the check
-                            failed.
+                            failed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -782,12 +782,12 @@ This attribute is optional and defaults to 1.</xs:documentation>
         <xs:attribute name="newActionClass" type="Byte">
             <xs:annotation>
                 <xs:documentation>The new action class to set the square to when this specific check succeeds. If this is used then the passNewActionClass and passActionClass attributes of the parent element are ignored.
-255 means no change.</xs:documentation>
+ 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
             </xs:annotation></xs:attribute>
         <xs:attribute name="newAction" type="Byte">
             <xs:annotation>
                 <xs:documentation>The new action class to set the square to when this specific check succeeds. If this is used then the passNewActionClass and passActionClass attributes of the parent element are ignored.
-255 means no change.</xs:documentation></xs:annotation></xs:attribute>
+ 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation></xs:annotation></xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="Item">
@@ -1367,19 +1367,19 @@ This attribute is optional and defaults to 1.</xs:documentation>
                 </xs:attribute>
                 <xs:attribute name="cancelNewActionClass" type="Byte" default="255">
                     <xs:annotation>
-                        <xs:documentation>The action class to apply to the square if the player cancels the dialogue. Defaults to 255 which means no change.</xs:documentation>
+                        <xs:documentation>The action class to apply to the square if the player cancels the dialogue.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
                     </xs:annotation></xs:attribute>
                 <xs:attribute name="cancelNewAction" type="Byte" default="255">
                     <xs:annotation>
-                        <xs:documentation>The action to apply to the square if the player cancels the dialogue. Defaults to 255 which means no change.</xs:documentation>
+                        <xs:documentation>The action to apply to the square if the player cancels the dialogue. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
                     </xs:annotation></xs:attribute>
                 <xs:attribute name="otherNewActionClass" type="Byte" default="255">
                     <xs:annotation>
-                        <xs:documentation>The action class to apply to the square if the player answers with an invalid answer. Defaults to 255 which means no change.</xs:documentation>
+                        <xs:documentation>The action class to apply to the square if the player answers with an invalid answer. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
                     </xs:annotation></xs:attribute>
                 <xs:attribute name="otherNewAction" type="Byte" default="255">
                     <xs:annotation>
-                        <xs:documentation>The action to apply to the square if the player answers with an invalid answer. Defaults to 255 which means no change.</xs:documentation>
+                        <xs:documentation>The action to apply to the square if the player answers with an invalid answer. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
                     </xs:annotation></xs:attribute>
             </xs:extension>
         </xs:complexContent>
@@ -1392,11 +1392,11 @@ This attribute is optional and defaults to 1.</xs:documentation>
             </xs:annotation></xs:attribute>
         <xs:attribute name="newActionClass" type="Byte" default="255">
             <xs:annotation>
-                <xs:documentation>The new action class to apply to the square if this answer is selected. Defaults to 255 which means no change.</xs:documentation>
+                <xs:documentation>The new action class to apply to the square if this answer is selected. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
             </xs:annotation></xs:attribute>
         <xs:attribute name="newAction" type="Byte" default="255">
             <xs:annotation>
-                <xs:documentation>The new action to apply to the square if this answer is selected. Defaults to 255 which means no change.</xs:documentation>
+                <xs:documentation>The new action to apply to the square if this answer is selected. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
             </xs:annotation></xs:attribute>
     </xs:complexType>
 
@@ -1447,11 +1447,11 @@ This attribute is optional and defaults to 1.</xs:documentation>
         </xs:attribute>
         <xs:attribute name="newActionClass" type="Byte" default="255">
             <xs:annotation>
-                <xs:documentation>New new action class to apply to the square at the given position. Defaults to 255 which means no change.</xs:documentation>
+                <xs:documentation>New new action class to apply to the square at the given position. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
             </xs:annotation></xs:attribute>
         <xs:attribute name="newAction" type="Byte" default="255">
             <xs:annotation>
-                <xs:documentation>New new action to apply to the square at the given position. Defaults to 255 which means no change.</xs:documentation>
+                <xs:documentation>New new action to apply to the square at the given position. 255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).</xs:documentation>
             </xs:annotation></xs:attribute>
     </xs:complexType>
 
@@ -2000,5 +2000,73 @@ This attribute is optional and defaults to 1.</xs:documentation>
             <xs:annotation>
                 <xs:documentation>The previous map before transitioning to new location. Used for FF transitions. Defaults to 0.</xs:documentation>
             </xs:annotation></xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="shopItems" type="ShopItems">
+        <xs:annotation>
+            <xs:documentation>The root element for shop item lists.</xs:documentation>
+        </xs:annotation></xs:element>
+
+    <xs:complexType name="ShopItems">
+        <xs:sequence>
+            <xs:element name="shopItem" type="ShopItem" maxOccurs="94" minOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>A shop item.</xs:documentation>
+                </xs:annotation></xs:element>
+        </xs:sequence></xs:complexType>
+
+    <xs:complexType name="ShopItem">
+        <xs:sequence></xs:sequence>
+        <xs:attribute name="id" type="Byte" use="required">
+            <xs:annotation>
+                <xs:documentation>The shop item id.</xs:documentation>
+            </xs:annotation></xs:attribute>
+        <xs:attribute name="price" type="Word" default="0">
+            <xs:annotation>
+                <xs:documentation>The item price.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="stock" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>
+                    How many items are available in the store.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="type" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The item type.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="unknown" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>
+                    The unknown three lower bits in byte 2. If you know what
+                    they do, please let me know: k@ailis.de
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="skill" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>
+                    The skill which is used for the item.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="damage" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The base damage in D6.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="capacity" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The ammo capacity.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ammo" type="Byte" default="0">
+            <xs:annotation>
+                <xs:documentation>The ammo.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 </xs:schema>
