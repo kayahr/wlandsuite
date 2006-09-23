@@ -23,31 +23,38 @@
 
 package de.ailis.wlandsuite;
 
-import java.io.IOException;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**
- * Abstract tests for a unpack program
+ * Tests the UnpackSprites program.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public abstract class UnpackTest extends LauncherTest
+public class UnpackSpritesTest extends UnpackTest
 {
     /**
-     * Tests empty call
+     * Returns the test suite.
      * 
-     * @throws IOException
+     * @return The test suite
+     */
+
+    public static Test suite()
+    {
+        return new TestSuite(UnpackSpritesTest.class);
+    }
+
+
+    /**
+     * @see junit.framework.TestCase#setUp()
      */
 
     @Override
-    public void testEmpty() throws IOException
+    public void setUp()
     {
-        testExec(
-            this.progName,
-            2,
-            "",
-            "^" + this.progName + ": ERROR! No output directory specified\nTry '" + this.progName + " --help' for more information\\.\n$");
+        this.progName = "unpacksprites";
     }
 }

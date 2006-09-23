@@ -1,0 +1,15 @@
+Usage: unpackgame [OPTION]... DIRECTORY [INPUT]
+Unpacks a game file as XML files into a directory
+
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+  
+The first parameter must be the name of the directory in which the maps,
+the savegame and the shop item lists should be unpacked in XML format. The 
+program creates the necessary directory structure automatically.
+
+The second parameter specifies the filename of the game file to read. If
+the parameter is missing or is "-" then the input is read from stdin.
+
+Report bugs to Klaus Reimer <k@ailis.de>

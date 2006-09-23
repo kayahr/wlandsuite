@@ -74,6 +74,6 @@ public class FixWlOffsetsTest extends LauncherTest
             this.progName,
             2,
             "",
-            "^fixwloffsets: No wasteland directory specified\nTry 'fixwloffsets --help' for more information\\.\n$");
+            "^fixwloffsets: ERROR! No wasteland directory specified\nTry 'fixwloffsets --help' for more information\\.\n$");
     }
 }

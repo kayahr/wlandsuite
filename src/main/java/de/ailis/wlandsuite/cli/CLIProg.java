@@ -94,7 +94,7 @@ public abstract class CLIProg
 
     protected void wrongUsage(String message)
     {
-        log.info(message + "\nTry '" + this.progName
+        log.error(message + "\nTry '" + this.progName
             + " --help' for more information.");
         System.exit(2);
     }
@@ -227,6 +227,7 @@ public abstract class CLIProg
             else
             {
                 log.error(e.getMessage());
+                System.exit(1);
             }
         }
     }

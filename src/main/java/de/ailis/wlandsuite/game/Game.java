@@ -141,6 +141,21 @@ public class Game
 
 
     /**
+     * Writes the game file to the specified output stream. The disk number
+     * is determined automatically by looking at the number of maps.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void write(OutputStream stream) throws IOException
+    {
+        write(stream, this.maps.size() == 20 ? 0 : 1);
+    }
+    
+    
+    /**
      * Writes the game file to the specified output stream.
      * 
      * @param stream

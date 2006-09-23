@@ -28,13 +28,13 @@ import junit.framework.TestSuite;
 
 
 /**
- * Tests the UnpackWlf program.
+ * Tests the UnpackMasks program.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class UnpackWlfTest extends UnpackTest
+public class UnpackMasksTest extends UnpackTest
 {
     /**
      * Returns the test suite.
@@ -44,7 +44,7 @@ public class UnpackWlfTest extends UnpackTest
 
     public static Test suite()
     {
-        return new TestSuite(UnpackWlfTest.class);
+        return new TestSuite(UnpackMasksTest.class);
     }
 
 
@@ -55,6 +55,6 @@ public class UnpackWlfTest extends UnpackTest
     @Override
     public void setUp()
     {
-        this.progName = "unpackwlf";
+        this.progName = "unpackmasks";
     }
 }

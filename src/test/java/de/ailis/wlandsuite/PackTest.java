@@ -48,6 +48,6 @@ public abstract class PackTest extends LauncherTest
             this.progName,
             2,
             "",
-            "^" + this.progName + ": No input directory specified\nTry '" + this.progName + " --help' for more information\\.\n$");
+            "^" + this.progName + ": ERROR! No input directory specified\nTry '" + this.progName + " --help' for more information\\.\n$");
     }
 }

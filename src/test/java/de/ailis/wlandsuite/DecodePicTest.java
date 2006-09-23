@@ -90,7 +90,7 @@ public class DecodePicTest extends LauncherTest
 
         file = File.createTempFile("decodepic", ".png");
         testExec("decodepic src/test/resources/pic/test.pic " + file.getPath(),
-            0, "", "^decodepic: Success\n$");
+            0, "^decodepic: Success\n$", "");
         assertEquals(new File("src/test/resources/pic/test.png"), ImageIO
             .read(file));
         file.delete();

@@ -28,13 +28,13 @@ import junit.framework.TestSuite;
 
 
 /**
- * Tests the PackWlf program.
+ * Tests the UnpackGame program.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class PackWlfTest extends PackTest
+public class UnpackGameTest extends UnpackTest
 {
     /**
      * Returns the test suite.
@@ -44,7 +44,7 @@ public class PackWlfTest extends PackTest
 
     public static Test suite()
     {
-        return new TestSuite(PackWlfTest.class);
+        return new TestSuite(UnpackGameTest.class);
     }
 
 
@@ -55,6 +55,6 @@ public class PackWlfTest extends PackTest
     @Override
     public void setUp()
     {
-        this.progName = "packwlf";
+        this.progName = "unpackgame";
     }
 }

@@ -1,0 +1,22 @@
+Usage: packgame [OPTION]... DIRECTORY [OUTPUT]
+Packs maps, savegame and shop item list XML files into a game file
+
+  -D, --disk     The disk index (0 for game1 or 1 for game2)
+                 Default is automatically determined by looking at the number
+                 of maps.
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory which holds the
+XML files describing the maps, the savegame and ths shop item lists. This 
+directory must contain maps with the filename map[00-21].xml, a savegame.xml 
+and shop item list files with the filename shopitems[0-2].xml.
+
+The easiest way to initialize a game directory is using unpackgame to unpack 
+the original data from the game.
+
+The second parameter specifies the filename of the game file to write. If
+the parameter is missing or is "-" then the output is written to stdout.
+
+Report bugs to Klaus Reimer <k@ailis.de>

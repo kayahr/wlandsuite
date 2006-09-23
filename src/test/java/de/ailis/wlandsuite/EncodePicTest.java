@@ -88,7 +88,7 @@ public class EncodePicTest extends LauncherTest
 
         file = File.createTempFile("encodepic", ".pic");
         testExec("encodepic src/test/resources/pic/test.png " + file.getPath(),
-            0, "", "^encodepic: Success\n$");
+            0, "^encodepic: Success\n$", "");
         assertEquals(new File("src/test/resources/pic/test.pic"), file);
         file.delete();
     }

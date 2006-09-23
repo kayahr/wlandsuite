@@ -150,7 +150,14 @@ public class PackGame extends PackProg
             listNo++;
         }
 
-        game.write(output, this.disk == -1 ? 0 : this.disk);
+        if (this.disk == -1)
+        {
+            game.write(output);
+        }
+        else
+        {
+            game.write(output, this.disk);
+        }
     }
 
 

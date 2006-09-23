@@ -3,7 +3,7 @@ Packs encounter animations from a directory into a allpics file
 
   -D, --disk     The disk index (0 for allpics1 or 1 for allpics2)
                  Default is automatically determined by looking at the 
-                 number of animatioons.
+                 number of animations.
   -d, --debug    Shows stacktrace when an error occurs
   -h, --help     Display help and exit
   -V, --version  Display version and exit

@@ -78,7 +78,7 @@ public class LauncherTest extends WSTestCase
     public void testEmpty() throws IOException
     {
         testExec(this.progName, 2, "", "^" + this.progName
-            + ": No command specified\n" + "Try '" + this.progName
+            + ": ERROR! No command specified\n" + "Try '" + this.progName
             + " --help' for more information\\.\n$");
     }
 
