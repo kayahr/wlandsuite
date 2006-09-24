@@ -1,0 +1,32 @@
+extractmaps
+
+  Extracts all the maps of wasteland as PNG images into a directory.
+
+  The first parameter must be the name of the directory in which the PNGs
+  should be extracted. The program creates the necessary directory structure
+  automatically.
+
+  The second parameter specifies the wasteland directory. If the parameter is 
+  missing then the current directory is used.
+
+* Usage  
+  
+---
+extractmaps [OPTION]... OUTPUTDIR [INPUTDIR]
+---
+  
+* Parameters
+
+---
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command extracts all the maps to c:\maps:
+  
+---
+extractmaps c:\maps c:\wland
+---

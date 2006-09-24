@@ -1,0 +1,43 @@
+unpackgame
+
+  Unpacks a game file as XML files into a directory.
+
+  The first parameter must be the name of the directory in which the maps,
+  the savegame and the shop item lists should be unpacked in XML format. The 
+  program creates the necessary directory structure automatically.
+
+  The second parameter specifies the filename of the game file to read. If
+  the parameter is missing or is "-" then the input is read from stdin.  
+
+* Usage  
+  
+---
+unpackgame [OPTION]... DIRECTORY [INPUT]
+---
+  
+* Parameters
+
+---
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command unpacks the game1 file into a c:\game1.
+  
+---
+unpackgame c:\game1 c:\wland\game1
+---
+
+  The program creates the files map00.xml to map19.xml, a savegame.xml and
+  the files shopitems0.xml, shopitems1.xml and shopitems2.xml. You can now
+  edit the files with a standard text editor but it is recommeded to use
+  a good XML editor for this purpose because it can take advantage of the
+  XML schema referenced in the XML files to give you a simple documentation of
+  all the tags and attributes and also gives you tag and attribute completion
+  and document validation.
+
+  After you have editid the files you can pack them in a new game1 file with
+  the {{{packgame.html}packgame}} program. 

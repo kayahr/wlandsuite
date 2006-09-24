@@ -1,0 +1,45 @@
+unpacksprites
+
+  With the unpacksprites program you can unpack the sprites of the ic0_9.wlf
+  file into a directory.
+
+  The first parameter must be the name of the directory in which the sprites
+  should be unpacked. The program creates the directory automatically if it 
+  does not yet exist.
+
+  The second parameter specifies the filename of the ic0_9.wlf file to read. If
+  the parameter is missing or is "-" then the input is read from stdin.
+
+  The ic0_9.wlf file does not contain any information about sprite dimensions. 
+  So if the sprites in the file are not the default 16x16 pixels then you have 
+  to use the width and height parameters to tell unpacksprites the real size of 
+  the sprites.
+
+  If you are reading input from stdin then you must also specify the number of
+  sprites to read. The default is 10 sprites.
+
+* Usage  
+  
+---
+unpacksprites [OPTION]... DIRECTORY [INPUT]
+---
+  
+* Parameters
+
+---
+-W, --width    The width of the sprites in the ic0_9.wlf file (Default: 16)
+-H, --height   The height of the sprites in the ic0_9.wlf file (Default: 16)
+-q, --quantity The number of sprites in the ic0_9.wlf file (Default: 10)
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command reads Wasteland's ic0_9.wlf and writes each sprite
+  from it to a PNG file in the specified output directory:
+  
+---
+unpacksprites c:\sprites c:\wland\ic0_9.wlf
+---

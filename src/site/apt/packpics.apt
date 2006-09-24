@@ -11,7 +11,8 @@ packpics
   contains two numbers per line. The first number is the delay and the second
   number the frame to display.
 
-  The easiest way to initialize an animation directory is using unpackpics to
+  The easiest way to initialize an animation directory is using 
+  {{{unpackpics.html}unpackpics}} to
   unpack the original animations from the game.
 
   The second parameter specifies the filename of the PICS file to write. If

@@ -9,9 +9,11 @@ Packs maps, savegame and shop item list XML files into a game file
   -V, --version  Display version and exit
 
 The first parameter must be the name of the directory which holds the
-XML files describing the maps, the savegame and ths shop item lists. This 
-directory must contain maps with the filename map[00-21].xml, a savegame.xml 
-and shop item list files with the filename shopitems[0-2].xml.
+XML files describing the maps, the savegame and the shop item lists. This 
+directory must contain maps with the filename map00.xml (for game1 up to
+map19.xml, for game2 up to map21.xml), a savegame.xml 
+and a shop item list file with the filename shopitems0.xml (game1 needs
+also the files shopitems1.xml and shopitems2.xml).
 
 The easiest way to initialize a game directory is using unpackgame to unpack 
 the original data from the game.

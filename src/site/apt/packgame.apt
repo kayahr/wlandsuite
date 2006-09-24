@@ -1,0 +1,51 @@
+packgame
+
+  Packs maps, savegame and shop item list XML files into a game file.
+
+  The first parameter must be the name of the directory which holds the
+  XML files describing the maps, the savegame and the shop item lists. This 
+  directory must contain maps with the filename map00.xml (for game1 up to
+  map19.xml, for game2 up to map21.xml), a savegame.xml 
+  and a shop item list file with the filename shopitems0.xml (game1 needs
+  also the files shopitems1.xml and shopitems2.xml). 
+
+  The easiest way to initialize a game directory is using 
+  {{{unpackgame.html}unpackgame}} to unpack the original data from the game.
+
+  The second parameter specifies the filename of the game file to write. If
+  the parameter is missing or is "-" then the output is written to stdout.
+  
+* Usage  
+  
+---
+packgame [OPTION]... DIRECTORY [OUTPUT]
+---
+  
+* Parameters
+
+---
+-D, --disk     The disk index (0 for game1 or 1 for game2)
+               Default is automatically determined by looking at the number
+               of maps.
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  Let's assume you have unpacked the game1 file into c:\game1 with the
+  {{{unpackgame}unpackgame program}} and
+  you have modified some files. To build a custom game1 with these 
+  changes just run this command:
+  
+---
+packgame c:\game1 c:\wland\game1
+---
+
+  Please note that for now you can't create game files which are larger then
+  the original file. The program will complain about a to large size and the
+  game won't run with the new game file. If this happens you have to make the
+  map, which is to large, less complex. You could try shortening texts and 
+  remove details from the tilemap or something like that.
+  

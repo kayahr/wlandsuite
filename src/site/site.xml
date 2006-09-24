@@ -20,8 +20,10 @@
     <menu name="Programs">
       <item name="decodepic" href="decodepic.html" />
       <item name="encodepic" href="encodepic.html" />
-      <item name="unpackwlf" href="unpackwlf.html" />
-      <item name="packwlf" href="packwlf.html" />
+      <item name="unpackmasks" href="unpackmasks.html" />
+      <item name="packmasks" href="packmasks.html" />
+      <item name="unpacksprites" href="unpacksprites.html" />
+      <item name="packsprites" href="packsprites.html" />
       <item name="unpackcpa" href="unpackcpa.html" />
       <item name="packcpa" href="packcpa.html" />
       <item name="unpackhtds" href="unpackhtds.html" />
@@ -32,7 +34,10 @@
       <item name="packcurs" href="packcurs.html" />
       <item name="unpackfnt" href="unpackfnt.html" />
       <item name="packfnt" href="packfnt.html" />
+      <item name="unpackgame" href="unpackgame.html" />
+      <item name="packgame" href="packgame.html" />
       <item name="fixwloffsets" href="fixwloffsets.html" />
+      <item name="extractmaps" href="extractmaps.html" />
     </menu>
     
     ${reports}

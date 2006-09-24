@@ -1,0 +1,45 @@
+unpackmasks
+
+  With the unpackmasks program you can unpack the bit masks of the masks.wlf
+  file into a directory.
+
+  The first parameter must be the name of the directory in which the bit masks
+  should be unpacked. The program creates the directory automatically if it 
+  does not yet exist.
+
+  The second parameter specifies the filename of the masks.wlf file to read. If
+  the parameter is missing or is "-" then the input is read from stdin.
+
+  The masks.wlf file does not contain any information about mask dimensions. So 
+  if the masks in the file are not the default 16x16 pixels then you have 
+  to use the width and height parameters to tell unpackmasks the real size of 
+  the masks.
+
+  If you are reading input from stdin then you must also specify the number of
+  masks to read. The default is 10 masks.
+
+* Usage  
+  
+---
+unpackmasks [OPTION]... DIRECTORY [INPUT]
+---
+  
+* Parameters
+
+---
+-W, --width    The width of the masks in the masks.wlf file (Default: 16)
+-H, --height   The height of the masks in the masks.wlf file (Default: 16)
+-q, --quantity The number of masks in the masks.wlf file (Default: 10)
+-d, --debug    Shows stacktrace when an error occurs
+-h, --help     Display help and exit
+-V, --version  Display version and exit
+---
+
+* Example
+
+  The following command reads Wasteland's masks.wlf and writes each bit mask
+  from it to a PNG file in the specified output directory:
+  
+---
+unpackmasks c:\masks c:\wland\masks.wlf
+---

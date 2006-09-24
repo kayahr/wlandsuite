@@ -9,10 +9,8 @@ What is the Wasteland Suite?
   The Wasteland Suite is written in Java and therefore is working an all
   platforms supported by Java.
   
-  Up to now the Wasteland Suite can read and write PIC, WLF, CPA, HTDS, PICS,
-  CURS and FNT data. It also provides easy to use classes for reading and
-  writing vertical xor and huffman streams. See the {{{apidocs/}API documentation}}
-  for more details.
+  The Wasteland Suite can read and write the files title.pic, masks.wlf, 
+  ic0_9.wlf, end.cpa, allhtds*, allpics*, curs, colorf.fnt and game*.
       
   The suite contains the following command line programs:
    
@@ -20,9 +18,13 @@ What is the Wasteland Suite?
     
     * {{{encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
 
-    * {{{unpackwlf.html}unpackwlf}} (Unpacks a WLF file to a directory)
+    * {{{unpackmasks.html}unpackmasks}} (Unpacks a masks.wlf file to a directory)
 
-    * {{{packwlf.html}packwlf}} (Packs the bit masks from a directory into a WLF file)
+    * {{{packmasks.html}packmasks}} (Packs the bit masks from a directory into a masks.wlf file)
+    
+    * {{{unpacksprites.html}unpacksprites}} (Unpacks a ic0_9.wlf file to a directory)
+
+    * {{{packsprites.html}packsprites}} (Packs the sprites from a directory into a ic0_9.wlf file)
     
     * {{{unpackcpa.html}unpackcpa}} (Unpacks a CPA file to a directory)
     
@@ -43,6 +45,12 @@ What is the Wasteland Suite?
     * {{{unpackfnt.html}unpackfnt}} (Unpacks font characters from a fnt file to a directory)
     
     * {{{packfnt.html}packfnt}} (Packs font characters from a directory into a fnt file)
+    
+    * {{{unpackgame.html}unpackgame}} (Unpacks the maps, the shop item lists and the savegame of a game file as XML files into a directory)
+    
+    * {{{packgame.html}packgame}} (Packs the XML files for maps, shop item lists and the savegame from a directory into a game file)
+    
+    * {{{extractmaps.html}extractmaps}} (Extracts the graphical maps of the game as PNGs into a directory)
     
     * {{{fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets for tilesets and encounter animations in the wl.exe file)
     

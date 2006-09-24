@@ -8,8 +8,8 @@ packcpa
   of animation frame PNGs (001.png, 002.png, ...) and a delays.txt file 
   containing one delay (0-65534) per line for each animation frame.
 
-  The easiest way to initialize an animation directory is using unpackcpa to
-  unpack the original end.cpa from the game.
+  The easiest way to initialize an animation directory is using 
+  {{{unpackcpa.html}unpackcpa}} to unpack the original end.cpa from the game.
 
   The second parameter specifies the filename of the CPA file to write. If
   the parameter is missing or is "-" then the output is written to stdout.
