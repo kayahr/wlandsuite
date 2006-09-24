@@ -17,6 +17,9 @@
       <item name="Installation" href="install.html" />
       <item name="Report problems" href="problems.html" />
     </menu>
+    <menu name="Tutorials">
+      <item name="Game tutorial" href="tutorials/game/index.html" />
+    </menu>
     <menu name="Programs">
       <item name="decodepic" href="decodepic.html" />
       <item name="encodepic" href="encodepic.html" />

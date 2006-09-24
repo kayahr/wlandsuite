@@ -1,0 +1,19 @@
+Creating a custom game
+
+  With the {{{../../unpackgame.html}unpackgame}} and 
+  {{{../../packgame.html}packgame}} programs of the Wasteland Suite you can 
+  create you own custom game files for wasteland. This tutorial teaches you 
+  the basics of how to do this by showing you the steps to create a complete
+  new game (If you want to call it a game...) from the ground up.
+  
+  * Step 1: {{{step1.html}Create skeleton game files}}
+  
+  * Step 2: {{{step2.html}Adding a simple print action}}
+  
+  * Step 3: {{{step3.html}Making squares impassable}}
+  
+  * Step 4: {{{step4.html}Making loot bags}}
+  
+  * Step 5: {{{step5.html}Creating transitions}}
+  
+  []

@@ -530,7 +530,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:documentation>This action alters one or more squares in the map.</xs:documentation>
                 </xs:annotation></xs:element>
         </xs:choice>
-        <xs:attribute name="actionClass" type="Nibble">
+        <xs:attribute name="actionClass" type="Nibble" use="required">
             <xs:annotation>
                 <xs:documentation>
                     Defines the action class for which the actions in this
@@ -1905,10 +1905,6 @@ This attribute is optional and defaults to 1.</xs:documentation>
             <xs:element name="unknown7A" type="Bytes">
                 <xs:annotation>
                     <xs:documentation>Unknown bytes at offset 0x7A. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
-                </xs:annotation></xs:element>
-            <xs:element name="unknown7F" type="Bytes">
-                <xs:annotation>
-                    <xs:documentation>Unknown bytes at offset 0x7F. If you know what they do, please tell me: k@ailis.de.</xs:documentation>
                 </xs:annotation></xs:element>
             <xs:element name="unknown82" type="Bytes">
                 <xs:annotation>

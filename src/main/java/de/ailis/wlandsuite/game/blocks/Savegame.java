@@ -63,9 +63,6 @@ public class Savegame extends GameBlock implements Serializable
     /** The unknown data at position 0x7A */
     private Unknown unknown7A;
 
-    /** The unknown data at position 0x7F */
-    private Unknown unknown7F;
-
     /** The unknown data at position 0x82 */
     private Unknown unknown82;
 
@@ -118,7 +115,7 @@ public class Savegame extends GameBlock implements Serializable
         String header;
         SeekableInputStream xorStream;
         Savegame savegame;
-        int viewportX, viewportY;
+        int viewportX, viewportY, currentMap;
         int currentMembers, currentParty, totalMembers, totalGroups;
 
         // Read the MSQ block header and validate it
@@ -151,7 +148,7 @@ public class Savegame extends GameBlock implements Serializable
         currentMembers = xorStream.read();
         currentParty = xorStream.read();
 
-        savegame.unknown7F = Unknown.read(xorStream, 1);
+        currentMap = xorStream.read();
 
         totalMembers = xorStream.read();
         totalGroups = xorStream.read();
@@ -170,6 +167,7 @@ public class Savegame extends GameBlock implements Serializable
         // Correct the parties object
         savegame.parties.get(currentParty).setX(viewportX + 9);
         savegame.parties.get(currentParty).setY(viewportY + 4);
+        savegame.parties.get(currentParty).setMap(currentMap);
         while (savegame.parties.size() > totalGroups + 1)
         {
             savegame.parties.remove(savegame.parties.size() - 1);
@@ -240,7 +238,8 @@ public class Savegame extends GameBlock implements Serializable
             .size());
         seekStream.write(this.parties.getCurrentParty());
 
-        this.unknown7F.write(seekStream);
+        seekStream.write(this.parties.get(this.parties.getCurrentParty())
+            .getMap());
 
         seekStream.write(this.parties.getTotalMembers());
         seekStream.write(this.parties.size() - 1);
@@ -298,9 +297,6 @@ public class Savegame extends GameBlock implements Serializable
 
         // Read the unknown data at position 0x7A
         savegame.unknown7A = Unknown.read(element.element("unknown7A"), 3);
-
-        // Read the unknown data at position 0x7F
-        savegame.unknown7F = Unknown.read(element.element("unknown7F"), 1);
 
         // Read the unknown data at position 0x82
         savegame.unknown82 = Unknown.read(element.element("unknown82"), 1);
@@ -365,9 +361,6 @@ public class Savegame extends GameBlock implements Serializable
 
         // Add the unknown block at position 0x7A
         element.add(this.unknown7A.toXml("unknown7A"));
-
-        // Add the unknown block at position 0x7F
-        element.add(this.unknown7F.toXml("unknown7F"));
 
         // Add the unknown block at position 0x82
         element.add(this.unknown82.toXml("unknown82"));
