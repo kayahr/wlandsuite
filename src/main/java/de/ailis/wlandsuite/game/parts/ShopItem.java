@@ -137,12 +137,13 @@ public class ShopItem
 
         item = new ShopItem();
 
-        item.ammo = StringUtils.toInt(element.attributeValue("ammo", "0"));
-        item.capacity = StringUtils.toInt(element.attributeValue("capacity", "0"));
-        item.damage = StringUtils.toInt(element.attributeValue("damage", "0"));
         item.price = StringUtils.toInt(element.attributeValue("price", "0"));
-        item.skill = StringUtils.toInt(element.attributeValue("skill", "0"));
+        item.stock = StringUtils.toInt(element.attributeValue("stock", "0"));
         item.type = StringUtils.toInt(element.attributeValue("type", "0"));
+        item.capacity = StringUtils.toInt(element.attributeValue("capacity", "0"));
+        item.skill = StringUtils.toInt(element.attributeValue("skill", "0"));
+        item.damage = StringUtils.toInt(element.attributeValue("damage", "0"));
+        item.ammo = StringUtils.toInt(element.attributeValue("ammo", "0"));
         item.unknown = StringUtils.toInt(element.attributeValue("unknown", "0"));
 
         return item;
@@ -161,7 +162,7 @@ public class ShopItem
         stream.writeWord(this.price);
         stream.write(this.stock);
         stream.write((this.type << 3) | (this.unknown & 7));
-        stream.write(this.ammo);
+        stream.write(this.capacity);
         stream.write(this.skill);
         stream.write(this.damage);
         stream.write(this.ammo);

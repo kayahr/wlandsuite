@@ -596,7 +596,12 @@ This attribute is optional and defaults to 1.</xs:documentation>
 
     <xs:complexType name="Check">
         <xs:annotation>
-            <xs:documentation>The check action performs one or more checks on skills, attributes, items or number of members. Depending on the result of the check a message string can be printed and the square action class and action can be changed.</xs:documentation>
+            <xs:documentation>
+                The check action performs one or more checks on skills,
+                attributes, items or number of members. Depending on the result
+                of the check a message string can be printed and the square
+                action class and action can be changed.
+            </xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="Action">
@@ -697,7 +702,12 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action class to set to the square when the
-                            check passed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
+                            check passed. 255 (0xff) means no change. This is
+                            also the default value when this attribute is not
+                            used. 253 (0xfd) means replacing with the original
+                            value (Useful for concatenated actions). 254 (0xfe)
+                            means replacing with the previous value (Useful for
+                            concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -705,7 +715,12 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action to set to the square when the check
-                            passed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
+                            passed. 255 (0xff) means no change. This is also the
+                            default value when this attribute is not used. 253
+                            (0xfd) means replacing with the original value
+                            (Useful for concatenated actions). 254 (0xfe) means
+                            replacing with the previous value (Useful for
+                            concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -722,7 +737,12 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action class to set to the square when the
-                            check failed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
+                            check failed. 255 (0xff) means no change. This is
+                            also the default value when this attribute is not
+                            used. 253 (0xfd) means replacing with the original
+                            value (Useful for concatenated actions). 254 (0xfe)
+                            means replacing with the previous value (Useful for
+                            concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -730,28 +750,31 @@ This attribute is optional and defaults to 1.</xs:documentation>
                     <xs:annotation>
                         <xs:documentation>
                             The new action to set to the square when the check
-                            failed.  255 (0xff) means no change. This is also the default value when this attribute is not used. 253 (0xfd) means replacing with the original value (Useful for concatenated actions). 254 (0xfe) means replacing with the previous value (Useful for concatenating actions).
+                            failed. 255 (0xff) means no change. This is also the
+                            default value when this attribute is not used. 253
+                            (0xfd) means replacing with the original value
+                            (Useful for concatenated actions). 254 (0xfe) means
+                            replacing with the previous value (Useful for
+                            concatenating actions).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="unknown08" type="xs:string" default="0">
+                <xs:attribute name="modifierTarget" type="Byte" default="0x1d">
                     <xs:annotation>
-                        <xs:documentation>
-                            The unknown byte 8 in the check data. If you know
-                            what it does, please contact me: k@ailis.de.
-                            Defaults to 0.
+                        <xs:documentation>The target which is modified if the check fails. This is simply an offset in the Character Data. 0x1d is the CON, 0x15 is money and 0x21 is experience points. Defaults to 0x1d.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="unknown09" type="xs:string" default="0">
+                <xs:attribute name="modifier" type="xs:byte" default="0">
                     <xs:annotation>
-                        <xs:documentation>
-                            The unknown byte 9 in the check data. If you know
-                            what it does, please contact me: k@ailis.de.
-                            Defaults to 0.
+                        <xs:documentation>The modifier which is applied to the modifier target when the check fails
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="fixedModifier" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Defines if the modifier is fixed (true) or a random D6 value (false). Defaults to false.</xs:documentation>
+                    </xs:annotation></xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1601,7 +1624,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="level" type="Byte" default="0">
+        <xs:attribute name="level" type="Byte" default="1">
             <xs:annotation>
                 <xs:documentation>The level. Defaults to 1.</xs:documentation>
             </xs:annotation>
