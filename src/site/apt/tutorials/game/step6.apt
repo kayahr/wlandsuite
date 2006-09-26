@@ -2,67 +2,78 @@ Game Tutorial Step 6: Checking for skills, attributes and items
 
   With {{{http://wasteland.wikispaces.com/Check+Data}action class 2}}
   you can create checks. The check action is one of the most complicated
-  and useful action. This is one of the action that gives your map a piece
+  and useful action. This is one of the actions that gives your map a piece
   of interaction. You can create walls which are impassable but you can climb
   over it, or bomb it away or shovel a hole under it to get through. In this
   example we will create a wall which you can climb over. When you slip and
   fall then you get damage.   
-  http://wasteland.wikispaces.com/Character+Data
+
 ----
-<actions actionClass="0xa">
-  <transition id="0" 
-              relative="true" 
-              targetX="2" 
-              targetY="1" 
-              targetMap="1" 
-              message="3" />
-  <transition id="1" 
-              confirm="true"
-              relative="true" 
-              targetX="-2" 
-              targetY="1" 
-              targetMap="1" 
-              message="3" />    
-</actions>
+  <actions actionClass="2"> 
+    <check id="0" 
+           failMessage="4" 
+           passMessage="5" 
+           modifierTarget="0x1d" 
+           modifier="-1">
+      <skill value="2" difficulty="2" />
+      <item value="0x36" difficulty="2" />
+      <attribute value="0x13" difficulty="2" /> 
+    </check>    
+  </actions>
 ----
 
-  This is the first time we have more than one action in the action container. The
-  second action has the id 1 and must be referenced with the value 01 in the
-  <actionMap>. 
+  This code defines a check which displays string 5 when the check passed and
+  string 4 when the check failed. Additionaly the modifier target 0x1d (This
+  is the CON, see {{{http://wasteland.wikispaces.com/Character+Data}Character Data in the Wiki}})
+  is decremented by 1D6. This means you get 1-6 damage points when you fail
+  to climb the wall.
   
-  To reference our two new actions, add two more houses to your map. The 
-  second house must be on the right of the first house with one empty square
-  between it. Give both squares the action class <a>, give the first house the
-  action 00 and the second house the action 01.
+  The child elements of the check element defines which skills, items and
+  attributes are checked. In this example the climb skill (2), a rope (0x36)
+  and the Dexterity attribute (0x13) can be used to climb the wall. All checks
+  have the same difficulty of 2.
   
-  The first action moves the player two squares to the east and one square
-  to the south. If you placed the two houses correctly then this leads to the
-  square below the second house. When transitioning message string 3 is
-  displayed. The second action moves the player two squares to the west and one
-  square to the south. This leads to the square below the first house. This
-  action has set the attribute <confirm> to <true>. This means that the player
-  must confirm the transition (Enter new location?).
+  With the attributes <failNewActionClass> and <failNewAction> attributes of
+  the <check> tag you can change the action class and action of the square when
+  the check failes. With <passNewActionClass> and <passNewAction> you can do
+  the same when the check succeeds. You can also specify a <newActionClass> and
+  <newAction> attribute on each check sub element. If one sub element uses
+  these attributes then the <passNewActionClass> and <passNewAction> attributes
+  are ignored because then the action class and action is changed depending
+  on the check which had succeeded.
   
-  A <targetMap> value of 255 is special: This means moving the player back
-  to the previous map. This is used for example in the derelict building maps
-  of the original game. The player can enter these maps through various doors
-  and when the player leaves a derelict building the player will end up at
-  the old position again.
-  
-  Oh, we forgot to add the string which is referenced by both transitions. Here
-  it is
-  
+  There are some more possible attributes for the <check> tag. They all 
+  default to false. Here is a list of them and what they do if you set them
+  to true:
+
+*---------------+----------------------------------------------------------+
+| <passable>    | The square is passable even without a successfull check. | 
+*---------------+----------------------------------------------------------+  
+| <bypassArmor> | Bypasses the armor when calculating damage.              |
+*---------------+----------------------------------------------------------+  
+| <damageAll>   | Damages all characters when the check failes.            |
+*---------------+----------------------------------------------------------+  
+| <party>       | All party members are checked instead of just the first one. | 
+*---------------+----------------------------------------------------------+  
+| <passAll>     | All party members must pass the check for the check to succeed. |
+*---------------+----------------------------------------------------------+  
+| <unknown1>    | A flag which is used by the game but the purpose is unknown. If you know what it does, please tell me. |
+*---------------+----------------------------------------------------------+  
+
+  Here are the two strings for the check:
+    
 ----
-<string id="3">\rYou enter the house, crawl through a tunnel to another house and leave it through the door.\r</string>
+<string id="4">\rYou slip and fall...\r</string>
+<string id="5">\rYou made it! You are the king of the wall!\r</string>
 ----    
 
-  You can download the current state of the map here: {{{step5/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{step6/map01.xml}map01.xml}}.
   
-[step5.png]
+[step6.png]
   
-  {{{step4.html}Back to step 4}}
+  {{{step5.html}Back to step 5}}
   | 
   {{{index.html}Index page}} 
   | 
-  {{{step6.html}Move on to step 6}}
+  {{{step7.html}Move on to step 7}}
   

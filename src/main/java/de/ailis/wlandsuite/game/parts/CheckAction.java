@@ -370,7 +370,17 @@ public class CheckAction implements Action
         SpecialActionTable specialActionTable) throws IOException
     {
         int b;
-        boolean checkBased = this.checks.get(0).getNewActionClass() != -1;
+        boolean checkBased;
+        
+        checkBased = false;
+        for (Check check: this.checks)
+        {
+            if (check.getNewActionClass() != -1)
+            {
+                checkBased = true;
+                break;
+            }
+        }
 
         b = this.passable ? 128 : 0;
         b |= this.autoCheck ? 64 : 0;

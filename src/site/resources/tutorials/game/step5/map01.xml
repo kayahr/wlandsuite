@@ -86,6 +86,7 @@
     <loot id="0" newActionClass="0" newAction="0">
       <item value="0x14" />
       <item value="0x1f" quantity="5" />
+      <item value="0x36" />
       <itemGroup value="0x0d" quantity="2" />
       <randomMoney quantity="1000" />
     </loot>

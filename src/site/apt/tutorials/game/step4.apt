@@ -15,6 +15,7 @@ Game Tutorial Step 4: Making loot bags
   <loot id="0" newActionClass="0" newAction="0">
     <item value="0x14" />
     <item value="0x1f" quantity="5" />
+    <item value="0x36" />
     <itemGroup value="0x0d" quantity="2" />
     <randomMoney quantity="1000" />
   </loot>
@@ -22,7 +23,8 @@ Game Tutorial Step 4: Making loot bags
 ----
 
   The code above defines a loot bag with a Red Ryder (item 0x14), five 7.62mm 
-  clips (item 0x1f), two random explosives (item group 0x0d) and a random amount
+  clips (item 0x1f), two random explosives (item group 0x0d), a rope (item 0x36) 
+  and a random amount
   of money with a maximum of 1000 USD. You can find a list of items and item
   groups in the {{{http://wasteland.wikispaces.com/Items}Wiki}}. If you want
   a fixed amount of money instead then you can use the <fixedMoney> tag instead

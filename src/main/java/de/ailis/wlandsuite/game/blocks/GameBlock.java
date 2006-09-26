@@ -68,7 +68,7 @@ public abstract class GameBlock
             rootElement
                 .addAttribute(
                     "xsi:schemaLocation",
-                    "http://www.ailis.de/~k/software/projects/wlandsuite/schemas http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd");
+                    "http://ailis.de/wlandsuite http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd");
             document = DocumentHelper.createDocument(rootElement);
             writer.write(document);
         }

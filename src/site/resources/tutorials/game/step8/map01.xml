@@ -4,7 +4,7 @@
   <actionClassMap>
     ...5.a.a........................
     ................................
-    ..1.b.2.........................
+    .81.b.2.........................
     ................................
     ................................
     ................................
@@ -38,7 +38,7 @@
   <actionMap>
     .. .. .. 00 .. 00 .. 01 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
-    .. .. 00 .. 00 .. 00 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. 00 00 .. 00 .. 00 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
@@ -78,6 +78,12 @@
     <print id="0" newActionClass="0" newAction="0">
       <message>1</message>
     </print>
+    <print id="1">
+      <message>6</message>
+    </print>
+    <print id="2">
+      <message>7</message>
+    </print>
   </actions>
 
   <!-- Check actions -->
@@ -86,8 +92,17 @@
     <check id="0" failMessage="4" passMessage="5" modifierTarget="0x1d" modifier="-1">
       <skill value="2" difficulty="2" />
       <item value="0x36" difficulty="2" />
-      <attribute value="0x13" difficulty="2" /> 
+      <attribute value="0x13" difficulty="2" />
+      <item value="6" newActionClass="4" newAction="0" /> 
+      <item value="7" newActionClass="4" newAction="0" /> 
+      <item value="8" newActionClass="4" newAction="0" /> 
     </check>    
+  </actions>
+  
+  <!-- Mask actions -->
+  
+  <actions actionClass="4">
+    <mask id="0" message="11" tile="71" />
   </actions>
 
   <!-- Loot bags -->
@@ -100,6 +115,15 @@
       <itemGroup value="0x0d" quantity="2" />
       <randomMoney quantity="1000" />
     </loot>
+  </actions>
+  
+  <!--  Dialogues -->
+  
+  <actions actionClass="8">
+    <dialogue id="0" menu="true" message="8">
+      <answer message="9" newActionClass="1" newAction="1" />
+      <answer message="10" newActionClass="1" newAction="2" />
+    </dialogue>
   </actions>
 
   <!-- Transitions -->
@@ -133,6 +157,12 @@
     <string id="3">\rYou enter the house, crawl through a tunnel to another house and leave it through the door.\r</string>
     <string id="4">\rYou slip and fall...\r</string>
     <string id="5">\rYou made it! You are the king of the wall!\r</string>
+    <string id="6">\rHello, sweety! How are you?\r</string>
+    <string id="7">\rLeave me alone, filthy Ranger!\r</string>
+    <string id="8">A woman starts talking to you: "Hello, mister. Do you think I'm attractive?"\r\rY)es, ma'am, I do.\r\rN)o, you look like a weasel!\r</string>
+    <string id="9">Y</string>
+    <string id="10">N</string>
+    <string id="11">\rThe wall which was standing here is history.\r</string>
     <string id="66">\x0b attacks</string>
     <string id="67">\x0b triggers</string>
     <string id="68">\x0b discharges a burst</string>
@@ -170,7 +200,7 @@
   <tileMap>
     .. .. .. .. .. 0b .. 0b .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
-    .. .. 42 .. 77 .. 36 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. 61 42 .. 77 .. 36 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
     .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
