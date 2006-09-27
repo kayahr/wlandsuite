@@ -172,7 +172,7 @@ public class NPCs extends ArrayList<Char>
         element = XmlUtils.createElement("npcs");
 
         // Add all the npcs
-        npcNo = 0;
+        npcNo = 1;
         for (Char character: this)
         {
             // Create and append string element

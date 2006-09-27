@@ -2,9 +2,9 @@ Creating a custom game
 
   With the {{{../../unpackgame.html}unpackgame}} and 
   {{{../../packgame.html}packgame}} programs of the Wasteland Suite you can 
-  create you own custom game files for wasteland. This tutorial teaches you 
-  the basics of how to do this by shows you some steps for creating a new
-  game (If you want to call it a game...) from the ground up.
+  create you own custom game files for wasteland. This tutorial shows you some 
+  steps for creating a new game (If you want to call it a game...) from the 
+  ground up.
   
   * Step 1: {{{step1.html}Create skeleton game files}}
   
@@ -24,4 +24,17 @@ Creating a custom game
   
   * Step 9: {{{step9.html}Altering multiple squares}}
   
+  * Step 10: {{{step10.html}Adding random encounters}}
+
+  * Step 11: {{{step11.html}Adding fixed encounters}}
+  
+  * Step 12: {{{step12.html}Creating NPCs}}
+  
+  * Step 13: {{{step13.html}Adding a store}}
+  
   []
+  
+  For further details I recommend you unpack the original game files and study
+  them to learn how to do complicated stuff like the jeep on the world map
+  or the train in Needles.
+   

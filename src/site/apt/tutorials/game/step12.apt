@@ -1,0 +1,57 @@
+Game Tutorial Step 12: Adding NPCs
+
+  An NPC is just a fixed encounter with a link to NPC data. So you can just
+  use the fixed encounter from the previous step as a base.
+  
+  Add the NPC data in front of the <monsters> section:
+  
+----
+<npcs>
+  <character id="1"
+             strength="12" 
+             iq="1" 
+             dexterity="25" 
+             agility="10" 
+             speed="8" 
+             charisma="18" 
+             luck="1" 
+             maxCon="25" 
+             con="25" 
+             ac="0"
+             weapon="1"
+             joinString="17" 
+             name="Sledge Hammer">
+    <skills>
+      <skill id="3" level="8" />
+      <skill id="0x24" level="255" special="true" />
+    </skills>
+    <items>
+      <item id="0x0d" load="7" />
+    </items>
+  </character>
+</npcs>
+----
+
+  This defines the character and the skills and items of the character. Now
+  you can just link the fixed encounter we created in the previous step 
+  to this NPC character by adding the attribute <npc="1"> to it.
+  
+  You may have noticed the skill marked as <special>. These skills must have
+  ids larger then 0x23 and defines NPC skills. You can use these skill ids 
+  in check actions to check for a specific NPC.  
+  
+  Only thing missing now is the new string which is referenced by the
+  <joinString> attribute. This string is displayed, when the NPC joins you:
+  
+----
+<string id="17">\r"Ok, let's go".\r</string>  
+----
+
+  You can download the current state of the map here: {{{step12/map01.xml}map01.xml}}.
+  
+  {{{step11.html}Back to step 11}}
+  | 
+  {{{index.html}Index page}} 
+  | 
+  {{{step13.html}Move on to step 13}}
+  

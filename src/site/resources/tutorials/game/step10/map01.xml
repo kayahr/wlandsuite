@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map xmlns="http://ailis.de/wlandsuite" mapSize="32" msqSize="5739" tilemapOffset="4991" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ailis.de/~k/software/projects/wlandsuite/schemas http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd">
+  <actionClassMap>
+    ...5.a.a........................
+    ................................
+    .81.b.2.........................
+    ................................
+    .c..............................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+    ................................
+  </actionClassMap>
+  <actionMap>
+    .. .. .. 00 .. 00 .. 01 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. 00 00 .. 00 .. 00 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. 00 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+  </actionMap>
+  <info tileset="1" backgroundTile="146" timeFactor="256" encounterFrequency="75" lastMonster="2" maxEncounters="2" />
+  <battleStrings s0="66" s1="67" s2="68" s3="69" s4="70" s5="71" s6="72" s7="73" s8="74" s9="75" s10="74" s11="76" s12="77" s13="78" s14="74" s15="79" s16="74" s17="80" s18="74" s19="81" s20="82" s21="83" s22="84" s23="85" s24="86" s25="87" s26="88" s27="89" s28="90" s29="91" s30="92" s31="93" s32="94" s33="95" s34="96" s35="97" s36="98"/>
+
+  <!-- Print actions -->
+
+  <actions actionClass="1">
+    <print id="0" newActionClass="0" newAction="0">
+      <message>1</message>
+    </print>
+    <print id="1">
+      <message>6</message>
+    </print>
+    <print id="2">
+      <message>7</message>
+    </print>
+    <print id="3">
+      <message>14</message>
+    </print>
+  </actions>
+
+  <!-- Check actions -->
+  
+  <actions actionClass="2"> 
+    <check id="0" failMessage="4" passMessage="5" modifierTarget="0x1d" modifier="-1">
+      <skill value="2" difficulty="2" />
+      <item value="0x36" difficulty="2" />
+      <attribute value="0x13" difficulty="2" />
+      <item value="6" newActionClass="4" newAction="0" /> 
+      <item value="7" newActionClass="4" newAction="0" /> 
+      <item value="8" newActionClass="4" newAction="0" /> 
+    </check>    
+  </actions>
+  
+  <!-- Fixed encounters -->
+  <actions actionClass="3">
+    <encounter id="0" 
+               friendly="true"
+               message="15"
+               monster1="1" 
+               properName="true"
+               maxGroupSize1="1" 
+               visibleDistance="100"
+               hitDistance="30" 
+               newActionClass="0" 
+               newAction="0" />
+  </actions>
+  
+  <!-- Mask actions -->
+  
+  <actions actionClass="4">
+    <mask id="0" message="11" tile="71" />
+  </actions>
+
+  <actions actionClass="4">
+    <mask id="1" message="13" tile="54" impassable="true" />
+  </actions>
+
+  <!-- Loot bags -->
+
+  <actions actionClass="5">
+    <loot id="0" newActionClass="0" newAction="0">
+      <item value="0x14" />
+      <item value="0x1f" quantity="5" />
+      <item value="0x36" />
+      <itemGroup value="0x0d" quantity="2" />
+      <randomMoney quantity="1000" />
+    </loot>
+  </actions>
+  
+  <!--  Dialogues -->
+  
+  <actions actionClass="8">
+    <dialogue id="0" menu="true" message="8">
+      <answer message="9" newActionClass="1" newAction="1" />
+      <answer message="10" newActionClass="1" newAction="2" />
+    </dialogue>
+  </actions>
+
+  <!-- Transitions -->
+
+  <actions actionClass="0xa">
+    <transition id="0" 
+                relative="true" 
+                targetX="2" 
+                targetY="1" 
+                targetMap="1" 
+                message="3" />
+    <transition id="1" 
+                confirm="true"
+                relative="true" 
+                targetX="-2" 
+                targetY="1" 
+                targetMap="1" 
+                message="3" />    
+  </actions>
+
+  <!-- Impassable actions -->
+
+  <actions actionClass="0xb">
+    <impassable id="0" message="2" />
+  </actions>
+  
+  <!-- Alter actions -->
+  
+  <actions actionClass="0xc">
+    <alteration id="0" message="12" newActionClass="1" newAction="3">
+      <alter relative="true" x="1" y="0" newActionClass="4" newAction="1" />
+      <alter relative="true" x="2" y="0" newActionClass="4" newAction="1" />
+      <alter relative="true" x="3" y="0" newActionClass="4" newAction="1" />
+      <alter relative="true" x="4" y="0" newActionClass="4" newAction="1" />
+      <alter relative="true" x="4" y="1" newActionClass="4" newAction="1" />
+      <alter relative="true" x="4" y="2" newActionClass="4" newAction="1" />
+      <alter relative="true" x="4" y="3" newActionClass="4" newAction="1" />
+      <alter relative="true" x="3" y="3" newActionClass="4" newAction="1" />
+      <alter relative="true" x="2" y="3" newActionClass="4" newAction="1" />
+      <alter relative="true" x="1" y="3" newActionClass="4" newAction="1" />
+      <alter relative="true" x="1" y="2" newActionClass="4" newAction="1" />
+      <alter relative="true" x="1" y="1" newActionClass="4" newAction="1" />
+    </alteration>
+  </actions>
+  
+  <!-- Random encounters -->
+  
+  <actions actionClass="0xf">
+    <encounter id="0" message="15" newActionClass="0" newAction="0" />
+    <encounter id="1" message="15" newActionClass="0" newAction="0" />
+  </actions>
+  
+  <!-- Monsters -->
+  
+  <monsters>
+    <monster id="0" />
+    <monster id="1" 
+             name="Visa \nman\nmen\n" 
+             ac="1" 
+             experience="15" 
+             skill="10" 
+             fixedDamage="0" 
+             randomDamage="1" 
+             maxGroupSize="2"
+             weaponType="2" 
+             monsterType="3"
+             picture="32" />
+    <monster id="2"
+             name="Brother Tux" 
+             ac="2" 
+             experience="20" 
+             skill="15" 
+             fixedDamage="0" 
+             randomDamage="2" 
+             maxGroupSize="1"
+             weaponType="2" 
+             monsterType="3"
+             picture="31" />
+  </monsters> 
+
+  <strings>
+    <string id="0"></string>
+    <string id="1">\rA nice apple tree. You climb up and eat all the apples.\r</string>
+    <string id="2">\rBONG! Didn't you see the house standing here? Go around!\r</string>
+    <string id="3">\rYou enter the house, crawl through a tunnel to another house and leave it through the door.\r</string>
+    <string id="4">\rYou slip and fall...\r</string>
+    <string id="5">\rYou made it! You are the king of the wall!\r</string>
+    <string id="6">\rHello, sweety! How are you?\r</string>
+    <string id="7">\rLeave me alone, filthy Ranger!\r</string>
+    <string id="8">A woman starts talking to you: "Hello, mister. Do you think I'm attractive?"\r\rY)es, ma'am, I do.\r\rN)o, you look like a weasel!\r</string>
+    <string id="9">Y</string>
+    <string id="10">N</string>
+    <string id="11">\rThe wall which was standing here is history.\r</string>
+    <string id="12">\r"A wall? Yes, Sir! Give me just a second, Sir!"\r</string>
+    <string id="13">\rA nice wall made of stone.\r</string>
+    <string id="14">\r"A nice wall. Isn't it, Sir?" says the worker.\r</string>
+    <string id="15">A freak crawls out of his hole. It's better you bring him back...\r</string>  
+    <string id="66">\x0b attacks</string>
+    <string id="67">\x0b triggers</string>
+    <string id="68">\x0b discharges a burst</string>
+    <string id="69">Sub-atomic particles burst from \x0b</string>
+    <string id="70">\x0b fires full auto</string>
+    <string id="71">\x0b chucks an explosive charge</string>
+    <string id="72">\x0b lauches a shell</string>
+    <string id="73">hits \x0f </string>
+    <string id="74"> for </string>
+    <string id="75">hits \x0f </string>
+    <string id="76">\x0f </string>
+    <string id="77"> \nis\nare\n raked in a crossfire of bullets for </string>
+    <string id="78">bores through \x0f </string>
+    <string id="79">tears a jagged rent in \x0f </string>
+    <string id="80">inflames \x0f </string>
+    <string id="81"> but fail\ns\n\n to inflict any damage</string>
+    <string id="82"> drills </string>
+    <string id="83"> blazes away at </string>
+    <string id="84"> sprays </string>
+    <string id="85"> triggers a burst at </string>
+    <string id="86"> fries </string>
+    <string id="87"> toasts </string>
+    <string id="88"> and hits for </string>
+    <string id="89"> beat\ns\n\n </string>
+    <string id="90"> hammer\ns\n\n </string>
+    <string id="91"> thrashes </string>
+    <string id="92"> mauls </string>
+    <string id="93"> whomps on </string>
+    <string id="94"> pounds at </string>
+    <string id="95"> and rips \x0ehim\x0eher\x0eit\x0e to shreds</string>
+    <string id="96"> and shreds \x0ehim\x0eher\x0eit\x0e</string>
+    <string id="97"> spinning \n\x0ehim\x0eher\x0eit\x0e\n\x0f of them\n into a dance of death</string>
+    <string id="98"> reducing \n\x0ehim\x0eher\x0eit\x0e\n\x0f of them\n to a thin red paste</string>
+  </strings>
+  <tileMap>
+    .. .. .. .. .. 0b .. 0b .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. 61 42 .. 77 .. 36 .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. 0c .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+  </tileMap>
+</map>
