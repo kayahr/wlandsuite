@@ -49,7 +49,7 @@ public class CheckAction implements Action
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(CheckAction.class);
-    
+
     /** If the square is passable even without a successful check */
     private boolean passable;
 
@@ -106,10 +106,10 @@ public class CheckAction implements Action
 
     /** If the modifier is a fixed value instead of a random dice role */
     private boolean fixedModifier;
-    
+
     /** The modifier target */
     private int modifierTarget;
-    
+
     /** The modifier */
     private int modifier;
 
@@ -132,7 +132,7 @@ public class CheckAction implements Action
     {
         CheckAction action;
         Check check;
-        int flags, b;
+        int flags, b, b1, b2;
         boolean checkBased;
 
         action = new CheckAction();
@@ -153,11 +153,11 @@ public class CheckAction implements Action
         action.passNewAction = stream.readByte();
         action.failNewActionClass = stream.readByte();
         action.failNewAction = stream.readByte();
-        b = stream.readByte();
-        action.fixedModifier = (b & 128) == 128;
-        action.modifierTarget = b & 127;
-        b = stream.readByte();
-        action.modifier = (b & 127) * (((b & 128) == 128) ? -1 : 1);
+        b1 = stream.readByte();
+        action.fixedModifier = (b1 & 128) == 128;
+        action.modifierTarget = b1 & 127;
+        b2 = stream.readByte();
+        action.modifier = (b2 & 127) * (((b2 & 128) == 128) ? -1 : 1);
 
         while ((check = Check.read(stream)) != null)
         {
@@ -179,8 +179,7 @@ public class CheckAction implements Action
             && action.passNewActionClass == 2 && action.passNewAction == 35
             && action.failNewActionClass == 2 && action.failNewAction == 35
             && action.modifierTarget == 0 && action.modifier == 0
-            && !action.fixedModifier
-            && action.checks.size() > 2
+            && !action.fixedModifier && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN6)
         {
             log.info("Patching safe-check (5) on map 3");
@@ -194,28 +193,36 @@ public class CheckAction implements Action
             && action.passNewActionClass == 8 && action.passNewAction == 5
             && action.failNewActionClass == 255 && action.failNewAction == 0
             && action.modifierTarget == 0 && action.modifier == 4
-            && !action.fixedModifier
-            && action.checks.size() > 2
+            && !action.fixedModifier && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN7)
         {
             log.info("Patching safe-check (20) on map 4");
-            action.checks.remove(9);
-            action.checks.remove(8);
-            action.checks.remove(7);
-            action.checks.remove(6);
-            action.checks.remove(5);
-            action.checks.remove(4);
-            action.checks.remove(3);
-            action.checks.remove(2);
+
+            List<Check> newChecks = new ArrayList<Check>();
+            check = new Check();
+            check.setType(b2 >> 5);
+            check.setDifficulty(b2 & 31);
+            check.setValue((action.checks.get(0).getType() << 5)
+                | action.checks.get(0).getDifficulty());
+            newChecks.add(check);
+            check = new Check();
+            b = action.checks.get(0).getValue();
+            check.setType(b >> 5);
+            check.setDifficulty(b & 31);
+            check.setValue((action.checks.get(1).getType() << 5)
+                | action.checks.get(1).getDifficulty());
+            newChecks.add(check);
+            action.checks = newChecks;
+            action.modifier = 0;
+            action.failNewAction = 0xff;
         }
 
         // Bugfix for Barrier-check on map 7 of game2
         if (flags == 0 && action.startMessage == 36 && action.passMessage == 0
             && action.failMessage == 0 && action.passNewActionClass == 255
             && action.passNewAction == 255 && action.failNewActionClass == 255
-            && action.failNewAction == 255 
-            && action.modifierTarget == 0 && action.modifier == 0
-            && !action.fixedModifier
+            && action.failNewAction == 255 && action.modifierTarget == 0
+            && action.modifier == 0 && !action.fixedModifier
             && action.checks.size() > 2
             && action.checks.get(2).getType() == Check.TYPE_UNKNOWN4)
         {
@@ -269,12 +276,12 @@ public class CheckAction implements Action
             "failNewActionClass", "255"));
         action.failNewAction = StringUtils.toInt(element.attributeValue(
             "failNewAction", "255"));
-        action.fixedModifier = Boolean.parseBoolean(element.attributeValue("fixedModifier",
-            "false"));
+        action.fixedModifier = Boolean.parseBoolean(element.attributeValue(
+            "fixedModifier", "false"));
         action.modifierTarget = StringUtils.toInt(element.attributeValue(
             "modifierTarget", "0x1d"));
-        action.modifier = StringUtils.toInt(element.attributeValue(
-            "modifier", "0"));
+        action.modifier = StringUtils.toInt(element.attributeValue("modifier",
+            "0"));
 
         // Read the checks
         for (Object check: element.elements())
@@ -324,28 +331,29 @@ public class CheckAction implements Action
         }
         if (this.passNewActionClass != 255)
         {
-            element.addAttribute("passNewActionClass", StringUtils.toHex
-                (this.passNewActionClass));
+            element.addAttribute("passNewActionClass", StringUtils
+                .toHex(this.passNewActionClass));
         }
         if (this.passNewAction != 255)
         {
-            element.addAttribute("passNewAction", StringUtils.toHex
-                (this.passNewAction));
+            element.addAttribute("passNewAction", StringUtils
+                .toHex(this.passNewAction));
         }
         if (this.failNewActionClass != 255)
         {
-            element.addAttribute("failNewActionClass", StringUtils.toHex
-                (this.failNewActionClass));
+            element.addAttribute("failNewActionClass", StringUtils
+                .toHex(this.failNewActionClass));
         }
         if (this.failNewAction != 255)
         {
-            element.addAttribute("failNewAction", StringUtils.toHex
-                (this.failNewAction));
+            element.addAttribute("failNewAction", StringUtils
+                .toHex(this.failNewAction));
         }
         if (this.fixedModifier) element.addAttribute("fixedModifier", "true");
         if (this.modifierTarget != 0x1d)
         {
-            element.addAttribute("modifierTarget", StringUtils.toHex(this.modifierTarget));
+            element.addAttribute("modifierTarget", StringUtils
+                .toHex(this.modifierTarget));
         }
         if (this.modifier != 0)
         {
@@ -371,7 +379,7 @@ public class CheckAction implements Action
     {
         int b;
         boolean checkBased;
-        
+
         checkBased = false;
         for (Check check: this.checks)
         {
@@ -846,7 +854,7 @@ public class CheckAction implements Action
         this.passAll = passAll;
     }
 
-    
+
     /**
      * Returns the unknown1.
      * 
@@ -858,7 +866,7 @@ public class CheckAction implements Action
         return this.unknown1;
     }
 
-    
+
     /**
      * Sets the unknown1.
      * 
@@ -871,76 +879,76 @@ public class CheckAction implements Action
         this.unknown1 = unknown1;
     }
 
-    
+
     /**
      * Returns the fixedModifier.
-     *
+     * 
      * @return The fixedModifier
      */
-    
+
     public boolean isFixedModifier()
     {
         return this.fixedModifier;
     }
 
-    
+
     /**
      * Sets the fixedModifier.
-     *
-     * @param fixedModifier 
+     * 
+     * @param fixedModifier
      *            The fixedModifier to set
      */
-    
+
     public void setFixedModifier(boolean fixedModifier)
     {
         this.fixedModifier = fixedModifier;
     }
 
-    
+
     /**
      * Returns the modifier.
-     *
+     * 
      * @return The modifier
      */
-    
+
     public int getModifier()
     {
         return this.modifier;
     }
 
-    
+
     /**
      * Sets the modifier.
-     *
-     * @param modifier 
+     * 
+     * @param modifier
      *            The modifier to set
      */
-    
+
     public void setModifier(int modifier)
     {
         this.modifier = modifier;
     }
 
-    
+
     /**
      * Returns the modifierTarget.
-     *
+     * 
      * @return The modifierTarget
      */
-    
+
     public int getModifierTarget()
     {
         return this.modifierTarget;
     }
 
-    
+
     /**
      * Sets the modifierTarget.
-     *
-     * @param modifierTarget 
+     * 
+     * @param modifierTarget
      *            The modifierTarget to set
      */
-    
+
     public void setModifierTarget(int modifierTarget)
     {
         this.modifierTarget = modifierTarget;

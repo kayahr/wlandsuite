@@ -5,6 +5,11 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
+    <release version="1.2.1" date="2006-09-28" desc="Bugfix release">
+      <action dev="k" type="fix">
+        Patch for safe check (20) on map 4 was not working correctly. 
+      </action>
+    </release>
     <release version="1.2.0" date="2006-09-24" desc="Major update">
       <action dev="k" type="add">
         Added full read and write support for the game files. unpackgame
