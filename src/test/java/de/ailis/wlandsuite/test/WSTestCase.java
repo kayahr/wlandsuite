@@ -234,7 +234,8 @@ public abstract class WSTestCase extends TestCase
         env = new String[1];
         env[0] = "CLASSPATH=target/classes" + File.pathSeparatorChar
             + "src/test/lib/java-getopt.jar" + File.pathSeparatorChar
-            + "src/test/lib/commons-logging.jar";
+            + "src/test/lib/commons-logging.jar" + File.pathSeparatorChar
+            + "src/test/lib/dom4j.jar";
 
         if (command.startsWith("wlandsuite"))
         {
@@ -249,8 +250,8 @@ public abstract class WSTestCase extends TestCase
         process.getOutputStream().close();
         err = readString(process.getErrorStream());
         out = readString(process.getInputStream());
-        assertRegex(outExpr, out);
         assertRegex(errExpr, err);
+        assertRegex(outExpr, out);
         try
         {
             assertEquals(statusCode, process.waitFor());

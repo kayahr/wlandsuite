@@ -25,6 +25,7 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -154,39 +155,57 @@ public class TileMap
      * 
      * @param stream
      *            The stream to read the tile map from
+     * @param mapSize
+     *            Defines the tilemap size. If this is 0 then the size is read
+     *            from the tile map itself. This only works for the original
+     *            game files. So if a map size != 0 is specified then it is
+     *            assumed that we have to read Displacer's hacked data files.
      * @return The new Tile Map
      * @throws IOException
      */
 
-    public static TileMap read(SeekableInputStream stream) throws IOException
+    public static TileMap read(SeekableInputStream stream, int mapSize)
+        throws IOException
     {
-        int mapSize;
         TileMap tileMap;
-        HuffmanInputStream huffmanStream;
+        InputStream huffmanStream;
+        boolean compressed;
+
+        compressed = mapSize == 0;
 
         // Read map size from stream
-        mapSize = stream.readSignedInt();
-        if (mapSize == 32 * 32)
+        if (compressed)
         {
-            mapSize = 32;
-        }
-        else if (mapSize == 64 * 64)
-        {
-            mapSize = 64;
-        }
-        else
-        {
-            throw new IOException("Invalid Tile Map header");
+            mapSize = stream.readSignedInt();
+            if (mapSize == 32 * 32)
+            {
+                mapSize = 32;
+            }
+            else if (mapSize == 64 * 64)
+            {
+                mapSize = 64;
+            }
+            else
+            {
+                throw new IOException("Invalid Tile Map header");
+            }
         }
 
         // Create the new TileMap
         tileMap = new TileMap(mapSize);
 
         // Read the unknown 32 bit value
-        tileMap.unknown = stream.readSignedInt();
+        if (compressed)
+        {
+            tileMap.unknown = stream.readSignedInt();
+            huffmanStream = new HuffmanInputStream(stream);
+        }
+        else
+        {
+            huffmanStream = stream;
+        }
 
         // Read the tile map data
-        huffmanStream = new HuffmanInputStream(stream);
         for (int y = 0; y < mapSize; y++)
         {
             for (int x = 0; x < mapSize; x++)
@@ -266,10 +285,13 @@ public class TileMap
      * 
      * @param stream
      *            The stream to write the Tile Map to
+     * @param compress
+     *            If the tile map should be compressed
      * @throws IOException
      */
 
-    public void write(SeekableOutputStream stream) throws IOException
+    public void write(SeekableOutputStream stream, boolean compress)
+        throws IOException
     {
         int mapSize;
         ByteArrayOutputStream byteStream;
@@ -281,8 +303,11 @@ public class TileMap
         mapSize = this.map.length;
 
         // Write the Tile Map header
-        stream.writeInt(mapSize * mapSize);
-        stream.writeInt(this.unknown);
+        if (compress)
+        {
+            stream.writeInt(mapSize * mapSize);
+            stream.writeInt(this.unknown);
+        }
 
         // Write the Tile Map data
         byteStream = new ByteArrayOutputStream();
@@ -294,10 +319,17 @@ public class TileMap
             }
         }
         bytes = byteStream.toByteArray();
-        tree = HuffmanTree.create(bytes);
-        huffmanStream = new HuffmanOutputStream(stream, tree);
-        huffmanStream.write(bytes);
-        huffmanStream.flush();
+        if (compress)
+        {
+            tree = HuffmanTree.create(bytes);
+            huffmanStream = new HuffmanOutputStream(stream, tree);
+            huffmanStream.write(bytes);
+            huffmanStream.flush();
+        }
+        else
+        {
+            stream.write(bytes);
+        }
     }
 
 

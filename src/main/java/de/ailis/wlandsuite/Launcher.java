@@ -158,6 +158,16 @@ public class Launcher extends CLIProg
             ExtractMaps.main(newArgs);
             System.exit(0);
         }
+        else if ("decodemap".equals(command))
+        {
+            DecodeMap.main(newArgs);
+            System.exit(0);
+        }
+        else if ("encodemap".equals(command))
+        {
+            EncodeMap.main(newArgs);
+            System.exit(0);
+        }
         else
         {
             wrongUsage("Unknown command: " + command);

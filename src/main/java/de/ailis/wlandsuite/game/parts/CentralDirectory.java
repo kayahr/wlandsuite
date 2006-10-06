@@ -62,6 +62,9 @@ public class CentralDirectory
 
     /** The NPC offset */
     private int npcOffset;
+    
+    /** The tilemap offset (Only used internaly, not exported to game files) */
+    private int tilemapOffset;
 
 
     /**
@@ -466,5 +469,30 @@ public class CentralDirectory
         {
             this.nibble6Offset = 0;
         }
+    }
+
+
+    /**
+     * Returns the tilemap offset.
+     *
+     * @return The tilemap offset
+     */
+    
+    public int getTilemapOffset()
+    {
+        return this.tilemapOffset;
+    }
+
+
+    /**
+     * Sets the tilemap offset.
+     *
+     * @param tilemapOffset 
+     *            The tilemap offset to set
+     */
+    
+    public void setTilemapOffset(int tilemapOffset)
+    {
+        this.tilemapOffset = tilemapOffset;
     }
 }

@@ -23,29 +23,22 @@
 
 package de.ailis.wlandsuite;
 
+import java.io.File;
 import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import de.ailis.wlandsuite.test.WSTestCase;
 
 
 /**
- * Tests the Launcher program. Also is the base for all the other program tests.
+ * Tests the EncodeMap program.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
-public class LauncherTest extends WSTestCase
+public class EncodeMapTest extends LauncherTest
 {
-    /** The program name */
-    protected String progName;
-
-    /** The program version */
-    protected String version = "1.2.1";
-
-
     /**
      * Returns the test suite.
      * 
@@ -54,7 +47,7 @@ public class LauncherTest extends WSTestCase
 
     public static Test suite()
     {
-        return new TestSuite(LauncherTest.class);
+        return new TestSuite(EncodeMapTest.class);
     }
 
 
@@ -65,7 +58,7 @@ public class LauncherTest extends WSTestCase
     @Override
     public void setUp()
     {
-        this.progName = "wlandsuite";
+        this.progName = "encodemap";
     }
 
 
@@ -75,46 +68,28 @@ public class LauncherTest extends WSTestCase
      * @throws IOException
      */
 
+    @Override
     public void testEmpty() throws IOException
     {
-        testExec(this.progName, 2, "", "^" + this.progName
-            + ": ERROR! No command specified\n" + "Try '" + this.progName
-            + " --help' for more information\\.\n$");
+        testExec(this.progName, 1, "",
+            "^encodemap: ERROR! Unable to read XML document: .*");
     }
 
 
     /**
-     * Tests version display
+     * Tests converting from file to file.
      * 
      * @throws IOException
      */
 
-    public void testVersion() throws IOException
+    public void testFileFile() throws IOException
     {
-        testExec(
-            this.progName + " --version",
-            0,
-            "^wlandsuite "
-                + this.version
-                + "\n\nCopyright \\(C\\) 2006 by Klaus Reimer\n\nPermission.*SOFTWARE\\.\n$",
-            "");
-    }
+        File file;
 
-
-    /**
-     * Tests help display
-     * 
-     * @throws IOException
-     */
-
-    public void testHelp() throws IOException
-    {
-        testExec(
-            this.progName + " --help",
-            0,
-            "^Usage: "
-                + this.progName
-                + " \\[OPTION\\]\\.\\.\\..*\nReport bugs to Klaus Reimer <k@ailis.de>\n$",
-            "");
+        file = File.createTempFile("encodemap", ".dat");
+        testExec("encodemap src/test/resources/map/test.xml " + file.getPath(),
+            0, "^encodemap: Success\n$", "");
+        assertEquals(new File("src/test/resources/map/test"), file);
+        file.delete();
     }
 }

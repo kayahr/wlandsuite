@@ -172,12 +172,9 @@ public class GameMap extends GameBlock implements Serializable
         byte[] bytes;
         int mapSize;
         int encSize;
-        int monsterDataOffset;
         int tilemapOffset;
         GameMap gameMap;
         long startOffset;
-        CentralDirectory centralDirectory;
-        SpecialActionTable specialActionTable;
 
         // Read the MSQ block header and validate it
         headerBytes = new byte[4];
@@ -218,33 +215,64 @@ public class GameMap extends GameBlock implements Serializable
         // Create the Game Map
         gameMap = new GameMap(mapSize, msqBlockSize, tilemapOffset);
 
-        // Read the action map
-        gameMap.actionClassMap = ActionClassMap.read(stream, mapSize);
+        // Read the map data
+        gameMap.readMapData(stream, tilemapOffset, mapSize, true);
+
+        // Return the created map
+        return gameMap;
+    }
+
+
+    /**
+     * Reads the map data from the given stream. This method is internally
+     * called by the read and read and readHacked method.
+     * 
+     * @param stream
+     *            The input stream
+     * @param tilemapOffset
+     *            The offset of the tilemap
+     * @param mapSize
+     *            The size of the map
+     * @param compressedTileMap
+     *            Defines if the tilemap is compressed and therefor must be
+     *            decompressed first
+     * @throws IOException
+     */
+
+    private void readMapData(SeekableInputStream stream, int tilemapOffset,
+        int mapSize, boolean compressedTileMap) throws IOException
+    {
+        CentralDirectory centralDirectory;
+        SpecialActionTable specialActionTable;
+        int monsterDataOffset;
 
         // Read the action map
-        gameMap.actionMap = ActionMap.read(stream, mapSize);
+        this.actionClassMap = ActionClassMap.read(stream, mapSize);
+
+        // Read the action map
+        this.actionMap = ActionMap.read(stream, mapSize);
 
         // Read the central directory
         centralDirectory = CentralDirectory.read(stream);
 
         // Read the map info
         stream.skip(1);
-        gameMap.info = Info.read(stream);
+        this.info = Info.read(stream);
 
         // Read the battle strings
-        gameMap.battleStrings = BattleStrings.read(stream);
+        this.battleStrings = BattleStrings.read(stream);
 
         // Read the tiles map
         stream.seek(tilemapOffset);
-        gameMap.tileMap = TileMap.read(stream);
+        this.tileMap = TileMap.read(stream, compressedTileMap ? 0 : mapSize);
 
         // Read the strings
         stream.seek(centralDirectory.getStringsOffset());
-        gameMap.strings = Strings.read(stream, tilemapOffset);
+        this.strings = Strings.read(stream, tilemapOffset);
 
         // Read the NPCs
         stream.seek(centralDirectory.getNpcOffset());
-        gameMap.npcs = NPCs.read(stream);
+        this.npcs = NPCs.read(stream);
 
         // Read the monsters if present
         monsterDataOffset = centralDirectory.getMonsterDataOffset();
@@ -255,16 +283,15 @@ public class GameMap extends GameBlock implements Serializable
             quantity = (centralDirectory.getStringsOffset() - monsterDataOffset) / 8;
 
             stream.seek(centralDirectory.getMonsterNamesOffset());
-            gameMap.monsters = Monsters.read(stream, monsterDataOffset,
-                quantity);
+            this.monsters = Monsters.read(stream, monsterDataOffset, quantity);
         }
         else
         {
-            gameMap.monsters = new Monsters();
+            this.monsters = new Monsters();
         }
 
         // Sanitizes the central directory
-        centralDirectory.sanitizeCentralDirectory(gameMap);
+        centralDirectory.sanitizeCentralDirectory(this);
 
         // Read the special action table
         stream.seek(centralDirectory.getNibble6Offset());
@@ -277,43 +304,71 @@ public class GameMap extends GameBlock implements Serializable
             if (offset != 0)
             {
                 stream.seek(offset);
-                gameMap.actions.put(i, Actions.read(i, stream,
-                    specialActionTable));
+                this.actions
+                    .put(i, Actions.read(i, stream, specialActionTable));
             }
             else
             {
-                gameMap.actions.put(i, new Actions());
+                this.actions.put(i, new Actions());
             }
         }
-
-        // Return the newly created Game Map
-        return gameMap;
     }
 
 
     /**
-     * Writes the map to the specified output stream.
+     * Reads a hacked map (For Displacer's hacked EXE) from the given input
+     * stream.
      * 
      * @param stream
-     *            The output stream
-     * @param disk
-     *            The disk id (0 or 1)
+     *            The input stream
+     * @return The map
      * @throws IOException
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public static GameMap readHacked(InputStream stream) throws IOException
     {
-        ByteArrayOutputStream byteStream;
+        int tilemapOffset, mapSize;
+        SeekableInputStream gameStream;
+        GameMap map;
+
+        gameStream = new SeekableInputStream(stream);
+        tilemapOffset = gameStream.readWord();
+        mapSize = gameStream.read();
+        if (tilemapOffset == -1 || mapSize == -1)
+        {
+            throw new IOException("Unexpected end of stream while reading map");
+        }
+
+        gameStream = new SeekableInputStream(stream);
+        map = new GameMap(mapSize, 0, 0);
+        map.readMapData(gameStream, tilemapOffset, mapSize, false);
+
+        return map;
+    }
+
+
+    /**
+     * Writes the map data to the specified output stream. This method is used
+     * internally by the write and writeHacked methods.
+     * 
+     * @param stream
+     *            The output stream
+     * @param compressTilemap
+     *            If the tile map should be compressed
+     * @return The central directory
+     * @throws IOException
+     */
+
+    private CentralDirectory writeMapData(OutputStream stream,
+        boolean compressTilemap) throws IOException
+    {
         SeekableOutputStream plainStream;
         CentralDirectory centralDirectory;
         int stringsOffset;
         long directoryOffset;
-        RotatingXorOutputStream xorStream;
-        byte[] bytes;
         SpecialActionTable specialActionTable;
 
-        byteStream = new ByteArrayOutputStream();
-        plainStream = new SeekableOutputStream(byteStream);
+        plainStream = new SeekableOutputStream(stream);
 
         // Write the action class map
         this.actionClassMap.write(plainStream);
@@ -381,28 +436,35 @@ public class GameMap extends GameBlock implements Serializable
         this.strings.write(plainStream);
 
         // Add padding
-        if (plainStream.tell() > this.tilemapOffset)
+        if (compressTilemap)
         {
-            log.warn("Too much data before tile map. Fixing "
-                + "offsets in wl.exe is needed to run this game file");
-        }
-        else
-        {
-            plainStream.skip(this.tilemapOffset - plainStream.tell());
+            if (plainStream.tell() > this.tilemapOffset)
+            {
+                log.warn("Too much data before tile map. Fixing "
+                    + "offsets in wl.exe is needed to run this game file");
+            }
+            else
+            {
+                plainStream.skip(this.tilemapOffset - plainStream.tell());
+            }
         }
 
         // Write the tile map
-        this.tileMap.write(plainStream);
+        centralDirectory.setTilemapOffset((int) plainStream.tell());
+        this.tileMap.write(plainStream, compressTilemap);
 
         // Add padding
-        if (plainStream.tell() > this.msqSize - 6)
+        if (compressTilemap)
         {
-            log.warn("Tilemap too large. Fixing offsets in wl.exe is needed "
-                + "to run this game file");
-        }
-        else
-        {
-            plainStream.skip(this.msqSize - 6 - plainStream.tell());
+            if (plainStream.tell() > this.msqSize - 6)
+            {
+                log.warn("Tilemap too large. Fixing offsets in wl.exe is needed "
+                    + "to run this game file");
+            }
+            else
+            {
+                plainStream.skip(this.msqSize - 6 - plainStream.tell());
+            }
         }
 
         // Write the central directory
@@ -411,7 +473,32 @@ public class GameMap extends GameBlock implements Serializable
 
         // Flush the stream, it's complete now
         plainStream.flush();
+
+        return centralDirectory;
+    }
+
+    /**
+     * Writes the map to the specified output stream.
+     * 
+     * @param stream
+     *            The output stream
+     * @param disk
+     *            The disk id (0 or 1)
+     * @throws IOException
+     */
+
+    public void write(OutputStream stream, int disk) throws IOException
+    {
+        ByteArrayOutputStream byteStream;
+        RotatingXorOutputStream xorStream;
+        byte[] bytes;
+        CentralDirectory centralDirectory;
+        int stringsOffset;
+
+        byteStream = new ByteArrayOutputStream();
+        centralDirectory = writeMapData(byteStream, true);
         bytes = byteStream.toByteArray();
+        stringsOffset = centralDirectory.getStringsOffset();
 
         // Write the MSQ header
         stream.write("msq".getBytes());
@@ -424,6 +511,34 @@ public class GameMap extends GameBlock implements Serializable
 
         // Write the unencrypted data
         stream.write(bytes, stringsOffset, bytes.length - stringsOffset);
+    }
+
+
+    /**
+     * Writes an external map file compatible to Displacer's hacked EXE file.
+     * 
+     * @param stream
+     *            The stream to write the map to
+     * @throws IOException
+     */
+
+    public void writeHacked(OutputStream stream) throws IOException
+    {
+        ByteArrayOutputStream byteStream;
+        byte[] bytes;
+        CentralDirectory centralDirectory;
+        int tilemapOffset;
+
+        byteStream = new ByteArrayOutputStream();
+        centralDirectory = writeMapData(byteStream, false);
+        tilemapOffset = centralDirectory.getTilemapOffset();
+        bytes = byteStream.toByteArray();
+
+        // Write the data
+        stream.write(tilemapOffset & 255);
+        stream.write(tilemapOffset >> 8);
+        stream.write(this.mapSize);
+        stream.write(bytes);
     }
 
 
@@ -485,9 +600,9 @@ public class GameMap extends GameBlock implements Serializable
 
         // Read map configuration
         mapSize = StringUtils.toInt(element.attributeValue("mapSize"));
-        msqSize = StringUtils.toInt(element.attributeValue("msqSize"));
-        tilemapOffset = StringUtils.toInt(element
-            .attributeValue("tilemapOffset"));
+        msqSize = StringUtils.toInt(element.attributeValue("msqSize", "0"));
+        tilemapOffset = StringUtils.toInt(element.attributeValue(
+            "tilemapOffset", "0"));
 
         // Create the new map
         gameMap = new GameMap(mapSize, msqSize, tilemapOffset);
@@ -566,9 +681,15 @@ public class GameMap extends GameBlock implements Serializable
         // Create the root element
         element = XmlUtils.createElement("map");
         element.addAttribute("mapSize", Integer.toString(this.mapSize));
-        element.addAttribute("msqSize", Integer.toString(this.msqSize));
-        element.addAttribute("tilemapOffset", Integer
-            .toString(this.tilemapOffset));
+        if (this.msqSize != 0)
+        {
+            element.addAttribute("msqSize", Integer.toString(this.msqSize));
+        }
+        if (this.tilemapOffset != 0)
+        {
+            element.addAttribute("tilemapOffset", Integer
+                .toString(this.tilemapOffset));
+        }
 
         // Add the action map
         element.add(this.actionClassMap.toXml());
