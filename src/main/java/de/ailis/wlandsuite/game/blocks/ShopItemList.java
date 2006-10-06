@@ -75,7 +75,6 @@ public class ShopItemList extends GameBlock implements Serializable
         byte[] headerBytes;
         String header;
         SeekableInputStream xorStream;
-        ShopItemList shopItems;
 
         // Read the MSQ block header and validate it
         headerBytes = new byte[4];
@@ -89,19 +88,59 @@ public class ShopItemList extends GameBlock implements Serializable
         // Read/Decrypt the MSQ block
         xorStream = new SeekableInputStream(new RotatingXorInputStream(stream));
 
+        return readData(xorStream);
+    }
+
+
+    /**
+     * Reads the shop item list data from the specified stream. This method is
+     * used internally by the read() and readHacked() method.
+     * 
+     * @param stream
+     *            The input stream
+     * @return The read shop item list
+     * @throws IOException
+     */
+
+    private static ShopItemList readData(SeekableInputStream stream)
+        throws IOException
+    {
+        ShopItemList shopItems;
+
         shopItems = new ShopItemList();
 
         // Skip first 8 bytes. They are always the same
-        xorStream.skip(8);
+        if (stream.skip(8) != 8)
+        {
+            throw new IOException(
+                "Unexpected end of stream while reading items");
+        }
 
         // Read the shop items
         for (int i = 0; i < 94; i++)
         {
-            shopItems.items.add(ShopItem.read(xorStream));
+            shopItems.items.add(ShopItem.read(stream));
         }
 
         // Return the newly created shop items object
         return shopItems;
+    }
+
+
+    /**
+     * Reads an external shop item list file which is used by Displacer's hacked
+     * EXE.
+     * 
+     * @param stream
+     *            The input stream
+     * @return The shop item list
+     * @throws IOException
+     */
+
+    public static ShopItemList readHacked(InputStream stream)
+        throws IOException
+    {
+        return readData(new SeekableInputStream(stream));
     }
 
 
@@ -126,14 +165,30 @@ public class ShopItemList extends GameBlock implements Serializable
         // Write the header
         seekStream = new SeekableOutputStream(new RotatingXorOutputStream(
             stream));
-        seekStream.write(0x60);
-        seekStream.write(0x60);
-        seekStream.write(0x60);
-        seekStream.write(0x00);
-        seekStream.write(0x37);
-        seekStream.write(0x08);
-        seekStream.write(0xf8);
-        seekStream.write(0x39);
+
+        writeData(seekStream);
+    }
+
+
+    /**
+     * Writes the shop item list data. This method is used internally by the
+     * write() and writeHacked() methods.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    private void writeData(SeekableOutputStream stream) throws IOException
+    {
+        stream.write(0x60);
+        stream.write(0x60);
+        stream.write(0x60);
+        stream.write(0x00);
+        stream.write(0x37);
+        stream.write(0x08);
+        stream.write(0xf8);
+        stream.write(0x39);
 
         // Make sure there are not too much shop items
         if (this.items.size() > 94)
@@ -144,17 +199,32 @@ public class ShopItemList extends GameBlock implements Serializable
         // Write the shop items
         for (ShopItem item: this.items)
         {
-            item.write(seekStream);
+            item.write(stream);
         }
 
         // Write padding
         for (int i = this.items.size(); i < 94; i++)
         {
-            seekStream.writeInt(0);
-            seekStream.writeInt(0);
+            stream.writeInt(0);
+            stream.writeInt(0);
         }
 
-        seekStream.flush();
+        stream.flush();
+    }
+
+
+    /**
+     * Writes the shop item list to an external itm file compatible to
+     * Displacer's hacked EXE.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void writeHacked(OutputStream stream) throws IOException
+    {
+        writeData(new SeekableOutputStream(stream));
     }
 
 
