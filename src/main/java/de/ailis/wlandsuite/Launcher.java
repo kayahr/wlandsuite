@@ -178,6 +178,16 @@ public class Launcher extends CLIProg
             EncodeItems.main(newArgs);
             System.exit(0);
         }
+        else if ("decodesavegame".equals(command))
+        {
+            DecodeSavegame.main(newArgs);
+            System.exit(0);
+        }
+        else if ("encodesavegame".equals(command))
+        {
+            EncodeSavegame.main(newArgs);
+            System.exit(0);
+        }
         else
         {
             wrongUsage("Unknown command: " + command);

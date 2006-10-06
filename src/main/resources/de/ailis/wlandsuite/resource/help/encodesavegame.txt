@@ -1,11 +1,11 @@
-Usage: encodeitems [OPTION]... [INPUT [OUTPUT]]
-Converts XML into an external item list file (For Displacer's hacked EXE)
+Usage: encodesavegame [OPTION]... [INPUT [OUTPUT]]
+Converts XML into an external savegame file (For Displacer's hacked EXE)
 
   -d, --debug    Shows stacktrace when an error occurs
   -h, --help     Display help and exit
   -V, --version  Display version and exit
 
-Without any parameters encodeitems reads the input from stdin and writes it
+Without any parameters encodesavegame reads the input from stdin and writes it
 to stdout. With one parameter the input is read from the specified file and the 
 output is written to stdout. If you specify two parameters then the input is 
 read from the first file and the output is written to the second file. You can 

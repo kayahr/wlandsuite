@@ -91,7 +91,11 @@ public class Party extends ArrayList<Integer>
         int member;
 
         party = new Party();
-        stream.skip(1);
+        if (stream.skip(1) != 1)
+        {
+            throw new IOException(
+                "Unexpected end of stream while reading savegame");
+        }
         for (int i = 0; i < 7; i++)
         {
             member = stream.read();

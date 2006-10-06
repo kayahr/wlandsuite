@@ -114,9 +114,6 @@ public class Savegame extends GameBlock implements Serializable
         byte[] headerBytes;
         String header;
         SeekableInputStream xorStream;
-        Savegame savegame;
-        int viewportX, viewportY, currentMap;
-        int currentMembers, currentParty, totalMembers, totalGroups;
 
         // Read the MSQ block header and validate it
         headerBytes = new byte[4];
@@ -130,39 +127,60 @@ public class Savegame extends GameBlock implements Serializable
         // Read/Decrypt the MSQ block
         xorStream = new SeekableInputStream(new RotatingXorInputStream(stream));
 
+        return readData(xorStream);
+    }
+
+
+    /**
+     * Reads the savegame data. This method is used internally by the read() and
+     * readHacked() methods.
+     * 
+     * @param stream
+     *            The input stream
+     * @return The save game
+     * @throws IOException
+     */
+
+    private static Savegame readData(SeekableInputStream stream)
+        throws IOException
+    {
+        Savegame savegame;
+        int viewportX, viewportY, currentMap;
+        int currentMembers, currentParty, totalMembers, totalGroups;
+
         savegame = new Savegame();
 
         // Read the parties
-        savegame.parties = Parties.read(xorStream);
+        savegame.parties = Parties.read(stream);
 
         // Read the unknown block at position 0x38
-        savegame.unknown38 = Unknown.read(xorStream, 64);
+        savegame.unknown38 = Unknown.read(stream, 64);
 
         // Read the viewport coordinates
-        viewportX = xorStream.readSignedByte();
-        viewportY = xorStream.readSignedByte();
+        viewportX = stream.readSignedByte();
+        viewportY = stream.readSignedByte();
 
         // Read the unknown block at position 0x7A
-        savegame.unknown7A = Unknown.read(xorStream, 3);
+        savegame.unknown7A = Unknown.read(stream, 3);
 
-        currentMembers = xorStream.read();
-        currentParty = xorStream.read();
+        currentMembers = stream.read();
+        currentParty = stream.read();
 
-        currentMap = xorStream.read();
+        currentMap = stream.read();
 
-        totalMembers = xorStream.read();
-        totalGroups = xorStream.read();
+        totalMembers = stream.read();
+        totalGroups = stream.read();
 
-        savegame.unknown82 = Unknown.read(xorStream, 1);
+        savegame.unknown82 = Unknown.read(stream, 1);
 
-        savegame.minute = xorStream.read();
-        savegame.hour = xorStream.read();
+        savegame.minute = stream.read();
+        savegame.hour = stream.read();
 
-        savegame.unknown85 = Unknown.read(xorStream, 112);
+        savegame.unknown85 = Unknown.read(stream, 112);
 
-        savegame.serial = xorStream.readInt();
+        savegame.serial = stream.readInt();
 
-        savegame.unknownF9 = Unknown.read(xorStream, 7);
+        savegame.unknownF9 = Unknown.read(stream, 7);
 
         // Correct the parties object
         savegame.parties.get(currentParty).setX(viewportX + 9);
@@ -187,7 +205,7 @@ public class Savegame extends GameBlock implements Serializable
         // Read the seven characters
         for (int i = 0; i < 7; i++)
         {
-            savegame.characters.add(Char.read(xorStream));
+            savegame.characters.add(Char.read(stream));
         }
 
         // Skip the padding
@@ -195,6 +213,21 @@ public class Savegame extends GameBlock implements Serializable
 
         // Return the newly created Game Map
         return savegame;
+    }
+
+
+    /**
+     * Reads an external savegame file (for Displacer's hacked EXE file).
+     * 
+     * @param stream
+     *            The input stream
+     * @return The savegame
+     * @throws IOException
+     */
+
+    public static Savegame readHacked(InputStream stream) throws IOException
+    {
+        return readData(new SeekableInputStream(stream));
     }
 
 
@@ -219,48 +252,81 @@ public class Savegame extends GameBlock implements Serializable
         seekStream = new SeekableOutputStream(new RotatingXorOutputStream(
             stream));
 
+        writeData(seekStream);
+
+        for (int i = 0; i < 2560; i++)
+        {
+            stream.write(0);
+        }
+    }
+
+
+    /**
+     * Writes the savegame data to the specified stream. This method is used
+     * internally by the write() and writeHacked() method.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    private void writeData(SeekableOutputStream stream) throws IOException
+    {
         // Write the parties
-        this.parties.write(seekStream);
+        this.parties.write(stream);
 
         // Write the unknown data at position 0x38
-        this.unknown38.write(seekStream);
+        this.unknown38.write(stream);
 
         // Write the view port position
-        seekStream.write(this.parties.get(this.parties.getCurrentParty())
-            .getX() - 9);
-        seekStream.write(this.parties.get(this.parties.getCurrentParty())
-            .getY() - 4);
+        stream
+            .write(this.parties.get(this.parties.getCurrentParty()).getX() - 9);
+        stream
+            .write(this.parties.get(this.parties.getCurrentParty()).getY() - 4);
 
         // Write the unknown data at position 0x7A
-        this.unknown7A.write(seekStream);
+        this.unknown7A.write(stream);
 
-        seekStream.write(this.parties.get(this.parties.getCurrentParty())
-            .size());
-        seekStream.write(this.parties.getCurrentParty());
+        stream.write(this.parties.get(this.parties.getCurrentParty()).size());
+        stream.write(this.parties.getCurrentParty());
 
-        seekStream.write(this.parties.get(this.parties.getCurrentParty())
-            .getMap());
+        stream.write(this.parties.get(this.parties.getCurrentParty()).getMap());
 
-        seekStream.write(this.parties.getTotalMembers());
-        seekStream.write(this.parties.size() - 1);
+        stream.write(this.parties.getTotalMembers());
+        stream.write(this.parties.size() - 1);
 
-        this.unknown82.write(seekStream);
+        this.unknown82.write(stream);
 
-        seekStream.write(this.minute);
-        seekStream.write(this.hour);
+        stream.write(this.minute);
+        stream.write(this.hour);
 
-        this.unknown85.write(seekStream);
+        this.unknown85.write(stream);
 
-        seekStream.writeInt(this.serial);
+        stream.writeInt(this.serial);
 
-        this.unknownF9.write(seekStream);
+        this.unknownF9.write(stream);
 
         // Write the characters
         for (Char character: this.characters)
         {
-            character.write(seekStream);
+            character.write(stream);
         }
-        seekStream.flush();
+        stream.flush();
+    }
+
+
+    /**
+     * Writes the savegame to an external save file (Compatibly to Displacer's
+     * hacked EXE file).
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void writeHacked(OutputStream stream) throws IOException
+    {
+        writeData(new SeekableOutputStream(stream));
         for (int i = 0; i < 2560; i++)
         {
             stream.write(0);
