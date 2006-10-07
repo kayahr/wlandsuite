@@ -289,6 +289,7 @@ public class PicsAnimation
         huffmanStream = new HuffmanOutputStream(stream, huffmanTree);
         huffmanStream.write(bytes);
         huffmanStream.flush();
+  
         // Write the animation MSQ header
         header = new MsqHeader(MsqType.Compressed, disk, bytes.length);
         header.write(stream);

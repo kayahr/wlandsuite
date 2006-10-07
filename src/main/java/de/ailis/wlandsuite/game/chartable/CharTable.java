@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
+
 
 /**
  * CharTable
@@ -129,7 +131,7 @@ public class CharTable
         }
         catch (UnsupportedEncodingException e)
         {
-            // Ignored, can't happen
+            throw new GameException(e.toString(), e);
         }
     }
 

@@ -40,6 +40,7 @@ import org.dom4j.Element;
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.game.RotatingXorInputStream;
 import de.ailis.wlandsuite.game.RotatingXorOutputStream;
+import de.ailis.wlandsuite.game.parts.Action;
 import de.ailis.wlandsuite.game.parts.ActionClassMap;
 import de.ailis.wlandsuite.game.parts.ActionMap;
 import de.ailis.wlandsuite.game.parts.Actions;
@@ -458,8 +459,9 @@ public class GameMap extends GameBlock implements Serializable
         {
             if (plainStream.tell() > this.msqSize - 6)
             {
-                log.warn("Tilemap too large. Fixing offsets in wl.exe is needed "
-                    + "to run this game file");
+                log
+                    .warn("Tilemap too large. Fixing offsets in wl.exe is needed "
+                        + "to run this game file");
             }
             else
             {
@@ -561,7 +563,8 @@ public class GameMap extends GameBlock implements Serializable
         {
             for (int i = 0, max = actions.countActions(); i < max; i++)
             {
-                try
+                Action specialAction = actions.getAction(i);
+                if (specialAction instanceof SpecialAction)
                 {
                     SpecialAction action = (SpecialAction) actions.getAction(i);
                     if (action != null)
@@ -572,10 +575,6 @@ public class GameMap extends GameBlock implements Serializable
                             specialActionTable.add(id);
                         }
                     }
-                }
-                catch (ClassCastException e)
-                {
-                    // Ignored
                 }
             }
         }
@@ -770,25 +769,19 @@ public class GameMap extends GameBlock implements Serializable
         // Check if map can be size 64
         is64 = false;
         offset = 64 * 64 * 3 / 2;
-        if (offset + 44 < bytes.length)
+        if ((offset + 44 < bytes.length)
+            && (bytes[offset + 44] == 64 && bytes[offset + 6] == 0 && bytes[offset + 7] == 0))
         {
-            if (bytes[offset + 44] == 64 && bytes[offset + 6] == 0
-                && bytes[offset + 7] == 0)
-            {
-                is64 = true;
-            }
+            is64 = true;
         }
 
         // Check if map can be size 3
         is32 = false;
         offset = 32 * 32 * 3 / 2;
-        if (offset + 44 < bytes.length && bytes[offset + 6] == 0
-            && bytes[offset + 7] == 0)
+        if ((offset + 44 < bytes.length && bytes[offset + 6] == 0 && bytes[offset + 7] == 0)
+            && (bytes[offset + 44] == 32))
         {
-            if (bytes[offset + 44] == 32)
-            {
-                is32 = true;
-            }
+            is32 = true;
         }
 
         // Complain if map can be both sizes

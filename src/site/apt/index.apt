@@ -1,3 +1,8 @@
+News
+
+  (2006/10/07) Version 1.3.0 has been released with full support for the
+  external data files used by Displacer's hacked EXE file.
+
 What is the Wasteland Suite?
 
   The Wasteland Suite is a collection of command-line programs for converting
@@ -53,6 +58,32 @@ What is the Wasteland Suite?
     * {{{extractmaps.html}extractmaps}} (Extracts the graphical maps of the game as PNGs into a directory)
     
     * {{{fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets for tilesets and encounter animations in the wl.exe file)
+  
+    []
+      
+  For Displacer's hacked EXE the following programs are available (For 
+  these programs no help is available here yet. Just run the programs
+  with the --help option to find out how to use it):   
+  
+    * decodemap (Decodes an external map file into XML format)
+    
+    * encodemap (Encodes XML into a new external map file)
+    
+    * decodeitems (Decodes an external shop item list file into XML format)
+    
+    * encodeitems (Encodes XML into a new external shop item list file)
+    
+    * decodesavegame (Decodes an external savegame file into XML format)
+    
+    * encodesavegame (Encodes XML into a new external savegame file)
+    
+    * unpacktileset (Unpacks an external tileset file into a directory)
+    
+    * packtileset (Packs a new external tileset file)
+    
+    * unpackpic (Unpacks an external animation file into a directory)
+    
+    * packpic (Packs a new external animation file)
     
     []
     
