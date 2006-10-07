@@ -198,6 +198,16 @@ public class Launcher extends CLIProg
             PackTileset.main(newArgs);
             System.exit(0);
         }
+        else if ("unpackpic".equals(command))
+        {
+            UnpackPic.main(newArgs);
+            System.exit(0);
+        }
+        else if ("packpic".equals(command))
+        {
+            PackPic.main(newArgs);
+            System.exit(0);
+        }
         else
         {
             wrongUsage("Unknown command: " + command);

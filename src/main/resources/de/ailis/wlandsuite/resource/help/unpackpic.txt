@@ -1,0 +1,21 @@
+Usage: unpackpic [OPTION]... DIRECTORY [INPUT]
+Unpacks an external animation for Displacer's hacked EXE into a directory
+
+  -W, --width    The animation picture width (Default: 96)
+  -H, --height   The animation picture height (Default: 84)
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory in which the animation
+should be unpacked. The program creates the necessary directory structure
+automatically.
+
+The second parameter specifies the filename of the animation file to read. If
+the parameter is missing or is "-" then the input is read from stdin.
+
+Please note that this tool is only useful if you work with Displacer's hacked
+EXE. If you are working with the original files then you have to use
+the unpackpics program to unpack the original allpics1 or allpics2 file.
+
+Report bugs to Klaus Reimer <k@ailis.de>

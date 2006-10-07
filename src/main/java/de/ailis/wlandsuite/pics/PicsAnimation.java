@@ -37,17 +37,13 @@ import java.util.Map;
 import de.ailis.wlandsuite.huffman.HuffmanInputStream;
 import de.ailis.wlandsuite.huffman.HuffmanOutputStream;
 import de.ailis.wlandsuite.huffman.HuffmanTree;
+import de.ailis.wlandsuite.io.BitInputStream;
+import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 import de.ailis.wlandsuite.msq.MsqHeader;
 import de.ailis.wlandsuite.msq.MsqType;
 import de.ailis.wlandsuite.pic.Pic;
 
 
-/**
- * Animation
- * 
- * @author Klaus Reimer (k@ailis.de)
- * @version $Revision$
- */
 /**
  * An animation consists of a base frame (which is the compressed pic found in
  * the beginning of a Wasteland animation structure) and a number of animation
@@ -100,17 +96,6 @@ public class PicsAnimation
     public static PicsAnimation read(InputStream stream, int width)
         throws IOException
     {
-        int headerSize;
-        int dataSize;
-        int pos;
-        int delay;
-        int frameNo;
-        byte[] instructions;
-        List<PicsAnimationFrameSet> frameSets;
-        PicsAnimationFrameSet frameSet;
-        List<RawAnimationFrame> rawFrames;
-        RawAnimationFrame rawFrame;
-        Pic workingFrame;
         MsqHeader header;
         int height;
         HuffmanInputStream huffmanStream;
@@ -152,8 +137,40 @@ public class PicsAnimation
         // Start a huffman input stream
         huffmanStream = new HuffmanInputStream(stream);
 
+        return new PicsAnimation(baseFrame, readAnimationData(huffmanStream,
+            baseFrame));
+    }
+
+
+    /**
+     * Reads the animation data from the stream.
+     * 
+     * @param stream
+     *            The input stream
+     * @param baseFrame
+     *            The base frame
+     * @return The animation data
+     * @throws IOException
+     */
+
+    private static List<PicsAnimationFrameSet> readAnimationData(
+        BitInputStream stream, Pic baseFrame) throws IOException
+    {
+        List<PicsAnimationFrameSet> frameSets;
+        PicsAnimationFrameSet frameSet;
+        List<RawAnimationFrame> rawFrames;
+        RawAnimationFrame rawFrame;
+        int dataSize;
+        int pos;
+        byte[] instructions;
+        Pic workingFrame;
+        int headerSize;
+        InputStream byteStream;
+        int delay;
+        int frameNo;
+
         // Read the header size from the MSQ block
-        headerSize = huffmanStream.readWord();
+        headerSize = stream.readWord();
         if (headerSize == -1)
         {
             throw new EOFException(
@@ -162,7 +179,7 @@ public class PicsAnimation
 
         // Read the raw animation instructions
         instructions = new byte[headerSize];
-        if (huffmanStream.read(instructions) != headerSize)
+        if (stream.read(instructions) != headerSize)
         {
             throw new EOFException(
                 "Unexpected end of stream while reading animation header");
@@ -170,7 +187,7 @@ public class PicsAnimation
 
         // Read the raw animation frames
         rawFrames = new ArrayList<RawAnimationFrame>();
-        dataSize = huffmanStream.readWord();
+        dataSize = stream.readWord();
         if (dataSize == -1)
         {
             throw new IOException(
@@ -179,19 +196,19 @@ public class PicsAnimation
         pos = 0;
         while (pos < dataSize)
         {
-            rawFrame = RawAnimationFrame.read(huffmanStream);
+            rawFrame = RawAnimationFrame.read(stream);
             rawFrames.add(rawFrame);
             pos += rawFrame.getSize();
         }
 
         // Cycle through the animation instructions and build the frame sets
         frameSets = new ArrayList<PicsAnimationFrameSet>();
-        stream = new ByteArrayInputStream(instructions);
+        byteStream = new ByteArrayInputStream(instructions);
         frameSet = new PicsAnimationFrameSet();
         workingFrame = baseFrame.clone();
         try
         {
-            while ((delay = stream.read()) != -1)
+            while ((delay = byteStream.read()) != -1)
             {
                 if (delay == 255)
                 {
@@ -200,7 +217,7 @@ public class PicsAnimation
                     workingFrame = baseFrame.clone();
                     continue;
                 }
-                frameNo = stream.read();
+                frameNo = byteStream.read();
                 if (frameNo == -1)
                 {
                     throw new EOFException(
@@ -212,10 +229,36 @@ public class PicsAnimation
         }
         finally
         {
-            stream.close();
+            byteStream.close();
         }
 
-        return new PicsAnimation(baseFrame, frameSets);
+        return frameSets;
+    }
+
+
+    /**
+     * Reads an external encounter animation file as used by Displacer's hacked
+     * EXE.
+     * 
+     * @param stream
+     *            The input stream
+     * @param width
+     *            The animation width
+     * @param height
+     *            The animation height
+     * @return The animation
+     * @throws IOException
+     */
+
+    public static PicsAnimation readHacked(InputStream stream, int width,
+        int height) throws IOException
+    {
+        Pic baseFrame;
+        List<PicsAnimationFrameSet> frames;
+
+        baseFrame = Pic.read(stream, width, height, false);
+        frames = readAnimationData(new BitInputStreamWrapper(stream), baseFrame);
+        return new PicsAnimation(baseFrame, frames);
     }
 
 
@@ -234,20 +277,8 @@ public class PicsAnimation
         MsqHeader header;
         HuffmanTree huffmanTree;
         HuffmanOutputStream huffmanStream;
-        RawAnimationFrame frame;
-        Map<String, RawAnimationFrame> rawFrames;
         byte bytes[];
-        int size;
-        String key;
-        List<RawAnimationFrame> seenFrames;
-        boolean seen;
-        int currentFrame, nextFrame;
-        int delay;
-        int frameId, newFrameId;        
-        ByteArrayOutputStream headerStream;
-        ByteArrayOutputStream dataStream;
-        ByteArrayOutputStream animStream;
-        
+
         // Write the base frame MSQ header
         bytes = this.baseFrame.getBytes();
         header = new MsqHeader(MsqType.Compressed, disk, bytes.length);
@@ -258,6 +289,42 @@ public class PicsAnimation
         huffmanStream = new HuffmanOutputStream(stream, huffmanTree);
         huffmanStream.write(bytes);
         huffmanStream.flush();
+        // Write the animation MSQ header
+        header = new MsqHeader(MsqType.Compressed, disk, bytes.length);
+        header.write(stream);
+
+        // Write the animation MSQ data
+        bytes = getAnimationData();
+        huffmanTree = HuffmanTree.create(bytes);
+        huffmanStream = new HuffmanOutputStream(stream, huffmanTree);
+        huffmanStream.write(bytes);
+        huffmanStream.flush();
+    }
+    
+    
+    /**
+     * Returns the animation data as byte array. Used internally by the
+     * write() and writeHacked() methods.
+     *
+     * @return The animation data as byte array
+     * @throws IOException 
+     */
+    
+    private byte[] getAnimationData() throws IOException
+    {
+        List<RawAnimationFrame> seenFrames;
+        boolean seen;
+        byte bytes[];
+        int currentFrame, nextFrame;
+        int delay;
+        int frameId, newFrameId;
+        ByteArrayOutputStream headerStream;
+        ByteArrayOutputStream dataStream;
+        ByteArrayOutputStream animStream;
+        RawAnimationFrame frame;
+        Map<String, RawAnimationFrame> rawFrames;
+        int size;
+        String key;
 
         // Create animation data
         seenFrames = new ArrayList<RawAnimationFrame>();
@@ -276,10 +343,11 @@ public class PicsAnimation
             {
                 delay = instruction.getDelay();
                 nextFrame = instruction.getFrame();
-                key = PicsAnimationFrameSet.getRawFrameKey(currentFrame, nextFrame);
-                
+                key = PicsAnimationFrameSet.getRawFrameKey(currentFrame,
+                    nextFrame);
+
                 frame = rawFrames.get(key);
-                
+
                 frameId = seenFrames.indexOf(frame);
                 seen = frameId != -1;
                 if (!seen)
@@ -287,26 +355,26 @@ public class PicsAnimation
                     frameId = newFrameId;
                     newFrameId++;
                 }
-                
+
                 // Add instructions to header stream
                 headerStream.write(delay);
                 headerStream.write(frameId);
-                
+
                 // Write the rawframe to the data stream
                 if (!seen)
                 {
-                    frame.write(dataStream);               
+                    frame.write(dataStream);
                     seenFrames.add(frame);
                 }
-                
+
                 // Process next frame
                 currentFrame = nextFrame;
             }
-            
+
             // Write the end-of-instructions maerker
             headerStream.write(0xff);
         }
-        
+
         // Append header and data to get the bytes we need to compress
         animStream = new ByteArrayOutputStream();
         size = headerStream.size();
@@ -317,22 +385,32 @@ public class PicsAnimation
         animStream.write(size & 0xff);
         animStream.write((size >> 8) & 0xff);
         animStream.write(dataStream.toByteArray());
-        bytes = animStream.toByteArray();        
-        
+        bytes = animStream.toByteArray();
+
         // Close the working streams
         dataStream.close();
         headerStream.close();
         animStream.close();
+        
+        return bytes;
+    }
 
-        // Write the animation MSQ header
-        header = new MsqHeader(MsqType.Compressed, disk, bytes.length);
-        header.write(stream);
+    
+    /**
+     * Writes an external animation file as used by Displacer's hacked EXE.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
 
-        // Write the animation MSQ data
-        huffmanTree = HuffmanTree.create(bytes);
-        huffmanStream = new HuffmanOutputStream(stream, huffmanTree);
-        huffmanStream.write(bytes);
-        huffmanStream.flush();
+    public void writeHacked(OutputStream stream) throws IOException
+    {
+        // Write the base frame MSQ header
+        stream.write(this.baseFrame.getBytes(false));
+        
+        // Write the animation data
+        stream.write(getAnimationData());
     }
 
 

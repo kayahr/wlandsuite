@@ -14,4 +14,8 @@ automatically.
 The second parameter specifies the filename of the external tileset file to 
 read. If the parameter is missing or is "-" then the input is read from stdin.
 
+Please note that this tool is only useful if you work with Displacer's hacked
+EXE. If you are working with the original files then you have to use
+the unpackhtds program to unpack the original allhtds1 or allhtds2 file.
+
 Report bugs to Klaus Reimer <k@ailis.de>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<savegame xmlns="http://ailis.de/wlandsuite" time="07:19" serial="16" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ailis.de/wlandsuite http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd">
+  <parties currentParty="0">
+    <party id="0" x="31" y="43" map="0" prevX="31" prevY="13" prevMap="1">
+      <member>1</member>
+      <member>2</member>
+      <member>3</member>
+      <member>4</member>
+    </party>
+  </parties>
+  <unknown38>
+    00 00 00 00    00 00 00 00    00 02 02 02    02 05 06 01
+    00 00 00 00    00 00 00 00    00 02 00 00    00 00 00 be
+    00 00 00 00    06 00 e2 19    0a 00 06 0a    5d 00 28 07
+    00 00 01 00    61 00 00 82    02 00 00 00    00 a0 1e 91
+  </unknown38>
+  <unknown7A>
+    cf 06 00
+  </unknown7A>
+  <unknown82>
+    c0
+  </unknown82>
+  <unknown85>
+    08 04 84 00    00 6e 00 00    2e 00 00 23    00 00 00 00
+    00 00 00 00    00 00 00 00    00 00 00 00    00 00 00 00
+    00 00 00 00    00 00 00 00    00 00 00 00    00 00 00 00
+    00 00 00 00    00 00 00 00    00 00 00 00    00 00 00 00
+    00 00 00 00    00 00 00 00    00 00 00 20    20 4d 61 72
+    6b 73 6d 61    6e 20 20 00    00 00 00 00    fe 00 00 00
+    00 00 00 00    00 00 00 00    00 00 00 00    00 00 00 00
+  </unknown85>
+  <unknownF9>
+    00 00 00 00    00 00 00
+  </unknownF9>
+  <characters>
+    <character id="1" name="Hell Razor" strength="12" iq="14" luck="13" speed="9" agility="14" dexterity="15" charisma="11" money="0" gender="male" nationality="US" ac="0" maxCon="28" con="24" weapon="12" skillPoints="1" experience="132">
+      <skills>
+        <skill id="1" level="2"/>
+        <skill id="2" level="1"/>
+        <skill id="3" level="1"/>
+        <skill id="7" level="1"/>
+        <skill id="9" level="2"/>
+        <skill id="12" level="1"/>
+        <skill id="16" level="1"/>
+        <skill id="13" level="1"/>
+        <skill id="8" level="1"/>
+      </skills>
+      <items>
+        <item id="13" load="7"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="54" load="1"/>
+        <item id="44"/>
+        <item id="45"/>
+        <item id="4"/>
+        <item id="49"/>
+        <item id="52" load="40"/>
+      </items>
+    </character>
+    <character id="2" name="Angela Deth" strength="8" iq="15" luck="14" speed="11" agility="10" dexterity="17" charisma="14" money="0" gender="female" nationality="US" ac="0" maxCon="27" con="25" weapon="1" skillPoints="1" experience="110">
+      <skills>
+        <skill id="3" level="2"/>
+        <skill id="7" level="1"/>
+        <skill id="9" level="1"/>
+        <skill id="20" level="1"/>
+        <skill id="18" level="1"/>
+        <skill id="10" level="1"/>
+        <skill id="22" level="1"/>
+        <skill id="15" level="1"/>
+        <skill id="26" level="1"/>
+        <skill id="25" level="1"/>
+      </skills>
+      <items>
+        <item id="16" load="9"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="54" load="1"/>
+        <item id="44"/>
+        <item id="45"/>
+        <item id="4"/>
+        <item id="49"/>
+        <item id="52" load="40"/>
+      </items>
+    </character>
+    <character id="3" name="Thrasher" strength="17" iq="10" luck="11" speed="12" agility="16" dexterity="9" charisma="8" money="0" gender="male" nationality="US" ac="0" maxCon="34" con="26" weapon="13" skillPoints="1" experience="46">
+      <skills>
+        <skill id="1" level="2"/>
+        <skill id="4" level="1"/>
+        <skill id="3" level="1"/>
+        <skill id="7" level="1"/>
+        <skill id="9" level="1"/>
+        <skill id="11" level="1"/>
+        <skill id="14" level="1"/>
+      </skills>
+      <items>
+        <item id="13" load="7"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="30"/>
+        <item id="54" load="1"/>
+        <item id="44"/>
+        <item id="45"/>
+        <item id="4"/>
+        <item id="49"/>
+        <item id="52" load="40"/>
+      </items>
+    </character>
+    <character id="4" name="Snake Vargas" strength="10" iq="17" luck="12" speed="13" agility="9" dexterity="13" charisma="12" money="0" gender="male" nationality="Mexican" ac="0" maxCon="31" con="27" weapon="1" skillPoints="1" experience="35">
+      <skills>
+        <skill id="1" level="1"/>
+        <skill id="24" level="1"/>
+        <skill id="3" level="1"/>
+        <skill id="7" level="1"/>
+        <skill id="9" level="1"/>
+        <skill id="6" level="1"/>
+        <skill id="23" level="1"/>
+        <skill id="25" level="2"/>
+        <skill id="28" level="1"/>
+      </skills>
+      <items>
+        <item id="16" load="12"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="32"/>
+        <item id="54" load="1"/>
+        <item id="44"/>
+        <item id="45"/>
+        <item id="4"/>
+        <item id="49"/>
+        <item id="52" load="40"/>
+      </items>
+    </character>
+    <character id="5" name="" strength="0" iq="0" luck="0" speed="0" agility="0" dexterity="0" charisma="0" money="0" gender="male" nationality="US" ac="0" maxCon="0" con="0" level="0" rank="">
+      <skills/>
+      <items/>
+    </character>
+    <character id="6" name="" strength="0" iq="0" luck="0" speed="0" agility="0" dexterity="0" charisma="0" money="0" gender="male" nationality="US" ac="0" maxCon="0" con="0" level="0" rank="">
+      <skills/>
+      <items/>
+    </character>
+    <character id="7" name="" strength="0" iq="0" luck="0" speed="0" agility="0" dexterity="0" charisma="0" money="0" gender="male" nationality="US" ac="0" maxCon="0" con="0" level="0" rank="">
+      <skills/>
+      <items/>
+    </character>
+  </characters>
+</savegame>
