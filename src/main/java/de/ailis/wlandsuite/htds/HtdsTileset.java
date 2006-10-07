@@ -24,6 +24,7 @@
 package de.ailis.wlandsuite.htds;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -68,8 +69,8 @@ public class HtdsTileset
 
 
     /**
-     * Reads HTDS tileset with the default tile size of 16x16 from the given 
-     * file. 
+     * Reads HTDS tileset with the default tile size of 16x16 from the given
+     * file.
      * 
      * @param file
      *            The input file
@@ -98,10 +99,11 @@ public class HtdsTileset
      * @throws IOException
      */
 
-    public static HtdsTileset read(File file, int width, int height) throws IOException
+    public static HtdsTileset read(File file, int width, int height)
+        throws IOException
     {
         InputStream stream;
-        
+
         stream = new FileInputStream(file);
         try
         {
@@ -112,11 +114,11 @@ public class HtdsTileset
             stream.close();
         }
     }
-    
-    
+
+
     /**
-     * Reads HTDS tileset with the default tile size of 16x16 from the given 
-     * stream. 
+     * Reads HTDS tileset with the default tile size of 16x16 from the given
+     * stream.
      * 
      * This method returns null if no more tilesets are found on the stream.
      * 
@@ -182,7 +184,44 @@ public class HtdsTileset
         return new HtdsTileset(tiles);
     }
 
-    
+
+    /**
+     * Reads a tileset from an external tileset file for Displacer's hacked EXE.
+     * Width and height of the tiles must be specified because no image
+     * dimensions can be read from the stream.
+     * 
+     * @param stream
+     *            The input stream
+     * @param width
+     *            The tile width
+     * @param height
+     *            The tile height
+     * @return The tileset
+     * @throws IOException
+     */
+
+    public static HtdsTileset readHacked(InputStream stream, int width,
+        int height) throws IOException
+    {
+        List<Pic> tiles;
+
+        // Read the tiles
+        tiles = new ArrayList<Pic>(163);
+        while (true)
+        {
+            try
+            {
+                tiles.add(Pic.read(stream, width, height, false));
+            }
+            catch (EOFException e)
+            {
+                break;
+            }
+        }
+        return new HtdsTileset(tiles);
+    }
+
+
     /**
      * Writes a HTDS tileset to a file.
      * 
@@ -207,14 +246,15 @@ public class HtdsTileset
             stream.close();
         }
     }
-    
-    
+
+
     /**
      * Writes a HTDS tileset to a stream.
      * 
      * @param stream
      *            The output stream
-     * @param disk The disk index
+     * @param disk
+     *            The disk index
      * @throws IOException
      */
 
@@ -225,14 +265,14 @@ public class HtdsTileset
         HuffmanTree tree;
         int size;
         byte[] bytes;
-        
+
         // Calculate the size of the tileset
         size = 0;
         for (Pic tile: this.tiles)
         {
             size += tile.getWidth() * tile.getHeight() / 2;
         }
-        
+
         // Write the MSQ header
         header = new MsqHeader(MsqType.Compressed, disk, size);
         header.write(stream);
@@ -245,14 +285,44 @@ public class HtdsTileset
         huffmanStream.flush();
     }
 
-    
+
     /**
-     * Returns the bytes of the tileset.
-     *
+     * Writes a tileset to an external tileset file compatibly to Displacer's
+     * hacked EXE.
+     * 
+     * @param stream
+     *            The output stream
+     * @throws IOException
+     */
+
+    public void writeHacked(OutputStream stream) throws IOException
+    {
+        // Write the tiles
+        stream.write(getBytes(false));
+    }
+
+
+    /**
+     * Returns the xor encoded bytes of the tileset.
+     * 
      * @return The bytes
      */
-    
+
     public byte[] getBytes()
+    {
+        return getBytes(true);
+    }
+    
+
+    /**
+     * Returns the bytes of the tileset.
+     * 
+     * @param encoded
+     *            If the pics should be xor encoded
+     * @return The bytes
+     */
+
+    public byte[] getBytes(boolean encoded)
     {
         ByteArrayOutputStream stream;
 
@@ -263,9 +333,9 @@ public class HtdsTileset
             {
                 for (Pic tile: this.tiles)
                 {
-                    tile.write(stream);
+                    tile.write(stream, encoded);
                 }
-                return  stream.toByteArray();
+                return stream.toByteArray();
             }
             finally
             {
