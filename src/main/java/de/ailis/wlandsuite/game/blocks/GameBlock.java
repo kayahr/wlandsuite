@@ -50,7 +50,7 @@ public abstract class GameBlock
      * @throws IOException
      */
 
-    public void writeXml(OutputStream stream) throws IOException
+    public void writeXml(final OutputStream stream) throws IOException
     {
         XMLWriter writer;
         Document document;
@@ -62,13 +62,7 @@ public abstract class GameBlock
         writer = new XMLWriter(stream, format);
         try
         {
-            Element rootElement = toXml();
-            rootElement.addAttribute("xmlns:xsi",
-                "http://www.w3.org/2001/XMLSchema-instance");
-            rootElement
-                .addAttribute(
-                    "xsi:schemaLocation",
-                    "http://ailis.de/wlandsuite http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd");
+            final Element rootElement = toXml();
             document = DocumentHelper.createDocument(rootElement);
             writer.write(document);
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<map xmlns="http://ailis.de/wlandsuite" mapSize="32" msqSize="5739" tilemapOffset="4991" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ailis.de/~k/software/projects/wlandsuite/schemas http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd">
+<map xmlns="http://ailis.de/wlandsuite" mapSize="32" msqSize="5739" tilemapOffset="4991">
   <actionClassMap>
     ................................
     ................................

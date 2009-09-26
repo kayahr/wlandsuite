@@ -2057,7 +2057,7 @@ This attribute is optional and defaults to 1.</xs:documentation>
                 <xs:documentation>The item type.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="unknown" type="Byte" default="0">
+        <xs:attribute name="demolition" type="xs:boolean" default="0">
             <xs:annotation>
                 <xs:documentation>
                     The unknown three lower bits in byte 2. If you know what

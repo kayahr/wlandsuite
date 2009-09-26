@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<savegame xmlns="http://ailis.de/wlandsuite" time="07:19" serial="16" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ailis.de/wlandsuite http://www.ailis.de/~k/software/projects/wlandsuite/schemas/wlandsuite.xsd">
+<savegame xmlns="http://ailis.de/wlandsuite" time="07:19" serial="16">
   <parties currentParty="0">
     <party id="0" x="31" y="43" map="0" prevX="31" prevY="13" prevMap="1">
       <member>1</member>

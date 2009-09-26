@@ -5,6 +5,8 @@
   </formats>
   <fileSets>
     <fileSet>
+      <directory>${basedir}</directory>
+      <outputDirectory>/</outputDirectory>
       <includes>
         <include>LICENSE.txt</include>
         <include>README.txt</include>
@@ -27,8 +29,7 @@
       <source>target/${artifactId}-${version}.jar</source>
       <outputDirectory>/lib/</outputDirectory>
       <destName>${artifactId}.jar</destName>
-      <!-- Change to 0644 when Maven bug MASSEMBLY-104 is fixed -->
-      <fileMode>420</fileMode>
+      <fileMode>0644</fileMode>
     </file>
   </files>
   <dependencySets>

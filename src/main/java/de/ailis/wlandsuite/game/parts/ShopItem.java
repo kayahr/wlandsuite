@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import org.dom4j.Element;
 
+import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.utils.StringUtils;
@@ -49,10 +50,13 @@ public class ShopItem
     private int stock;
 
     /** The item type */
-    private int type;
+    private ItemType type;
 
-    /** The unknown lower three bits of byte 3 */
-    private int unknown;
+    /**
+     * If weapon is a demolition weapon (Affects splash-damage on auto-miss
+     * roles and playing a sound effect
+     */
+    private boolean demolition;
 
     /** The ammo capacity */
     private int capacity;
@@ -76,7 +80,8 @@ public class ShopItem
      * @throws IOException
      */
 
-    public static ShopItem read(SeekableInputStream stream) throws IOException
+    public static ShopItem read(final SeekableInputStream stream)
+        throws IOException
     {
         ShopItem item;
         int b;
@@ -86,8 +91,9 @@ public class ShopItem
         item.price = stream.readWord();
         item.stock = stream.read();
         b = stream.read();
-        item.type = b >> 3;
-        item.unknown = b & 7;
+        item.type = ItemType.valueOf(b >> 3);
+        if ((b & 7) > 1) throw new GameException("Demolition flag is higher than 1");
+        item.demolition = (b & 7) == 1;
         item.capacity = stream.read();
         item.skill = stream.read();
         item.damage = stream.read();
@@ -105,7 +111,7 @@ public class ShopItem
      * @return The shop item
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -113,12 +119,12 @@ public class ShopItem
         element.addAttribute("id", Integer.toString(id));
         element.addAttribute("price", Integer.toString(this.price));
         element.addAttribute("stock", Integer.toString(this.stock));
-        element.addAttribute("type", Integer.toString(this.type));
+        element.addAttribute("type", Integer.toString(this.type.getId()));
         element.addAttribute("capacity", Integer.toString(this.capacity));
         element.addAttribute("skill", Integer.toString(this.skill));
         element.addAttribute("damage", Integer.toString(this.damage));
         element.addAttribute("ammo", Integer.toString(this.ammo));
-        element.addAttribute("unknown", Integer.toString(this.unknown));
+        element.addAttribute("demolition", Boolean.toString(this.demolition));
         return element;
     }
 
@@ -131,7 +137,7 @@ public class ShopItem
      * @return The new shop item
      */
 
-    public static ShopItem read(Element element)
+    public static ShopItem read(final Element element)
     {
         ShopItem item;
 
@@ -139,12 +145,15 @@ public class ShopItem
 
         item.price = StringUtils.toInt(element.attributeValue("price", "0"));
         item.stock = StringUtils.toInt(element.attributeValue("stock", "0"));
-        item.type = StringUtils.toInt(element.attributeValue("type", "0"));
-        item.capacity = StringUtils.toInt(element.attributeValue("capacity", "0"));
+        item.type = ItemType.valueOf(StringUtils.toInt(element
+            .attributeValue("type", "0")));
+        item.capacity = StringUtils.toInt(element.attributeValue("capacity",
+            "0"));
         item.skill = StringUtils.toInt(element.attributeValue("skill", "0"));
         item.damage = StringUtils.toInt(element.attributeValue("damage", "0"));
         item.ammo = StringUtils.toInt(element.attributeValue("ammo", "0"));
-        item.unknown = StringUtils.toInt(element.attributeValue("unknown", "0"));
+        item.demolition = Boolean.parseBoolean(element.attributeValue(
+            "demolition", "false"));
 
         return item;
     }
@@ -157,11 +166,11 @@ public class ShopItem
      *            The output stream
      */
 
-    public void write(SeekableOutputStream stream)
+    public void write(final SeekableOutputStream stream)
     {
         stream.writeWord(this.price);
         stream.write(this.stock);
-        stream.write((this.type << 3) | (this.unknown & 7));
+        stream.write((this.type.getId() << 3) | (this.demolition ? 1 : 0));
         stream.write(this.capacity);
         stream.write(this.skill);
         stream.write(this.damage);
@@ -171,10 +180,10 @@ public class ShopItem
 
     /**
      * Returns the ammo.
-     *
+     * 
      * @return The ammo
      */
-    
+
     public int getAmmo()
     {
         return this.ammo;
@@ -183,12 +192,12 @@ public class ShopItem
 
     /**
      * Sets the ammo.
-     *
-     * @param ammo 
+     * 
+     * @param ammo
      *            The ammo to set
      */
-    
-    public void setAmmo(int ammo)
+
+    public void setAmmo(final int ammo)
     {
         this.ammo = ammo;
     }
@@ -196,10 +205,10 @@ public class ShopItem
 
     /**
      * Returns the capacity.
-     *
+     * 
      * @return The capacity
      */
-    
+
     public int getCapacity()
     {
         return this.capacity;
@@ -208,12 +217,12 @@ public class ShopItem
 
     /**
      * Sets the capacity.
-     *
-     * @param capacity 
+     * 
+     * @param capacity
      *            The capacity to set
      */
-    
-    public void setCapacity(int capacity)
+
+    public void setCapacity(final int capacity)
     {
         this.capacity = capacity;
     }
@@ -221,10 +230,10 @@ public class ShopItem
 
     /**
      * Returns the damage.
-     *
+     * 
      * @return The damage
      */
-    
+
     public int getDamage()
     {
         return this.damage;
@@ -233,12 +242,12 @@ public class ShopItem
 
     /**
      * Sets the damage.
-     *
-     * @param damage 
+     * 
+     * @param damage
      *            The damage to set
      */
-    
-    public void setDamage(int damage)
+
+    public void setDamage(final int damage)
     {
         this.damage = damage;
     }
@@ -246,10 +255,10 @@ public class ShopItem
 
     /**
      * Returns the price.
-     *
+     * 
      * @return The price
      */
-    
+
     public int getPrice()
     {
         return this.price;
@@ -258,12 +267,12 @@ public class ShopItem
 
     /**
      * Sets the price.
-     *
-     * @param price 
+     * 
+     * @param price
      *            The price to set
      */
-    
-    public void setPrice(int price)
+
+    public void setPrice(final int price)
     {
         this.price = price;
     }
@@ -271,10 +280,10 @@ public class ShopItem
 
     /**
      * Returns the skill.
-     *
+     * 
      * @return The skill
      */
-    
+
     public int getSkill()
     {
         return this.skill;
@@ -283,12 +292,12 @@ public class ShopItem
 
     /**
      * Sets the skill.
-     *
-     * @param skill 
+     * 
+     * @param skill
      *            The skill to set
      */
-    
-    public void setSkill(int skill)
+
+    public void setSkill(final int skill)
     {
         this.skill = skill;
     }
@@ -296,10 +305,10 @@ public class ShopItem
 
     /**
      * Returns the stock.
-     *
+     * 
      * @return The stock
      */
-    
+
     public int getStock()
     {
         return this.stock;
@@ -308,12 +317,12 @@ public class ShopItem
 
     /**
      * Sets the stock.
-     *
-     * @param stock 
+     * 
+     * @param stock
      *            The stock to set
      */
-    
-    public void setStock(int stock)
+
+    public void setStock(final int stock)
     {
         this.stock = stock;
     }
@@ -321,11 +330,11 @@ public class ShopItem
 
     /**
      * Returns the type.
-     *
+     * 
      * @return The type
      */
-    
-    public int getType()
+
+    public ItemType getType()
     {
         return this.type;
     }
@@ -333,38 +342,40 @@ public class ShopItem
 
     /**
      * Sets the type.
-     *
-     * @param type 
+     * 
+     * @param type
      *            The type to set
      */
-    
-    public void setType(int type)
+
+    public void setType(final ItemType type)
     {
         this.type = type;
     }
 
 
     /**
-     * Returns the unknown.
-     *
-     * @return The unknown
+     * Returns true if item is a demolition weapon. This affects for example
+     * the playing of a sound effect when the weapon is fired.
+     * 
+     * @return The demolition flag
      */
-    
-    public int getUnknown()
+
+    public boolean isDemolution()
     {
-        return this.unknown;
+        return this.demolition;
     }
 
 
     /**
-     * Sets the unknown.
-     *
-     * @param unknown 
-     *            The unknown to set
+     * Sets the demolition flag. This affects for example the playing of a
+     * sound effect when the weapon is fired.
+     * 
+     * @param demolition
+     *            The demolition flag to set
      */
-    
-    public void setUnknown(int unknown)
+
+    public void setDemolition(final boolean demolition)
     {
-        this.unknown = unknown;
+        this.demolition = demolition;
     }
 }

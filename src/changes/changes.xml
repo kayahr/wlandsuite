@@ -5,7 +5,16 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
-    <release version="1.3.0" date="2006-10-07" desc="Minor update">
+    <release version="1.3.1" date="2009-09-26" desc="Minor update">
+      <action dev="k" type="update">
+        Implemented demolition flag in item lists.
+      </action>
+      <action dev="k" type="update">
+        Item type is now handled as a enum internally instead of an integer
+        but XML file still uses an integer.
+      </action>
+    </release>
+    <release version="1.3.0" date="2009-10-07" desc="Minor update">
       <action dev="k" type="add">
         Added full support for the external data files used by Displacer's 
         hacked EXE.
