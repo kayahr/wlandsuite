@@ -17,9 +17,9 @@
   </organization>
   
   <scm>
-    <url>http://scm.ailis.de/viewcvs.cgi/java/wlandsuite/trunk/?root=svn</url>
+    <url>http://scm.ailis.de/viewvc/svn/java/wlandsuite/trunk/</url>
     <connection>scm:svn:http://scm.ailis.de/svn/java/wlandsuite/trunk</connection>
-    <!-- <developerConnection>scm:svn:svn+ssh://k@ailis.de/var/lib/svn/java/wlandsuite/trunk</developerConnection> -->
+    <developerConnection>scm:svn:https://scm.ailis.de/svn/java/wlandsuite/trunk</developerConnection>
   </scm>
   
   <build>
@@ -182,13 +182,18 @@
   
   <distributionManagement>
     <repository>
-      <id>kay-repository</id>
-      <name>Kay's Maven repository</name>
-      <url>scpexe://k@ailis.de/home/k/public_html/software/maven2/</url>
+      <id>ailis-releases</id>
+      <name>Ailis Maven Releases</name>
+      <url>https://www.ailis.de/nexus/content/repositories/releases</url>
     </repository>
+    <snapshotRepository>
+      <id>ailis-snapshots</id>
+      <name>Ailis Maven Snapshots</name>
+      <url>https://www.ailis.de/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
     <site>
-      <id>website</id>
-      <url>scpexe://k@ailis.de/home/k/public_html/software/projects/wlandsuite</url>
+      <id>k-website</id>
+      <url>scpexe://k@ailis.de/home/k/public_html/projects/wlandsuite</url>
     </site>
   </distributionManagement>
   
