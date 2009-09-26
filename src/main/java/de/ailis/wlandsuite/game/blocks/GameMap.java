@@ -108,7 +108,7 @@ public class GameMap extends GameBlock implements Serializable
     private Monsters monsters;
 
     /** The actions */
-    private Map<Integer, Actions> actions;
+    private final Map<Integer, Actions> actions;
 
 
     /**
@@ -132,7 +132,8 @@ public class GameMap extends GameBlock implements Serializable
      *            The offset of the tilemap
      */
 
-    public GameMap(int mapSize, int msqBlockSize, int tilemapOffset)
+    public GameMap(final int mapSize, final int msqBlockSize,
+        final int tilemapOffset)
     {
         if (mapSize != 32 && mapSize != 64)
         {
@@ -164,8 +165,8 @@ public class GameMap extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    public static GameMap read(SeekableInputStream stream, int msqBlockSize)
-        throws IOException
+    public static GameMap read(final SeekableInputStream stream,
+        final int msqBlockSize) throws IOException
     {
         byte[] headerBytes;
         String header;
@@ -211,16 +212,23 @@ public class GameMap extends GameBlock implements Serializable
         tilemapOffset = determineTilesOffset(bytes, mapSize);
 
         // Create the byte array stream and begin parsing the input
-        stream = new SeekableInputStream(new ByteArrayInputStream(bytes));
+        final SeekableInputStream blockStream = new SeekableInputStream(
+            new ByteArrayInputStream(bytes));
+        try
+        {
+            // Create the Game Map
+            gameMap = new GameMap(mapSize, msqBlockSize, tilemapOffset);
 
-        // Create the Game Map
-        gameMap = new GameMap(mapSize, msqBlockSize, tilemapOffset);
+            // Read the map data
+            gameMap.readMapData(blockStream, tilemapOffset, mapSize, true);
 
-        // Read the map data
-        gameMap.readMapData(stream, tilemapOffset, mapSize, true);
-
-        // Return the created map
-        return gameMap;
+            // Return the created map
+            return gameMap;
+        }
+        finally
+        {
+            blockStream.close();
+        }
     }
 
 
@@ -240,8 +248,9 @@ public class GameMap extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    private void readMapData(SeekableInputStream stream, int tilemapOffset,
-        int mapSize, boolean compressedTileMap) throws IOException
+    private void readMapData(final SeekableInputStream stream,
+        final int tilemapOffset, final int mapSize,
+        final boolean compressedTileMap) throws IOException
     {
         CentralDirectory centralDirectory;
         SpecialActionTable specialActionTable;
@@ -301,7 +310,7 @@ public class GameMap extends GameBlock implements Serializable
         // Read the actions
         for (int i = 1; i < 16; i++)
         {
-            int offset = centralDirectory.getActionClassOffset(i);
+            final int offset = centralDirectory.getActionClassOffset(i);
             if (offset != 0)
             {
                 stream.seek(offset);
@@ -326,7 +335,8 @@ public class GameMap extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    public static GameMap readHacked(InputStream stream) throws IOException
+    public static GameMap readHacked(final InputStream stream)
+        throws IOException
     {
         int tilemapOffset, mapSize;
         SeekableInputStream gameStream;
@@ -360,8 +370,8 @@ public class GameMap extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    private CentralDirectory writeMapData(OutputStream stream,
-        boolean compressTilemap) throws IOException
+    private CentralDirectory writeMapData(final OutputStream stream,
+        final boolean compressTilemap) throws IOException
     {
         SeekableOutputStream plainStream;
         CentralDirectory centralDirectory;
@@ -489,7 +499,8 @@ public class GameMap extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk)
+        throws IOException
     {
         ByteArrayOutputStream byteStream;
         RotatingXorOutputStream xorStream;
@@ -524,7 +535,7 @@ public class GameMap extends GameBlock implements Serializable
      * @throws IOException
      */
 
-    public void writeHacked(OutputStream stream) throws IOException
+    public void writeHacked(final OutputStream stream) throws IOException
     {
         ByteArrayOutputStream byteStream;
         byte[] bytes;
@@ -563,13 +574,14 @@ public class GameMap extends GameBlock implements Serializable
         {
             for (int i = 0, max = actions.countActions(); i < max; i++)
             {
-                Action specialAction = actions.getAction(i);
+                final Action specialAction = actions.getAction(i);
                 if (specialAction instanceof SpecialAction)
                 {
-                    SpecialAction action = (SpecialAction) actions.getAction(i);
+                    final SpecialAction action = (SpecialAction) actions
+                        .getAction(i);
                     if (action != null)
                     {
-                        int id = action.getAction();
+                        final int id = action.getAction();
                         if (!specialActionTable.contains(id))
                         {
                             specialActionTable.add(id);
@@ -590,7 +602,7 @@ public class GameMap extends GameBlock implements Serializable
      * @return The Game Map
      */
 
-    public static GameMap read(Element element)
+    public static GameMap read(final Element element)
     {
         GameMap gameMap;
         int mapSize;
@@ -622,9 +634,9 @@ public class GameMap extends GameBlock implements Serializable
             .element("battleStrings"));
 
         // Read the actions
-        for (Object item: element.elements("actions"))
+        for (final Object item: element.elements("actions"))
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             int actionClass;
 
             actionClass = StringUtils.toInt(subElement
@@ -657,7 +669,7 @@ public class GameMap extends GameBlock implements Serializable
      * @return The game map
      */
 
-    public static GameMap readXml(InputStream stream)
+    public static GameMap readXml(final InputStream stream)
     {
         Document document;
         Element element;
@@ -742,7 +754,8 @@ public class GameMap extends GameBlock implements Serializable
      * @return The size of the encrypted part
      */
 
-    private static int determineEncryptionSize(byte[] bytes, int mapSize)
+    private static int determineEncryptionSize(final byte[] bytes,
+        final int mapSize)
     {
         int offset;
 
@@ -761,7 +774,7 @@ public class GameMap extends GameBlock implements Serializable
      * @return The map size.
      */
 
-    private static int determineMapSize(byte[] bytes)
+    private static int determineMapSize(final byte[] bytes)
     {
         int offset;
         boolean is32, is64;
@@ -810,7 +823,8 @@ public class GameMap extends GameBlock implements Serializable
      * @return The tiles offset
      */
 
-    private static int determineTilesOffset(byte[] bytes, int mapSize)
+    private static int determineTilesOffset(final byte[] bytes,
+        final int mapSize)
     {
         int i = bytes.length - 9;
         while (i > 0)
@@ -872,7 +886,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The action class map to set
      */
 
-    public void setActionClassMap(ActionClassMap actionClassMap)
+    public void setActionClassMap(final ActionClassMap actionClassMap)
     {
         this.actionClassMap = actionClassMap;
     }
@@ -897,7 +911,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The actionMap to set
      */
 
-    public void setActionMap(ActionMap actionMap)
+    public void setActionMap(final ActionMap actionMap)
     {
         this.actionMap = actionMap;
     }
@@ -922,7 +936,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The battleStrings to set
      */
 
-    public void setBattleStrings(BattleStrings battleStrings)
+    public void setBattleStrings(final BattleStrings battleStrings)
     {
         this.battleStrings = battleStrings;
     }
@@ -947,7 +961,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The info to set
      */
 
-    public void setInfo(Info info)
+    public void setInfo(final Info info)
     {
         this.info = info;
     }
@@ -972,7 +986,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The monsters to set
      */
 
-    public void setMonsters(Monsters monsters)
+    public void setMonsters(final Monsters monsters)
     {
         this.monsters = monsters;
     }
@@ -997,7 +1011,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The npcs to set
      */
 
-    public void setNpcs(NPCs npcs)
+    public void setNpcs(final NPCs npcs)
     {
         this.npcs = npcs;
     }
@@ -1022,7 +1036,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The strings to set
      */
 
-    public void setStrings(Strings strings)
+    public void setStrings(final Strings strings)
     {
         this.strings = strings;
     }
@@ -1047,7 +1061,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The tileMap to set
      */
 
-    public void setTileMap(TileMap tileMap)
+    public void setTileMap(final TileMap tileMap)
     {
         this.tileMap = tileMap;
     }
@@ -1072,7 +1086,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The tilemapOffset to set
      */
 
-    public void setTilemapOffset(int tilemapOffset)
+    public void setTilemapOffset(final int tilemapOffset)
     {
         this.tilemapOffset = tilemapOffset;
     }
@@ -1085,7 +1099,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The mapSize to set
      */
 
-    public void setMapSize(int mapSize)
+    public void setMapSize(final int mapSize)
     {
         this.mapSize = mapSize;
     }
@@ -1098,7 +1112,7 @@ public class GameMap extends GameBlock implements Serializable
      *            The msqSize to set
      */
 
-    public void setMsqSize(int msqSize)
+    public void setMsqSize(final int msqSize)
     {
         this.msqSize = msqSize;
     }

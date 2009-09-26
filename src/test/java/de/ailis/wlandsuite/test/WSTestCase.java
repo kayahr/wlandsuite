@@ -56,7 +56,8 @@ public abstract class WSTestCase extends TestCase
      * @throws IOException
      */
 
-    public static void assertEquals(File file, byte[] data) throws IOException
+    public static void assertEquals(final File file, final byte[] data)
+        throws IOException
     {
         InputStream stream1;
         InputStream stream2;
@@ -95,7 +96,8 @@ public abstract class WSTestCase extends TestCase
      * @throws IOException
      */
 
-    public static void assertEquals(File file1, File file2) throws IOException
+    public static void assertEquals(final File file1, final File file2)
+        throws IOException
     {
         InputStream stream1;
         InputStream stream2;
@@ -109,7 +111,8 @@ public abstract class WSTestCase extends TestCase
             {
                 if (b != stream1.read())
                 {
-                    fail("Content of " + file2.getPath() + " does not match the content of " + file1.getPath());
+                    fail("Content of " + file2.getPath()
+                        + " does not match the content of " + file1.getPath());
                 }
             }
             if (stream1.read() != -1)
@@ -135,7 +138,7 @@ public abstract class WSTestCase extends TestCase
      * @throws IOException
      */
 
-    public static void assertEquals(File file, BufferedImage image)
+    public static void assertEquals(final File file, final BufferedImage image)
         throws IOException
     {
         BufferedImage other;
@@ -173,7 +176,8 @@ public abstract class WSTestCase extends TestCase
      * @throws IOException
      */
 
-    public static String readString(InputStream stream) throws IOException
+    public static String readString(final InputStream stream)
+        throws IOException
     {
         ByteArrayOutputStream bytes;
         byte[] buffer;
@@ -198,10 +202,10 @@ public abstract class WSTestCase extends TestCase
      *            The test text
      */
 
-    public static void assertRegex(String regex, String text)
+    public static void assertRegex(final String regex, final String text)
     {
         Pattern pattern;
-        
+
         pattern = Pattern.compile(regex, Pattern.DOTALL);
         if (!pattern.matcher(text).matches())
         {
@@ -209,7 +213,7 @@ public abstract class WSTestCase extends TestCase
         }
     }
 
-    
+
     /**
      * Executes a Wasteland Suite program and checks its output.
      * 
@@ -224,12 +228,13 @@ public abstract class WSTestCase extends TestCase
      * @throws IOException
      */
 
-    public static void testExec(String command, int statusCode, String outExpr,
-        String errExpr) throws IOException
+    public static void testExec(final String command, final int statusCode,
+        final String outExpr, final String errExpr) throws IOException
     {
         String[] env;
         Process process;
         String out, err;
+        String execCommand;
 
         env = new String[1];
         env[0] = "CLASSPATH=target/classes" + File.pathSeparatorChar
@@ -239,14 +244,14 @@ public abstract class WSTestCase extends TestCase
 
         if (command.startsWith("wlandsuite"))
         {
-            command = command.substring(10);
+            execCommand = command.substring(10);
         }
         else
         {
-            command = "-- " + command;
+            execCommand = "-- " + command;
         }
         process = Runtime.getRuntime().exec(
-            "java de.ailis.wlandsuite.Launcher " + command, env);
+            "java de.ailis.wlandsuite.Launcher " + execCommand, env);
         process.getOutputStream().close();
         err = readString(process.getErrorStream());
         out = readString(process.getInputStream());
@@ -256,7 +261,7 @@ public abstract class WSTestCase extends TestCase
         {
             assertEquals(statusCode, process.waitFor());
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             fail(e.getMessage());
         }

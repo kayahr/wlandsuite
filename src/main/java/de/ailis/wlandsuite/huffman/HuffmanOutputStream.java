@@ -46,10 +46,10 @@ import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
 public class HuffmanOutputStream extends OutputStream
 {
     /** The bit stream */
-    private BitOutputStream bitStream;
+    private final BitOutputStream bitStream;
 
     /** The huffman tree */
-    private HuffmanTree tree;
+    private final HuffmanTree tree;
 
 
     /**
@@ -62,7 +62,7 @@ public class HuffmanOutputStream extends OutputStream
      * @throws IOException
      */
 
-    public HuffmanOutputStream(OutputStream stream, HuffmanTree tree)
+    public HuffmanOutputStream(final OutputStream stream, final HuffmanTree tree)
         throws IOException
     {
         this.bitStream = new BitOutputStreamWrapper(stream);
@@ -76,22 +76,18 @@ public class HuffmanOutputStream extends OutputStream
      */
 
     @Override
-    public void write(int b) throws IOException
+    public void write(final int b) throws IOException
     {
-        boolean[] fullKey;
-        HuffmanNode node;
 
-        if (b < 0)
-        {
-            b += 256;
-        }
-        
-        node = this.tree.getNode(b);
+        final int payload = b < 0 ? b + 256 : b;
+
+        final HuffmanNode node = this.tree.getNode(payload);
         if (node == null)
         {
-            throw new IOException("No huffman node found for payload " + b);
+            throw new IOException("No huffman node found for payload "
+                + payload);
         }
-        fullKey = node.getFullKey();
+        final boolean[] fullKey = node.getFullKey();
         for (int i = fullKey.length - 1; i >= 0; i--)
         {
             this.bitStream.writeBit(fullKey[i]);

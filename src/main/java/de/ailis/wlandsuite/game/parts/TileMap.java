@@ -29,9 +29,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
-
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
@@ -41,6 +38,8 @@ import de.ailis.wlandsuite.huffman.HuffmanOutputStream;
 import de.ailis.wlandsuite.huffman.HuffmanTree;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
@@ -53,7 +52,7 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 public class TileMap
 {
     /** The tile map. First index is y, second is x */
-    private int[][] map;
+    private final int[][] map;
 
     /** A unknown 32 bit address */
     private int unknown;
@@ -70,7 +69,7 @@ public class TileMap
      *             If illegal map size was specified
      */
 
-    public TileMap(int mapSize)
+    public TileMap(final int mapSize)
     {
         if (mapSize != 32 && mapSize != 64)
         {
@@ -93,7 +92,8 @@ public class TileMap
      * @return The new Tile Map
      */
 
-    public static TileMap read(Element element, int mapSize, int backgroundTile)
+    public static TileMap read(final Element element, final int mapSize,
+        final int backgroundTile)
     {
         TileMap tileMap;
         String data;
@@ -116,7 +116,7 @@ public class TileMap
                 {
                     c = data.substring(i * 3, i * 3 + 2);
                 }
-                catch (StringIndexOutOfBoundsException e)
+                catch (final StringIndexOutOfBoundsException e)
                 {
                     throw new GameException("Tile map is corrupt: "
                         + (mapSize * mapSize - (y * mapSize + x))
@@ -132,7 +132,7 @@ public class TileMap
                     {
                         b = Integer.valueOf(c, 16);
                     }
-                    catch (NumberFormatException e)
+                    catch (final NumberFormatException e)
                     {
                         throw new GameException(
                             "Illegal data in tile map at y=" + y + " x=" + x);
@@ -164,35 +164,36 @@ public class TileMap
      * @throws IOException
      */
 
-    public static TileMap read(SeekableInputStream stream, int mapSize)
-        throws IOException
+    public static TileMap read(final SeekableInputStream stream,
+        final int mapSize) throws IOException
     {
-        TileMap tileMap;
         InputStream huffmanStream;
-        boolean compressed;
+        int realMapSize;
 
-        compressed = mapSize == 0;
+        final boolean compressed = mapSize == 0;
 
         // Read map size from stream
         if (compressed)
         {
-            mapSize = stream.readSignedInt();
-            if (mapSize == 32 * 32)
+            realMapSize = stream.readSignedInt();
+            if (realMapSize == 32 * 32)
             {
-                mapSize = 32;
+                realMapSize = 32;
             }
-            else if (mapSize == 64 * 64)
+            else if (realMapSize == 64 * 64)
             {
-                mapSize = 64;
+                realMapSize = 64;
             }
             else
             {
                 throw new IOException("Invalid Tile Map header");
             }
         }
+        else
+            realMapSize = mapSize;
 
         // Create the new TileMap
-        tileMap = new TileMap(mapSize);
+        final TileMap tileMap = new TileMap(realMapSize);
 
         // Read the unknown 32 bit value
         if (compressed)
@@ -206,9 +207,9 @@ public class TileMap
         }
 
         // Read the tile map data
-        for (int y = 0; y < mapSize; y++)
+        for (int y = 0; y < realMapSize; y++)
         {
-            for (int x = 0; x < mapSize; x++)
+            for (int x = 0; x < realMapSize; x++)
             {
                 tileMap.map[y][x] = huffmanStream.read();
             }
@@ -227,7 +228,7 @@ public class TileMap
      * @return The tile map as XML
      */
 
-    public Element toXml(int backgroundTile)
+    public Element toXml(final int backgroundTile)
     {
         Element element;
         StringWriter text;
@@ -290,7 +291,7 @@ public class TileMap
      * @throws IOException
      */
 
-    public void write(SeekableOutputStream stream, boolean compress)
+    public void write(final SeekableOutputStream stream, final boolean compress)
         throws IOException
     {
         int mapSize;
@@ -343,7 +344,7 @@ public class TileMap
      * @return The action selector
      */
 
-    public int getTile(int x, int y)
+    public int getTile(final int x, final int y)
     {
         return this.map[y][x];
     }
@@ -360,7 +361,7 @@ public class TileMap
      *            The tile to set
      */
 
-    public void setTile(int x, int y, int tile)
+    public void setTile(final int x, final int y, final int tile)
     {
         this.map[y][x] = tile;
     }

@@ -48,10 +48,10 @@ import de.ailis.wlandsuite.pic.Pic;
 public class PicsAnimationFrameSet
 {
     /** The animation frames */
-    private List<Pic> frames;
+    private final List<Pic> frames;
 
     /** The animation instructions */
-    private List<PicsAnimationInstruction> instructions;
+    private final List<PicsAnimationInstruction> instructions;
 
 
     /**
@@ -74,8 +74,8 @@ public class PicsAnimationFrameSet
      *            The instructions
      */
 
-    public PicsAnimationFrameSet(List<Pic> frames,
-        List<PicsAnimationInstruction> instructions)
+    public PicsAnimationFrameSet(final List<Pic> frames,
+        final List<PicsAnimationInstruction> instructions)
     {
         this.frames = frames;
         this.instructions = instructions;
@@ -97,8 +97,8 @@ public class PicsAnimationFrameSet
      *            The raw frames
      */
 
-    void addFrame(int delay, int frameNo, Pic baseFrame,
-        Pic workingFrame, List<RawAnimationFrame> rawFrames)
+    void addFrame(final int delay, final int frameNo, final Pic baseFrame,
+        final Pic workingFrame, final List<RawAnimationFrame> rawFrames)
     {
         int index;
 
@@ -128,7 +128,7 @@ public class PicsAnimationFrameSet
      * @return The raw animation frames.
      */
 
-    public Map<String, RawAnimationFrame> getRawFrames(Pic baseFrame)
+    public Map<String, RawAnimationFrame> getRawFrames(final Pic baseFrame)
     {
         Map<String, RawAnimationFrame> rawFrames;
         String key;
@@ -136,7 +136,7 @@ public class PicsAnimationFrameSet
 
         rawFrames = new HashMap<String, RawAnimationFrame>();
         currentFrame = 0;
-        for (PicsAnimationInstruction instruction: this.instructions)
+        for (final PicsAnimationInstruction instruction: this.instructions)
         {
             nextFrame = instruction.getFrame();
             key = getRawFrameKey(currentFrame, nextFrame);
@@ -168,8 +168,8 @@ public class PicsAnimationFrameSet
      * @return The raw animation frame
      */
 
-    private RawAnimationFrame getRawFrame(int currentFrame, int nextFrame,
-        Pic baseFrame)
+    private RawAnimationFrame getRawFrame(final int currentFrame, final int nextFrame,
+        final Pic baseFrame)
     {
         Pic current, next;
         List<RawAnimationFramePart> parts;
@@ -196,7 +196,7 @@ public class PicsAnimationFrameSet
      * @return The diff
      */
 
-    private List<RawAnimationFramePart> getDiff(Pic frame1, Pic frame2)
+    private List<RawAnimationFramePart> getDiff(final Pic frame1, final Pic frame2)
     {
         int x, y;
         int w, h;
@@ -244,17 +244,13 @@ public class PicsAnimationFrameSet
      * @return The map key
      */
 
-    public static String getRawFrameKey(int frame1, int frame2)
+    public static String getRawFrameKey(final int frame1, final int frame2)
     {
-        int tmp;
+        int lowFrame, highFrame;
 
-        if (frame1 > frame2)
-        {
-            tmp = frame1;
-            frame1 = frame2;
-            frame2 = tmp;
-        }
-        return frame1 + "-" + frame2;
+        lowFrame = Math.min(frame1, frame2);
+        highFrame = Math.max(frame1, frame2);
+        return lowFrame + "-" + highFrame;
     }
 
 
@@ -271,7 +267,7 @@ public class PicsAnimationFrameSet
      * @return The frame index or -1 if frame was not found
      */
 
-    private int getFrameIndex(Pic workingFrame, Pic baseFrame)
+    private int getFrameIndex(final Pic workingFrame, final Pic baseFrame)
     {
         if (workingFrame.equals(baseFrame))
         {
