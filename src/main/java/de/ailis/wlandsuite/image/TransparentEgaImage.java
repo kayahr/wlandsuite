@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: EgaImage.java 67 2006-08-01 20:25:34Z k $
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,6 +23,8 @@
 
 package de.ailis.wlandsuite.image;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.IndexColorModel;
@@ -33,19 +35,20 @@ import javax.imageio.ImageIO;
 
 
 /**
- * An EGA image.
+ * A transparent EGA image. It has the standard 16 color palette with an
+ * additional color at index 16 which indicates a transparent color.
  * 
  * @author Klaus Reimer (k@ailis.de)
- * @version $Revision$
+ * @version $Revision: 67 $
  */
 
-public class EgaImage extends PaletteImage
+public class TransparentEgaImage extends PaletteImage
 {
     /** The color palette */
-    private static final int palette[] = { 0xff000000, 0xff0000aa, 0xff00aa00,
-        0xff00aaaa, 0xffaa0000, 0xffaa00aa, 0xffaa5500, 0xffaaaaaa, 0xff555555,
-        0xff5555ff, 0xff55ff55, 0xff55ffff, 0xffff5555, 0xffff55ff, 0xffffff55,
-        0xffffffff };
+    private static final int palette[] = { 0xff000000, 0xff0000aa, 0xff00aa00, 0xff00aaaa,
+        0xffaa0000, 0xffaa00aa, 0xffaa5500, 0xffaaaaaa, 0xff555555,
+        0xff5555ff, 0xff55ff55, 0xff55ffff, 0xffff5555, 0xffff55ff,
+        0xffffff55, 0xffffffff,0xff222222 }; 
 
 
     /**
@@ -57,10 +60,13 @@ public class EgaImage extends PaletteImage
      *            The picture height
      */
 
-    public EgaImage(final int width, final int height)
+    public TransparentEgaImage(final int width, final int height)
     {
-        super(width, height, TYPE_BYTE_BINARY, new IndexColorModel(4,
+        super(width, height, TYPE_BYTE_INDEXED, new IndexColorModel(5,
             palette.length, palette, 0, false, -1, DataBuffer.TYPE_BYTE));
+        final Graphics2D ctx = createGraphics();
+        ctx.setColor(new Color(palette[16]));
+        ctx.fillRect(0, 0, width, height);
     }
 
 
@@ -73,7 +79,7 @@ public class EgaImage extends PaletteImage
      *            The normal buffered image
      */
 
-    public EgaImage(final BufferedImage image)
+    public TransparentEgaImage(final BufferedImage image)
     {
         this(image.getWidth(), image.getHeight());
         createGraphics().drawImage(image, 0, 0, null);
@@ -89,7 +95,7 @@ public class EgaImage extends PaletteImage
      * @throws IOException
      */
 
-    public static EgaImage read(final InputStream stream) throws IOException
+    public static TransparentEgaImage read(final InputStream stream) throws IOException
     {
         BufferedImage image;
 
@@ -98,45 +104,17 @@ public class EgaImage extends PaletteImage
         {
             throw new IOException("Unable to read image from stream");
         }
-        return new EgaImage(image);
+        return new TransparentEgaImage(image);
     }
 
 
     /**
      * @see de.ailis.wlandsuite.image.PaletteImage#getPalette()
      */
-
+    
     @Override
     protected int[] getPalette()
     {
         return palette;
-    }
-
-
-    /**
-     * Creates a diff between this picture and the specified one and returns it
-     * in form of a transparent ega image.
-     * 
-     * @param image
-     *            The other image to create a diff for
-     * @return The diff as a transparent EGA image
-     */
-
-    public TransparentEgaImage getDiff(final EgaImage image)
-    {
-        final int aw = getWidth();
-        final int ah = getHeight();
-        final int bw = image.getWidth();
-        final int bh = image.getHeight();
-        final TransparentEgaImage diff = new TransparentEgaImage(bw, bh);
-        for (int y = 0; y < bh; y++)
-        {
-            for (int x = 0; x < bw; x++)
-            {
-                if (y >= ah || x >= aw || getRGB(x, y) != image.getRGB(x, y))
-                    diff.setRGB(x, y, image.getRGB(x, y));
-            }
-        }
-        return diff;
     }
 }

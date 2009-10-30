@@ -23,7 +23,6 @@
 
 package de.ailis.wlandsuite.pics;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -58,7 +57,7 @@ import de.ailis.wlandsuite.pic.Pic;
 public class PicsAnimation
 {
     /** The base frame */
-    private Pic baseFrame;
+    private final Pic baseFrame;
 
     /** The animation frame sets */
     private List<PicsAnimationFrameSet> frameSets = new ArrayList<PicsAnimationFrameSet>();
@@ -73,7 +72,7 @@ public class PicsAnimation
      *            The frame sets
      */
 
-    public PicsAnimation(Pic baseFrame, List<PicsAnimationFrameSet> frameSets)
+    public PicsAnimation(final Pic baseFrame, final List<PicsAnimationFrameSet> frameSets)
     {
         this.baseFrame = baseFrame;
         this.frameSets = frameSets;
@@ -93,7 +92,7 @@ public class PicsAnimation
      * @throws IOException
      */
 
-    public static PicsAnimation read(InputStream stream, int width)
+    public static PicsAnimation read(final InputStream stream, final int width)
         throws IOException
     {
         MsqHeader header;
@@ -154,7 +153,7 @@ public class PicsAnimation
      */
 
     private static List<PicsAnimationFrameSet> readAnimationData(
-        BitInputStream stream, Pic baseFrame) throws IOException
+        final BitInputStream stream, final Pic baseFrame) throws IOException
     {
         List<PicsAnimationFrameSet> frameSets;
         PicsAnimationFrameSet frameSet;
@@ -250,8 +249,8 @@ public class PicsAnimation
      * @throws IOException
      */
 
-    public static PicsAnimation readHacked(InputStream stream, int width,
-        int height) throws IOException
+    public static PicsAnimation readHacked(final InputStream stream, final int width,
+        final int height) throws IOException
     {
         Pic baseFrame;
         List<PicsAnimationFrameSet> frames;
@@ -272,7 +271,7 @@ public class PicsAnimation
      * @throws IOException
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         MsqHeader header;
         HuffmanTree huffmanTree;
@@ -332,14 +331,14 @@ public class PicsAnimation
         headerStream = new ByteArrayOutputStream();
         dataStream = new ByteArrayOutputStream();
         newFrameId = 0;
-        for (PicsAnimationFrameSet frameSet: this.frameSets)
+        for (final PicsAnimationFrameSet frameSet: this.frameSets)
         {
             // Get the map with raw frames from the frame set
             rawFrames = frameSet.getRawFrames(this.baseFrame);
 
             // Cycle through instructions
             currentFrame = 0;
-            for (PicsAnimationInstruction instruction: frameSet
+            for (final PicsAnimationInstruction instruction: frameSet
                 .getInstructions())
             {
                 delay = instruction.getDelay();
@@ -405,7 +404,7 @@ public class PicsAnimation
      * @throws IOException
      */
 
-    public void writeHacked(OutputStream stream) throws IOException
+    public void writeHacked(final OutputStream stream) throws IOException
     {
         // Write the base frame MSQ header
         stream.write(this.baseFrame.getBytes(false));
@@ -421,7 +420,7 @@ public class PicsAnimation
      * @return The base frame
      */
 
-    public BufferedImage getBaseFrame()
+    public Pic getBaseFrame()
     {
         return this.baseFrame;
     }
