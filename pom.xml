@@ -197,6 +197,20 @@
     </site>
   </distributionManagement>
   
+  <repositories>
+    <repository>
+      <id>ailis-releases</id>
+      <name>Ailis Maven Releases</name>
+      <url>https://www.ailis.de/nexus/content/repositories/releases</url>      
+    </repository>
+    <repository>
+      <id>ailis-snapshots</id>
+      <name>Ailis Maven Snapshots</name>
+      <url>https://www.ailis.de/nexus/content/repositories/snapshots</url>
+      <snapshots />
+    </repository>
+  </repositories>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

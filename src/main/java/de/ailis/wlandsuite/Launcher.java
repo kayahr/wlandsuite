@@ -41,7 +41,7 @@ public class Launcher extends CLIProg
      */
     
     @Override
-    protected void run(String[] params)
+    protected void run(final String[] params)
     {
         String[] newArgs;
         String command;
@@ -208,6 +208,11 @@ public class Launcher extends CLIProg
             PackPic.main(newArgs);
             System.exit(0);
         }
+        else if ("webextract".equals(command))
+        {
+            WebExtract.main(newArgs);
+            System.exit(0);
+        }
         else
         {
             wrongUsage("Unknown command: " + command);
@@ -222,7 +227,7 @@ public class Launcher extends CLIProg
      *            Command line arguments
      */
 
-    public static void main(String[] args)
+    public static void main(final String[] args)
     {
         Launcher launcher;
         

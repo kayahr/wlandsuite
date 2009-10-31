@@ -2,6 +2,9 @@ Usage: webextract [OPTION]... OUTPUTDIR [INPUTDIR]
 Extracts all game data to web compatible files (JSON objects and PNG/GIF
 graphics).
 
+  -s, --scale    Optional scaling algorithm to use. Possible values:
+                 nearest2x, nearest3x, nearest4x, scale2x, scale3x, hq2x,
+                 hq3x, hq4x.
   -d, --debug    Shows stacktrace when an error occurs
   -h, --help     Display help and exit
   -V, --version  Display version and exit
