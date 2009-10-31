@@ -23,6 +23,9 @@
 
 package de.ailis.wlandsuite;
 
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -38,19 +41,20 @@ import javax.imageio.ImageIO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.ailis.scilter.ScaleFilter;
+import de.ailis.scilter.ScaleFilterFactory;
 import de.ailis.wlandsuite.cli.ExtractProg;
 import de.ailis.wlandsuite.htds.Htds;
 import de.ailis.wlandsuite.htds.HtdsTileset;
+import de.ailis.wlandsuite.image.EgaImage;
 import de.ailis.wlandsuite.image.GifAnimWriter;
 import de.ailis.wlandsuite.image.TransparentEgaImage;
-import de.ailis.wlandsuite.masks.Mask;
 import de.ailis.wlandsuite.masks.Masks;
 import de.ailis.wlandsuite.pic.Pic;
 import de.ailis.wlandsuite.pics.Pics;
 import de.ailis.wlandsuite.pics.PicsAnimation;
 import de.ailis.wlandsuite.pics.PicsAnimationFrameSet;
 import de.ailis.wlandsuite.pics.PicsAnimationInstruction;
-import de.ailis.wlandsuite.sprites.Sprite;
 import de.ailis.wlandsuite.sprites.Sprites;
 
 
@@ -62,10 +66,13 @@ import de.ailis.wlandsuite.sprites.Sprites;
  * @version $Revision: 126 $
  */
 
-public class WebExtractor extends ExtractProg
+public class WebExtract extends ExtractProg
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(ExtractMaps.class);
+
+    /** The scale filter to use */
+    private ScaleFilter scaleFilter = ScaleFilterFactory.createFilter("normal");
 
 
     /**
@@ -96,19 +103,30 @@ public class WebExtractor extends ExtractProg
                 final Htds htds = Htds.read(stream);
 
                 int tilesetId = 0;
+                log.info("Writing tileset " + tilesetId);
                 for (final HtdsTileset tileset: htds.getTilesets())
                 {
                     final List<Pic> tiles = tileset.getTiles();
-                    final BufferedImage out = new BufferedImage(10 * 16,
-                        (int) Math.ceil((double) tiles.size() / 10) * 16,
-                        BufferedImage.TYPE_INT_RGB);
+                    final int scale = this.scaleFilter.getScaleFactor();
+                    final BufferedImage out;
+                    final int outType = this.scaleFilter.getImageType();
+                    if (outType == -1)
+                        out = new EgaImage(10 * 16 * scale, (int) Math
+                            .ceil((double) tiles.size() / 10)
+                            * 16 * scale);
+                    else
+                        out = new BufferedImage(10 * 16 * scale, (int) Math
+                            .ceil((double) tiles.size() / 10)
+                            * 16 * scale, outType);
                     final Graphics2D g = out.createGraphics();
                     int i = 0;
                     for (final Pic tile: tileset.getTiles())
                     {
-                        g.drawImage(tile, i % 10 * 16, i / 10 * 16, null);
+                        g.drawImage(this.scaleFilter.scale(tile), i % 10 * 16
+                            * scale, i / 10 * 16 * scale, null);
                         i++;
                     }
+
                     ImageIO.write(out, "png", new File(imagesDirectory,
                         "tileset" + gameId + tilesetId + ".png"));
                     tilesetId++;
@@ -166,18 +184,26 @@ public class WebExtractor extends ExtractProg
             stream.close();
         }
 
-        final BufferedImage out = new BufferedImage(10 * 16, 16,
-            BufferedImage.TYPE_INT_ARGB);
+        final int scale = this.scaleFilter.getScaleFactor();
+        final BufferedImage out;
+        final int outType = this.scaleFilter.getImageType();
+        if (outType == -1)
+            out = new TransparentEgaImage(10 * 16 * scale, 16 * scale);
+        else
+            out = new BufferedImage(10 * 16 * scale, 16 * scale, BufferedImage.TYPE_INT_ARGB);
+        log.info("Writing sprites");
         for (int i = 0; i < 10; i++)
         {
-            final Sprite sprite = sprites.getSprites().get(i);
-            final Mask mask = masks.getMasks().get(i);
-            for (int x = 0; x < 16; x++)
+            final BufferedImage sprite = this.scaleFilter.scale(sprites
+                .getSprites().get(i));
+            final BufferedImage mask = this.scaleFilter.scale(masks.getMasks()
+                .get(i));
+            for (int x = 0; x < 16 * scale; x++)
             {
-                for (int y = 0; y < 16; y++)
+                for (int y = 0; y < 16 * scale; y++)
                 {
                     if (mask.getRGB(x, y) == Color.BLACK.getRGB())
-                        out.setRGB(i * 16 + x, y, sprite.getRGB(x, y));
+                        out.setRGB(x + i * 16 * scale, y, sprite.getRGB(x, y));
                 }
             }
         }
@@ -223,11 +249,12 @@ public class WebExtractor extends ExtractProg
             int i = 0;
             for (final PicsAnimation animation: pics.getAnimations())
             {
+                log.info("Writing pic " + i);
                 final File animDirectory = new File(animsDirectory, String
                     .format("%d%02d", gameId, i));
                 animDirectory.mkdirs();
 
-                final Pic baseFrame = animation.getBaseFrame();
+                final TransparentEgaImage baseFrame = new TransparentEgaImage(this.scaleFilter.scale(animation.getBaseFrame()));
 
                 int layerId = 1;
                 for (final PicsAnimationFrameSet frameSet: animation
@@ -240,9 +267,9 @@ public class WebExtractor extends ExtractProg
                         animDirectory, "layer" + layerId + ".gif"), 0);
                     try
                     {
-                        gif.setTransparentIndex(16);
+                        gif.setTransparentIndex(0);
                         gif.setDelay(instructions.get(0).getDelay() * 50);
-                        Pic current = baseFrame;
+                        TransparentEgaImage current = baseFrame;
                         if (layerId == 1)
                             gif.addFrame(current);
                         else
@@ -255,8 +282,8 @@ public class WebExtractor extends ExtractProg
                             final int frameIndex = instruction.getFrame();
                             final int delay = instructions.get(
                                 (j + 1) % instructions.size()).getDelay();
-                            final Pic frame = frameIndex == 0 ? baseFrame
-                                : frames.get(frameIndex - 1);
+                            final TransparentEgaImage frame = frameIndex == 0 ? baseFrame
+                                : new TransparentEgaImage(this.scaleFilter.scale(frames.get(frameIndex - 1)));
                             gif.setDelay(delay * 50);
                             gif.addFrame(current.getDiff(frame));
                             current = frame;
@@ -290,7 +317,7 @@ public class WebExtractor extends ExtractProg
         }
     }
 
-    
+
     /**
      * @see de.ailis.wlandsuite.cli.ExtractProg#extract(java.io.File,
      *      java.io.File)
@@ -307,6 +334,24 @@ public class WebExtractor extends ExtractProg
 
 
     /**
+     * @see de.ailis.wlandsuite.cli.CLIProg#processOption(int,
+     *      gnu.getopt.Getopt)
+     */
+
+    @Override
+    protected void processOption(final int opt, final Getopt getopt)
+    {
+        switch (opt)
+        {
+            case 's':
+                this.scaleFilter = ScaleFilterFactory.createFilter(getopt
+                    .getOptarg());
+                break;
+        }
+    }
+
+
+    /**
      * Main method
      * 
      * @param args
@@ -315,9 +360,14 @@ public class WebExtractor extends ExtractProg
 
     public static void main(final String[] args)
     {
-        final WebExtractor app = new WebExtractor();
-        app.setHelp("help/webextractor.txt");
-        app.setProgName("webextractor");
+        final WebExtract app = new WebExtract();
+
+        final LongOpt[] longOpts = new LongOpt[] { new LongOpt("scale",
+            LongOpt.REQUIRED_ARGUMENT, null, 's') };
+
+        app.setHelp("help/webextract.txt");
+        app.setProgName("webextract");
+        app.setLongOpts(longOpts);
         app.start(args);
     }
 }

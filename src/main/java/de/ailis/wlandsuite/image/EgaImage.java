@@ -23,6 +23,8 @@
 
 package de.ailis.wlandsuite.image;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.IndexColorModel;
@@ -76,7 +78,14 @@ public class EgaImage extends PaletteImage
     public EgaImage(final BufferedImage image)
     {
         this(image.getWidth(), image.getHeight());
-        createGraphics().drawImage(image, 0, 0, null);
+        final Graphics2D ctx = createGraphics();
+        ctx.setRenderingHint(RenderingHints.KEY_RENDERING,
+            RenderingHints.VALUE_RENDER_QUALITY);
+        ctx.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
+            RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        ctx.setRenderingHint(RenderingHints.KEY_DITHERING,
+            RenderingHints.VALUE_DITHER_DISABLE);
+        ctx.drawImage(image, 0, 0, null);
     }
 
 
@@ -110,33 +119,5 @@ public class EgaImage extends PaletteImage
     protected int[] getPalette()
     {
         return palette;
-    }
-
-
-    /**
-     * Creates a diff between this picture and the specified one and returns it
-     * in form of a transparent ega image.
-     * 
-     * @param image
-     *            The other image to create a diff for
-     * @return The diff as a transparent EGA image
-     */
-
-    public TransparentEgaImage getDiff(final EgaImage image)
-    {
-        final int aw = getWidth();
-        final int ah = getHeight();
-        final int bw = image.getWidth();
-        final int bh = image.getHeight();
-        final TransparentEgaImage diff = new TransparentEgaImage(bw, bh);
-        for (int y = 0; y < bh; y++)
-        {
-            for (int x = 0; x < bw; x++)
-            {
-                if (y >= ah || x >= aw || getRGB(x, y) != image.getRGB(x, y))
-                    diff.setRGB(x, y, image.getRGB(x, y));
-            }
-        }
-        return diff;
     }
 }

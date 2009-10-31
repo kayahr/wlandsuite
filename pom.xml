@@ -8,9 +8,9 @@
   <packaging>jar</packaging>
   <name>wlandsuite</name>
   <version>1.3.1-SNAPSHOT</version>
-  <url>http://www.ailis.de/~k/software/projects/wlandsuite/</url>
+  <url>http://www.ailis.de/~k/projects/wlandsuite/</url>
   <description>Software for reading and writing data files of the famous game Wasteland</description>
-  <inceptionYear>2006</inceptionYear>
+  <inceptionYear>2009</inceptionYear>
   <organization>
     <name>Klaus Reimer</name>
     <url>http://www.ailis.de/~k/</url>
@@ -247,6 +247,11 @@
           <artifactId>xml-apis</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>de.ailis.scilter</groupId>
+      <artifactId>scilter</artifactId>
+      <version>1.0.1-SNAPSHOT</version>  
     </dependency>
   </dependencies>
 </project>

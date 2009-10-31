@@ -52,7 +52,7 @@ public abstract class PaletteImage extends BufferedImage
      *            The color model
      */
 
-    public PaletteImage(int width, int height, int imageType, IndexColorModel cm)
+    public PaletteImage(final int width, final int height, final int imageType, final IndexColorModel cm)
     {
         super(width, height, imageType, cm);
     }
@@ -67,7 +67,7 @@ public abstract class PaletteImage extends BufferedImage
      * @return The palette index
      */
 
-    private int getPaletteIndex(int color)
+    private int getPaletteIndex(final int color)
     {
         for (int i = 0; i < getPalette().length; i++)
         {
@@ -98,7 +98,7 @@ public abstract class PaletteImage extends BufferedImage
      *            The color index (0-15)
      */
 
-    public void setPixel(int x, int y, int color)
+    public void setPixel(final int x, final int y, final int color)
     {
         setRGB(x, y, getPalette()[color]);
     }
@@ -115,7 +115,7 @@ public abstract class PaletteImage extends BufferedImage
      * @return The color index (0-15) of the pixel
      */
 
-    public int getPixel(int x, int y)
+    public int getPixel(final int x, final int y)
     {
         return getPaletteIndex(getRGB(x, y));
     }
@@ -137,7 +137,7 @@ public abstract class PaletteImage extends BufferedImage
      */
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object o)
     {
         PaletteImage other;
         
@@ -177,5 +177,33 @@ public abstract class PaletteImage extends BufferedImage
             }
         }
         return pixels;
+    }
+
+
+    /**
+     * Creates a diff between this picture and the specified one and returns it
+     * in form of a transparent ega image.
+     * 
+     * @param image
+     *            The other image to create a diff for
+     * @return The diff as a transparent EGA image
+     */
+
+    public TransparentEgaImage getDiff(final BufferedImage image)
+    {
+        final int aw = getWidth();
+        final int ah = getHeight();
+        final int bw = image.getWidth();
+        final int bh = image.getHeight();
+        final TransparentEgaImage diff = new TransparentEgaImage(bw, bh);
+        for (int y = 0; y < bh; y++)
+        {
+            for (int x = 0; x < bw; x++)
+            {
+                if (y >= ah || x >= aw || getRGB(x, y) != image.getRGB(x, y))
+                    diff.setRGB(x, y, image.getRGB(x, y));
+            }
+        }
+        return diff;
     }
 }

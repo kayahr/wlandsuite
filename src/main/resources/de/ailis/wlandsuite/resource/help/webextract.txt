@@ -1,0 +1,16 @@
+Usage: webextract [OPTION]... OUTPUTDIR [INPUTDIR]
+Extracts all game data to web compatible files (JSON objects and PNG/GIF
+graphics).
+
+  -d, --debug    Shows stacktrace when an error occurs
+  -h, --help     Display help and exit
+  -V, --version  Display version and exit
+
+The first parameter must be the name of the directory in which the generated
+files should be saved. The program creates the necessary directory structure
+automatically.
+
+The second parameter specifies the wasteland directory. If the parameter is 
+missing then the current directory is used.
+
+Report bugs to Klaus Reimer <k@ailis.de>
