@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -32,7 +32,7 @@ import java.io.Serializable;
 
 /**
  * MSQ header
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -43,18 +43,18 @@ public class MsqHeader implements Serializable
     private static final long serialVersionUID = -5186751829710381419L;
 
     /** The MSQ block type */
-    private MsqType type;
+    private final MsqType type;
 
     /** The disk index (0 or 1) */
-    private int disk;
+    private final int disk;
 
     /** The size of the uncompressed MSQ data */
-    private int size;
+    private final int size;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param type
      *            The MSQ block type
      * @param disk
@@ -63,7 +63,7 @@ public class MsqHeader implements Serializable
      *            The size of the uncompressed MSQ data
      */
 
-    public MsqHeader(MsqType type, int disk, int size)
+    public MsqHeader(final MsqType type, final int disk, final int size)
     {
         this.type = type;
         this.disk = disk;
@@ -74,14 +74,15 @@ public class MsqHeader implements Serializable
     /**
      * Reads a MSQ header from the stream. If the end of the stream has been
      * reached then NULL is returned.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The MSQ header or null if end of stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static MsqHeader read(InputStream stream) throws IOException
+    public static MsqHeader read(final InputStream stream) throws IOException
     {
         int b1, b2, b3, b4;
         int size;
@@ -140,13 +141,14 @@ public class MsqHeader implements Serializable
 
     /**
      * Writes the MSQ header to the given output stream
-     * 
+     *
      * @param stream
      *            The output stream
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         // Write the size information for compressed or Cpa animation block
         if (this.type == MsqType.Compressed || this.type == MsqType.CpaAnimation)
@@ -156,7 +158,7 @@ public class MsqHeader implements Serializable
             stream.write((this.size >> 16) & 0xff);
             stream.write((this.size >> 24) & 0xff);
         }
-        
+
         // Write the MSQ identifier
         if (this.type == MsqType.CpaAnimation)
         {
@@ -170,7 +172,7 @@ public class MsqHeader implements Serializable
             stream.write('s');
             stream.write('q');
         }
-        
+
         // Write the disk index
         if (this.type == MsqType.Uncompressed)
         {
@@ -185,7 +187,7 @@ public class MsqHeader implements Serializable
 
     /**
      * Returns the disk index (0 or 1).
-     * 
+     *
      * @return The disk index
      */
 
@@ -197,7 +199,7 @@ public class MsqHeader implements Serializable
 
     /**
      * Returns the size of the uncompressed MSQ block data.
-     * 
+     *
      * @return The size of the uncompressed data
      */
 
@@ -209,7 +211,7 @@ public class MsqHeader implements Serializable
 
     /**
      * Returns the MSQ block type.
-     * 
+     *
      * @return The MSQ block type
      */
 

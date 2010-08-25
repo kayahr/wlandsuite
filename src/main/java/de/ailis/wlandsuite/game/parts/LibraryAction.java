@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -28,16 +28,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The library data used in the Special Building Actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -63,14 +63,15 @@ public class LibraryAction implements Action
     /**
      * Creates and returns a new Library object by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The LIbrary
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static LibraryAction read(InputStream stream) throws IOException
+    public static LibraryAction read(final InputStream stream) throws IOException
     {
         LibraryAction library;
         byte[] bytes;
@@ -99,7 +100,7 @@ public class LibraryAction implements Action
             skills.add(b);
             b = stream.read();
         }
-        int max = skills.size();
+        final int max = skills.size();
         library.skills = new int[max];
         for (int i = 0; i < max; i++)
         {
@@ -115,8 +116,8 @@ public class LibraryAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         stream.write(0x82);
 
@@ -131,7 +132,7 @@ public class LibraryAction implements Action
             stream.write(0);
         }
 
-        for (int itemType: this.skills)
+        for (final int itemType: this.skills)
         {
             stream.write(itemType);
         }
@@ -141,13 +142,13 @@ public class LibraryAction implements Action
 
     /**
      * Returns the library data as XML.
-     * 
+     *
      * @param id
      *            The action id
      * @return The library data as XML
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -172,7 +173,7 @@ public class LibraryAction implements Action
             element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
 
-        for (int skill: this.skills)
+        for (final int skill: this.skills)
         {
             Element subElement;
 
@@ -187,13 +188,13 @@ public class LibraryAction implements Action
 
     /**
      * Creates and returns a new Library object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The library data
      */
 
-    public static LibraryAction read(Element element)
+    public static LibraryAction read(final Element element)
     {
         LibraryAction library;
 
@@ -206,12 +207,12 @@ public class LibraryAction implements Action
         library.newAction = StringUtils.toInt(element.attributeValue(
             "newAction", "255"));
 
-        List<?> elements = element.elements("skill");
+        final List<?> elements = element.elements("skill");
         library.skills = new int[elements.size()];
         int i = 0;
-        for (Object item: elements)
+        for (final Object item: elements)
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             library.skills[i] = StringUtils.toInt(subElement.getText());
             i++;
         }
@@ -222,7 +223,7 @@ public class LibraryAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -234,12 +235,12 @@ public class LibraryAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -247,7 +248,7 @@ public class LibraryAction implements Action
 
     /**
      * Returns the name.
-     * 
+     *
      * @return The name
      */
 
@@ -259,12 +260,12 @@ public class LibraryAction implements Action
 
     /**
      * Sets the name.
-     * 
+     *
      * @param name
      *            The name to set
      */
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -272,7 +273,7 @@ public class LibraryAction implements Action
 
     /**
      * Returns the newAction.
-     * 
+     *
      * @return The newAction
      */
 
@@ -284,12 +285,12 @@ public class LibraryAction implements Action
 
     /**
      * Sets the newAction.
-     * 
+     *
      * @param newAction
      *            The newAction to set
      */
 
-    public void setNewAction(int newAction)
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -297,7 +298,7 @@ public class LibraryAction implements Action
 
     /**
      * Returns the newActionClass.
-     * 
+     *
      * @return The newActionClass
      */
 
@@ -309,12 +310,12 @@ public class LibraryAction implements Action
 
     /**
      * Sets the newActionClass.
-     * 
+     *
      * @param newActionClass
      *            The newActionClass to set
      */
 
-    public void setNewActionClass(int newActionClass)
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }
@@ -322,7 +323,7 @@ public class LibraryAction implements Action
 
     /**
      * Returns the skills.
-     * 
+     *
      * @return The skills
      */
 
@@ -334,12 +335,12 @@ public class LibraryAction implements Action
 
     /**
      * Sets the skills.
-     * 
+     *
      * @param skills
      *            The skills to set
      */
 
-    public void setSkills(int[] skills)
+    public void setSkills(final int[] skills)
     {
         this.skills = skills;
     }

@@ -63,7 +63,7 @@ public class CpaTest extends WSTestCase
     /**
      * Tests reading a CPA
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testRead() throws IOException
@@ -86,7 +86,7 @@ public class CpaTest extends WSTestCase
     /**
      * Tests writing a CPA.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWrite() throws IOException

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -38,7 +38,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * A container for actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -61,7 +61,7 @@ public class Actions
 
     /**
      * Creates and returns a new Actions object.
-     * 
+     *
      * @param actionClass
      *            The action class
      * @param stream
@@ -70,10 +70,11 @@ public class Actions
      *            The special action table
      * @return The Actions object
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Actions read(int actionClass, SeekableInputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public static Actions read(final int actionClass, final SeekableInputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         Action action;
         int quantity;
@@ -108,7 +109,7 @@ public class Actions
         actions.actions = new ArrayList<Action>(quantity);
         for (int i = 0; i < quantity; i++)
         {
-            int actionOffset = offsets.get(i).intValue();
+            final int actionOffset = offsets.get(i).intValue();
             if (actionOffset != 0)
             {
                 stream.seek(actionOffset);
@@ -129,16 +130,17 @@ public class Actions
 
     /**
      * Writes the actions to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param specialActionTable
      *            The special action table
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         List<Integer> offsets;
         ByteArrayOutputStream byteStream;
@@ -149,7 +151,7 @@ public class Actions
         byteStream = new ByteArrayOutputStream();
         offsets = new ArrayList<Integer>(this.actions.size());
         startOffset = (int) stream.tell() + this.actions.size() * 2;
-        for (Action action: this.actions)
+        for (final Action action: this.actions)
         {
             if (action == null)
             {
@@ -164,7 +166,7 @@ public class Actions
         }
 
         // Write the offset table
-        for (Integer offset: offsets)
+        for (final Integer offset: offsets)
         {
             stream.writeWord(offset);
         }
@@ -176,13 +178,13 @@ public class Actions
 
     /**
      * Returns the actions as XML.
-     * 
+     *
      * @param actionClass
      *            The action class (1-15)
      * @return The actions as XML
      */
 
-    public Element toXml(int actionClass)
+    public Element toXml(final int actionClass)
     {
         Element element;
         int id;
@@ -190,7 +192,7 @@ public class Actions
         element = XmlUtils.createElement("actions");
         element.addAttribute("actionClass", StringUtils.toHex(actionClass));
         id = 0;
-        for (Action action: this.actions)
+        for (final Action action: this.actions)
         {
             if (action != null)
             {
@@ -205,13 +207,13 @@ public class Actions
     /**
      * Creates a new Actions object by reading its data from the specified XML
      * element.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new Actions object
      */
 
-    public static Actions read(Element element)
+    public static Actions read(final Element element)
     {
         int actionClass;
         Actions actions;
@@ -219,9 +221,9 @@ public class Actions
         actions = new Actions();
 
         actionClass = StringUtils.toInt(element.attributeValue("actionClass"));
-        for (Object item: element.elements())
+        for (final Object item: element.elements())
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             int id;
 
             id = StringUtils.toInt(subElement.attributeValue("id"));
@@ -239,7 +241,7 @@ public class Actions
 
     /**
      * Returns the number of actions.
-     * 
+     *
      * @return The number of actions
      */
 
@@ -251,13 +253,13 @@ public class Actions
 
     /**
      * Returns the action with the specified index.
-     * 
+     *
      * @param index
      *            The index
      * @return The action
      */
-    
-    public Action getAction(int index)
+
+    public Action getAction(final int index)
     {
         return this.actions.get(index);
     }

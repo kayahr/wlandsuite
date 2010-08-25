@@ -60,7 +60,7 @@ public class VerticalXorOutputStreamTest extends TestCase
     /**
      * Tests writing VXor endoced data.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWriting() throws IOException

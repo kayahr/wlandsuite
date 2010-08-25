@@ -67,7 +67,7 @@ public class DecodePicTest extends LauncherTest
     /**
      * Tests empty call
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     @Override
@@ -81,7 +81,7 @@ public class DecodePicTest extends LauncherTest
     /**
      * Tests converting from file to file.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testFileFile() throws IOException

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,17 +26,17 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The mask action is used to mask a square with a different tile. It also can
  * output a message and it change the square when the player steps on it.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -62,14 +62,15 @@ public class MaskAction implements Action
     /**
      * Creates and returns a new Mask Action by reading the data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The Mask Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static MaskAction read(InputStream stream) throws IOException
+    public static MaskAction read(final InputStream stream) throws IOException
     {
         MaskAction action;
         int b;
@@ -101,13 +102,13 @@ public class MaskAction implements Action
     /**
      * Creates and returns a new Mask Action by reading its data from the
      * specified XML element.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Mask Action
      */
 
-    public static MaskAction read(Element element)
+    public static MaskAction read(final Element element)
     {
         MaskAction action;
 
@@ -130,7 +131,7 @@ public class MaskAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -162,8 +163,8 @@ public class MaskAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.write(this.message);
         stream.write((this.tile & 127) | (this.impassable ? 128 : 0));
@@ -177,7 +178,7 @@ public class MaskAction implements Action
 
     /**
      * Returns the action class.
-     * 
+     *
      * @return The action class
      */
 
@@ -189,12 +190,12 @@ public class MaskAction implements Action
 
     /**
      * Sets the action class.
-     * 
+     *
      * @param newActionClass
      *            The action class to set
      */
 
-    public void setNewActionClass(int newActionClass)
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }
@@ -202,7 +203,7 @@ public class MaskAction implements Action
 
     /**
      * Returns the action selector.
-     * 
+     *
      * @return The action selector
      */
 
@@ -214,12 +215,12 @@ public class MaskAction implements Action
 
     /**
      * Sets the action selector.
-     * 
+     *
      * @param newAction
      *            The action selector to set
      */
 
-    public void setNewAction(int newAction)
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -227,7 +228,7 @@ public class MaskAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -239,12 +240,12 @@ public class MaskAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -252,7 +253,7 @@ public class MaskAction implements Action
 
     /**
      * Returns the impassable.
-     * 
+     *
      * @return The impassable
      */
 
@@ -264,12 +265,12 @@ public class MaskAction implements Action
 
     /**
      * Sets the impassable.
-     * 
+     *
      * @param impassable
      *            The impassable to set
      */
 
-    public void setImpassable(boolean impassable)
+    public void setImpassable(final boolean impassable)
     {
         this.impassable = impassable;
     }
@@ -277,7 +278,7 @@ public class MaskAction implements Action
 
     /**
      * Returns the tile.
-     * 
+     *
      * @return The tile
      */
 
@@ -289,12 +290,12 @@ public class MaskAction implements Action
 
     /**
      * Sets the tile.
-     * 
+     *
      * @param tile
      *            The tile to set
      */
 
-    public void setTile(int tile)
+    public void setTile(final int tile)
     {
         this.tile = tile;
     }

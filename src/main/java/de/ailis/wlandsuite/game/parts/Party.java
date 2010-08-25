@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -37,7 +37,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * Party is a container for party members (Which are just the member ids).
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -78,14 +78,15 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Creates a new party be reading its data from the specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new party
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Party read(InputStream stream) throws IOException
+    public static Party read(final InputStream stream) throws IOException
     {
         Party party;
         int member;
@@ -114,13 +115,14 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Writes the party to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         if (size() > 7)
         {
@@ -130,7 +132,7 @@ public class Party extends ArrayList<Integer>
         }
 
         stream.write(0);
-        for (int member: this)
+        for (final int member: this)
         {
             stream.write(member);
         }
@@ -149,13 +151,13 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Creates a new party by reading its data from the specified XML element.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new party
      */
 
-    public static Party read(Element element)
+    public static Party read(final Element element)
     {
         Party party;
 
@@ -167,9 +169,9 @@ public class Party extends ArrayList<Integer>
         party.prevY = StringUtils.toInt(element.attributeValue("prevY", "0"));
         party.prevMap = StringUtils.toInt(element
             .attributeValue("prevMap", "0"));
-        for (Object item: element.elements("member"))
+        for (final Object item: element.elements("member"))
         {
-            Element member = (Element) item;
+            final Element member = (Element) item;
 
             party.add(StringUtils.toInt(member.getTextTrim()));
         }
@@ -179,13 +181,13 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the XML representation of the party.
-     * 
+     *
      * @param id
      *            The party id
      * @return The XML element
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -204,7 +206,7 @@ public class Party extends ArrayList<Integer>
         element.addAttribute("prevX", Integer.toString(this.prevX));
         element.addAttribute("prevY", Integer.toString(this.prevY));
         element.addAttribute("prevMap", Integer.toString(this.prevMap));
-        for (int member: this)
+        for (final int member: this)
         {
             Element subElement;
 
@@ -218,7 +220,7 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the map.
-     * 
+     *
      * @return The map
      */
 
@@ -230,12 +232,12 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Sets the map.
-     * 
+     *
      * @param map
      *            The map to set
      */
 
-    public void setMap(int map)
+    public void setMap(final int map)
     {
         this.map = map;
     }
@@ -243,7 +245,7 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the previous map (For FF transitions):
-     * 
+     *
      * @return The map
      */
 
@@ -255,12 +257,12 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Sets the previous map (For FF transitions).
-     * 
+     *
      * @param prevMap
      *            The map to set
      */
 
-    public void setPrevMap(int prevMap)
+    public void setPrevMap(final int prevMap)
     {
         this.prevMap = prevMap;
     }
@@ -268,7 +270,7 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the previous X position on the previous map (For FF transitions).
-     * 
+     *
      * @return The X position
      */
 
@@ -280,12 +282,12 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Sets the previous X position on the previous map (For FF transitions).
-     * 
+     *
      * @param prevX
      *            The X position to set
      */
 
-    public void setPrevX(int prevX)
+    public void setPrevX(final int prevX)
     {
         this.prevX = prevX;
     }
@@ -293,7 +295,7 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the previous Y position on the previous map (For FF transitions).
-     * 
+     *
      * @return The Y position
      */
 
@@ -305,12 +307,12 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Sets the previous Y position on the previous map (For FF transitions).
-     * 
+     *
      * @param prevY
      *            The Y position to set
      */
 
-    public void setPrevY(int prevY)
+    public void setPrevY(final int prevY)
     {
         this.prevY = prevY;
     }
@@ -318,7 +320,7 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the x position on the map.
-     * 
+     *
      * @return The x position
      */
 
@@ -330,12 +332,12 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Sets the x position on the map.
-     * 
+     *
      * @param x
      *            The x position to set
      */
 
-    public void setX(int x)
+    public void setX(final int x)
     {
         this.x = x;
     }
@@ -343,7 +345,7 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Returns the y position on the map.
-     * 
+     *
      * @return The y position
      */
 
@@ -355,12 +357,12 @@ public class Party extends ArrayList<Integer>
 
     /**
      * Sets the y position on the map.
-     * 
+     *
      * @param y
      *            The y position to set
      */
 
-    public void setY(int y)
+    public void setY(final int y)
     {
         this.y = y;
     }

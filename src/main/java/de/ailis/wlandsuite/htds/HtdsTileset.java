@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -44,7 +44,7 @@ import de.ailis.wlandsuite.pic.Pic;
 
 /**
  * HtdsTileset
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -52,17 +52,17 @@ import de.ailis.wlandsuite.pic.Pic;
 public class HtdsTileset
 {
     /** The tiles */
-    private List<Pic> tiles;
+    private final List<Pic> tiles;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param tiles
      *            The tiles
      */
 
-    public HtdsTileset(List<Pic> tiles)
+    public HtdsTileset(final List<Pic> tiles)
     {
         this.tiles = tiles;
     }
@@ -71,14 +71,15 @@ public class HtdsTileset
     /**
      * Reads HTDS tileset with the default tile size of 16x16 from the given
      * file.
-     * 
+     *
      * @param file
      *            The input file
      * @return The HTDS tileset
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HtdsTileset read(File file) throws IOException
+    public static HtdsTileset read(final File file) throws IOException
     {
         return read(file, 16, 16);
     }
@@ -88,7 +89,7 @@ public class HtdsTileset
      * Reads HTDS tileset from the given file. Width and height of the tiles
      * must be specified because no image dimensions can be read from the
      * stream.
-     * 
+     *
      * @param file
      *            The input file
      * @param width
@@ -97,9 +98,10 @@ public class HtdsTileset
      *            The tile height
      * @return The HTDS tileset
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HtdsTileset read(File file, int width, int height)
+    public static HtdsTileset read(final File file, final int width, final int height)
         throws IOException
     {
         InputStream stream;
@@ -119,16 +121,17 @@ public class HtdsTileset
     /**
      * Reads HTDS tileset with the default tile size of 16x16 from the given
      * stream.
-     * 
+     *
      * This method returns null if no more tilesets are found on the stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The HTDS tileset
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HtdsTileset read(InputStream stream) throws IOException
+    public static HtdsTileset read(final InputStream stream) throws IOException
     {
         return read(stream, 16, 16);
     }
@@ -137,9 +140,9 @@ public class HtdsTileset
     /**
      * Reads a HTDS tileset from a stream. Width and height of the tiles must be
      * specified because no image dimensions can be read from the stream.
-     * 
+     *
      * This method returns null if no more tilesets are found on the stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -148,9 +151,10 @@ public class HtdsTileset
      *            The tile height
      * @return The tileset or null if no more tilesets are found
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HtdsTileset read(InputStream stream, int width, int height)
+    public static HtdsTileset read(final InputStream stream, final int width, final int height)
         throws IOException
     {
         MsqHeader header;
@@ -189,7 +193,7 @@ public class HtdsTileset
      * Reads a tileset from an external tileset file for Displacer's hacked EXE.
      * Width and height of the tiles must be specified because no image
      * dimensions can be read from the stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -198,10 +202,11 @@ public class HtdsTileset
      *            The tile height
      * @return The tileset
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HtdsTileset readHacked(InputStream stream, int width,
-        int height) throws IOException
+    public static HtdsTileset readHacked(final InputStream stream, final int width,
+        final int height) throws IOException
     {
         List<Pic> tiles;
 
@@ -213,7 +218,7 @@ public class HtdsTileset
             {
                 tiles.add(Pic.read(stream, width, height, false));
             }
-            catch (EOFException e)
+            catch (final EOFException e)
             {
                 break;
             }
@@ -224,15 +229,16 @@ public class HtdsTileset
 
     /**
      * Writes a HTDS tileset to a file.
-     * 
+     *
      * @param file
      *            The output file
      * @param disk
      *            The disk index
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(File file, int disk) throws IOException
+    public void write(final File file, final int disk) throws IOException
     {
         OutputStream stream;
 
@@ -250,15 +256,16 @@ public class HtdsTileset
 
     /**
      * Writes a HTDS tileset to a stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk index
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         MsqHeader header;
         HuffmanOutputStream huffmanStream;
@@ -268,7 +275,7 @@ public class HtdsTileset
 
         // Calculate the size of the tileset
         size = 0;
-        for (Pic tile: this.tiles)
+        for (final Pic tile: this.tiles)
         {
             size += tile.getWidth() * tile.getHeight() / 2;
         }
@@ -289,13 +296,14 @@ public class HtdsTileset
     /**
      * Writes a tileset to an external tileset file compatibly to Displacer's
      * hacked EXE.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeHacked(OutputStream stream) throws IOException
+    public void writeHacked(final OutputStream stream) throws IOException
     {
         // Write the tiles
         stream.write(getBytes(false));
@@ -304,7 +312,7 @@ public class HtdsTileset
 
     /**
      * Returns the xor encoded bytes of the tileset.
-     * 
+     *
      * @return The bytes
      */
 
@@ -312,17 +320,17 @@ public class HtdsTileset
     {
         return getBytes(true);
     }
-    
+
 
     /**
      * Returns the bytes of the tileset.
-     * 
+     *
      * @param encoded
      *            If the pics should be xor encoded
      * @return The bytes
      */
 
-    public byte[] getBytes(boolean encoded)
+    public byte[] getBytes(final boolean encoded)
     {
         ByteArrayOutputStream stream;
 
@@ -331,7 +339,7 @@ public class HtdsTileset
             stream = new ByteArrayOutputStream();
             try
             {
-                for (Pic tile: this.tiles)
+                for (final Pic tile: this.tiles)
                 {
                     tile.write(stream, encoded);
                 }
@@ -342,7 +350,7 @@ public class HtdsTileset
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored, can't happen
             return null;
@@ -351,7 +359,7 @@ public class HtdsTileset
 
     /**
      * Returns the tiles.
-     * 
+     *
      * @return The tiles
      */
 

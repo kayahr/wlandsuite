@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -33,7 +33,7 @@ import java.io.InputStream;
 
 /**
  * File utility methods
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -43,13 +43,13 @@ public class FileUtils
     /**
      * Returns the file extension of the filename. If the filename has no
      * extension then an empty string is returned.
-     * 
+     *
      * @param filename
      *            The filename
      * @return The file extension
      */
 
-    public static String getFileExtension(String filename)
+    public static String getFileExtension(final String filename)
     {
         int pos;
 
@@ -68,14 +68,15 @@ public class FileUtils
     /**
      * Reads all the available bytes from a file and returns them as a byte
      * array.
-     * 
+     *
      * @param file
      *            The file to read
      * @return The read data
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static byte[] readBytes(File file) throws IOException
+    public static byte[] readBytes(final File file) throws IOException
     {
         FileInputStream stream;
 
@@ -94,14 +95,15 @@ public class FileUtils
     /**
      * Reads all the available bytes from the input stream and returns them as a
      * byte array.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The read data
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static byte[] readBytes(InputStream stream) throws IOException
+    public static byte[] readBytes(final InputStream stream) throws IOException
     {
         ByteArrayOutputStream output;
         byte[] buffer;
@@ -126,15 +128,16 @@ public class FileUtils
 
     /**
      * Writes bytes to a file.
-     * 
+     *
      * @param file
      *            The file
      * @param bytes
      *            The bytes
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static void writeBytes(File file, byte[] bytes) throws IOException
+    public static void writeBytes(final File file, final byte[] bytes) throws IOException
     {
         FileOutputStream stream;
 

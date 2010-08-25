@@ -55,7 +55,7 @@ public class HuffmanInputStreamTest extends TestCase
     /**
      * Tests reading of huffman compressed data.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testReading() throws IOException

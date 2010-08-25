@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,7 +34,7 @@ import de.ailis.wlandsuite.io.SeekableInputStream;
 /**
  * Special actions are doctors, shops, libraries, ranger centers and special EXE
  * actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,16 +54,17 @@ public class SpecialActionFactory
     /**
      * Creates and returns a new Special Action by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param specialActionTable The special action table
      * @return The new Dialogue Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Action read(SeekableInputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public static Action read(final SeekableInputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         int type;
 
@@ -95,13 +96,13 @@ public class SpecialActionFactory
 
     /**
      * Creates and returns a Special Action by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Dialogue Action
      */
 
-    public static Action read(Element element)
+    public static Action read(final Element element)
     {
         String type;
 

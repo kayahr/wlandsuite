@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -30,7 +30,7 @@ import java.io.InputStream;
 /**
  * The VerticalXorInputStream allows reading a vxor encoded data stream.
  * If this stream is closed then the connected input stream is also closed.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -38,31 +38,31 @@ import java.io.InputStream;
 public class VerticalXorInputStream extends InputStream
 {
     /** The stream to read encoded data from */
-    private InputStream stream;
+    private final InputStream stream;
 
     /** The width in bytes (not in pixels) */
-    private int width;
-    
+    private final int width;
+
     /** The last read line (used for decoding the next line) */
-    private int[] lastLine;
-    
+    private final int[] lastLine;
+
     /** Current X position in stream */
     private int x;
-    
+
     /** Current Y position in stream */
     private int y;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param stream
      *            The stream to read encoded data from
      * @param width
      *            The width in pixels
      */
 
-    public VerticalXorInputStream(InputStream stream, int width)
+    public VerticalXorInputStream(final InputStream stream, final int width)
     {
         super();
         this.stream = stream;
@@ -79,23 +79,23 @@ public class VerticalXorInputStream extends InputStream
     public int read() throws IOException
     {
         int b;
-        
-        // Read encoded byte from stream        
+
+        // Read encoded byte from stream
         b = this.stream.read();
         if (b == -1)
         {
             return -1;
         }
-        
+
         // Decode the byte it it's not in the first (unencoded) row
         if (this.y > 0)
         {
             b = b ^ this.lastLine[this.x];
         }
-        
+
         // Remember the decoded byte for the next row
         this.lastLine[this.x] = b;
-            
+
         // Move on the cursor
         if (this.x < this.width - 1)
         {
@@ -106,17 +106,18 @@ public class VerticalXorInputStream extends InputStream
             this.y++;
             this.x = 0;
         }
-        
+
         // Return the decoded byte
         return b;
     }
-    
-    
+
+
     /**
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      * @see java.io.InputStream#close()
      */
-    
+
     @Override
     public void close() throws IOException
     {

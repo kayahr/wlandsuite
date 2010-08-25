@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -25,18 +25,18 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * A loot item used in loot bags.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -60,18 +60,18 @@ public class LootItem
         "fixedMoney", "randomMoney" };
 
     /** The check type. One of the TYPE_* constants */
-    private int type;
+    private final int type;
 
     /** The check value (For example the item id or group id) */
-    private int value;
+    private final int value;
 
     /** The number of items (or the amount of money */
-    private int quantity;
+    private final int quantity;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param type
      *            The item type
      * @param value
@@ -80,7 +80,7 @@ public class LootItem
      *            The item quantity
      */
 
-    public LootItem(int type, int value, int quantity)
+    public LootItem(final int type, final int value, final int quantity)
     {
         this.type = type;
         this.value = value;
@@ -90,7 +90,7 @@ public class LootItem
 
     /**
      * Returns the item quantity.
-     * 
+     *
      * @return The item quantity
      */
 
@@ -102,7 +102,7 @@ public class LootItem
 
     /**
      * Returns the item value.
-     * 
+     *
      * @return The item value
      */
 
@@ -114,7 +114,7 @@ public class LootItem
 
     /**
      * Returns the type.
-     * 
+     *
      * @return The type
      */
 
@@ -127,14 +127,15 @@ public class LootItem
     /**
      * Creates and returns a new item by reading its data from the specified
      * stream. If no more items are on the stream then null is returned.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The item
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static LootItem read(SeekableInputStream stream) throws IOException
+    public static LootItem read(final SeekableInputStream stream) throws IOException
     {
         int type, value, b, quantity;
         boolean highBit;
@@ -160,12 +161,12 @@ public class LootItem
 
     /**
      * Writes the loot data to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      */
 
-    public void write(SeekableOutputStream stream)
+    public void write(final SeekableOutputStream stream)
     {
         int value;
 
@@ -197,7 +198,7 @@ public class LootItem
 
     /**
      * Returns the item data as XML.
-     * 
+     *
      * @return The item data as XML
      */
 
@@ -221,13 +222,13 @@ public class LootItem
 
     /**
      * Creates and returns a new LootItem object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The loot item data
      */
 
-    public static LootItem read(Element element)
+    public static LootItem read(final Element element)
     {
         int type, quantity, value;
 
@@ -252,13 +253,13 @@ public class LootItem
     /**
      * Returns the type for the specified xml name. Returns -1 if no type was
      * found.
-     * 
+     *
      * @param xmlName
      *            The XML name
      * @return The type
      */
 
-    private static int getType(String xmlName)
+    private static int getType(final String xmlName)
     {
         for (int i = 0; i < xmlNames.length; i++)
         {
@@ -273,13 +274,13 @@ public class LootItem
 
     /**
      * Returns the XML name for the specified item type.
-     * 
+     *
      * @param type
      *            The check type
      * @return The XML name
      */
 
-    private static String getXmlName(int type)
+    private static String getXmlName(final int type)
     {
         return xmlNames[type];
     }

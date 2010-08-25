@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -61,7 +61,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * A game map.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -115,15 +115,15 @@ public class GameMap extends GameBlock implements Serializable
      * Constructs a new map with the specified map size. The map size must be 64
      * or 32. Maps are always quadratic. It's not possible to have different
      * widths and heights.
-     * 
+     *
      * The MSQ block size must be specified so the object knows how many padding
      * bytes must be inserted during save. MSQ block sizes are hardcoded in the
      * EXE so new Maps must fit these hardcoded boundaries to be loadable.
-     * 
+     *
      * The tilemap offset must also be specified because the position of the
      * tilemap is also hardcoded in the exe. So a new map must know where to
      * save the tilemap in the map file.
-     * 
+     *
      * @param mapSize
      *            The map size
      * @param msqBlockSize
@@ -153,16 +153,17 @@ public class GameMap extends GameBlock implements Serializable
      * Constructs a map by reading it from a wasteland gameX file stream. The
      * stream must point at the beginning of the MSQ block (which is at the "m"
      * of the "msq" header string.
-     * 
+     *
      * Because it's not possible to read the length of a MSQ block from the MSQ
      * block itself the size of the block must be specified manually.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param msqBlockSize
      *            The block size
      * @return The newly constructed Game Map
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static GameMap read(final SeekableInputStream stream,
@@ -235,7 +236,7 @@ public class GameMap extends GameBlock implements Serializable
     /**
      * Reads the map data from the given stream. This method is internally
      * called by the read and read and readHacked method.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param tilemapOffset
@@ -246,6 +247,7 @@ public class GameMap extends GameBlock implements Serializable
      *            Defines if the tilemap is compressed and therefor must be
      *            decompressed first
      * @throws IOException
+     *             When file operation fails.
      */
 
     private void readMapData(final SeekableInputStream stream,
@@ -328,11 +330,12 @@ public class GameMap extends GameBlock implements Serializable
     /**
      * Reads a hacked map (For Displacer's hacked EXE) from the given input
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The map
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static GameMap readHacked(final InputStream stream)
@@ -361,13 +364,14 @@ public class GameMap extends GameBlock implements Serializable
     /**
      * Writes the map data to the specified output stream. This method is used
      * internally by the write and writeHacked methods.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param compressTilemap
      *            If the tile map should be compressed
      * @return The central directory
      * @throws IOException
+     *             When file operation fails.
      */
 
     private CentralDirectory writeMapData(final OutputStream stream,
@@ -489,14 +493,16 @@ public class GameMap extends GameBlock implements Serializable
         return centralDirectory;
     }
 
+
     /**
      * Writes the map to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk id (0 or 1)
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void write(final OutputStream stream, final int disk)
@@ -529,10 +535,11 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Writes an external map file compatible to Displacer's hacked EXE file.
-     * 
+     *
      * @param stream
      *            The stream to write the map to
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void writeHacked(final OutputStream stream) throws IOException
@@ -558,7 +565,7 @@ public class GameMap extends GameBlock implements Serializable
     /**
      * Builds the special action table by looking at the actions in action class
      * 6.
-     * 
+     *
      * @return The special action table
      */
 
@@ -596,7 +603,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Creates and returns a new game map from XML.
-     * 
+     *
      * @param element
      *            The XML root element
      * @return The Game Map
@@ -663,7 +670,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Reads a game map from the specified XML stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The game map
@@ -746,7 +753,7 @@ public class GameMap extends GameBlock implements Serializable
     /**
      * Returns the size of the encrypted part in the map block. To do this it
      * needs at least 6146 decrypted bytes from the map block.
-     * 
+     *
      * @param bytes
      *            The (decrypted) block data
      * @param mapSize
@@ -768,7 +775,7 @@ public class GameMap extends GameBlock implements Serializable
      * Determines the map size by just looking at the MSQ block bytes. For this
      * it needs at least 6189 unencrypted bytes. Throws a GameException if it
      * was not able to determine the map size.
-     * 
+     *
      * @param bytes
      *            The MSQ block bytes
      * @return The map size.
@@ -815,7 +822,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Determines the tiles offset by just looking at the MSQ block bytes.
-     * 
+     *
      * @param bytes
      *            The MSQ block bytes
      * @param mapSize
@@ -845,7 +852,7 @@ public class GameMap extends GameBlock implements Serializable
     /**
      * Returns the map size. This is normally 64 or 32. Maps are always
      * quadratic. It's not possible to have different widths and heights.
-     * 
+     *
      * @return The map size
      */
 
@@ -857,7 +864,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the MSQ block size.
-     * 
+     *
      * @return The MSQ block size
      */
 
@@ -869,7 +876,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the action class map.
-     * 
+     *
      * @return The action class map
      */
 
@@ -881,7 +888,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the action class map.
-     * 
+     *
      * @param actionClassMap
      *            The action class map to set
      */
@@ -894,7 +901,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the actionMap.
-     * 
+     *
      * @return The actionMap
      */
 
@@ -906,7 +913,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the actionMap.
-     * 
+     *
      * @param actionMap
      *            The actionMap to set
      */
@@ -919,7 +926,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the battleStrings.
-     * 
+     *
      * @return The battleStrings
      */
 
@@ -931,7 +938,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the battleStrings.
-     * 
+     *
      * @param battleStrings
      *            The battleStrings to set
      */
@@ -944,7 +951,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the info.
-     * 
+     *
      * @return The info
      */
 
@@ -956,7 +963,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the info.
-     * 
+     *
      * @param info
      *            The info to set
      */
@@ -969,7 +976,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the monsters.
-     * 
+     *
      * @return The monsters
      */
 
@@ -981,7 +988,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the monsters.
-     * 
+     *
      * @param monsters
      *            The monsters to set
      */
@@ -994,7 +1001,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the npcs.
-     * 
+     *
      * @return The npcs
      */
 
@@ -1006,7 +1013,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the npcs.
-     * 
+     *
      * @param npcs
      *            The npcs to set
      */
@@ -1019,7 +1026,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the strings.
-     * 
+     *
      * @return The strings
      */
 
@@ -1031,7 +1038,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the strings.
-     * 
+     *
      * @param strings
      *            The strings to set
      */
@@ -1044,7 +1051,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the tileMap.
-     * 
+     *
      * @return The tileMap
      */
 
@@ -1056,7 +1063,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the tileMap.
-     * 
+     *
      * @param tileMap
      *            The tileMap to set
      */
@@ -1069,7 +1076,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Returns the tilemapOffset.
-     * 
+     *
      * @return The tilemapOffset
      */
 
@@ -1081,7 +1088,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the tilemapOffset.
-     * 
+     *
      * @param tilemapOffset
      *            The tilemapOffset to set
      */
@@ -1094,7 +1101,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the mapSize.
-     * 
+     *
      * @param mapSize
      *            The mapSize to set
      */
@@ -1107,7 +1114,7 @@ public class GameMap extends GameBlock implements Serializable
 
     /**
      * Sets the msqSize.
-     * 
+     *
      * @param msqSize
      *            The msqSize to set
      */

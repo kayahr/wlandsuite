@@ -62,7 +62,7 @@ public class FntTest extends WSTestCase
     /**
      * Tests reading a FNT
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testRead() throws IOException
@@ -86,7 +86,7 @@ public class FntTest extends WSTestCase
     /**
      * Tests writing a FNT.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWrite() throws IOException

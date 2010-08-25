@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * A Curs object contains the cursors of Wastelands curs file.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -44,7 +44,7 @@ public class Curs implements Serializable
     private static final long serialVersionUID = -6430987170817521049L;
 
     /** The cursors */
-    private List<Cursor> cursors;
+    private final List<Cursor> cursors;
 
 
     /**
@@ -59,12 +59,12 @@ public class Curs implements Serializable
 
     /**
      * Constructor for building a new curs.
-     * 
+     *
      * @param cursors
      *            The cursors
      */
 
-    public Curs(List<Cursor> cursors)
+    public Curs(final List<Cursor> cursors)
     {
         this.cursors = cursors;
     }
@@ -73,7 +73,7 @@ public class Curs implements Serializable
     /**
      * Calculates and returns the number of sprites for the given file size,
      * cursor width and height
-     * 
+     *
      * @param size
      *            The file size
      * @param width
@@ -83,7 +83,7 @@ public class Curs implements Serializable
      * @return The number of cursors
      */
 
-    public static int getQuantity(long size, int width, int height)
+    public static int getQuantity(final long size, final int width, final int height)
     {
         return (int) (size / (4 * height * width / 8 * 2));
     }
@@ -92,14 +92,15 @@ public class Curs implements Serializable
     /**
      * Loads cursors from a stream. A cursor size of 16x16 and a quantity of 8
      * is assumed.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The cursors
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Curs read(InputStream stream) throws IOException
+    public static Curs read(final InputStream stream) throws IOException
     {
         return read(stream, 16, 16, 8);
     }
@@ -107,16 +108,17 @@ public class Curs implements Serializable
 
     /**
      * Loads cursors from a stream. A cursor size of 16x16 is assumed.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param quantity
      *            The number of cursors to read
      * @return The cursors
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Curs read(InputStream stream, int quantity)
+    public static Curs read(final InputStream stream, final int quantity)
         throws IOException
     {
         return read(stream, 16, 16, quantity);
@@ -125,7 +127,7 @@ public class Curs implements Serializable
 
     /**
      * Loads cursors from a stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -136,10 +138,11 @@ public class Curs implements Serializable
      *            The number of cursors
      * @return The cursors
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Curs read(InputStream stream, int width, int height,
-        int quantity) throws IOException
+    public static Curs read(final InputStream stream, final int width, final int height,
+        final int quantity) throws IOException
     {
         Curs curs;
 
@@ -159,16 +162,17 @@ public class Curs implements Serializable
 
     /**
      * Writes cursors to a stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         // Read the cursors
-        for (Cursor cursor: this.cursors)
+        for (final Cursor cursor: this.cursors)
         {
             cursor.write(stream);
         }
@@ -177,7 +181,7 @@ public class Curs implements Serializable
 
     /**
      * Returns the cursors.
-     * 
+     *
      * @return The cursors
      */
 

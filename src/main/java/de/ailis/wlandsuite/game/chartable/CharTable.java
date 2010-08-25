@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -36,7 +36,7 @@ import de.ailis.wlandsuite.common.exceptions.GameException;
 
 /**
  * CharTable
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -44,7 +44,7 @@ import de.ailis.wlandsuite.common.exceptions.GameException;
 public class CharTable
 {
     /** The table entries */
-    private List<CharTableEntry> entries;
+    private final List<CharTableEntry> entries;
 
     /** If this char table is finished and therefor read only */
     private boolean finished;
@@ -63,18 +63,19 @@ public class CharTable
 
     /**
      * Constructor for reading a char table from an input stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public CharTable(InputStream stream) throws IOException
+    public CharTable(final InputStream stream) throws IOException
     {
         this.entries = new ArrayList<CharTableEntry>(60);
         for (int i = 60; i > 0; i--)
         {
-            int b = stream.read();
+            final int b = stream.read();
             this.entries.add(new CharTableEntry(b, i));
         }
         Collections.sort(this.entries);
@@ -84,18 +85,18 @@ public class CharTable
 
     /**
      * Adds a character to the char table.
-     * 
+     *
      * @param character
      *            The character to add
      */
 
-    public void add(int character)
+    public void add(final int character)
     {
         if (this.finished)
         {
             throw new IllegalStateException("CharTable is already finished");
         }
-        for (CharTableEntry entry: this.entries)
+        for (final CharTableEntry entry: this.entries)
         {
             if (entry.getCharacter() == character)
             {
@@ -109,12 +110,12 @@ public class CharTable
 
     /**
      * Adds the characters of the specified string to the char table.
-     * 
+     *
      * @param string
      *            The string to add
      */
 
-    public void add(String string)
+    public void add(final String string)
     {
         if (this.finished)
         {
@@ -122,14 +123,14 @@ public class CharTable
         }
         try
         {
-            for (byte b: string.toLowerCase().getBytes("ASCII"))
+            for (final byte b: string.toLowerCase().getBytes("ASCII"))
             {
-                int i = b & 0xff;
+                final int i = b & 0xff;
 
                 add(i);
             }
         }
-        catch (UnsupportedEncodingException e)
+        catch (final UnsupportedEncodingException e)
         {
             throw new GameException(e.toString(), e);
         }
@@ -159,13 +160,13 @@ public class CharTable
 
     /**
      * Returns the character for the specified table index
-     * 
+     *
      * @param index
      *            The table index
      * @return The character
      */
 
-    public int getCharacter(int index)
+    public int getCharacter(final int index)
     {
         return this.entries.get(index).getCharacter();
     }
@@ -173,13 +174,13 @@ public class CharTable
 
     /**
      * Returns the index for the specified character. Return -1 if not found.
-     * 
+     *
      * @param character
      *            The character to search for
      * @return The index in the char table
      */
 
-    public int getIndex(int character)
+    public int getIndex(final int character)
     {
         for (int i = 0, max = this.entries.size(); i < max; i++)
         {
@@ -194,17 +195,18 @@ public class CharTable
 
     /**
      * Writes the char table to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream to write to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         if (!this.finished) finish();
 
-        for (CharTableEntry entry: this.entries)
+        for (final CharTableEntry entry: this.entries)
         {
             stream.write(entry.getCharacter());
         }
@@ -223,9 +225,9 @@ public class CharTable
         if (!this.finished) finish();
 
         builder = new StringBuilder();
-        for (CharTableEntry entry: this.entries)
+        for (final CharTableEntry entry: this.entries)
         {
-            int i = entry.getCharacter();
+            final int i = entry.getCharacter();
 
             if (i >= 0x20 && i < 0x7f)
             {

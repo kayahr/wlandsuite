@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -28,16 +28,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The store data used in the Special Building Actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -72,14 +72,15 @@ public class StoreAction implements Action
     /**
      * Creates and returns a new Store object by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The Store
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static StoreAction read(InputStream stream) throws IOException
+    public static StoreAction read(final InputStream stream) throws IOException
     {
         StoreAction store;
         byte[] bytes;
@@ -111,7 +112,7 @@ public class StoreAction implements Action
             itemTypes.add(b);
             b = stream.read();
         }
-        int max = itemTypes.size();
+        final int max = itemTypes.size();
         store.itemTypes = new int[max];
         for (int i = 0; i < max; i++)
         {
@@ -127,8 +128,8 @@ public class StoreAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         stream.write(0x81);
 
@@ -146,7 +147,7 @@ public class StoreAction implements Action
             stream.write(0);
         }
 
-        for (int itemType: this.itemTypes)
+        for (final int itemType: this.itemTypes)
         {
             stream.write(itemType);
         }
@@ -156,13 +157,13 @@ public class StoreAction implements Action
 
     /**
      * Returns the store data as XML.
-     * 
+     *
      * @param id
      *            The action id
      * @return The store data as XML
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -198,7 +199,7 @@ public class StoreAction implements Action
             element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
 
-        for (int itemType: this.itemTypes)
+        for (final int itemType: this.itemTypes)
         {
             Element subElement;
 
@@ -213,13 +214,13 @@ public class StoreAction implements Action
 
     /**
      * Creates and returns a new Store object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The store data
      */
 
-    public static StoreAction read(Element element)
+    public static StoreAction read(final Element element)
     {
         StoreAction store;
 
@@ -234,12 +235,12 @@ public class StoreAction implements Action
             .attributeValue("newActionClass", "255"));
         store.newAction = StringUtils.toInt(element.attributeValue("newAction", "255"));
 
-        List<?> elements = element.elements("itemType");
+        final List<?> elements = element.elements("itemType");
         store.itemTypes = new int[elements.size()];
         int i = 0;
-        for (Object item: elements)
+        for (final Object item: elements)
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             store.itemTypes[i] = StringUtils.toInt(subElement.getText());
             i++;
         }
@@ -250,7 +251,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the buyFactor.
-     * 
+     *
      * @return The buyFactor
      */
 
@@ -262,12 +263,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the buyFactor.
-     * 
+     *
      * @param buyFactor
      *            The buyFactor to set
      */
 
-    public void setBuyFactor(int buyFactor)
+    public void setBuyFactor(final int buyFactor)
     {
         this.buyFactor = buyFactor;
     }
@@ -275,7 +276,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the itemList.
-     * 
+     *
      * @return The itemList
      */
 
@@ -287,12 +288,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the itemList.
-     * 
+     *
      * @param itemList
      *            The itemList to set
      */
 
-    public void setItemList(int itemList)
+    public void setItemList(final int itemList)
     {
         this.itemList = itemList;
     }
@@ -300,7 +301,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the itemTypes.
-     * 
+     *
      * @return The itemTypes
      */
 
@@ -312,12 +313,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the itemTypes.
-     * 
+     *
      * @param itemTypes
      *            The itemTypes to set
      */
 
-    public void setItemTypes(int[] itemTypes)
+    public void setItemTypes(final int[] itemTypes)
     {
         this.itemTypes = itemTypes;
     }
@@ -325,7 +326,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -337,12 +338,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -350,7 +351,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the name.
-     * 
+     *
      * @return The name
      */
 
@@ -362,12 +363,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the name.
-     * 
+     *
      * @param name
      *            The name to set
      */
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -375,7 +376,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the newAction.
-     * 
+     *
      * @return The newAction
      */
 
@@ -387,12 +388,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the newAction.
-     * 
+     *
      * @param newAction
      *            The newAction to set
      */
 
-    public void setNewAction(int newAction)
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -400,7 +401,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the newActionClass.
-     * 
+     *
      * @return The newActionClass
      */
 
@@ -412,12 +413,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the newActionClass.
-     * 
+     *
      * @param newActionClass
      *            The newActionClass to set
      */
 
-    public void setNewActionClass(int newActionClass)
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }
@@ -425,7 +426,7 @@ public class StoreAction implements Action
 
     /**
      * Returns the sellFactor.
-     * 
+     *
      * @return The sellFactor
      */
 
@@ -437,12 +438,12 @@ public class StoreAction implements Action
 
     /**
      * Sets the sellFactor.
-     * 
+     *
      * @param sellFactor
      *            The sellFactor to set
      */
 
-    public void setSellFactor(int sellFactor)
+    public void setSellFactor(final int sellFactor)
     {
         this.sellFactor = sellFactor;
     }

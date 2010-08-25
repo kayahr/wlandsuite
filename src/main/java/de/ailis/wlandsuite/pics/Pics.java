@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -42,7 +42,7 @@ import de.ailis.wlandsuite.msq.MsqHeader;
 /**
  * A PICS object contains the encounter animations from the files
  * allpics1 or allpics2.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -51,19 +51,19 @@ public class Pics
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(Pics.class);
-    
+
     /** The tilesets */
-    private List<PicsAnimation> animations;
+    private final List<PicsAnimation> animations;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param animations
      *            The animations
      */
 
-    public Pics(List<PicsAnimation> animations)
+    public Pics(final List<PicsAnimation> animations)
     {
         this.animations = animations;
     }
@@ -72,33 +72,35 @@ public class Pics
     /**
      * Reads PICS animations with the default width of 96 pixels from the given
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The PICS animations
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Pics read(InputStream stream) throws IOException
+    public static Pics read(final InputStream stream) throws IOException
     {
         return read(stream, 96);
     }
 
 
     /**
-     * Reads PICS animations from the given stream. Width 
+     * Reads PICS animations from the given stream. Width
      * must be specified because no image dimensions can be read from the
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
      *            The tile width
      * @return The PICS animations
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Pics read(InputStream stream, int width)
+    public static Pics read(final InputStream stream, final int width)
         throws IOException
     {
         List<PicsAnimation> animations;
@@ -110,24 +112,25 @@ public class Pics
         log.info("Reading pic " + picNo);
         while ((animation = PicsAnimation.read(stream, width)) != null)
         {
-            animations.add(animation);            
+            animations.add(animation);
             picNo++;
             log.info("Reading pic " + picNo);
         }
         return new Pics(animations);
     }
-        
+
 
     /**
      * Writes PICS animations to the given stream. The disk index is determined
      * automatically by looking at the number of tilesets in the HTDS.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         write(stream, this.animations.size() == 33 ? 0 : 1);
     }
@@ -135,18 +138,19 @@ public class Pics
 
     /**
      * Writes PICS animations to the given stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk index
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         int picNo = 0;
-        for (PicsAnimation animation: this.animations)
+        for (final PicsAnimation animation: this.animations)
         {
             log.info("Writing pic " + picNo);
             animation.write(stream, disk);
@@ -159,14 +163,15 @@ public class Pics
      * Returns the offsets of the base frame MSQ blocks in the specified file.
      * The offsets are determined by reading the raw data of each block and
      * looking at the current position in the file.
-     * 
+     *
      * @param file
      *            The file
      * @return The offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static List<Integer> getMsqOffsets(File file) throws IOException
+    public static List<Integer> getMsqOffsets(final File file) throws IOException
     {
         List<Integer> offsets;
         RandomAccessFile access;
@@ -203,10 +208,10 @@ public class Pics
         return offsets;
     }
 
-    
+
     /**
      * Returns the tilesets.
-     * 
+     *
      * @return The tilesets
      */
 

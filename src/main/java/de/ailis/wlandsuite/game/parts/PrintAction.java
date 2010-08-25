@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -28,17 +28,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The message action can output one or more strings and modify the current
  * square.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -68,14 +68,15 @@ public class PrintAction implements Action
     /**
      * Creates and returns a new action by reading the data it from the
      * specified input stream.
-     * 
+     *
      * @param stream
      *            The input stream to read the action data from
      * @return The new action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static PrintAction read(InputStream stream) throws IOException
+    public static PrintAction read(final InputStream stream) throws IOException
     {
         int b;
         PrintAction action;
@@ -111,13 +112,13 @@ public class PrintAction implements Action
 
     /**
      * Creates and returns a new action by reading the data from XML.
-     * 
+     *
      * @param element
      *            The XML element to read
      * @return The new action
      */
 
-    public static PrintAction read(Element element)
+    public static PrintAction read(final Element element)
     {
         PrintAction action;
 
@@ -125,12 +126,12 @@ public class PrintAction implements Action
         action = new PrintAction();
 
         // Parse the data
-        for (Object item: element.elements("message"))
+        for (final Object item: element.elements("message"))
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             action.messages.add(StringUtils.toInt(subElement.getTextTrim()));
         }
-        
+
         action.newActionClass = StringUtils.toInt(element.attributeValue(
             "newActionClass", "255"));
         action.newAction = StringUtils.toInt(element.attributeValue("newAction",
@@ -144,14 +145,14 @@ public class PrintAction implements Action
     /**
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
-    
-    public Element toXml(int id)
+
+    public Element toXml(final int id)
     {
         Element element, subElement;
 
         element = XmlUtils.createElement("print");
         element.addAttribute("id", StringUtils.toHex(id));
-        for (int message: this.messages)
+        for (final int message: this.messages)
         {
             subElement = XmlUtils.createElement("message");
             subElement.setText(Integer.toString(message));
@@ -175,8 +176,8 @@ public class PrintAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         for (int i = 0; i < this.messages.size() - 1; i++)
         {
@@ -195,7 +196,7 @@ public class PrintAction implements Action
 
     /**
      * Returns the action class.
-     * 
+     *
      * @return The action class
      */
 
@@ -207,12 +208,12 @@ public class PrintAction implements Action
 
     /**
      * Sets the action class.
-     * 
+     *
      * @param newActionClass
      *            The action class to set
      */
 
-    public void setNewActionClass(int newActionClass)
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }
@@ -220,7 +221,7 @@ public class PrintAction implements Action
 
     /**
      * Returns the action selector.
-     * 
+     *
      * @return The action selector
      */
 
@@ -232,12 +233,12 @@ public class PrintAction implements Action
 
     /**
      * Sets the action selector.
-     * 
+     *
      * @param newAction
      *            The action selector to set
      */
 
-    public void setNewAction(int newAction)
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -245,12 +246,12 @@ public class PrintAction implements Action
 
     /**
      * Adds a new message
-     * 
+     *
      * @param message
      *            The message to add
      */
 
-    public void addMessage(int message)
+    public void addMessage(final int message)
     {
         this.messages.add(message);
     }
@@ -258,13 +259,13 @@ public class PrintAction implements Action
 
     /**
      * Returns the message with the specified index.
-     * 
+     *
      * @param index
      *            The index
      * @return The message
      */
 
-    public int getMessage(int index)
+    public int getMessage(final int index)
     {
         return this.messages.get(index);
     }
@@ -272,14 +273,14 @@ public class PrintAction implements Action
 
     /**
      * Sets a message at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param message
      *            The message
      */
 
-    public void setMessage(int index, int message)
+    public void setMessage(final int index, final int message)
     {
         this.messages.set(index, message);
     }
@@ -297,12 +298,12 @@ public class PrintAction implements Action
 
     /**
      * Removes the message at the specified index.
-     * 
+     *
      * @param index
      *            The index
      */
 
-    public void removeMessage(int index)
+    public void removeMessage(final int index)
     {
         this.messages.remove(index);
     }
@@ -310,7 +311,7 @@ public class PrintAction implements Action
 
     /**
      * Returns the number of messages.
-     * 
+     *
      * @return The number of messages
      */
 
@@ -322,14 +323,14 @@ public class PrintAction implements Action
 
     /**
      * Inserts a message at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param message
      *            The message
      */
 
-    public void addMessage(int index, int message)
+    public void addMessage(final int index, final int message)
     {
         this.messages.add(index, message);
     }

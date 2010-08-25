@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,17 +27,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * All the NPCs of a map. Be careful when you delete an NPC because other NPCs
  * will get a new index and you have to correct all references to these NPCs.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -60,12 +60,12 @@ public class NPCs extends ArrayList<Char>
 
     /**
      * Constructor
-     * 
+     *
      * @param capacity
      *            The initial capacity
      */
 
-    public NPCs(int capacity)
+    public NPCs(final int capacity)
     {
         super(capacity);
     }
@@ -74,14 +74,15 @@ public class NPCs extends ArrayList<Char>
     /**
      * Creates and returns a new NPCs object by reading all the NPCs from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The stream to read the strings from
      * @return The NPCs
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static NPCs read(SeekableInputStream stream) throws IOException
+    public static NPCs read(final SeekableInputStream stream) throws IOException
     {
         long offset;
         NPCs npcs;
@@ -132,14 +133,14 @@ public class NPCs extends ArrayList<Char>
 
     /**
      * Creates and returns a new NPCs object from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The NPCs
      */
 
     @SuppressWarnings("unchecked")
-    public static NPCs read(Element element)
+    public static NPCs read(final Element element)
     {
         NPCs npcs;
         List<Element> subElements;
@@ -148,7 +149,7 @@ public class NPCs extends ArrayList<Char>
         if (element != null)
         {
             subElements = element.elements("character");
-            for (Element subElement: subElements)
+            for (final Element subElement: subElements)
             {
                 npcs.add(Char.read(subElement));
             }
@@ -159,7 +160,7 @@ public class NPCs extends ArrayList<Char>
 
     /**
      * Returns the NPCs as XML.
-     * 
+     *
      * @return The NPCs as XML
      */
 
@@ -173,7 +174,7 @@ public class NPCs extends ArrayList<Char>
 
         // Add all the npcs
         npcNo = 1;
-        for (Char character: this)
+        for (final Char character: this)
         {
             // Create and append string element
             subElement = character.toXml(npcNo);
@@ -188,27 +189,28 @@ public class NPCs extends ArrayList<Char>
 
     /**
      * Writes the NPCs to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(SeekableOutputStream stream) throws IOException
+    public void write(final SeekableOutputStream stream) throws IOException
     {
         int offset;
-        
+
         offset = (int) stream.tell();
-        
+
         // Write the offsets
         stream.writeWord(0);
         for (int i = 0; i < size(); i++)
         {
             stream.writeWord(2 + size() * 2 + i * 256 + offset);
         }
-        
+
         // Write the characters.
-        for (Char character: this)
+        for (final Char character: this)
         {
             character.write(stream);
         }

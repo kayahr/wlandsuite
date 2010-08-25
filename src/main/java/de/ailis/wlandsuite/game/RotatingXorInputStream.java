@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -31,59 +31,61 @@ import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 
 
 /**
- * The RotatingXorInputStream allows reading the xor-rotation compressed data 
+ * The RotatingXorInputStream allows reading the xor-rotation compressed data
  * from an input stream.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
 
 public class RotatingXorInputStream extends BitInputStream
 {
-    /** The encryption byte */ 
+    /** The encryption byte */
     private int enc;
-    
+
     /** The end checksum */
     private int endChecksum;
-    
+
     /** The current checksum */
     private int checksum;
-    
+
     /** The bit reader */
-    private BitInputStream bitStream;
+    private final BitInputStream bitStream;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param stream
      *            The input stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public RotatingXorInputStream(InputStream stream) throws IOException
+    public RotatingXorInputStream(final InputStream stream) throws IOException
     {
         this.bitStream = new BitInputStreamWrapper(stream);
         init();
     }
-    
-    
+
+
     /**
      * Initializes the encryption of the stream.
      *
      * @throws IOException
+     *             When file operation fails.
      */
-    
+
     private void init() throws IOException
     {
         int e1, e2;
-        
+
         // Get encryption byte and checksum end marker
         e1 = this.bitStream.readByte();
         e2 = this.bitStream.readByte();
         this.enc = e1 ^ e2;
         this.endChecksum = e1 | (e2 << 8);
-        
+
         // Initialize checksum
         this.checksum = 0;
     }
@@ -103,13 +105,13 @@ public class RotatingXorInputStream extends BitInputStream
 
         // Decrypt the byte
         b = crypted ^ this.enc;
-        
+
         // Update checksum
         this.checksum = (this.checksum - b) & 0xffff;
 
         // Updated encryption byte
         this.enc = (this.enc + 0x1f) % 0x100;
-        
+
         // Return the decrypted byte
         return b;
     }
@@ -120,7 +122,7 @@ public class RotatingXorInputStream extends BitInputStream
      *
      * @return The current checksum
      */
-    
+
     public int getChecksum()
     {
         return this.checksum;
@@ -132,7 +134,7 @@ public class RotatingXorInputStream extends BitInputStream
      *
      * @return The end checksum
      */
-    
+
     public int getEndChecksum()
     {
         return this.endChecksum;

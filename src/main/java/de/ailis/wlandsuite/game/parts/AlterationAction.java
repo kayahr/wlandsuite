@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,20 +27,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Alter code
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -49,7 +48,7 @@ public class AlterationAction implements Action
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(AlterationAction.class);
-    
+
     /** The message to print when player enters the square */
     private int message;
 
@@ -66,14 +65,15 @@ public class AlterationAction implements Action
     /**
      * Creates a new Alter Action by reading the data from the specified input
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Alter Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static AlterationAction read(SeekableInputStream stream)
+    public static AlterationAction read(final SeekableInputStream stream)
         throws IOException
     {
         int b;
@@ -126,13 +126,13 @@ public class AlterationAction implements Action
 
     /**
      * Creates a new Alter Action from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new Alter Action
      */
 
-    public static AlterationAction read(Element element)
+    public static AlterationAction read(final Element element)
     {
         AlterationAction action;
 
@@ -144,9 +144,9 @@ public class AlterationAction implements Action
             "newActionClass", "255"));
         action.newAction = StringUtils.toInt(element.attributeValue("newAction",
             "255"));
-        for (Object item: element.elements("alter"))
+        for (final Object item: element.elements("alter"))
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             action.alterations.add(Alter.read(subElement));
         }
 
@@ -158,7 +158,7 @@ public class AlterationAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -177,7 +177,7 @@ public class AlterationAction implements Action
         {
             element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
-        for (Alter alteration: this.alterations)
+        for (final Alter alteration: this.alterations)
         {
             element.add(alteration.toXml());
         }
@@ -191,8 +191,8 @@ public class AlterationAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.write(this.message);
         for (int i = 0; i < this.alterations.size(); i++)
@@ -210,7 +210,7 @@ public class AlterationAction implements Action
 
     /**
      * Returns the action class.
-     * 
+     *
      * @return The action class
      */
 
@@ -222,12 +222,12 @@ public class AlterationAction implements Action
 
     /**
      * Sets the action class.
-     * 
+     *
      * @param actionClass
      *            The action class to set
      */
 
-    public void setNewActionClass(int actionClass)
+    public void setNewActionClass(final int actionClass)
     {
         this.newActionClass = actionClass;
     }
@@ -235,7 +235,7 @@ public class AlterationAction implements Action
 
     /**
      * Returns the action selector.
-     * 
+     *
      * @return The action selector
      */
 
@@ -247,12 +247,12 @@ public class AlterationAction implements Action
 
     /**
      * Sets the action selector.
-     * 
+     *
      * @param actionSelector
      *            The action selector to set
      */
 
-    public void setNewAction(int actionSelector)
+    public void setNewAction(final int actionSelector)
     {
         this.newAction = actionSelector;
     }
@@ -260,7 +260,7 @@ public class AlterationAction implements Action
 
     /**
      * Returns the alterations.
-     * 
+     *
      * @return The alterations
      */
 
@@ -272,12 +272,12 @@ public class AlterationAction implements Action
 
     /**
      * Sets the alterations.
-     * 
+     *
      * @param alterations
      *            The alterations to set
      */
 
-    public void setAlterations(List<Alter> alterations)
+    public void setAlterations(final List<Alter> alterations)
     {
         this.alterations = alterations;
     }
@@ -285,7 +285,7 @@ public class AlterationAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -297,12 +297,12 @@ public class AlterationAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }

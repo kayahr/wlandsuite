@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -44,7 +44,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * Shop items
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -55,21 +55,22 @@ public class ShopItemList extends GameBlock implements Serializable
     private static final long serialVersionUID = 1004046023232273188L;
 
     /** The shop items */
-    private List<ShopItem> items = new ArrayList<ShopItem>();
+    private final List<ShopItem> items = new ArrayList<ShopItem>();
 
 
     /**
      * Constructs a shop items object by reading it from a wasteland gameX file
      * stream. The stream must point at the beginning of the MSQ block (which is
      * at the "m" of the "msq" header string.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The newly constructed shop items object
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static ShopItemList read(SeekableInputStream stream)
+    public static ShopItemList read(final SeekableInputStream stream)
         throws IOException
     {
         byte[] headerBytes;
@@ -95,14 +96,15 @@ public class ShopItemList extends GameBlock implements Serializable
     /**
      * Reads the shop item list data from the specified stream. This method is
      * used internally by the read() and readHacked() method.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The read shop item list
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private static ShopItemList readData(SeekableInputStream stream)
+    private static ShopItemList readData(final SeekableInputStream stream)
         throws IOException
     {
         ShopItemList shopItems;
@@ -130,14 +132,15 @@ public class ShopItemList extends GameBlock implements Serializable
     /**
      * Reads an external shop item list file which is used by Displacer's hacked
      * EXE.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The shop item list
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static ShopItemList readHacked(InputStream stream)
+    public static ShopItemList readHacked(final InputStream stream)
         throws IOException
     {
         return readData(new SeekableInputStream(stream));
@@ -146,15 +149,16 @@ public class ShopItemList extends GameBlock implements Serializable
 
     /**
      * Writes the shop items to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk id (0 or 1)
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         SeekableOutputStream seekStream;
 
@@ -173,13 +177,14 @@ public class ShopItemList extends GameBlock implements Serializable
     /**
      * Writes the shop item list data. This method is used internally by the
      * write() and writeHacked() methods.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private void writeData(SeekableOutputStream stream) throws IOException
+    private void writeData(final SeekableOutputStream stream) throws IOException
     {
         stream.write(0x60);
         stream.write(0x60);
@@ -197,7 +202,7 @@ public class ShopItemList extends GameBlock implements Serializable
         }
 
         // Write the shop items
-        for (ShopItem item: this.items)
+        for (final ShopItem item: this.items)
         {
             item.write(stream);
         }
@@ -216,13 +221,14 @@ public class ShopItemList extends GameBlock implements Serializable
     /**
      * Writes the shop item list to an external itm file compatible to
      * Displacer's hacked EXE.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeHacked(OutputStream stream) throws IOException
+    public void writeHacked(final OutputStream stream) throws IOException
     {
         writeData(new SeekableOutputStream(stream));
     }
@@ -230,22 +236,22 @@ public class ShopItemList extends GameBlock implements Serializable
 
     /**
      * Creates and returns a new shop items object from XML.
-     * 
+     *
      * @param element
      *            The XML root element
      * @return The shop items object
      */
 
-    public static ShopItemList read(Element element)
+    public static ShopItemList read(final Element element)
     {
         ShopItemList shopItems;
 
         shopItems = new ShopItemList();
 
         // Read the shop items
-        for (Object item: element.elements("shopItem"))
+        for (final Object item: element.elements("shopItem"))
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
             shopItems.items.add(ShopItem.read(subElement));
         }
 
@@ -255,13 +261,13 @@ public class ShopItemList extends GameBlock implements Serializable
 
     /**
      * Reads a shop items object from the specified XML stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The shop items object
      */
 
-    public static ShopItemList readXml(InputStream stream)
+    public static ShopItemList readXml(final InputStream stream)
     {
         Document document;
         Element element;
@@ -286,7 +292,7 @@ public class ShopItemList extends GameBlock implements Serializable
         element = XmlUtils.createElement("shopItems");
 
         id = 0;
-        for (ShopItem item: this.items)
+        for (final ShopItem item: this.items)
         {
             element.add(item.toXml(id));
             id++;

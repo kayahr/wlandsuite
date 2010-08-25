@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
@@ -36,13 +35,14 @@ import de.ailis.wlandsuite.game.chartable.CharTable;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * All the strings of a map. Be careful when you delete a string because other
  * strings will get a new index and you have to correct all references to these
  * strings.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -65,12 +65,12 @@ public class Strings extends ArrayList<String>
 
     /**
      * Constructor
-     * 
+     *
      * @param capacity
      *            The initial capacity
      */
 
-    public Strings(int capacity)
+    public Strings(final int capacity)
     {
         super(capacity);
     }
@@ -79,16 +79,17 @@ public class Strings extends ArrayList<String>
     /**
      * Creates and returns a new Strings object by reading all the strings from
      * the specified stream.
-     * 
+     *
      * @param stream
      *            The stream to read the strings from
      * @param endOffset
      *            The definite end of the strings block
      * @return The strings
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Strings read(SeekableInputStream stream, int endOffset)
+    public static Strings read(final SeekableInputStream stream, final int endOffset)
         throws IOException
     {
         long startOffset;
@@ -103,7 +104,7 @@ public class Strings extends ArrayList<String>
         strings = new Strings();
 
         // Read the character table
-        CharTable charTable = new CharTable(stream);
+        final CharTable charTable = new CharTable(stream);
 
         // Read the string offsets
         tmp = stream.readWord();
@@ -147,7 +148,7 @@ public class Strings extends ArrayList<String>
      * positioned at the beginning of the string group. The strings are
      * completely decrypted by using the specified char table. Strings are added
      * to the specified strings array.
-     * 
+     *
      * @param stream
      *            The stream to read the string group from
      * @param charTable
@@ -157,24 +158,25 @@ public class Strings extends ArrayList<String>
      * @param endOffset
      *            The definite end of the strings block
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private static void readStringGroup(SeekableInputStream stream,
-        CharTable charTable, List<String> strings, int endOffset)
+    private static void readStringGroup(final SeekableInputStream stream,
+        final CharTable charTable, final List<String> strings, final int endOffset)
         throws IOException
     {
         for (int j = 0; j < 4; j++)
         {
             boolean upper = false;
             boolean high = false;
-            StringBuilder string = new StringBuilder();
+            final StringBuilder string = new StringBuilder();
             outer: while (true)
             {
                 if (stream.tell() > endOffset)
                 {
                     return;
                 }
-                int index = stream.readBits(5, true);
+                final int index = stream.readBits(5, true);
                 switch (index)
                 {
                     case 0x1f:
@@ -186,7 +188,7 @@ public class Strings extends ArrayList<String>
                         break;
 
                     default:
-                        int character = charTable.getCharacter(index
+                        final int character = charTable.getCharacter(index
                             + (high ? 0x1e : 0));
                         if (character == 0)
                         {
@@ -207,13 +209,14 @@ public class Strings extends ArrayList<String>
 
     /**
      * Writes the strings to the specified stream.
-     * 
+     *
      * @param stream
      *            The stream to write the strings to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(SeekableOutputStream stream) throws IOException
+    public void write(final SeekableOutputStream stream) throws IOException
     {
         CharTable charTable;
         ByteArrayOutputStream stringStream;
@@ -226,7 +229,7 @@ public class Strings extends ArrayList<String>
 
         // Create and write the char table
         charTable = new CharTable();
-        for (String string: this)
+        for (final String string: this)
         {
             charTable.add(string);
             charTable.add(0);
@@ -241,7 +244,7 @@ public class Strings extends ArrayList<String>
         stringNo = 0;
         stringStream = new ByteArrayOutputStream();
         bitStream = new SeekableOutputStream(stringStream);
-        for (String string: this)
+        for (final String string: this)
         {
             writeString(bitStream, string, charTable);
 
@@ -275,7 +278,7 @@ public class Strings extends ArrayList<String>
 
     /**
      * Writes a string into the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param string
@@ -283,10 +286,11 @@ public class Strings extends ArrayList<String>
      * @param charTable
      *            The character table
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private void writeString(SeekableOutputStream stream, String string,
-        CharTable charTable) throws IOException
+    private void writeString(final SeekableOutputStream stream, final String string,
+        final CharTable charTable) throws IOException
     {
         for (byte b: string.getBytes("ASCII"))
         {
@@ -322,13 +326,13 @@ public class Strings extends ArrayList<String>
     /**
      * Creates and returns a new Strings object read from the specified XML
      * element.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Strings object
      */
 
-    public static Strings read(Element element)
+    public static Strings read(final Element element)
     {
         Strings strings;
 
@@ -336,7 +340,7 @@ public class Strings extends ArrayList<String>
         strings = new Strings(element.elements().size());
 
         // Read all the strings
-        for (Object subElement: element.elements("string"))
+        for (final Object subElement: element.elements("string"))
         {
             Element string;
             String text;
@@ -370,7 +374,7 @@ public class Strings extends ArrayList<String>
 
     /**
      * Returns the strings as XML.
-     * 
+     *
      * @return The strings as XML
      */
 
@@ -384,7 +388,7 @@ public class Strings extends ArrayList<String>
 
         // Add all the strings
         stringNo = 0;
-        for (String string: this)
+        for (final String string: this)
         {
             // Create and append string element
             subElement = XmlUtils.createElement("string");

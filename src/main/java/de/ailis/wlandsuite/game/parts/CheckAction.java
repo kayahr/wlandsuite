@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,20 +27,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The check action defines a skill/check/attribute/... check.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -120,14 +119,15 @@ public class CheckAction implements Action
     /**
      * Creates and returns a new Check Action by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Check Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static CheckAction read(SeekableInputStream stream)
+    public static CheckAction read(final SeekableInputStream stream)
         throws IOException
     {
         CheckAction action;
@@ -167,7 +167,7 @@ public class CheckAction implements Action
         // Read replacement data if present
         if (checkBased)
         {
-            for (Check c: action.checks)
+            for (final Check c: action.checks)
             {
                 c.readReplacement(stream);
             }
@@ -198,7 +198,7 @@ public class CheckAction implements Action
         {
             log.info("Patching safe-check (20) on map 4");
 
-            List<Check> newChecks = new ArrayList<Check>();
+            final List<Check> newChecks = new ArrayList<Check>();
             check = new Check();
             check.setType(b2 >> 5);
             check.setDifficulty(b2 & 31);
@@ -236,13 +236,13 @@ public class CheckAction implements Action
 
     /**
      * Creates and returns a Check Action by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Check Action
      */
 
-    public static CheckAction read(Element element)
+    public static CheckAction read(final Element element)
     {
         CheckAction action;
 
@@ -284,7 +284,7 @@ public class CheckAction implements Action
             "0"));
 
         // Read the checks
-        for (Object check: element.elements())
+        for (final Object check: element.elements())
         {
             Element subElement;
 
@@ -301,7 +301,7 @@ public class CheckAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -359,7 +359,7 @@ public class CheckAction implements Action
         {
             element.addAttribute("modifier", Integer.toString(this.modifier));
         }
-        for (Check check: this.checks)
+        for (final Check check: this.checks)
         {
             element.add(check.toXml());
         }
@@ -370,18 +370,19 @@ public class CheckAction implements Action
 
     /**
      * @throws IOException
+     *             When file operation fails.
      * @see de.ailis.wlandsuite.game.parts.Action#write(de.ailis.wlandsuite.io.SeekableOutputStream,
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         int b;
         boolean checkBased;
 
         checkBased = false;
-        for (Check check: this.checks)
+        for (final Check check: this.checks)
         {
             if (check.getNewActionClass() != -1)
             {
@@ -411,7 +412,7 @@ public class CheckAction implements Action
         b = this.modifier < 0 ? 128 : 0;
         stream.write(b | (Math.abs(this.modifier)));
 
-        for (Check check: this.checks)
+        for (final Check check: this.checks)
         {
             check.write(stream);
         }
@@ -419,7 +420,7 @@ public class CheckAction implements Action
 
         if (checkBased)
         {
-            for (Check check: this.checks)
+            for (final Check check: this.checks)
             {
                 check.writeReplacement(stream);
             }
@@ -429,7 +430,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the start message.
-     * 
+     *
      * @return The start message
      */
 
@@ -441,12 +442,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the start message.
-     * 
+     *
      * @param startMessage
      *            The start message to set
      */
 
-    public void setStartMessage(int startMessage)
+    public void setStartMessage(final int startMessage)
     {
         this.startMessage = startMessage;
     }
@@ -454,7 +455,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the new action class to set when the check failes.
-     * 
+     *
      * @return The action class
      */
 
@@ -466,12 +467,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the new action class to set when the check failes.
-     * 
+     *
      * @param failNewActionClass
      *            The action class to set
      */
 
-    public void setFailNewActionClass(int failNewActionClass)
+    public void setFailNewActionClass(final int failNewActionClass)
     {
         this.failNewActionClass = failNewActionClass;
     }
@@ -479,7 +480,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the new action to set when the check failes.
-     * 
+     *
      * @return The action
      */
 
@@ -491,12 +492,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the new action to set when the check failes.
-     * 
+     *
      * @param failNewAction
      *            The action to set
      */
 
-    public void setFailNewAction(int failNewAction)
+    public void setFailNewAction(final int failNewAction)
     {
         this.failNewAction = failNewAction;
     }
@@ -504,7 +505,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the fail message.
-     * 
+     *
      * @return The fail message
      */
 
@@ -516,12 +517,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the fail message.
-     * 
+     *
      * @param failMessage
      *            The fail message to set
      */
 
-    public void setFailMessage(int failMessage)
+    public void setFailMessage(final int failMessage)
     {
         this.failMessage = failMessage;
     }
@@ -529,7 +530,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the new action class to set when the check passes.
-     * 
+     *
      * @return The action class
      */
 
@@ -541,12 +542,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the new action class to set when the check passes.
-     * 
+     *
      * @param passNewActionClass
      *            The action class to set
      */
 
-    public void setPassNewActionClass(int passNewActionClass)
+    public void setPassNewActionClass(final int passNewActionClass)
     {
         this.passNewActionClass = passNewActionClass;
     }
@@ -554,7 +555,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the new action to set when the check passes.
-     * 
+     *
      * @return The action
      */
 
@@ -566,12 +567,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the new action to set when the check passes.
-     * 
+     *
      * @param passNewAction
      *            The action to set
      */
 
-    public void setPassNewAction(int passNewAction)
+    public void setPassNewAction(final int passNewAction)
     {
         this.passNewAction = passNewAction;
     }
@@ -579,7 +580,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the pass message.
-     * 
+     *
      * @return The pass message
      */
 
@@ -591,12 +592,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the pass message.
-     * 
+     *
      * @param passMessage
      *            The pass message to set
      */
 
-    public void setPassMessage(int passMessage)
+    public void setPassMessage(final int passMessage)
     {
         this.passMessage = passMessage;
     }
@@ -604,12 +605,12 @@ public class CheckAction implements Action
 
     /**
      * Adds a new check
-     * 
+     *
      * @param check
      *            The check to add
      */
 
-    public void addCheck(Check check)
+    public void addCheck(final Check check)
     {
         this.checks.add(check);
     }
@@ -617,13 +618,13 @@ public class CheckAction implements Action
 
     /**
      * Returns the check with the specified index.
-     * 
+     *
      * @param index
      *            The index
      * @return The check
      */
 
-    public Check getCheck(int index)
+    public Check getCheck(final int index)
     {
         return this.checks.get(index);
     }
@@ -631,14 +632,14 @@ public class CheckAction implements Action
 
     /**
      * Sets a check at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param check
      *            The check
      */
 
-    public void setCheck(int index, Check check)
+    public void setCheck(final int index, final Check check)
     {
         this.checks.set(index, check);
     }
@@ -656,12 +657,12 @@ public class CheckAction implements Action
 
     /**
      * Removes the check at the specified index.
-     * 
+     *
      * @param index
      *            The index
      */
 
-    public void removeCheck(int index)
+    public void removeCheck(final int index)
     {
         this.checks.remove(index);
     }
@@ -669,7 +670,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the number of checks.
-     * 
+     *
      * @return The number of checks
      */
 
@@ -681,21 +682,21 @@ public class CheckAction implements Action
 
     /**
      * Inserts a check at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param check
      *            The check
      */
 
-    public void addCheck(int index, Check check)
+    public void addCheck(final int index, final Check check)
     {
         this.checks.add(index, check);
     }
 
     /**
      * Returns the autoCheck.
-     * 
+     *
      * @return The autoCheck
      */
 
@@ -706,19 +707,19 @@ public class CheckAction implements Action
 
     /**
      * Sets the autoCheck.
-     * 
+     *
      * @param autoCheck
      *            The autoCheck to set
      */
 
-    public void setAutoCheck(boolean autoCheck)
+    public void setAutoCheck(final boolean autoCheck)
     {
         this.autoCheck = autoCheck;
     }
 
     /**
      * Returns the bypassArmor.
-     * 
+     *
      * @return The bypassArmor
      */
 
@@ -729,19 +730,19 @@ public class CheckAction implements Action
 
     /**
      * Sets the bypassArmor.
-     * 
+     *
      * @param bypassArmor
      *            The bypassArmor to set
      */
 
-    public void setBypassArmor(boolean bypassArmor)
+    public void setBypassArmor(final boolean bypassArmor)
     {
         this.bypassArmor = bypassArmor;
     }
 
     /**
      * Returns the checks.
-     * 
+     *
      * @return The checks
      */
 
@@ -752,19 +753,19 @@ public class CheckAction implements Action
 
     /**
      * Sets the checks.
-     * 
+     *
      * @param checks
      *            The checks to set
      */
 
-    public void setChecks(List<Check> checks)
+    public void setChecks(final List<Check> checks)
     {
         this.checks = checks;
     }
 
     /**
      * Returns the damageAll.
-     * 
+     *
      * @return The damageAll
      */
 
@@ -775,19 +776,19 @@ public class CheckAction implements Action
 
     /**
      * Sets the damageAll.
-     * 
+     *
      * @param damageAll
      *            The damageAll to set
      */
 
-    public void setDamageAll(boolean damageAll)
+    public void setDamageAll(final boolean damageAll)
     {
         this.damageAll = damageAll;
     }
 
     /**
      * Returns the party.
-     * 
+     *
      * @return The party
      */
 
@@ -798,19 +799,19 @@ public class CheckAction implements Action
 
     /**
      * Sets the party.
-     * 
+     *
      * @param party
      *            The party to set
      */
 
-    public void setParty(boolean party)
+    public void setParty(final boolean party)
     {
         this.party = party;
     }
 
     /**
      * Returns the passable.
-     * 
+     *
      * @return The passable
      */
 
@@ -821,19 +822,19 @@ public class CheckAction implements Action
 
     /**
      * Sets the passable.
-     * 
+     *
      * @param passable
      *            The passable to set
      */
 
-    public void setPassable(boolean passable)
+    public void setPassable(final boolean passable)
     {
         this.passable = passable;
     }
 
     /**
      * Returns the passAll.
-     * 
+     *
      * @return The passAll
      */
 
@@ -844,12 +845,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the passAll.
-     * 
+     *
      * @param passAll
      *            The passAll to set
      */
 
-    public void setPassAll(boolean passAll)
+    public void setPassAll(final boolean passAll)
     {
         this.passAll = passAll;
     }
@@ -857,7 +858,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the unknown1.
-     * 
+     *
      * @return The unknown1
      */
 
@@ -869,12 +870,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the unknown1.
-     * 
+     *
      * @param unknown1
      *            The unknown1 to set
      */
 
-    public void setUnknown1(boolean unknown1)
+    public void setUnknown1(final boolean unknown1)
     {
         this.unknown1 = unknown1;
     }
@@ -882,7 +883,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the fixedModifier.
-     * 
+     *
      * @return The fixedModifier
      */
 
@@ -894,12 +895,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the fixedModifier.
-     * 
+     *
      * @param fixedModifier
      *            The fixedModifier to set
      */
 
-    public void setFixedModifier(boolean fixedModifier)
+    public void setFixedModifier(final boolean fixedModifier)
     {
         this.fixedModifier = fixedModifier;
     }
@@ -907,7 +908,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the modifier.
-     * 
+     *
      * @return The modifier
      */
 
@@ -919,12 +920,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the modifier.
-     * 
+     *
      * @param modifier
      *            The modifier to set
      */
 
-    public void setModifier(int modifier)
+    public void setModifier(final int modifier)
     {
         this.modifier = modifier;
     }
@@ -932,7 +933,7 @@ public class CheckAction implements Action
 
     /**
      * Returns the modifierTarget.
-     * 
+     *
      * @return The modifierTarget
      */
 
@@ -944,12 +945,12 @@ public class CheckAction implements Action
 
     /**
      * Sets the modifierTarget.
-     * 
+     *
      * @param modifierTarget
      *            The modifierTarget to set
      */
 
-    public void setModifierTarget(int modifierTarget)
+    public void setModifierTarget(final int modifierTarget)
     {
         this.modifierTarget = modifierTarget;
     }

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,11 +34,11 @@ import de.ailis.wlandsuite.io.BitOutputStreamWrapper;
  * The HuffmanOutputStream allows writing huffman compressed data to an output
  * stream. The Huffman Tree must have already been calculated and given to the
  * constructor of this class.
- * 
+ *
  * It's very important that you close or flush the stream before you rely on the
  * written data because this stream uses a BitWriter which may cache bits until
  * a full byte is written.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,12 +54,13 @@ public class HuffmanOutputStream extends OutputStream
 
     /**
      * Constructor
-     * 
+     *
      * @param stream
      *            The output stream
      * @param tree
      *            The huffman tree
      * @throws IOException
+     *             When file operation fails.
      */
 
     public HuffmanOutputStream(final OutputStream stream, final HuffmanTree tree)

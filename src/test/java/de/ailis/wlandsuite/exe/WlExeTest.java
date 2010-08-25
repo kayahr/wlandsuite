@@ -64,7 +64,7 @@ public class WlExeTest extends TestCase
      * @param source
      *            The source file
      * @return The copy of the source file
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     private File createCopy(File source) throws IOException
@@ -105,7 +105,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests getting MSQ offsets for HTDS1.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testGetHTDS1Offsets() throws IOException
@@ -127,7 +127,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests getting MSQ offsets for HTDS2.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testGetHTDS2Offsets() throws IOException
@@ -150,7 +150,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests setting MSQ offsets for HTDS1.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testSetHTDS1Offsets() throws IOException
@@ -180,7 +180,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests setting MSQ offsets for HTDS2.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testSetHTDS2Offsets() throws IOException
@@ -210,7 +210,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests getting MSQ offsets for PICS1.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testGetPics1Offsets() throws IOException
@@ -261,7 +261,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests getting MSQ offsets for PICS2.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testGetPics2Offsets() throws IOException
@@ -328,7 +328,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests setting MSQ offsets for PICS1.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testSetPics1Offsets() throws IOException
@@ -387,7 +387,7 @@ public class WlExeTest extends TestCase
     /**
      * Tests setting MSQ offsets for PICS2.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testSetPics2Offsets() throws IOException

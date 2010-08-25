@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * A Sprites object contains the sprites from Wasteland's ic0_9.wlf file.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -42,9 +42,9 @@ public class Sprites implements Serializable
 {
     /** Serial version UID */
     private static final long serialVersionUID = -2736830301271481828L;
-    
+
     /** The sprites */
-    private List<Sprite> sprites;
+    private final List<Sprite> sprites;
 
 
     /**
@@ -59,12 +59,12 @@ public class Sprites implements Serializable
 
     /**
      * Constructor for building new sprites.
-     * 
+     *
      * @param cursors
      *            The cursors
      */
 
-    public Sprites(List<Sprite> cursors)
+    public Sprites(final List<Sprite> cursors)
     {
         this.sprites = cursors;
     }
@@ -73,7 +73,7 @@ public class Sprites implements Serializable
     /**
      * Calculates and returns the number of sprites for the given file size,
      * cursor width and height
-     * 
+     *
      * @param size
      *            The file size
      * @param width
@@ -83,7 +83,7 @@ public class Sprites implements Serializable
      * @return The number of cursors
      */
 
-    public static int getQuantity(long size, int width, int height)
+    public static int getQuantity(final long size, final int width, final int height)
     {
         return (int) (size / (height * (width / 2)));
     }
@@ -92,14 +92,15 @@ public class Sprites implements Serializable
     /**
      * Loads sprites from a stream. A sprite size of 16x16 and a quantity of 10
      * is assumed.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The sprites
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Sprites read(InputStream stream) throws IOException
+    public static Sprites read(final InputStream stream) throws IOException
     {
         return read(stream, 16, 16, 10);
     }
@@ -107,16 +108,17 @@ public class Sprites implements Serializable
 
     /**
      * Loads sprites from a stream. A sprite size of 16x16 is assumed.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param quantity
      *            The number of sprites to read
      * @return The sprites
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Sprites read(InputStream stream, int quantity)
+    public static Sprites read(final InputStream stream, final int quantity)
         throws IOException
     {
         return read(stream, 16, 16, quantity);
@@ -125,21 +127,23 @@ public class Sprites implements Serializable
 
     /**
      * Loads sprites from a stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
      *            The width of a sprite
      * @param height
-     *            The height of a sprite
+     *            The height of a sprite     * @throws IOException
+
      * @param quantity
      *            The number of sprites
      * @return The sprites
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Sprites read(InputStream stream, int width, int height,
-        int quantity) throws IOException
+    public static Sprites read(final InputStream stream, final int width, final int height,
+        final int quantity) throws IOException
     {
         Sprites sprites;
 
@@ -159,16 +163,17 @@ public class Sprites implements Serializable
 
     /**
      * Writes sprites to a stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         // Read the cursors
-        for (Sprite sprite: this.sprites)
+        for (final Sprite sprite: this.sprites)
         {
             sprite.write(stream);
         }
@@ -177,7 +182,7 @@ public class Sprites implements Serializable
 
     /**
      * Returns the sprites.
-     * 
+     *
      * @return The sprites
      */
 

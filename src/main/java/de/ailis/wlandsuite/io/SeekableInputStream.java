@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -32,7 +32,7 @@ import java.io.InputStream;
  * cache which allows seeking in the stream. Be careful! If you are reading lots
  * of data with this Class then you may have a large memory footprint because
  * all the data you read is cached in a byte array.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -60,11 +60,11 @@ public class SeekableInputStream extends InputStream
 
     /**
      * Constructor
-     * 
-     * @param stream
+     *
+     * @param stream The stream.
      */
 
-    public SeekableInputStream(InputStream stream)
+    public SeekableInputStream(final InputStream stream)
     {
         this.stream = stream;
         this.cache = new byte[32];
@@ -99,9 +99,10 @@ public class SeekableInputStream extends InputStream
     /**
      * Reads a byte from the underlying input stream. The byte is also cached
      * and the cache is enlarged if needed.
-     * 
+     *
      * @return The next byte in the underlying input stream
      * @throws IOException
+     *             When file operation fails.
      */
 
     protected int readReal() throws IOException
@@ -110,10 +111,10 @@ public class SeekableInputStream extends InputStream
 
         b = this.stream.read();
         if (b == -1) return -1;
-        int newSize = this.size + 1;
+        final int newSize = this.size + 1;
         if (newSize > this.cache.length)
         {
-            byte newCache[] = new byte[Math
+            final byte newCache[] = new byte[Math
                 .max(this.cache.length << 1, newSize)];
             System.arraycopy(this.cache, 0, newCache, 0, this.size);
             this.cache = newCache;
@@ -126,7 +127,7 @@ public class SeekableInputStream extends InputStream
 
     /**
      * Returns the current position in the stream.
-     * 
+     *
      * @return The current position in the stream
      */
 
@@ -138,13 +139,14 @@ public class SeekableInputStream extends InputStream
 
     /**
      * Seeks to the specified position.
-     * 
+     *
      * @param position
      *            The position to seek to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void seek(long position) throws IOException
+    public void seek(final long position) throws IOException
     {
         if (this.position != position)
         {
@@ -154,7 +156,7 @@ public class SeekableInputStream extends InputStream
             }
             else
             {
-                long rest = position - this.size;
+                final long rest = position - this.size;
                 this.position = this.size;
                 skip(rest);
             }
@@ -167,9 +169,10 @@ public class SeekableInputStream extends InputStream
     /**
      * Reads a bit from the input stream and returns it (0 or 1). Returns -1 if
      * there is no more data on the stream.
-     * 
+     *
      * @return The next bit in the stream
      * @throws IOException
+     *             When file operation fails.
      */
 
     public byte readBit() throws IOException
@@ -182,14 +185,15 @@ public class SeekableInputStream extends InputStream
      * Reads a bit from the input stream and returns it (0 or 1). Returns -1 if
      * there is no more data on the stream. This method can read the bits in
      * reversed order.
-     * 
+     *
      * @param reverse
      *            If bits should be read in reversed order
      * @return The next bit in the stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public byte readBit(boolean reverse) throws IOException
+    public byte readBit(final boolean reverse) throws IOException
     {
         if (this.currentBit > 6)
         {
@@ -219,16 +223,17 @@ public class SeekableInputStream extends InputStream
     /**
      * Reads the specified number of bits. The bits can be read in reverse order
      * if the reverse flag is set.
-     * 
+     *
      * @param quantity
      *            The number of bits to read
      * @param reverse
      *            If the bits should be read reversed.
      * @return The bits
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public int readBits(int quantity, boolean reverse) throws IOException
+    public int readBits(final int quantity, final boolean reverse) throws IOException
     {
         int value;
         byte b;
@@ -259,9 +264,10 @@ public class SeekableInputStream extends InputStream
      * must not be byte-aligned in the stream. So if you read 4 bits and then a
      * byte then this byte contains the last 4 bit of the current byte and the
      * next 4 bit of the next byte.
-     * 
+     *
      * @return A byte
      * @throws IOException
+     *             When file operation fails.
      */
 
     public int readByte() throws IOException
@@ -292,9 +298,10 @@ public class SeekableInputStream extends InputStream
 
     /**
      * Reads a signed byte.
-     * 
+     *
      * @return The signed byte
      * @throws IOException
+     *             When file operation fails.
      */
 
     public int readSignedByte() throws IOException
@@ -318,9 +325,10 @@ public class SeekableInputStream extends InputStream
      * stream has been reached. The method don't need a byte-aligned stream. So
      * if you have read 4 bits from the stream the the next 32 bits are the int
      * which is read by this method.
-     * 
+     *
      * @return The integer value
      * @throws IOException
+     *             When file operation fails.
      */
 
     public long readInt() throws IOException
@@ -344,9 +352,10 @@ public class SeekableInputStream extends InputStream
      * the stream has been reached. The method don't need a byte-aligned stream.
      * So if you have read 4 bits from the stream the the next 32 bits are the
      * int which is read by this method.
-     * 
+     *
      * @return The integer value
      * @throws IOException
+     *             When file operation fails.
      */
 
     public int readSignedInt() throws IOException
@@ -370,9 +379,10 @@ public class SeekableInputStream extends InputStream
      * stream has been reached. The method don't need a byte-aligned stream. So
      * if you have read 4 bits from the stream the the next 24 bits are the int
      * which is read by this method.
-     * 
+     *
      * @return The integer value
      * @throws IOException
+     *             When file operation fails.
      */
 
     public int readInt3() throws IOException
@@ -395,9 +405,10 @@ public class SeekableInputStream extends InputStream
      * has been reached. The method don't need a byte-aligned stream. So if you
      * have read 4 bits from the stream the the next 16 bits are the word which
      * is read by this method.
-     * 
+     *
      * @return The word value
      * @throws IOException
+     *             When file operation fails.
      */
 
     public int readWord() throws IOException

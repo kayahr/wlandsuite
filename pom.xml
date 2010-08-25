@@ -1,82 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-                             http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <artifactId>maven-java</artifactId>
+    <groupId>de.ailis.maven</groupId>
+    <version>7</version>
+  </parent>   
+  
   <groupId>de.ailis.wlandsuite</groupId>
   <artifactId>wlandsuite</artifactId>
-  <packaging>jar</packaging>
-  <name>wlandsuite</name>
   <version>1.3.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>GraMath</name>
   <url>http://www.ailis.de/~k/projects/wlandsuite/</url>
-  <description>Software for reading and writing data files of the famous game Wasteland</description>
-  <inceptionYear>2009</inceptionYear>
+  <description>Software for reading and writing data files of the famous game Wasteland.</description>
+  <inceptionYear>2010</inceptionYear>
   <organization>
     <name>Klaus Reimer</name>
     <url>http://www.ailis.de/~k/</url>
   </organization>
-  
-  <scm>
-    <url>http://scm.ailis.de/viewvc/svn/java/wlandsuite/trunk/</url>
-    <connection>scm:svn:http://scm.ailis.de/svn/java/wlandsuite/trunk</connection>
-    <developerConnection>scm:svn:https://scm.ailis.de/svn/java/wlandsuite/trunk</developerConnection>
-  </scm>
-  
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <manifest>
-                <mainClass>de.ailis.wlandsuite.Launcher</mainClass>
-                <packageName>de.ailis.wlandsuite</packageName>
-                <addClasspath>true</addClasspath>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>1.5</source>
-            <target>1.5</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <configuration>
-            <descriptors>
-              <descriptor>src/main/assembly/unix-bin.xml</descriptor>
-              <descriptor>src/main/assembly/windows-bin.xml</descriptor>
-              <descriptor>src/main/assembly/src.xml</descriptor>
-            </descriptors>
-          </configuration>
-          <executions>
-            <execution>
-              <id>package-assembly</id>
-              <goals>
-                <goal>attached</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <!-- <configuration>
-            <tagBase>svn+ssh://k@ailis.de/var/lib/svn/java/wlandsuite/tags</tagBase>
-          </configuration>-->
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-report-plugin</artifactId>
-          <groupId>org.apache.maven.plugins</groupId>
-        </plugin> 
-      </plugins>
-    </pluginManagement>
-  </build>
   
   <licenses>
     <license>
@@ -86,130 +29,91 @@
     </license>
   </licenses>
   
-  <reporting>
-    <plugins>
-      <!-- <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin> -->      
-      <!-- <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>changelog-maven-plugin</artifactId>
-      </plugin> -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jxr-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <links>
-            <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
-            <link>http://www.junit.org/junit/javadoc/</link>
-          </links>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-         <reportSets>
-           <reportSet>
-             <reports>
-               <report>dependencies</report>
-               <report>project-team</report>
-               <!-- <report>mailing-list</report> -->
-               <!-- <report>cim</report> -->
-               <!-- <report>issue-tracking</report> -->
-               <report>license</report>
-               <report>scm</report>
-             </reports>
-           </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-      <!-- <plugin>
-        <artifactId>maven-clover-plugin</artifactId>
-      </plugin> -->
-      <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-pmd-plugin</artifactId>
-         <configuration>
-            <targetJdk>1.5</targetJdk>
-            <rulesets>
-               <ruleset>/rulesets/basic.xml</ruleset>
-               <!-- <ruleset>/rulesets/controversial.xml</ruleset> -->
-            </rulesets>
-            <format>xml</format>
-            <linkXref>true</linkXref>
-            <sourceEncoding>utf-8</sourceEncoding>
-            <minimumTokens>100</minimumTokens>
-         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>changes-maven-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>changes-report</report>
-              <!-- <report>jira-report</report> -->
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>
-  
   <developers>
     <developer>
       <id>k</id>
       <name>Klaus Reimer</name>
       <email>k@ailis.de</email>
       <roles>
-        <role>Project Manager</role>
         <role>Architect</role>
       </roles>
-      <timezone>+2</timezone>
+      <timezone>+1</timezone>
       <url>http://www.ailis.de/~k/</url>
     </developer>        
   </developers>
   
-  <distributionManagement>
+  <scm>
+    <url>http://www.ailis.de/~k/hg/java/wlandsuite</url>
+    <connection>scm:hg:http://www.ailis.de/~k/hg/java/wlandsuite</connection>
+    <developerConnection>scm:hg:ssh://k@ailis.de/hg/java/wlandsuite</developerConnection>
+  </scm>  
+  
+  <repositories>  
     <repository>
       <id>ailis-releases</id>
       <name>Ailis Maven Releases</name>
-      <url>https://www.ailis.de/nexus/content/repositories/releases</url>
+      <url>http://www.ailis.de/nexus/content/groups/public/</url>
+      <snapshots><enabled>false</enabled></snapshots>
     </repository>
-    <snapshotRepository>
+    <repository>
       <id>ailis-snapshots</id>
       <name>Ailis Maven Snapshots</name>
-      <url>https://www.ailis.de/nexus/content/repositories/snapshots</url>
-    </snapshotRepository>
+      <url>http://www.ailis.de/nexus/content/groups/public-snapshots/</url>
+      <releases><enabled>false</enabled></releases>
+    </repository>
+  </repositories>
+   
+  <distributionManagement>
     <site>
-      <id>k-website</id>
-      <url>scpexe://k@ailis.de/home/k/public_html/projects/wlandsuite</url>
+      <id>project-website</id>
+      <url>scpexe://k@ailis.de/home/k/public_html/projects/wlandsuite/</url>
     </site>
   </distributionManagement>
   
-  <repositories>
-    <repository>
-      <id>ailis-releases</id>
-      <name>Ailis Maven Releases</name>
-      <url>https://www.ailis.de/nexus/content/repositories/releases</url>      
-    </repository>
-    <repository>
-      <id>ailis-snapshots</id>
-      <name>Ailis Maven Snapshots</name>
-      <url>https://www.ailis.de/nexus/content/repositories/snapshots</url>
-      <snapshots />
-    </repository>
-  </repositories>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>de.ailis.wlandsuite.Launcher</mainClass>
+              <packageName>de.ailis.wlandsuite</packageName>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>  
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/unix-bin.xml</descriptor>
+            <descriptor>src/main/assembly/windows-bin.xml</descriptor>
+            <descriptor>src/main/assembly/src.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>package-assembly</id>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   
   <dependencies>
     <dependency>

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -32,7 +32,7 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 /**
  * The special action table is used as a map from action indexes to actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -55,12 +55,12 @@ public class SpecialActionTable extends ArrayList<Integer>
 
     /**
      * Constructor
-     * 
+     *
      * @param capacity
      *            The initial capacity
      */
 
-    public SpecialActionTable(int capacity)
+    public SpecialActionTable(final int capacity)
     {
         super(capacity);
     }
@@ -69,22 +69,23 @@ public class SpecialActionTable extends ArrayList<Integer>
     /**
      * Creates and returns a new Action Table object by reading the data from
      * the specified stream.
-     * 
+     *
      * @param stream
      *            The stream to read the data from
      * @param quantity
      *            The number of action table entries to read from the stream
      * @return The action table
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static SpecialActionTable read(SeekableInputStream stream, int quantity)
+    public static SpecialActionTable read(final SeekableInputStream stream, final int quantity)
         throws IOException
     {
         SpecialActionTable table;
-        
+
         table = new SpecialActionTable(quantity);
-        
+
         for (int i = 0; i < quantity; i++)
         {
             table.add(stream.readWord());
@@ -97,14 +98,14 @@ public class SpecialActionTable extends ArrayList<Integer>
 
     /**
      * Writes the action table to the specified stream.
-     * 
+     *
      * @param stream
      *            The stream to write the action table to
      */
 
-    public void write(SeekableOutputStream stream)
+    public void write(final SeekableOutputStream stream)
     {
-        for (int action: this)
+        for (final int action: this)
         {
             stream.writeWord(action);
         }

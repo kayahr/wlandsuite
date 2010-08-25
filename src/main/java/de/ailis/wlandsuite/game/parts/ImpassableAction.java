@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,16 +26,16 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Impassable action
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,14 +54,15 @@ public class ImpassableAction implements Action
 
     /**
      * Creates a new Impassable Action by reading the data from a stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The Impassable Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static ImpassableAction read(InputStream stream) throws IOException
+    public static ImpassableAction read(final InputStream stream) throws IOException
     {
         ImpassableAction action;
 
@@ -89,13 +90,13 @@ public class ImpassableAction implements Action
 
     /**
      * Creates a new Impassable Action by reading the data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new Impassable Action
      */
 
-    public static ImpassableAction read(Element element)
+    public static ImpassableAction read(final Element element)
     {
         ImpassableAction action;
 
@@ -115,7 +116,7 @@ public class ImpassableAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -142,8 +143,8 @@ public class ImpassableAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.writeByte(this.message);
         stream.writeByte(this.newActionClass);
@@ -156,7 +157,7 @@ public class ImpassableAction implements Action
 
     /**
      * Returns the action class.
-     * 
+     *
      * @return The action class
      */
 
@@ -168,12 +169,12 @@ public class ImpassableAction implements Action
 
     /**
      * Sets the action class.
-     * 
+     *
      * @param actionClass
      *            The action class to set
      */
 
-    public void setNewActionClass(int actionClass)
+    public void setNewActionClass(final int actionClass)
     {
         this.newActionClass = actionClass;
     }
@@ -181,7 +182,7 @@ public class ImpassableAction implements Action
 
     /**
      * Returns the action selector.
-     * 
+     *
      * @return The action selector
      */
 
@@ -193,12 +194,12 @@ public class ImpassableAction implements Action
 
     /**
      * Sets the action selector.
-     * 
+     *
      * @param actionSelector
      *            The action selector to set
      */
 
-    public void setNewAction(int actionSelector)
+    public void setNewAction(final int actionSelector)
     {
         this.newAction = actionSelector;
     }
@@ -206,7 +207,7 @@ public class ImpassableAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -218,12 +219,12 @@ public class ImpassableAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }

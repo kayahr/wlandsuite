@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -42,7 +42,7 @@ import de.ailis.wlandsuite.msq.MsqHeader;
 /**
  * A HTDS object contains the tile sets from the allhtds1 or allhtds2 files of
  * Wasteland.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -51,19 +51,19 @@ public class Htds
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(Htds.class);
-    
+
     /** The tilesets */
-    private List<HtdsTileset> tilesets;
+    private final List<HtdsTileset> tilesets;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param tilesets
      *            The tilesets
      */
 
-    public Htds(List<HtdsTileset> tilesets)
+    public Htds(final List<HtdsTileset> tilesets)
     {
         this.tilesets = tilesets;
     }
@@ -72,14 +72,15 @@ public class Htds
     /**
      * Reads HTDS tilesets with the default tile size of 16x16 from the given
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The HTDS tilesets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Htds read(InputStream stream) throws IOException
+    public static Htds read(final InputStream stream) throws IOException
     {
         return read(stream, 16, 16);
     }
@@ -89,7 +90,7 @@ public class Htds
      * Reads HTDS tilesets from the given stream. Width and height of the tiles
      * must be specified because no image dimensions can be read from the
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -98,9 +99,10 @@ public class Htds
      *            The tile height
      * @return The HTDS tilesets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Htds read(InputStream stream, int width, int height)
+    public static Htds read(final InputStream stream, final int width, final int height)
         throws IOException
     {
         List<HtdsTileset> tilesets;
@@ -122,13 +124,14 @@ public class Htds
     /**
      * Writes HTDS tilesets to the given stream. The disk index is determined
      * automatically by looking at the number of tilesets in the HTDS.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         write(stream, this.tilesets.size() == 4 ? 0 : 1);
     }
@@ -136,18 +139,19 @@ public class Htds
 
     /**
      * Writes HTDS tilesets to the given stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk index
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         int tilesetNo = 0;
-        for (HtdsTileset tileset: this.tilesets)
+        for (final HtdsTileset tileset: this.tilesets)
         {
             log.info("Writing tileset " + tilesetNo);
             tileset.write(stream, disk);
@@ -160,14 +164,15 @@ public class Htds
      * Returns the offsets of the tileset MSQ blocks in the specified file.
      * The offsets are determined by reading the raw data of each block and
      * looking at the position in the file.
-     * 
+     *
      * @param file
      *            The file
      * @return The offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static List<Integer> getMsqOffsets(File file) throws IOException
+    public static List<Integer> getMsqOffsets(final File file) throws IOException
     {
         List<Integer> offsets;
         RandomAccessFile access;
@@ -202,7 +207,7 @@ public class Htds
 
     /**
      * Returns the tilesets.
-     * 
+     *
      * @return The tilesets
      */
 

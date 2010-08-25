@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -38,7 +38,7 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 /**
  * The central directory contains all the offsets to the various parts of the
  * map.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -55,14 +55,14 @@ public class CentralDirectory
     private int monsterDataOffset;
 
     /** The action class master table */
-    private int[] actionClassMasterTable = new int[16];
+    private final int[] actionClassMasterTable = new int[16];
 
     /** The nibble 6 offset */
     private int nibble6Offset;
 
     /** The NPC offset */
     private int npcOffset;
-    
+
     /** The tilemap offset (Only used internaly, not exported to game files) */
     private int tilemapOffset;
 
@@ -80,14 +80,15 @@ public class CentralDirectory
     /**
      * Creates and returns a new Central Directory by reading it from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The stream to read the central directory from.
      * @return The central directory
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static CentralDirectory read(SeekableInputStream stream)
+    public static CentralDirectory read(final SeekableInputStream stream)
         throws IOException
     {
         CentralDirectory directory;
@@ -115,17 +116,17 @@ public class CentralDirectory
 
     /**
      * Writes the central directory to the specified output stream.
-     * 
+     *
      * @param stream
      *            The stream to write the central directory to
      */
 
-    public void write(SeekableOutputStream stream)
+    public void write(final SeekableOutputStream stream)
     {
         stream.writeWord(this.stringsOffset);
         stream.writeWord(this.monsterNamesOffset);
         stream.writeWord(this.monsterDataOffset);
-        for (int offset: this.actionClassMasterTable)
+        for (final int offset: this.actionClassMasterTable)
         {
             stream.writeWord(offset);
         }
@@ -137,7 +138,7 @@ public class CentralDirectory
 
     /**
      * Returns the monster data offset.
-     * 
+     *
      * @return The monster data offset
      */
 
@@ -149,12 +150,12 @@ public class CentralDirectory
 
     /**
      * Sets the monster data offset.
-     * 
+     *
      * @param monsterDataOffset
      *            The monster data offset to set
      */
 
-    public void setMonsterDataOffset(int monsterDataOffset)
+    public void setMonsterDataOffset(final int monsterDataOffset)
     {
         this.monsterDataOffset = monsterDataOffset;
     }
@@ -162,7 +163,7 @@ public class CentralDirectory
 
     /**
      * Returns the monster names offset.
-     * 
+     *
      * @return The monster names offset
      */
 
@@ -174,12 +175,12 @@ public class CentralDirectory
 
     /**
      * Sets the monster names offset.
-     * 
+     *
      * @param monsterNamesOffset
      *            The monster names offset to set
      */
 
-    public void setMonsterNamesOffset(int monsterNamesOffset)
+    public void setMonsterNamesOffset(final int monsterNamesOffset)
     {
         this.monsterNamesOffset = monsterNamesOffset;
     }
@@ -187,7 +188,7 @@ public class CentralDirectory
 
     /**
      * Returns the strings offset.
-     * 
+     *
      * @return The strings offset
      */
 
@@ -199,25 +200,25 @@ public class CentralDirectory
 
     /**
      * Sets the strings offset.
-     * 
+     *
      * @param stringsOffset
      *            The strings offset to set
      */
 
-    public void setStringsOffset(int stringsOffset)
+    public void setStringsOffset(final int stringsOffset)
     {
         this.stringsOffset = stringsOffset;
     }
 
     /**
      * Returns the action class offset.
-     * 
+     *
      * @param actionClass
      *            The action class
      * @return The offset
      */
 
-    public int getActionClassOffset(int actionClass)
+    public int getActionClassOffset(final int actionClass)
     {
         return this.actionClassMasterTable[actionClass];
     }
@@ -225,14 +226,14 @@ public class CentralDirectory
 
     /**
      * Sets an action class offset.
-     * 
+     *
      * @param actionClass
      *            The action class
      * @param offset
      *            The offset
      */
 
-    public void setActionClassOffset(int actionClass, int offset)
+    public void setActionClassOffset(final int actionClass, final int offset)
     {
         this.actionClassMasterTable[actionClass] = offset;
     }
@@ -240,7 +241,7 @@ public class CentralDirectory
 
     /**
      * Returns the nibble6Offset.
-     * 
+     *
      * @return The nibble6Offset
      */
 
@@ -252,12 +253,12 @@ public class CentralDirectory
 
     /**
      * Sets the nibble6Offset.
-     * 
+     *
      * @param nibble6Offset
      *            The nibble6Offset to set
      */
 
-    public void setNibble6Offset(int nibble6Offset)
+    public void setNibble6Offset(final int nibble6Offset)
     {
         this.nibble6Offset = nibble6Offset;
     }
@@ -265,7 +266,7 @@ public class CentralDirectory
 
     /**
      * Returns the npcOffset.
-     * 
+     *
      * @return The npcOffset
      */
 
@@ -277,12 +278,12 @@ public class CentralDirectory
 
     /**
      * Sets the npcOffset.
-     * 
+     *
      * @param npcOffset
      *            The npcOffset to set
      */
 
-    public void setNpcOffset(int npcOffset)
+    public void setNpcOffset(final int npcOffset)
     {
         this.npcOffset = npcOffset;
     }
@@ -291,12 +292,12 @@ public class CentralDirectory
     /**
      * Sanitizes the central directory. This means zeroing all offsets which are
      * not used or set incorrectly.
-     * 
+     *
      * @param gameMap
      *            The game map where the central directory is located in
      */
 
-    public void sanitizeCentralDirectory(GameMap gameMap)
+    public void sanitizeCentralDirectory(final GameMap gameMap)
     {
         // Reset unused npc offset
         if ((this.npcOffset != 0) && (gameMap.getNpcs().size() == 0))
@@ -342,12 +343,12 @@ public class CentralDirectory
         }
 
         // Build a map from offsets to action classes
-        Map<Integer, List<Integer>> usage = new HashMap<Integer, List<Integer>>();
+        final Map<Integer, List<Integer>> usage = new HashMap<Integer, List<Integer>>();
         for (int i = 0; i < 16; i++)
         {
             List<Integer> classes;
 
-            int offset = this.actionClassMasterTable[i];
+            final int offset = this.actionClassMasterTable[i];
             if (offset == 0) continue;
 
             classes = usage.get(offset);
@@ -360,16 +361,16 @@ public class CentralDirectory
         }
 
         // Cycle through the map and try to find and resolve conflicts
-        for (Integer offset: usage.keySet())
+        for (final Integer offset: usage.keySet())
         {
-            List<Integer> classes = usage.get(offset);
+            final List<Integer> classes = usage.get(offset);
 
             // No conflict? Then continue
             if (classes.size() < 2) continue;
 
             // Find out which class is really in use
             int usedClass = -1;
-            for (Integer c: classes)
+            for (final Integer c: classes)
             {
                 boolean used;
 
@@ -448,7 +449,7 @@ public class CentralDirectory
             if (usedClass >= 0)
             {
                 // Reset all other classes
-                for (Integer c: classes)
+                for (final Integer c: classes)
                 {
                     if (c.intValue() != usedClass)
                     {
@@ -463,7 +464,7 @@ public class CentralDirectory
                 "Don't know how to resolve conflicting action classes "
                     + classes);
         }
-        
+
         // Reset nibble6 offset if action class 6 is not used
         if (this.nibble6Offset != 0 && this.actionClassMasterTable[6] == 0)
         {
@@ -477,7 +478,7 @@ public class CentralDirectory
      *
      * @return The tilemap offset
      */
-    
+
     public int getTilemapOffset()
     {
         return this.tilemapOffset;
@@ -487,11 +488,11 @@ public class CentralDirectory
     /**
      * Sets the tilemap offset.
      *
-     * @param tilemapOffset 
+     * @param tilemapOffset
      *            The tilemap offset to set
      */
-    
-    public void setTilemapOffset(int tilemapOffset)
+
+    public void setTilemapOffset(final int tilemapOffset)
     {
         this.tilemapOffset = tilemapOffset;
     }

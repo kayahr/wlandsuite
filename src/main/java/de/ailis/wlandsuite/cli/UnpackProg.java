@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -33,7 +33,7 @@ import java.io.InputStream;
 /**
  * A base class for unpack programs. Unpack programs are meant for unpacking
  * a single file into a directory.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -42,21 +42,22 @@ public abstract class UnpackProg extends CLIProg
 {
     /** The input filename (or null for stdin) */
     protected String input = null;
-    
+
     /** The output directory */
     protected File output;
 
-    
+
     /**
      * Returns the input stream where the input data can be read from.
-     * 
+     *
      * @param input
      *            The input file name or null for stdin
      * @return The input stream
      * @throws FileNotFoundException
+     *             When input was not found.
      */
 
-    private InputStream getInputStream(String input)
+    private InputStream getInputStream(final String input)
         throws FileNotFoundException
     {
         if (input == null)
@@ -68,21 +69,17 @@ public abstract class UnpackProg extends CLIProg
             return new FileInputStream(new File(input));
         }
     }
-    
+
 
     /**
-     * Runs the program
-     * 
-     * @param params
-     *            The command line arguments.
-     * @throws IOException
+     * @see de.ailis.wlandsuite.cli.CLIProg#run(java.lang.String[])
      */
 
     @Override
-    public void run(String[] params) throws IOException
+    public void run(final String[] params) throws IOException
     {
         InputStream inputStream;
-        
+
         if (params.length == 0)
         {
             wrongUsage("No output directory specified");
@@ -121,12 +118,13 @@ public abstract class UnpackProg extends CLIProg
 
     /**
      * Converts some input into some output.
-     * 
+     *
      * @param input
      *            The input stream
      * @param directory
      *            The output directory
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      */
 
     protected abstract void unpack(InputStream input, File directory) throws IOException;

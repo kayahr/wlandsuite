@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,7 +34,7 @@ import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 /**
  * The HuffmanInputStream allows reading huffman compressed data from an input
  * stream.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -42,21 +42,22 @@ import de.ailis.wlandsuite.io.BitInputStreamWrapper;
 public class HuffmanInputStream extends BitInputStream
 {
     /** The huffman tree */
-    private HuffmanTree tree;
+    private final HuffmanTree tree;
 
     /** The bit reader */
-    private BitInputStream bitStream;
+    private final BitInputStream bitStream;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param stream
      *            The input stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public HuffmanInputStream(InputStream stream) throws IOException
+    public HuffmanInputStream(final InputStream stream) throws IOException
     {
         this.bitStream = new BitInputStreamWrapper(stream);
         this.tree = HuffmanTree.load(this.bitStream);

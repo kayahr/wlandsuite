@@ -62,7 +62,7 @@ public class HtdsTest extends WSTestCase
     /**
      * Tests reading a HTDS
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testRead() throws IOException
@@ -99,7 +99,7 @@ public class HtdsTest extends WSTestCase
     /**
      * Tests writing a HTDS.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWrite() throws IOException

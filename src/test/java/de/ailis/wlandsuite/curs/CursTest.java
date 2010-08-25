@@ -62,7 +62,7 @@ public class CursTest extends WSTestCase
     /**
      * Tests reading a Curs
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testRead() throws IOException
@@ -88,7 +88,7 @@ public class CursTest extends WSTestCase
     /**
      * Tests writing a Curs.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWrite() throws IOException

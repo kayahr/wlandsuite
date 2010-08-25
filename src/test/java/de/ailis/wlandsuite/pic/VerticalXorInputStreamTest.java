@@ -57,7 +57,7 @@ public class VerticalXorInputStreamTest extends TestCase
     /**
      * Tests reading VXor encoded data.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testReading() throws IOException

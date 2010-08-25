@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -32,7 +32,7 @@ import java.io.OutputStream;
 
 /**
  * A base class for packing programs.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -41,21 +41,22 @@ public abstract class PackProg extends CLIProg
 {
     /** The output filename (or null for stdout) */
     protected String output = null;
-    
+
     /** The input directory */
     protected File input;
 
-    
+
     /**
      * Returns the output stream where the data will be written to.
-     * 
+     *
      * @param output
      *            The output file name or null for stdout
      * @return The output stream
      * @throws FileNotFoundException
+     *             When output was not found.
      */
 
-    private OutputStream getOutputStream(String output)
+    private OutputStream getOutputStream(final String output)
         throws FileNotFoundException
     {
         if (output == null)
@@ -67,21 +68,17 @@ public abstract class PackProg extends CLIProg
             return new FileOutputStream(new File(output));
         }
     }
-    
+
 
     /**
-     * Runs the program
-     * 
-     * @param params
-     *            The command line arguments.
-     * @throws IOException
+     * @see de.ailis.wlandsuite.cli.CLIProg#run(java.lang.String[])
      */
 
     @Override
-    public void run(String[] params) throws IOException
+    public void run(final String[] params) throws IOException
     {
         OutputStream outputStream;
-        
+
         if (params.length == 0)
         {
             wrongUsage("No input directory specified");
@@ -124,7 +121,8 @@ public abstract class PackProg extends CLIProg
      *            The input directory
      * @param output
      *            The output stream
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      */
 
     protected abstract void pack(File directory, OutputStream output) throws IOException;

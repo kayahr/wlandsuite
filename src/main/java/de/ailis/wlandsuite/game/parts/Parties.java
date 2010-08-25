@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -37,7 +37,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * Parties
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -63,14 +63,15 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Reads the parties from the specified input stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The parties
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Parties read(InputStream stream) throws IOException
+    public static Parties read(final InputStream stream) throws IOException
     {
         Parties parties;
 
@@ -85,22 +86,22 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Reads the parties from the specified XML element.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The parties
      */
 
-    public static Parties read(Element element)
+    public static Parties read(final Element element)
     {
         Parties parties;
 
         parties = new Parties();
         parties.currentParty = StringUtils.toInt(element
             .attributeValue("currentParty", "0"));
-        for (Object item: element.elements("party"))
+        for (final Object item: element.elements("party"))
         {
-            Element party = (Element) item;
+            final Element party = (Element) item;
 
             parties.add(Party.read(party));
         }
@@ -110,13 +111,14 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Writes the parties to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         if (size() > 4)
         {
@@ -126,7 +128,7 @@ public class Parties extends ArrayList<Party>
         }
 
         // Write the parties
-        for (Party party: this)
+        for (final Party party: this)
         {
             party.write(stream);
         }
@@ -143,7 +145,7 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Returns the XML representation of the parties.
-     * 
+     *
      * @return The XML element
      */
 
@@ -163,7 +165,7 @@ public class Parties extends ArrayList<Party>
         element.addAttribute("currentParty", Integer
             .toString(this.currentParty));
         id = 0;
-        for (Party party: this)
+        for (final Party party: this)
         {
             element.add(party.toXml(id));
             id++;
@@ -174,7 +176,7 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Returns the currentParty.
-     * 
+     *
      * @return The currentParty
      */
 
@@ -186,12 +188,12 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Sets the currentParty.
-     * 
+     *
      * @param currentParty
      *            The currentParty to set
      */
 
-    public void setCurrentParty(int currentParty)
+    public void setCurrentParty(final int currentParty)
     {
         this.currentParty = currentParty;
     }
@@ -199,7 +201,7 @@ public class Parties extends ArrayList<Party>
 
     /**
      * Returns the total number of party members
-     * 
+     *
      * @return The total number of party members
      */
 
@@ -207,9 +209,9 @@ public class Parties extends ArrayList<Party>
     {
         int members = 0;
 
-        for (Party party: this)
+        for (final Party party: this)
         {
-            for (int member: party)
+            for (final int member: party)
             {
                 if (member > members) members = member;
             }

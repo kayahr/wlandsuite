@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,7 +34,7 @@ import java.io.OutputStream;
 
 /**
  * A base class for convert programs.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -43,21 +43,22 @@ public abstract class ConvertProg extends CLIProg
 {
     /** The input filename (or null for stdin) */
     protected String input = null;
-    
+
     /** The output filename (or null for stdout) */
     protected String output = null;
 
-    
+
     /**
      * Returns the input stream where the input data can be read from.
-     * 
+     *
      * @param input
      *            The input file name or null for stdin
      * @return The input stream
      * @throws FileNotFoundException
+     *             When input was not found.
      */
 
-    private InputStream getInputStream(String input)
+    private InputStream getInputStream(final String input)
         throws FileNotFoundException
     {
         if (input == null)
@@ -73,14 +74,15 @@ public abstract class ConvertProg extends CLIProg
 
     /**
      * Returns the output stream.
-     * 
+     *
      * @param output
      *            The output file name or null for stdout
      * @return The output stream
      * @throws FileNotFoundException
+     *             When output was not found.
      */
 
-    private OutputStream getOutputStream(String output)
+    private OutputStream getOutputStream(final String output)
         throws FileNotFoundException
     {
         if (output == null)
@@ -96,14 +98,15 @@ public abstract class ConvertProg extends CLIProg
 
     /**
      * Runs the program
-     * 
+     *
      * @param params
      *            The command line arguments.
      * @throws IOException
+     *             When some file could not be read or written.
      */
 
     @Override
-    public void run(String[] params) throws IOException
+    public void run(final String[] params) throws IOException
     {
         InputStream inputStream;
         OutputStream outputStream;
@@ -157,12 +160,13 @@ public abstract class ConvertProg extends CLIProg
 
     /**
      * Converts some input into some output.
-     * 
+     *
      * @param input
      *            The input stream
      * @param output
      *            The output stream
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      */
 
     protected abstract void convert(InputStream input, OutputStream output) throws IOException;

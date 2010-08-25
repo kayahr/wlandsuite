@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -28,18 +28,18 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * All the Monsters of a map. Be careful when you delete a Monster because other
  * Monsters will get a new index and you have to correct all references to these
  * Monsters.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -62,11 +62,12 @@ public class Monsters extends ArrayList<Monster>
 
     /**
      * Constructor
-     * 
+     *
      * @param capacity
+     *            The capacity.
      */
 
-    public Monsters(int capacity)
+    public Monsters(final int capacity)
     {
         super(capacity);
     }
@@ -77,7 +78,7 @@ public class Monsters extends ArrayList<Monster>
      * from the specified stream. The stream must be positioned at the beginning
      * of the monster names table and the offset to the monster data must be
      * specified together with the number of monsters to read.
-     * 
+     *
      * @param stream
      *            The stream to read the Monsters from
      * @param dataOffset
@@ -86,10 +87,11 @@ public class Monsters extends ArrayList<Monster>
      *            The number of monsters to read
      * @return The Monsters
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Monsters read(SeekableInputStream stream, int dataOffset,
-        int quantity) throws IOException
+    public static Monsters read(final SeekableInputStream stream, final int dataOffset,
+        final int quantity) throws IOException
     {
         Monsters monsters;
         List<String> names;
@@ -98,7 +100,7 @@ public class Monsters extends ArrayList<Monster>
         names = new ArrayList<String>();
         for (int i = 0; i < quantity; i++)
         {
-            StringBuilder name = new StringBuilder();
+            final StringBuilder name = new StringBuilder();
             while (true)
             {
                 String s;
@@ -117,7 +119,7 @@ public class Monsters extends ArrayList<Monster>
 
         // Seek to monster data
         stream.seek(dataOffset);
-        for (String name: names)
+        for (final String name: names)
         {
             monsters.add(Monster.read(stream, name));
         }
@@ -125,26 +127,26 @@ public class Monsters extends ArrayList<Monster>
         // Return the monsters object
         return monsters;
     }
-    
-    
+
+
     /**
      * Creates and returns a new Monsters object from XML.
      *
      * @param element The XML element
      * @return The Monsters
      */
-    
+
     @SuppressWarnings("unchecked")
-    public static Monsters read(Element element)
+    public static Monsters read(final Element element)
     {
         Monsters monsters;
         List<Element> subElements;
-        
+
         monsters = new Monsters();
         if (element != null)
         {
             subElements = element.elements("monster");
-            for (Element subElement: subElements)
+            for (final Element subElement: subElements)
             {
                 monsters.add(Monster.read(subElement));
             }
@@ -155,32 +157,33 @@ public class Monsters extends ArrayList<Monster>
 
     /**
      * Writes the monster data to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      */
 
-    public void writeData(SeekableOutputStream stream)
+    public void writeData(final SeekableOutputStream stream)
     {
-        for (Monster monster: this)
+        for (final Monster monster: this)
         {
             monster.write(stream);
         }
     }
-    
+
 
     /**
      * Writes the monster names to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeNames(OutputStream stream)
+    public void writeNames(final OutputStream stream)
         throws IOException
     {
-        for (Monster monster: this)
+        for (final Monster monster: this)
         {
             stream.write(monster.getName().getBytes("ASCII"));
             stream.write(0);
@@ -190,7 +193,7 @@ public class Monsters extends ArrayList<Monster>
 
     /**
      * Returns the monsters as XML.
-     * 
+     *
      * @return The monsters as XML
      */
 
@@ -204,7 +207,7 @@ public class Monsters extends ArrayList<Monster>
 
         // Add all the monsters
         monsterNo = 0;
-        for (Monster monster: this)
+        for (final Monster monster: this)
         {
             // Create and append string element
             subElement = monster.toXml(monsterNo);

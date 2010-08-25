@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -38,7 +38,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * The Action Map describes the actions of all the map squares.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -46,20 +46,20 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 public class ActionMap
 {
     /** The actions */
-    private int[][] actions;
+    private final int[][] actions;
 
 
     /**
      * Constructs a new action map with the specified map size. Map size must be
      * 32 or 64. Any other value throws an IllegalArgumentException.
-     * 
+     *
      * @param mapSize
      *            The map size
      * @throws IllegalArgumentException
      *             If specified size is not 32 and not 64.
      */
 
-    public ActionMap(int mapSize)
+    public ActionMap(final int mapSize)
     {
         // Validate the map size
         if (mapSize != 32 && mapSize != 64)
@@ -78,18 +78,19 @@ public class ActionMap
      * The map size must be specified because it can't be read from the stream
      * automatically. Map size must be 32 or 64. Any other value throws an
      * IllegalArgumentException.
-     * 
+     *
      * @param stream
      *            The input stream to read the action map from
      * @param mapSize
      *            The map size (Must be 32 or 64)
      * @return The newly constructed Action Map
      * @throws IOException
+     *             When file operation fails.
      * @throws IllegalArgumentException
      *             If specified size is not 32 and not 64.
      */
 
-    public static ActionMap read(InputStream stream, int mapSize)
+    public static ActionMap read(final InputStream stream, final int mapSize)
         throws IOException
     {
         ActionMap actionMap;
@@ -114,13 +115,14 @@ public class ActionMap
 
     /**
      * Writes the action map to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream to write the action map to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         int mapSize;
 
@@ -140,7 +142,7 @@ public class ActionMap
 
     /**
      * Creates and returns a new action map read from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @param mapSize
@@ -148,7 +150,7 @@ public class ActionMap
      * @return The action map
      */
 
-    public static ActionMap read(Element element, int mapSize)
+    public static ActionMap read(final Element element, final int mapSize)
     {
         ActionMap actionMap;
         String data;
@@ -170,7 +172,7 @@ public class ActionMap
                 {
                     s = data.substring(i * 3, i * 3 + 2);
                 }
-                catch (StringIndexOutOfBoundsException e)
+                catch (final StringIndexOutOfBoundsException e)
                 {
                     throw new GameException("Action selector map is corrupt: "
                         + (mapSize * mapSize - (y * mapSize + x))
@@ -181,7 +183,7 @@ public class ActionMap
                 {
                     b = Integer.valueOf(s, 16);
                 }
-                catch (NumberFormatException e)
+                catch (final NumberFormatException e)
                 {
                     throw new GameException(
                         "Illegal data in action selector map at y=" + y + " x="
@@ -199,13 +201,13 @@ public class ActionMap
 
     /**
      * Returns the action map in XML format.
-     * 
+     *
      * @param actionClassMap
      *            The action class map
      * @return The action map in XML
      */
 
-    public Element toXml(ActionClassMap actionClassMap)
+    public Element toXml(final ActionClassMap actionClassMap)
     {
         Element element;
         StringWriter text;
@@ -256,7 +258,7 @@ public class ActionMap
 
     /**
      * Returns the action at the specified position
-     * 
+     *
      * @param x
      *            The x position
      * @param y
@@ -264,7 +266,7 @@ public class ActionMap
      * @return The action
      */
 
-    public int getAction(int x, int y)
+    public int getAction(final int x, final int y)
     {
         return this.actions[y][x];
     }
@@ -272,7 +274,7 @@ public class ActionMap
 
     /**
      * Sets the action at the specified position.
-     * 
+     *
      * @param x
      *            The x position
      * @param y
@@ -281,7 +283,7 @@ public class ActionMap
      *            The action to set
      */
 
-    public void setAction(int x, int y, int action)
+    public void setAction(final int x, final int y, final int action)
     {
         this.actions[y][x] = action;
     }

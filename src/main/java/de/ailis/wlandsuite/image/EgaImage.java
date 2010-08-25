@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -36,7 +36,7 @@ import javax.imageio.ImageIO;
 
 /**
  * An EGA image.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -52,7 +52,7 @@ public class EgaImage extends PaletteImage
 
     /**
      * Constructor
-     * 
+     *
      * @param width
      *            The picture width
      * @param height
@@ -70,7 +70,7 @@ public class EgaImage extends PaletteImage
      * Creates a picture from a normal buffered image which is copied to the
      * picture. Colors are automatically converted to the 16 color palette of
      * the picture.
-     * 
+     *
      * @param image
      *            The normal buffered image
      */
@@ -91,11 +91,12 @@ public class EgaImage extends PaletteImage
 
     /**
      * Reads an image from the specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The image
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static EgaImage read(final InputStream stream) throws IOException

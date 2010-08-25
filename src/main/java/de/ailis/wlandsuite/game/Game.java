@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -40,7 +40,7 @@ import de.ailis.wlandsuite.io.SeekableInputStream;
 
 /**
  * Represents a game file with all its maps, the savegame and shop lists.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -49,7 +49,7 @@ public class Game
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(Game.class);
-    
+
     /** The map block type */
     private static final int TYPE_MAP = 0;
 
@@ -60,13 +60,13 @@ public class Game
     private static final int TYPE_SHOPLIST = 2;
 
     /** The game maps */
-    private List<GameMap> maps;
+    private final List<GameMap> maps;
 
     /** The save game */
     private Savegame savegame;
 
     /** The shop item lists */
-    private List<ShopItemList> shopItemLists;
+    private final List<ShopItemList> shopItemLists;
 
 
     /**
@@ -83,14 +83,15 @@ public class Game
     /**
      * Creates and returns a new Game object by reading it from the specified
      * input stream.
-     * 
+     *
      * @param stream
      *            The input stream to read the game file from
      * @return The newly created Game object
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Game read(InputStream stream) throws IOException
+    public static Game read(final InputStream stream) throws IOException
     {
         Game game;
         SeekableInputStream gameStream;
@@ -106,7 +107,7 @@ public class Game
         // Cycle over all msq blocks
         mapNo = 0;
         listNo = 0;
-        for (GameMsqBlock block: getMsqBlocks(gameStream))
+        for (final GameMsqBlock block: getMsqBlocks(gameStream))
         {
             int type;
 
@@ -143,35 +144,37 @@ public class Game
     /**
      * Writes the game file to the specified output stream. The disk number
      * is determined automatically by looking at the number of maps.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         write(stream, this.maps.size() == 20 ? 0 : 1);
     }
-    
-    
+
+
     /**
      * Writes the game file to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk id (0 or 1)
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         int i;
-        
+
         // Write the maps
         i = 0;
-        for (GameMap map: this.maps)
+        for (final GameMap map: this.maps)
         {
             log.info("Writing map " + i);
             map.write(stream, disk);
@@ -184,7 +187,7 @@ public class Game
 
         // Write the shop item lists
         i = 0;
-        for (ShopItemList list: this.shopItemLists)
+        for (final ShopItemList list: this.shopItemLists)
         {
             log.info("Writing shop item list " + i);
             list.write(stream, disk);
@@ -195,7 +198,7 @@ public class Game
 
     /**
      * Returns the maps of the game file.
-     * 
+     *
      * @return The maps
      */
 
@@ -207,7 +210,7 @@ public class Game
 
     /**
      * Returns the shop item lists of the game file.
-     * 
+     *
      * @return The shop item lists
      */
 
@@ -224,7 +227,7 @@ public class Game
      * header. This will break if such a text appears in the middle of a MSQ
      * block. But because this is quite a uncommon string and because of the
      * encryption and compression this will most likely not happen.
-     * 
+     *
      * @param stream
      *            The stream to read the game data from
      * @return The game file structure
@@ -232,7 +235,7 @@ public class Game
      *             When the game file could not be read
      */
 
-    private static List<GameMsqBlock> getMsqBlocks(InputStream stream)
+    private static List<GameMsqBlock> getMsqBlocks(final InputStream stream)
         throws IOException
     {
         List<GameMsqBlock> blocks;
@@ -318,7 +321,7 @@ public class Game
      * to. This method reads the first 9 decrypted bytes from the block. You
      * have to reset the stream if you want to read the MSQ block from it after
      * this.
-     * 
+     *
      * @param stream
      *            The stream pointing to a MSQ block
      * @param msqBlockSize
@@ -328,7 +331,7 @@ public class Game
      *             If stream cannot be read or doesn't contain a valid MSQ block
      */
 
-    private static int getType(InputStream stream, int msqBlockSize)
+    private static int getType(final InputStream stream, final int msqBlockSize)
         throws IOException
     {
         byte[] bytes;
@@ -370,13 +373,13 @@ public class Game
      * games are discovered by the block size and by the byte offsets 1-8 which
      * represents the character order and must contain values between 0 and 7
      * while all non-zero numbers can only occur once.
-     * 
+     *
      * @param bytes
      *            The byte array to check
      * @return If it's a save game or not
      */
 
-    private static boolean isSaveGame(byte[] bytes)
+    private static boolean isSaveGame(final byte[] bytes)
     {
         List<Integer> seen;
         byte b;
@@ -397,13 +400,13 @@ public class Game
      * Checks if the specified byte array represents an unknown block which is
      * one of the blocks following the save game block. Purpose of these blocks
      * is currently unknown.
-     * 
+     *
      * @param bytes
      *            The byte array to check
      * @return If it's an unknwon block or not
      */
 
-    private static boolean isShopItems(byte[] bytes)
+    private static boolean isShopItems(final byte[] bytes)
     {
         if (bytes[0] == 0x60 && bytes[1] == 0x60 && bytes[2] == 0x60)
         {
@@ -415,12 +418,12 @@ public class Game
 
     /**
      * Adds a new map to the game.
-     * 
+     *
      * @param map
      *            The map to add
      */
 
-    public void addMap(GameMap map)
+    public void addMap(final GameMap map)
     {
         this.maps.add(map);
     }
@@ -428,12 +431,12 @@ public class Game
 
     /**
      * Adds a new shop item list to the game.
-     * 
+     *
      * @param shopItemList
      *            The shop item list to add
      */
 
-    public void addShopItemList(ShopItemList shopItemList)
+    public void addShopItemList(final ShopItemList shopItemList)
     {
         this.shopItemLists.add(shopItemList);
     }
@@ -441,7 +444,7 @@ public class Game
 
     /**
      * Returns the savegame.
-     * 
+     *
      * @return The savegame
      */
 
@@ -453,12 +456,12 @@ public class Game
 
     /**
      * Sets the savegame.
-     * 
+     *
      * @param savegame
      *            The savegame to set
      */
 
-    public void setSavegame(Savegame savegame)
+    public void setSavegame(final Savegame savegame)
     {
         this.savegame = savegame;
     }

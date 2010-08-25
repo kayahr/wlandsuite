@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Provides methods for reading and writing special bytes from the unpacked
  * wl.exe file.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -42,7 +42,7 @@ import java.util.List;
 public class WlExe
 {
     /** The random access to wl.exe */
-    private RandomAccessFile file;
+    private final RandomAccessFile file;
 
     /** The offset of seg002 in the EXE file */
     private int seg2Offset;
@@ -51,13 +51,14 @@ public class WlExe
     /**
      * Constructor. If you create this object then you must call the close()
      * method if you are finished with it.
-     * 
+     *
      * @param file
      *            The wl.exe
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public WlExe(File file) throws IOException
+    public WlExe(final File file) throws IOException
     {
         this.file = new RandomAccessFile(file, "rw");
         scan();
@@ -67,8 +68,9 @@ public class WlExe
     /**
      * Scans the EXE to find the segments and validate if the EXE could safely
      * be read.
-     * 
+     *
      * @throws IOException
+     *             When file operation fails.
      */
 
     private void scan() throws IOException
@@ -89,8 +91,9 @@ public class WlExe
 
     /**
      * Closes the random access file.
-     * 
+     *
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void close() throws IOException
@@ -101,9 +104,10 @@ public class WlExe
 
     /**
      * Returns the MSQ offsets of the first tileset file.
-     * 
+     *
      * @return The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
     public List<Integer> getHtds1Offsets() throws IOException
@@ -122,13 +126,14 @@ public class WlExe
 
     /**
      * Sets the MSQ offsets for the first tileset file.
-     * 
+     *
      * @param offsets
      *            The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void setHtds1Offsets(List<Integer> offsets) throws IOException
+    public void setHtds1Offsets(final List<Integer> offsets) throws IOException
     {
         if (offsets.size() != 4)
         {
@@ -136,7 +141,7 @@ public class WlExe
                 + offsets.size() + " offsets");
         }
         this.file.seek(this.seg2Offset + 48636);
-        for (Integer offset: offsets)
+        for (final Integer offset: offsets)
         {
             writeOffset(offset.intValue());
         }
@@ -145,9 +150,10 @@ public class WlExe
 
     /**
      * Returns the MSQ offsets of the second tileset file.
-     * 
+     *
      * @return The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
     public List<Integer> getHtds2Offsets() throws IOException
@@ -167,13 +173,14 @@ public class WlExe
 
     /**
      * Sets the MSQ offsets for the second tileset file.
-     * 
+     *
      * @param offsets
      *            The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void setHtds2Offsets(List<Integer> offsets) throws IOException
+    public void setHtds2Offsets(final List<Integer> offsets) throws IOException
     {
         if (offsets.size() != 5)
         {
@@ -181,7 +188,7 @@ public class WlExe
                 + offsets.size() + " offsets");
         }
         this.file.seek(this.seg2Offset + 48652);
-        for (Integer offset: offsets)
+        for (final Integer offset: offsets)
         {
             writeOffset(offset.intValue() + 0x8603);
         }
@@ -190,17 +197,18 @@ public class WlExe
 
     /**
      * Reads an offset from the current position.
-     * 
+     *
      * @return The offset
      * @throws IOException
+     *             When file operation fails.
      */
 
     private int readOffset() throws IOException
     {
-        int ch1 = this.file.read();
-        int ch2 = this.file.read();
-        int ch3 = this.file.read();
-        int ch4 = this.file.read();
+        final int ch1 = this.file.read();
+        final int ch2 = this.file.read();
+        final int ch3 = this.file.read();
+        final int ch4 = this.file.read();
         if ((ch1 | ch2 | ch3 | ch4) < 0) throw new EOFException();
         return ((ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1 << 0));
     }
@@ -208,13 +216,14 @@ public class WlExe
 
     /**
      * Writes an offset to the current position
-     * 
+     *
      * @param offset
      *            The offset to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private final void writeOffset(int offset) throws IOException
+    private final void writeOffset(final int offset) throws IOException
     {
         this.file.write((offset >>> 0) & 0xFF);
         this.file.write((offset >>> 8) & 0xFF);
@@ -225,9 +234,10 @@ public class WlExe
 
     /**
      * Returns the MSQ offsets of the first pics file.
-     * 
+     *
      * @return The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
     public List<Integer> getPics1Offsets() throws IOException
@@ -253,13 +263,14 @@ public class WlExe
 
     /**
      * Sets the MSQ offsets for the first pics file.
-     * 
+     *
      * @param offsets
      *            The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void setPics1Offsets(List<Integer> offsets) throws IOException
+    public void setPics1Offsets(final List<Integer> offsets) throws IOException
     {
         int index;
 
@@ -270,7 +281,7 @@ public class WlExe
         }
         this.file.seek(this.seg2Offset + 47760);
         index = 0;
-        for (Integer offset: offsets)
+        for (final Integer offset: offsets)
         {
             // Write the 25th offset twice. Bug in the game?
             if (index == 25)
@@ -285,9 +296,10 @@ public class WlExe
 
     /**
      * Returns the MSQ offsets of the second pics file.
-     * 
+     *
      * @return The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
     public List<Integer> getPics2Offsets() throws IOException
@@ -306,13 +318,14 @@ public class WlExe
 
     /**
      * Sets the MSQ offsets for the second pics file.
-     * 
+     *
      * @param offsets
      *            The MSQ offsets
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void setPics2Offsets(List<Integer> offsets) throws IOException
+    public void setPics2Offsets(final List<Integer> offsets) throws IOException
     {
         if (offsets.size() != 49)
         {
@@ -320,20 +333,21 @@ public class WlExe
                 + offsets.size() + " offsets");
         }
         this.file.seek(this.seg2Offset + 47896);
-        for (Integer offset: offsets)
+        for (final Integer offset: offsets)
         {
             writeOffset(offset.intValue());
         }
     }
-    
-    
+
+
     /**
      * Returns the map MSQ block offsets of GAME1
      *
      * @return The map MSQ block offsets
      * @throws IOException
+     *             When file operation fails.
      */
-    
+
     public List<Integer> getMap1Offsets() throws IOException
     {
         List<Integer> offsets;
@@ -346,17 +360,18 @@ public class WlExe
             offset = readOffset();
             offsets.add(Integer.valueOf(offset));
         }
-        return offsets;        
+        return offsets;
     }
 
-    
+
     /**
      * Returns the map MSQ block offsets of GAME2
      *
      * @return The map MSQ block offsets
      * @throws IOException
+     *             When file operation fails.
      */
-    
+
     public List<Integer> getMap2Offsets() throws IOException
     {
         List<Integer> offsets;
@@ -369,17 +384,18 @@ public class WlExe
             offset = readOffset();
             offsets.add(Integer.valueOf(offset));
         }
-        return offsets;        
+        return offsets;
     }
-    
-    
+
+
     /**
      * Returns the map sizes of GAME1
      *
      * @return The map sizes
      * @throws IOException
+     *             When file operation fails.
      */
-    
+
     public List<Integer> getMap1Sizes() throws IOException
     {
         List<Integer> sizes;
@@ -392,17 +408,18 @@ public class WlExe
             size = this.file.read();
             sizes.add(Integer.valueOf(size));
         }
-        return sizes;        
-    }    
-    
-    
+        return sizes;
+    }
+
+
     /**
      * Returns the map sizes of GAME1
      *
      * @return The map sizes
      * @throws IOException
+     *             When file operation fails.
      */
-    
+
     public List<Integer> getMap2Sizes() throws IOException
     {
         List<Integer> sizes;
@@ -415,7 +432,7 @@ public class WlExe
             size = this.file.read();
             sizes.add(Integer.valueOf(size));
         }
-        return sizes;        
+        return sizes;
     }
 
 
@@ -424,9 +441,9 @@ public class WlExe
      *
      * @return The seg2Offset
      */
-    
+
     public int getSeg2Offset()
     {
         return this.seg2Offset;
-    }    
+    }
 }

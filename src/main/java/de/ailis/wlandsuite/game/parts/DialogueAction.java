@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,18 +27,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The dialogue action is used to interact with the player. The player can
  * choose answers and each answer triggers a different action.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -76,20 +76,21 @@ public class DialogueAction implements Action
     private int otherNewAction;
 
     /** The answers */
-    private List<Answer> answers = new ArrayList<Answer>();
+    private final List<Answer> answers = new ArrayList<Answer>();
 
 
     /**
      * Creates and returns a new Dialogue Action by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Dialogue Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static DialogueAction read(SeekableInputStream stream)
+    public static DialogueAction read(final SeekableInputStream stream)
         throws IOException
     {
         DialogueAction action;
@@ -113,7 +114,7 @@ public class DialogueAction implements Action
         }
         while ((b & 128) == 0);
 
-        for (Answer answer: action.answers)
+        for (final Answer answer: action.answers)
         {
             answer.setNewActionClass(stream.read());
             answer.setNewAction(stream.read());
@@ -135,13 +136,13 @@ public class DialogueAction implements Action
 
     /**
      * Creates and returns a Dialogue Action by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Dialogue Action
      */
 
-    public static DialogueAction read(Element element)
+    public static DialogueAction read(final Element element)
     {
         DialogueAction action;
 
@@ -161,7 +162,7 @@ public class DialogueAction implements Action
             "otherNewAction", "255"));
 
         // Read the checks
-        for (Object answer: element.elements())
+        for (final Object answer: element.elements())
         {
             Element subElement;
 
@@ -178,7 +179,7 @@ public class DialogueAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -213,7 +214,7 @@ public class DialogueAction implements Action
                 .toHex(this.otherNewAction));
         }
 
-        for (Answer answer: this.answers)
+        for (final Answer answer: this.answers)
         {
             element.add(answer.toXml());
         }
@@ -227,8 +228,8 @@ public class DialogueAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.write(this.message & 127 | (this.menu ? 128 : 0));
         stream.write(this.cancelNewActionClass);
@@ -236,11 +237,11 @@ public class DialogueAction implements Action
 
         for (int i = 0, max = this.answers.size(); i < max; i++)
         {
-            Answer answer = this.answers.get(i);
+            final Answer answer = this.answers.get(i);
             stream.write((answer.getMessage() & 127)
                 | ((i == max - 1) ? 128 : 0));
         }
-        for (Answer answer: this.answers)
+        for (final Answer answer: this.answers)
         {
             stream.write(answer.getNewActionClass());
             stream.write(answer.getNewAction());
@@ -256,7 +257,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the cancelNewAction.
-     * 
+     *
      * @return The cancelNewAction
      */
 
@@ -268,12 +269,12 @@ public class DialogueAction implements Action
 
     /**
      * Sets the cancelNewAction.
-     * 
+     *
      * @param cancelNewAction
      *            The cancelNewAction to set
      */
 
-    public void setCancelNewAction(int cancelNewAction)
+    public void setCancelNewAction(final int cancelNewAction)
     {
         this.cancelNewAction = cancelNewAction;
     }
@@ -281,7 +282,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the cancelNewActionClass.
-     * 
+     *
      * @return The cancelNewActionClass
      */
 
@@ -293,12 +294,12 @@ public class DialogueAction implements Action
 
     /**
      * Sets the cancelNewActionClass.
-     * 
+     *
      * @param cancelNewActionClass
      *            The cancelNewActionClass to set
      */
 
-    public void setCancelNewActionClass(int cancelNewActionClass)
+    public void setCancelNewActionClass(final int cancelNewActionClass)
     {
         this.cancelNewActionClass = cancelNewActionClass;
     }
@@ -306,7 +307,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the menu.
-     * 
+     *
      * @return The menu
      */
 
@@ -318,12 +319,12 @@ public class DialogueAction implements Action
 
     /**
      * Sets the menu.
-     * 
+     *
      * @param menu
      *            The menu to set
      */
 
-    public void setMenu(boolean menu)
+    public void setMenu(final boolean menu)
     {
         this.menu = menu;
     }
@@ -331,7 +332,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -343,12 +344,12 @@ public class DialogueAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -356,7 +357,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the otherNewAction.
-     * 
+     *
      * @return The otherNewAction
      */
 
@@ -368,12 +369,12 @@ public class DialogueAction implements Action
 
     /**
      * Sets the otherNewAction.
-     * 
+     *
      * @param otherNewAction
      *            The otherNewAction to set
      */
 
-    public void setOtherNewAction(int otherNewAction)
+    public void setOtherNewAction(final int otherNewAction)
     {
         this.otherNewAction = otherNewAction;
     }
@@ -381,7 +382,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the otherNewActionClass.
-     * 
+     *
      * @return The otherNewActionClass
      */
 
@@ -393,12 +394,12 @@ public class DialogueAction implements Action
 
     /**
      * Sets the otherNewActionClass.
-     * 
+     *
      * @param otherNewActionClass
      *            The otherNewActionClass to set
      */
 
-    public void setOtherNewActionClass(int otherNewActionClass)
+    public void setOtherNewActionClass(final int otherNewActionClass)
     {
         this.otherNewActionClass = otherNewActionClass;
     }
@@ -406,12 +407,12 @@ public class DialogueAction implements Action
 
     /**
      * Adds a new answer
-     * 
+     *
      * @param answer
      *            The answer to add
      */
 
-    public void addAnswer(Answer answer)
+    public void addAnswer(final Answer answer)
     {
         this.answers.add(answer);
     }
@@ -419,13 +420,13 @@ public class DialogueAction implements Action
 
     /**
      * Returns the answer with the specified index.
-     * 
+     *
      * @param index
      *            The index
      * @return The answer
      */
 
-    public Answer getAnswer(int index)
+    public Answer getAnswer(final int index)
     {
         return this.answers.get(index);
     }
@@ -433,14 +434,14 @@ public class DialogueAction implements Action
 
     /**
      * Sets a answer at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param answer
      *            The answer
      */
 
-    public void setAnswer(int index, Answer answer)
+    public void setAnswer(final int index, final Answer answer)
     {
         this.answers.set(index, answer);
     }
@@ -458,12 +459,12 @@ public class DialogueAction implements Action
 
     /**
      * Removes the answer at the specified index.
-     * 
+     *
      * @param index
      *            The index
      */
 
-    public void removeAnswer(int index)
+    public void removeAnswer(final int index)
     {
         this.answers.remove(index);
     }
@@ -471,7 +472,7 @@ public class DialogueAction implements Action
 
     /**
      * Returns the number of answers.
-     * 
+     *
      * @return The number of answers
      */
 
@@ -483,14 +484,14 @@ public class DialogueAction implements Action
 
     /**
      * Inserts a answer at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param answer
      *            The answer
      */
 
-    public void addAnswer(int index, Answer answer)
+    public void addAnswer(final int index, final Answer answer)
     {
         this.answers.add(index, answer);
     }

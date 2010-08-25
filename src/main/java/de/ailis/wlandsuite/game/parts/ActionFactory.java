@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -33,7 +33,7 @@ import de.ailis.wlandsuite.io.SeekableInputStream;
 
 /**
  * ActionFactory
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,7 +54,7 @@ public class ActionFactory
      * Reads an action from the specified input stream and returns it. The
      * action class must be specified so this factory method knows which action
      * implementation must be used.
-     * 
+     *
      * @param actionClass
      *            The action class
      * @param stream
@@ -63,10 +63,11 @@ public class ActionFactory
      *            The special action table
      * @return The action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Action read(int actionClass, SeekableInputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public static Action read(final int actionClass, final SeekableInputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         switch (actionClass)
         {
@@ -116,7 +117,7 @@ public class ActionFactory
      * Reads an action from the specified XML element and returns it. The action
      * class must be specified so this factory method knows which action
      * implementation must be used.
-     * 
+     *
      * @param actionClass
      *            The action class
      * @param element
@@ -124,7 +125,7 @@ public class ActionFactory
      * @return The action
      */
 
-    public static Action read(int actionClass, Element element)
+    public static Action read(final int actionClass, final Element element)
     {
         switch (actionClass)
         {

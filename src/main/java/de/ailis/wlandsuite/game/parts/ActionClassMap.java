@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -38,7 +38,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * The Action Class Map describes the action classes of all the map squares.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -46,20 +46,20 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 public class ActionClassMap
 {
     /** The action classes */
-    private int[][] actionClasses;
+    private final int[][] actionClasses;
 
 
     /**
      * Constructs a new action classes map with the specified map size. Map size
      * must be 32 or 64. Any other value throws an IllegalArgumentException.
-     * 
+     *
      * @param mapSize
      *            The map size
      * @throws IllegalArgumentException
      *             If specified size is not 32 and not 64.
      */
 
-    public ActionClassMap(int mapSize)
+    public ActionClassMap(final int mapSize)
     {
         // Validate the map size
         if (mapSize != 32 && mapSize != 64)
@@ -78,18 +78,19 @@ public class ActionClassMap
      * stream. The map size must be specified because it can't be read from the
      * stream automatically. Map size must be 32 or 64. Any other value throws
      * an IllegalArgumentException.
-     * 
+     *
      * @param stream
      *            The input stream to read the action classes map from
      * @param mapSize
      *            The map size (Must be 32 or 64)
      * @return The newly constructed Action Classes Map
      * @throws IOException
+     *             When file operation fails.
      * @throws IllegalArgumentException
      *             If specified size is not 32 and not 64.
      */
 
-    public static ActionClassMap read(InputStream stream, int mapSize)
+    public static ActionClassMap read(final InputStream stream, final int mapSize)
         throws IOException
     {
         ActionClassMap actionClassMap;
@@ -120,13 +121,14 @@ public class ActionClassMap
 
     /**
      * Writes the action classes map to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream to write the action classes map to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         int mapSize;
 
@@ -150,7 +152,7 @@ public class ActionClassMap
 
     /**
      * Creates and returns a new action classes map read from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @param mapSize
@@ -158,7 +160,7 @@ public class ActionClassMap
      * @return The action classes map
      */
 
-    public static ActionClassMap read(Element element, int mapSize)
+    public static ActionClassMap read(final Element element, final int mapSize)
     {
         ActionClassMap actionClassMap;
         String data;
@@ -180,7 +182,7 @@ public class ActionClassMap
                 {
                     c = data.charAt(i);
                 }
-                catch (StringIndexOutOfBoundsException e)
+                catch (final StringIndexOutOfBoundsException e)
                 {
                     throw new GameException("Action class map is corrupt: "
                         + (mapSize * mapSize - (y * mapSize + x))
@@ -191,7 +193,7 @@ public class ActionClassMap
                 {
                     b = Byte.valueOf(Character.toString(c), 16);
                 }
-                catch (NumberFormatException e)
+                catch (final NumberFormatException e)
                 {
                     throw new GameException(
                         "Illegal character in action class map at y=" + y
@@ -210,7 +212,7 @@ public class ActionClassMap
 
     /**
      * Returns the action classes map in XML format.
-     * 
+     *
      * @return The action classes map in XML
      */
 
@@ -264,15 +266,15 @@ public class ActionClassMap
 
     /**
      * Checks if the specified action class exists in the action class map.
-     * 
+     *
      * @param actionClass
      *            The action class to search
      * @return If the action class exists or not
      */
 
-    public boolean hasActionClass(int actionClass)
+    public boolean hasActionClass(final int actionClass)
     {
-        int mapSize = this.actionClasses.length;
+        final int mapSize = this.actionClasses.length;
 
         for (int y = 0; y < mapSize; y++)
         {
@@ -290,7 +292,7 @@ public class ActionClassMap
 
     /**
      * Returns the action class at the specified position
-     * 
+     *
      * @param x
      *            The x position
      * @param y
@@ -298,7 +300,7 @@ public class ActionClassMap
      * @return The action class
      */
 
-    public int getActionClass(int x, int y)
+    public int getActionClass(final int x, final int y)
     {
         return this.actionClasses[y][x];
     }
@@ -306,7 +308,7 @@ public class ActionClassMap
 
     /**
      * Sets the action class at the specified position.
-     * 
+     *
      * @param x
      *            The x position
      * @param y
@@ -315,7 +317,7 @@ public class ActionClassMap
      *            The action class to set
      */
 
-    public void setActionClass(int x, int y, int actionClass)
+    public void setActionClass(final int x, final int y, final int actionClass)
     {
         this.actionClasses[y][x] = actionClass;
     }

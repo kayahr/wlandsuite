@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,16 +26,16 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The doctor data used in the Special Building Actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -67,14 +67,15 @@ public class DoctorAction implements Action
     /**
      * Creates and returns a new Doctor object by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The Doctor
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static DoctorAction read(InputStream stream) throws IOException
+    public static DoctorAction read(final InputStream stream) throws IOException
     {
         DoctorAction doctor;
         byte[] bytes;
@@ -106,8 +107,8 @@ public class DoctorAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         stream.write(0x80);
 
@@ -129,13 +130,13 @@ public class DoctorAction implements Action
 
     /**
      * Returns the doctor data as XML.
-     * 
+     *
      * @param id
      *            The action id
      * @return The doctor data as XML
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -179,13 +180,13 @@ public class DoctorAction implements Action
 
     /**
      * Creates and returns a new Doctor object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The doctor data
      */
 
-    public static DoctorAction read(Element element)
+    public static DoctorAction read(final Element element)
     {
         DoctorAction doctor;
 
@@ -210,7 +211,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the curePrice.
-     * 
+     *
      * @return The curePrice
      */
 
@@ -222,12 +223,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the curePrice.
-     * 
+     *
      * @param curePrice
      *            The curePrice to set
      */
 
-    public void setCurePrice(int curePrice)
+    public void setCurePrice(final int curePrice)
     {
         this.curePrice = curePrice;
     }
@@ -235,7 +236,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the examinePrice.
-     * 
+     *
      * @return The examinePrice
      */
 
@@ -247,12 +248,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the examinePrice.
-     * 
+     *
      * @param examinePrice
      *            The examinePrice to set
      */
 
-    public void setExaminePrice(int examinePrice)
+    public void setExaminePrice(final int examinePrice)
     {
         this.examinePrice = examinePrice;
     }
@@ -260,7 +261,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the healPrice.
-     * 
+     *
      * @return The healPrice
      */
 
@@ -272,12 +273,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the healPrice.
-     * 
+     *
      * @param healPrice
      *            The healPrice to set
      */
 
-    public void setHealPrice(int healPrice)
+    public void setHealPrice(final int healPrice)
     {
         this.healPrice = healPrice;
     }
@@ -285,7 +286,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -297,12 +298,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -310,7 +311,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the name.
-     * 
+     *
      * @return The name
      */
 
@@ -322,12 +323,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the name.
-     * 
+     *
      * @param name
      *            The name to set
      */
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -335,7 +336,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the newAction.
-     * 
+     *
      * @return The newAction
      */
 
@@ -347,12 +348,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the newAction.
-     * 
+     *
      * @param newAction
      *            The newAction to set
      */
 
-    public void setNewAction(int newAction)
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -360,7 +361,7 @@ public class DoctorAction implements Action
 
     /**
      * Returns the newActionClass.
-     * 
+     *
      * @return The newActionClass
      */
 
@@ -372,12 +373,12 @@ public class DoctorAction implements Action
 
     /**
      * Sets the newActionClass.
-     * 
+     *
      * @param newActionClass
      *            The newActionClass to set
      */
 
-    public void setNewActionClass(int newActionClass)
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }

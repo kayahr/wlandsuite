@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -36,7 +36,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * Shop item
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -73,11 +73,12 @@ public class ShopItem
 
     /**
      * Creates a new shop item by reading its data from the specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new shop item
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static ShopItem read(final SeekableInputStream stream)
@@ -105,7 +106,7 @@ public class ShopItem
 
     /**
      * Returns the XML representation of the shop item.
-     * 
+     *
      * @param id
      *            The shop item id
      * @return The shop item
@@ -131,7 +132,7 @@ public class ShopItem
 
     /**
      * Creates a new shop item by reading the data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new shop item
@@ -161,7 +162,7 @@ public class ShopItem
 
     /**
      * Writes the shop item to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      */
@@ -180,7 +181,7 @@ public class ShopItem
 
     /**
      * Returns the ammo.
-     * 
+     *
      * @return The ammo
      */
 
@@ -192,7 +193,7 @@ public class ShopItem
 
     /**
      * Sets the ammo.
-     * 
+     *
      * @param ammo
      *            The ammo to set
      */
@@ -205,7 +206,7 @@ public class ShopItem
 
     /**
      * Returns the capacity.
-     * 
+     *
      * @return The capacity
      */
 
@@ -217,7 +218,7 @@ public class ShopItem
 
     /**
      * Sets the capacity.
-     * 
+     *
      * @param capacity
      *            The capacity to set
      */
@@ -230,7 +231,7 @@ public class ShopItem
 
     /**
      * Returns the damage.
-     * 
+     *
      * @return The damage
      */
 
@@ -242,7 +243,7 @@ public class ShopItem
 
     /**
      * Sets the damage.
-     * 
+     *
      * @param damage
      *            The damage to set
      */
@@ -255,7 +256,7 @@ public class ShopItem
 
     /**
      * Returns the price.
-     * 
+     *
      * @return The price
      */
 
@@ -267,7 +268,7 @@ public class ShopItem
 
     /**
      * Sets the price.
-     * 
+     *
      * @param price
      *            The price to set
      */
@@ -280,7 +281,7 @@ public class ShopItem
 
     /**
      * Returns the skill.
-     * 
+     *
      * @return The skill
      */
 
@@ -292,7 +293,7 @@ public class ShopItem
 
     /**
      * Sets the skill.
-     * 
+     *
      * @param skill
      *            The skill to set
      */
@@ -305,7 +306,7 @@ public class ShopItem
 
     /**
      * Returns the stock.
-     * 
+     *
      * @return The stock
      */
 
@@ -317,7 +318,7 @@ public class ShopItem
 
     /**
      * Sets the stock.
-     * 
+     *
      * @param stock
      *            The stock to set
      */
@@ -330,7 +331,7 @@ public class ShopItem
 
     /**
      * Returns the type.
-     * 
+     *
      * @return The type
      */
 
@@ -342,7 +343,7 @@ public class ShopItem
 
     /**
      * Sets the type.
-     * 
+     *
      * @param type
      *            The type to set
      */
@@ -356,7 +357,7 @@ public class ShopItem
     /**
      * Returns true if item is a demolition weapon. This affects for example
      * the playing of a sound effect when the weapon is fired.
-     * 
+     *
      * @return The demolition flag
      */
 
@@ -369,7 +370,7 @@ public class ShopItem
     /**
      * Sets the demolition flag. This affects for example the playing of a
      * sound effect when the weapon is fired.
-     * 
+     *
      * @param demolition
      *            The demolition flag to set
      */

@@ -72,7 +72,7 @@ public class LauncherTest extends WSTestCase
     /**
      * Tests empty call
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testEmpty() throws IOException
@@ -86,7 +86,7 @@ public class LauncherTest extends WSTestCase
     /**
      * Tests version display
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testVersion() throws IOException
@@ -104,7 +104,7 @@ public class LauncherTest extends WSTestCase
     /**
      * Tests help display
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testHelp() throws IOException

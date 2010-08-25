@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -49,7 +49,7 @@ import de.ailis.wlandsuite.pic.Pic;
  * frame sets (which can be used to play multiple animations at once). Simple
  * animations (like the rotating dish of the Ranger Center) only has one frame
  * set.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -65,7 +65,7 @@ public class PicsAnimation
 
     /**
      * Constructor
-     * 
+     *
      * @param baseFrame
      *            The base frame;
      * @param frameSets
@@ -83,13 +83,14 @@ public class PicsAnimation
      * Reads an animation from the given input stream. If no more animations are
      * found then NULL is returned. The width of the picture must be specified
      * because no image dimensions can be read from the stream.
-     * 
+     *
      * @param stream
      *            The PICS animation stream
      * @param width
      *            The width of the picture
      * @return The picture animation
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static PicsAnimation read(final InputStream stream, final int width)
@@ -143,13 +144,14 @@ public class PicsAnimation
 
     /**
      * Reads the animation data from the stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param baseFrame
      *            The base frame
      * @return The animation data
      * @throws IOException
+     *             When file operation fails.
      */
 
     private static List<PicsAnimationFrameSet> readAnimationData(
@@ -238,7 +240,7 @@ public class PicsAnimation
     /**
      * Reads an external encounter animation file as used by Displacer's hacked
      * EXE.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -247,6 +249,7 @@ public class PicsAnimation
      *            The animation height
      * @return The animation
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static PicsAnimation readHacked(final InputStream stream, final int width,
@@ -263,12 +266,13 @@ public class PicsAnimation
 
     /**
      * Writes the picture animation to the given output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk index
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void write(final OutputStream stream, final int disk) throws IOException
@@ -288,7 +292,7 @@ public class PicsAnimation
         huffmanStream = new HuffmanOutputStream(stream, huffmanTree);
         huffmanStream.write(bytes);
         huffmanStream.flush();
-  
+
         // Write the animation MSQ header
         header = new MsqHeader(MsqType.Compressed, disk, bytes.length);
         header.write(stream);
@@ -300,16 +304,17 @@ public class PicsAnimation
         huffmanStream.write(bytes);
         huffmanStream.flush();
     }
-    
-    
+
+
     /**
      * Returns the animation data as byte array. Used internally by the
      * write() and writeHacked() methods.
      *
      * @return The animation data as byte array
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      */
-    
+
     private byte[] getAnimationData() throws IOException
     {
         List<RawAnimationFrame> seenFrames;
@@ -391,24 +396,25 @@ public class PicsAnimation
         dataStream.close();
         headerStream.close();
         animStream.close();
-        
+
         return bytes;
     }
 
-    
+
     /**
      * Writes an external animation file as used by Displacer's hacked EXE.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void writeHacked(final OutputStream stream) throws IOException
     {
         // Write the base frame MSQ header
         stream.write(this.baseFrame.getBytes(false));
-        
+
         // Write the animation data
         stream.write(getAnimationData());
     }
@@ -416,7 +422,7 @@ public class PicsAnimation
 
     /**
      * Returns the base frame.
-     * 
+     *
      * @return The base frame
      */
 
@@ -428,7 +434,7 @@ public class PicsAnimation
 
     /**
      * Returns the frame sets.
-     * 
+     *
      * @return The frame sets
      */
 

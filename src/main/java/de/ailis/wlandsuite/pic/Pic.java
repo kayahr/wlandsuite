@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -43,7 +43,7 @@ import de.ailis.wlandsuite.image.EgaImage;
  * programmer forgot to compress the picture. But because the title.pic is the
  * simplest form of all the pictures it's the base for this class. So with this
  * class you can read and write this title pic right away.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -52,14 +52,14 @@ public class Pic extends EgaImage implements Cloneable
 {
     /**
      * Constructor
-     * 
+     *
      * @param width
      *            The picture width
      * @param height
      *            The picture height
      */
 
-    public Pic(int width, int height)
+    public Pic(final int width, final int height)
     {
         super(width, height);
     }
@@ -69,12 +69,12 @@ public class Pic extends EgaImage implements Cloneable
      * Creates a picture from a normal buffered image which is copied to the
      * picture. Colors are automatically converted to the 16 color palette of
      * the picture.
-     * 
+     *
      * @param image
      *            The normal buffered image
      */
 
-    public Pic(BufferedImage image)
+    public Pic(final BufferedImage image)
     {
         super(image);
     }
@@ -82,7 +82,7 @@ public class Pic extends EgaImage implements Cloneable
 
     /**
      * Loads a xor-encoded picture from a stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -91,18 +91,19 @@ public class Pic extends EgaImage implements Cloneable
      *            The height of the picture to read in pixel
      * @return The picture
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Pic read(InputStream stream, int width, int height)
+    public static Pic read(final InputStream stream, final int width, final int height)
         throws IOException
     {
         return read(stream, width, height, true);
     }
-    
+
 
     /**
      * Loads a picture from a stream
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -113,10 +114,11 @@ public class Pic extends EgaImage implements Cloneable
      *            If the pic is vertical xor encoded
      * @return The picture
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Pic read(InputStream stream, int width, int height,
-        boolean encoded) throws IOException
+    public static Pic read(final InputStream stream, final int width, final int height,
+        final boolean encoded) throws IOException
     {
         InputStream xorStream;
         Pic pic;
@@ -152,15 +154,16 @@ public class Pic extends EgaImage implements Cloneable
 
     /**
      * Writes the picture to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param xorEncode
      *            If the picture data should be vertical-xor encoded
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, boolean xorEncode)
+    public void write(final OutputStream stream, final boolean xorEncode)
         throws IOException
     {
         int width, height;
@@ -190,13 +193,14 @@ public class Pic extends EgaImage implements Cloneable
     /**
      * Writes the picture to the specified output stream. The picture data is
      * vertical-xor encoded.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         write(stream, true);
     }
@@ -204,13 +208,13 @@ public class Pic extends EgaImage implements Cloneable
 
     /**
      * Returns the bytes of the picture.
-     * 
+     *
      * @param xorEncode
      *            If picture data should be vertical-xor encoded
      * @return The picture bytes
      */
 
-    public byte[] getBytes(boolean xorEncode)
+    public byte[] getBytes(final boolean xorEncode)
     {
         ByteArrayOutputStream stream;
 
@@ -227,7 +231,7 @@ public class Pic extends EgaImage implements Cloneable
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored. Can't happen
             return null;
@@ -238,7 +242,7 @@ public class Pic extends EgaImage implements Cloneable
     /**
      * Returns the bytes of the picture. The picture data is vertical-xor
      * encoded.
-     * 
+     *
      * @return The picture bytes
      */
 
@@ -250,7 +254,7 @@ public class Pic extends EgaImage implements Cloneable
 
     /**
      * Returns a copy of the picture.
-     * 
+     *
      * @return The copy of the source image
      */
 
@@ -267,14 +271,15 @@ public class Pic extends EgaImage implements Cloneable
 
     /**
      * Reads an image from the specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The image
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Pic read(InputStream stream) throws IOException
+    public static Pic read(final InputStream stream) throws IOException
     {
         BufferedImage image;
 

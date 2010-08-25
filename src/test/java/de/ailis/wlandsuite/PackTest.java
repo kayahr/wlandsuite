@@ -38,7 +38,7 @@ public abstract class PackTest extends LauncherTest
     /**
      * Tests empty call
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     @Override

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,18 +26,18 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The encounter action is used for fixed (class 3) and random (class 15)
  * encounters.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -102,14 +102,15 @@ public class EncounterAction implements Action
     /**
      * Creates and returns a new Encounter Action by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Encounter Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static EncounterAction read(InputStream stream) throws IOException
+    public static EncounterAction read(final InputStream stream) throws IOException
     {
         EncounterAction action;
         int b;
@@ -150,13 +151,13 @@ public class EncounterAction implements Action
 
     /**
      * Creates and returns an Encounter Action by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Encounter Action
      */
 
-    public static EncounterAction read(Element element)
+    public static EncounterAction read(final Element element)
     {
         EncounterAction action;
 
@@ -207,7 +208,7 @@ public class EncounterAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -303,8 +304,8 @@ public class EncounterAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.write(this.visibleDistance);
         stream.write(this.hitDistance);
@@ -324,7 +325,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the friendly.
-     * 
+     *
      * @return The friendly
      */
 
@@ -336,12 +337,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the friendly.
-     * 
+     *
      * @param friendly
      *            The friendly to set
      */
 
-    public void setFriendly(boolean friendly)
+    public void setFriendly(final boolean friendly)
     {
         this.friendly = friendly;
     }
@@ -349,7 +350,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the hitDistance.
-     * 
+     *
      * @return The hitDistance
      */
 
@@ -361,12 +362,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the hitDistance.
-     * 
+     *
      * @param hitDistance
      *            The hitDistance to set
      */
 
-    public void setHitDistance(int hitDistance)
+    public void setHitDistance(final int hitDistance)
     {
         this.hitDistance = hitDistance;
     }
@@ -374,7 +375,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the maxGroupSize1.
-     * 
+     *
      * @return The maxGroupSize1
      */
 
@@ -386,12 +387,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the maxGroupSize1.
-     * 
+     *
      * @param maxGroupSize1
      *            The maxGroupSize1 to set
      */
 
-    public void setMaxGroupSize1(int maxGroupSize1)
+    public void setMaxGroupSize1(final int maxGroupSize1)
     {
         this.maxGroupSize1 = maxGroupSize1;
     }
@@ -399,7 +400,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the maxGroupSize2.
-     * 
+     *
      * @return The maxGroupSize2
      */
 
@@ -411,12 +412,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the maxGroupSize2.
-     * 
+     *
      * @param maxGroupSize2
      *            The maxGroupSize2 to set
      */
 
-    public void setMaxGroupSize2(int maxGroupSize2)
+    public void setMaxGroupSize2(final int maxGroupSize2)
     {
         this.maxGroupSize2 = maxGroupSize2;
     }
@@ -424,7 +425,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the maxGroupSize3.
-     * 
+     *
      * @return The maxGroupSize3
      */
 
@@ -436,12 +437,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the maxGroupSize3.
-     * 
+     *
      * @param maxGroupSize3
      *            The maxGroupSize3 to set
      */
 
-    public void setMaxGroupSize3(int maxGroupSize3)
+    public void setMaxGroupSize3(final int maxGroupSize3)
     {
         this.maxGroupSize3 = maxGroupSize3;
     }
@@ -449,7 +450,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the message.
-     * 
+     *
      * @return The message
      */
 
@@ -461,12 +462,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message
      *            The message to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -474,7 +475,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the monster1.
-     * 
+     *
      * @return The monster1
      */
 
@@ -486,12 +487,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the monster1.
-     * 
+     *
      * @param monster1
      *            The monster1 to set
      */
 
-    public void setMonster1(int monster1)
+    public void setMonster1(final int monster1)
     {
         this.monster1 = monster1;
     }
@@ -499,7 +500,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the monster2.
-     * 
+     *
      * @return The monster2
      */
 
@@ -511,12 +512,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the monster2.
-     * 
+     *
      * @param monster2
      *            The monster2 to set
      */
 
-    public void setMonster2(int monster2)
+    public void setMonster2(final int monster2)
     {
         this.monster2 = monster2;
     }
@@ -524,7 +525,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the monster3.
-     * 
+     *
      * @return The monster3
      */
 
@@ -536,12 +537,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the monster3.
-     * 
+     *
      * @param monster3
      *            The monster3 to set
      */
 
-    public void setMonster3(int monster3)
+    public void setMonster3(final int monster3)
     {
         this.monster3 = monster3;
     }
@@ -549,7 +550,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the npc.
-     * 
+     *
      * @return The npc
      */
 
@@ -561,12 +562,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the npc.
-     * 
+     *
      * @param npc
      *            The npc to set
      */
 
-    public void setNpc(int npc)
+    public void setNpc(final int npc)
     {
         this.npc = npc;
     }
@@ -574,7 +575,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the properName.
-     * 
+     *
      * @return The properName
      */
 
@@ -586,12 +587,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the properName.
-     * 
+     *
      * @param properName
      *            The properName to set
      */
 
-    public void setProperName(boolean properName)
+    public void setProperName(final boolean properName)
     {
         this.properName = properName;
     }
@@ -599,7 +600,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the random1.
-     * 
+     *
      * @return The random1
      */
 
@@ -611,12 +612,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the random1.
-     * 
+     *
      * @param random1
      *            The random1 to set
      */
 
-    public void setRandom1(boolean random1)
+    public void setRandom1(final boolean random1)
     {
         this.random1 = random1;
     }
@@ -624,7 +625,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the random2.
-     * 
+     *
      * @return The random2
      */
 
@@ -636,12 +637,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the random2.
-     * 
+     *
      * @param random2
      *            The random2 to set
      */
 
-    public void setRandom2(boolean random2)
+    public void setRandom2(final boolean random2)
     {
         this.random2 = random2;
     }
@@ -649,7 +650,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the random3.
-     * 
+     *
      * @return The random3
      */
 
@@ -661,12 +662,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the random3.
-     * 
+     *
      * @param random3
      *            The random3 to set
      */
 
-    public void setRandom3(boolean random3)
+    public void setRandom3(final boolean random3)
     {
         this.random3 = random3;
     }
@@ -674,7 +675,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the unknown093.
-     * 
+     *
      * @return The unknown093
      */
 
@@ -686,12 +687,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the unknown093.
-     * 
+     *
      * @param unknown093
      *            The unknown093 to set
      */
 
-    public void setUnknown093(boolean unknown093)
+    public void setUnknown093(final boolean unknown093)
     {
         this.unknown093 = unknown093;
     }
@@ -699,7 +700,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the visibleDistance.
-     * 
+     *
      * @return The visibleDistance
      */
 
@@ -711,12 +712,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the visibleDistance.
-     * 
+     *
      * @param visibleDistance
      *            The visibleDistance to set
      */
 
-    public void setVisibleDistance(int visibleDistance)
+    public void setVisibleDistance(final int visibleDistance)
     {
         this.visibleDistance = visibleDistance;
     }
@@ -724,7 +725,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the newAction.
-     * 
+     *
      * @return The newAction
      */
 
@@ -736,12 +737,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the newAction.
-     * 
+     *
      * @param newAction
      *            The newAction to set
      */
 
-    public void setNewAction(int newAction)
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -749,7 +750,7 @@ public class EncounterAction implements Action
 
     /**
      * Returns the newActionClass.
-     * 
+     *
      * @return The newActionClass
      */
 
@@ -761,12 +762,12 @@ public class EncounterAction implements Action
 
     /**
      * Sets the newActionClass.
-     * 
+     *
      * @param newActionClass
      *            The newActionClass to set
      */
 
-    public void setNewActionClass(int newActionClass)
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,16 +26,16 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The ranger center data used in the Special Building Actions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -50,19 +50,20 @@ public class RangerCenterAction implements Action
 
     /** The library name */
     private String name;
-    
+
 
     /**
      * Creates and returns a new Ranger Center object by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The Ranger Center
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static RangerCenterAction read(InputStream stream) throws IOException
+    public static RangerCenterAction read(final InputStream stream) throws IOException
     {
         RangerCenterAction rangerCenter;
         byte[] bytes;
@@ -72,7 +73,7 @@ public class RangerCenterAction implements Action
 
         rangerCenter.newActionClass = stream.read();
         rangerCenter.newAction = stream.read();
-        
+
         // Read the name
         bytes = new byte[13];
         stream.read(bytes);
@@ -90,8 +91,8 @@ public class RangerCenterAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         stream.write(0x83);
 
@@ -109,13 +110,13 @@ public class RangerCenterAction implements Action
 
     /**
      * Returns the ranger center data as XML.
-     * 
+     *
      * @param id
      *            The action id
      * @return The ranger center data as XML
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -134,20 +135,20 @@ public class RangerCenterAction implements Action
         {
             element.addAttribute("newAction", StringUtils.toHex(this.newAction));
         }
-        
+
         return element;
     }
 
 
     /**
      * Creates and returns a new Ranger Center object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Ranger Center data
      */
 
-    public static RangerCenterAction read(Element element)
+    public static RangerCenterAction read(final Element element)
     {
         RangerCenterAction library;
 
@@ -166,7 +167,7 @@ public class RangerCenterAction implements Action
      *
      * @return The name
      */
-    
+
     public String getName()
     {
         return this.name;
@@ -176,11 +177,11 @@ public class RangerCenterAction implements Action
     /**
      * Sets the name.
      *
-     * @param name 
+     * @param name
      *            The name to set
      */
-    
-    public void setName(String name)
+
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -191,7 +192,7 @@ public class RangerCenterAction implements Action
      *
      * @return The newAction
      */
-    
+
     public int getNewAction()
     {
         return this.newAction;
@@ -201,11 +202,11 @@ public class RangerCenterAction implements Action
     /**
      * Sets the newAction.
      *
-     * @param newAction 
+     * @param newAction
      *            The newAction to set
      */
-    
-    public void setNewAction(int newAction)
+
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -216,7 +217,7 @@ public class RangerCenterAction implements Action
      *
      * @return The newActionClass
      */
-    
+
     public int getNewActionClass()
     {
         return this.newActionClass;
@@ -226,11 +227,11 @@ public class RangerCenterAction implements Action
     /**
      * Sets the newActionClass.
      *
-     * @param newActionClass 
+     * @param newActionClass
      *            The newActionClass to set
      */
-    
-    public void setNewActionClass(int newActionClass)
+
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }

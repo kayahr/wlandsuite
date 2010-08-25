@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,7 +34,7 @@ import de.ailis.wlandsuite.image.EgaImage;
 
 /**
  * A font character.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -53,12 +53,12 @@ public class FntChar extends EgaImage
 
     /**
      * Constructor
-     * 
+     *
      * @param image
      *            The buffered image
      */
 
-    public FntChar(BufferedImage image)
+    public FntChar(final BufferedImage image)
     {
         super(image);
     }
@@ -66,14 +66,15 @@ public class FntChar extends EgaImage
 
     /**
      * Reads a font character from a stream
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The cursor
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static FntChar read(InputStream stream) throws IOException
+    public static FntChar read(final InputStream stream) throws IOException
     {
         FntChar fntChar;
         int b;
@@ -104,13 +105,14 @@ public class FntChar extends EgaImage
 
     /**
      * Writes the character to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         int b;
         int y;

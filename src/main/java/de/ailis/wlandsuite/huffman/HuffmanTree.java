@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -31,14 +31,14 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import de.ailis.wlandsuite.io.BitOutputStream;
 import de.ailis.wlandsuite.io.BitInputStream;
 import de.ailis.wlandsuite.io.BitInputStreamWrapper;
+import de.ailis.wlandsuite.io.BitOutputStream;
 
 
 /**
  * Huffman Tree
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -49,7 +49,7 @@ public class HuffmanTree
     private HuffmanNode rootNode;
 
     /** The index. Mapping payloads to nodes */
-    private Map<Integer, HuffmanNode> index = new HashMap<Integer, HuffmanNode>();
+    private final Map<Integer, HuffmanNode> index = new HashMap<Integer, HuffmanNode>();
 
 
     /**
@@ -65,14 +65,15 @@ public class HuffmanTree
     /**
      * Constructs a new huffman tree. The tree is created for the data which can
      * be read from the stream.
-     * 
+     *
      * @param stream
      *            The stream to read the data from
      * @return The Huffman tree
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HuffmanTree create(InputStream stream) throws IOException
+    public static HuffmanTree create(final InputStream stream) throws IOException
     {
         HuffmanTree tree;
 
@@ -80,19 +81,19 @@ public class HuffmanTree
         tree.createTree(stream);
         return tree;
     }
-    
-    
+
+
     /**
      * Creates a huffman tree from a byte array.
      *
      * @param bytes The bytes to build the huffman tree for
      * @return The huffman tree
      */
-    
-    public static HuffmanTree create(byte[] bytes)
+
+    public static HuffmanTree create(final byte[] bytes)
     {
         ByteArrayInputStream stream;
-        
+
         try
         {
             stream = new ByteArrayInputStream(bytes);
@@ -105,7 +106,7 @@ public class HuffmanTree
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored. Can't happen
             return null;
@@ -115,14 +116,15 @@ public class HuffmanTree
 
     /**
      * Loads a Huffman tree from an already encoded data stream
-     * 
+     *
      * @param stream
      *            The data stream
      * @return The Huffman Tree
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static HuffmanTree load(InputStream stream) throws IOException
+    public static HuffmanTree load(final InputStream stream) throws IOException
     {
         HuffmanTree tree;
 
@@ -141,13 +143,14 @@ public class HuffmanTree
 
     /**
      * Creates the root node of the Huffman Tree.
-     * 
+     *
      * @param stream
      *            The input stream to build the root node for.
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private void createTree(InputStream stream) throws IOException
+    private void createTree(final InputStream stream) throws IOException
     {
         int[] counter;
         int b;
@@ -192,13 +195,14 @@ public class HuffmanTree
 
     /**
      * Loads the Huffman tree from the specified bit stream.
-     * 
+     *
      * @param stream
      *            The stream to read the tree from
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private void loadTree(BitInputStream stream) throws IOException
+    private void loadTree(final BitInputStream stream) throws IOException
     {
         this.rootNode = loadNode(stream);
     }
@@ -206,13 +210,14 @@ public class HuffmanTree
 
     /**
      * Saves the huffman tree.
-     * 
+     *
      * @param bitStream
      *            The stream to save the tree to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    void save(BitOutputStream bitStream) throws IOException
+    void save(final BitOutputStream bitStream) throws IOException
     {
         saveNode(this.rootNode, bitStream);
     }
@@ -220,15 +225,16 @@ public class HuffmanTree
 
     /**
      * Saves a huffman node to a bit stream.
-     * 
+     *
      * @param node
      *            The huffman node to save
      * @param bitStream
      *            The bit stream to write the node to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private void saveNode(HuffmanNode node, BitOutputStream bitStream)
+    private void saveNode(final HuffmanNode node, final BitOutputStream bitStream)
         throws IOException
     {
         int payload;
@@ -251,14 +257,15 @@ public class HuffmanTree
 
     /**
      * Builds a huffman node and returns it.
-     * 
+     *
      * @param stream
      *            The bit stream to read data from
      * @return The huffman node
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private HuffmanNode loadNode(BitInputStream stream) throws IOException
+    private HuffmanNode loadNode(final BitInputStream stream) throws IOException
     {
         int b;
         HuffmanNode node;
@@ -284,7 +291,7 @@ public class HuffmanTree
 
     /**
      * Returns the root node of the huffman tree.
-     * 
+     *
      * @return The root node
      */
 
@@ -296,13 +303,13 @@ public class HuffmanTree
 
     /**
      * Returns the huffman node for the given payload.
-     * 
+     *
      * @param payload
      *            The payload
      * @return The Huffman node
      */
 
-    public HuffmanNode getNode(int payload)
+    public HuffmanNode getNode(final int payload)
     {
         return this.index.get(Integer.valueOf(payload));
     }
@@ -318,7 +325,7 @@ public class HuffmanTree
         StringBuilder builder;
 
         builder = new StringBuilder();
-        for (HuffmanNode node: this.index.values())
+        for (final HuffmanNode node: this.index.values())
         {
             builder.append(node.getFullKeyName());
             builder.append("=");

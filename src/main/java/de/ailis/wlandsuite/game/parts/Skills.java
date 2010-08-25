@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,17 +26,17 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The skills of a character.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -59,12 +59,12 @@ public class Skills extends ArrayList<Skill>
 
     /**
      * Constructor
-     * 
+     *
      * @param capacity
      *            The initial capacity
      */
 
-    public Skills(int capacity)
+    public Skills(final int capacity)
     {
         super(capacity);
     }
@@ -74,14 +74,15 @@ public class Skills extends ArrayList<Skill>
      * Creates and returns a new Skills object by reading all the skill from the
      * specified stream. The stream must be positioned at the beginning of the
      * skill list.
-     * 
+     *
      * @param stream
      *            The stream to read the skills from
      * @return The skills
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Skills read(SeekableInputStream stream) throws IOException
+    public static Skills read(final SeekableInputStream stream) throws IOException
     {
         Skills skills;
         boolean special;
@@ -112,21 +113,21 @@ public class Skills extends ArrayList<Skill>
 
     /**
      * Creates and returns a new Skills object from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The skills
      */
 
-    public static Skills read(Element element)
+    public static Skills read(final Element element)
     {
         Skills skills;
 
         skills = new Skills(30);
-        for (Object item: element.elements("skill"))
+        for (final Object item: element.elements("skill"))
         {
-            Element subElement = (Element) item;
-            
+            final Element subElement = (Element) item;
+
             skills.add(Skill.read(subElement));
         }
         return skills;
@@ -135,34 +136,35 @@ public class Skills extends ArrayList<Skill>
 
     /**
      * Writes the skills to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(SeekableOutputStream stream) throws IOException
+    public void write(final SeekableOutputStream stream) throws IOException
     {
         int specials, i;
-        
+
         if (size() > 30)
         {
             throw new GameException("Character has to many skills: " + size());
         }
-        
+
         // Count the special skills
         specials = 0;
-        for (Skill skill: this)
+        for (final Skill skill: this)
         {
             if (skill.isSpecial())
             {
                 specials++;
             }
         }
-        
+
         // Write the normal skills
         i = 0;
-        for (Skill skill: this)
+        for (final Skill skill: this)
         {
             if (!skill.isSpecial())
             {
@@ -170,7 +172,7 @@ public class Skills extends ArrayList<Skill>
                 i++;
             }
         }
-        
+
         // Write the unused skills
         while (i < 30 - specials)
         {
@@ -178,9 +180,9 @@ public class Skills extends ArrayList<Skill>
             stream.write(0);
             i++;
         }
-        
+
         // Write the special skills
-        for (Skill skill: this)
+        for (final Skill skill: this)
         {
             if (skill.isSpecial())
             {
@@ -192,7 +194,7 @@ public class Skills extends ArrayList<Skill>
 
     /**
      * Returns the monsters as XML.
-     * 
+     *
      * @return The monsters as XML
      */
 
@@ -204,7 +206,7 @@ public class Skills extends ArrayList<Skill>
         element = XmlUtils.createElement("skills");
 
         // Add all the skills
-        for (Skill skill: this)
+        for (final Skill skill: this)
         {
             element.add(skill.toXml());
         }

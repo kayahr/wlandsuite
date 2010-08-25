@@ -1,7 +1,7 @@
 /*
  * $Id:WlfMask.java 81 2006-09-02 12:10:44Z k $
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -38,7 +38,7 @@ import de.ailis.wlandsuite.image.BwImage;
 
 /**
  * WLF mask.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision:81 $
  */
@@ -47,14 +47,14 @@ public class Mask extends BwImage implements Cloneable
 {
     /**
      * Constructor
-     * 
+     *
      * @param width
      *            The mask width
      * @param height
      *            The mask height
      */
 
-    public Mask(int width, int height)
+    public Mask(final int width, final int height)
     {
         super(width, height);
     }
@@ -64,15 +64,15 @@ public class Mask extends BwImage implements Cloneable
      * Creates a mask from a normal buffered image which is copied to the
      * picture. Colors are automatically converted to the black and white color
      * palette of the mask.
-     * 
+     *
      * @param image
      *            The normal buffered image
      */
 
-    public Mask(BufferedImage image)
+    public Mask(final BufferedImage image)
     {
         super(image);
-    }    
+    }
 
 
     /**
@@ -80,16 +80,17 @@ public class Mask extends BwImage implements Cloneable
      * standard size of Wasteland's bit masks. If you want to read a mask with
      * different dimensions then use the read method where you can specify a
      * custom size.
-     * 
+     *
      * @param file
      *            The file to read
      * @return The mask
      * @throws IOException
-     * 
+     *             When file operation fails.
+     *
      * @see Mask#read(File, int, int)
      */
 
-    public static Mask read(File file) throws IOException
+    public static Mask read(final File file) throws IOException
     {
         return read(file, 16, 16);
     }
@@ -98,7 +99,7 @@ public class Mask extends BwImage implements Cloneable
     /**
      * Reads a mask from a file. The width and height must be specified because
      * the image dimensions can't be read from the file.
-     * 
+     *
      * @param file
      *            The file to read
      * @param width
@@ -107,9 +108,10 @@ public class Mask extends BwImage implements Cloneable
      *            The mask width
      * @return The mask
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Mask read(File file, int width, int height) throws IOException
+    public static Mask read(final File file, final int width, final int height) throws IOException
     {
         InputStream stream;
 
@@ -127,7 +129,7 @@ public class Mask extends BwImage implements Cloneable
 
     /**
      * Loads a mask from a stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -136,9 +138,10 @@ public class Mask extends BwImage implements Cloneable
      *            The height of the mask to read in pixel
      * @return The picture
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Mask read(InputStream stream, int width, int height)
+    public static Mask read(final InputStream stream, final int width, final int height)
         throws IOException
     {
         Mask mask;
@@ -168,13 +171,14 @@ public class Mask extends BwImage implements Cloneable
 
     /**
      * Writes the mask to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         int width, height;
         int x, y, bit;
@@ -199,7 +203,7 @@ public class Mask extends BwImage implements Cloneable
 
     /**
      * Returns the bytes of the mask.
-     * 
+     *
      * @return The mask bytes
      */
 
@@ -220,7 +224,7 @@ public class Mask extends BwImage implements Cloneable
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored. Can't happen
             return null;
@@ -230,13 +234,14 @@ public class Mask extends BwImage implements Cloneable
 
     /**
      * Writes the mask to a file
-     * 
+     *
      * @param file
      *            The file
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(File file) throws IOException
+    public void write(final File file) throws IOException
     {
         OutputStream stream;
 
@@ -254,7 +259,7 @@ public class Mask extends BwImage implements Cloneable
 
     /**
      * Returns a copy of the mask.
-     * 
+     *
      * @return The copy of the source mask
      */
 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -34,7 +34,7 @@ import de.ailis.wlandsuite.image.EgaImage;
 
 /**
  * A sprite.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -43,14 +43,14 @@ public class Sprite extends EgaImage
 {
     /**
      * Constructor
-     * 
+     *
      * @param width
      *            The width
      * @param height
      *            The height
      */
 
-    public Sprite(int width, int height)
+    public Sprite(final int width, final int height)
     {
         super(width, height);
     }
@@ -59,12 +59,12 @@ public class Sprite extends EgaImage
     /**
      * Creates a sprite from a normal buffered image which is copied to the
      * picture. Colors are automatically converted to the EGA color palette.
-     * 
+     *
      * @param image
      *            The normal buffered image
      */
 
-    public Sprite(BufferedImage image)
+    public Sprite(final BufferedImage image)
     {
         super(image);
     }
@@ -72,7 +72,7 @@ public class Sprite extends EgaImage
 
     /**
      * Loads a sprite from a stream
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -81,9 +81,10 @@ public class Sprite extends EgaImage
      *            The height of the sprite to read in pixel
      * @return The sprite
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Sprite read(InputStream stream, int width, int height)
+    public static Sprite read(final InputStream stream, final int width, final int height)
         throws IOException
     {
         Sprite sprite;
@@ -119,13 +120,14 @@ public class Sprite extends EgaImage
 
     /**
      * Writes the sprite to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         int b;
         int x, y;

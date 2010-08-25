@@ -59,7 +59,7 @@ public class PicTest extends WSTestCase
     /**
      * Tests reading a PIC
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testRead() throws IOException
@@ -77,7 +77,7 @@ public class PicTest extends WSTestCase
     /**
      * Tests writing a PIC.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWrite() throws IOException

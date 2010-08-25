@@ -53,7 +53,7 @@ public abstract class WSTestCase extends TestCase
      *            The file
      * @param data
      *            The byte array
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public static void assertEquals(final File file, final byte[] data)
@@ -93,7 +93,7 @@ public abstract class WSTestCase extends TestCase
      *            The first file
      * @param file2
      *            The second file
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public static void assertEquals(final File file1, final File file2)
@@ -135,7 +135,7 @@ public abstract class WSTestCase extends TestCase
      *            The image file
      * @param image
      *            The image
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public static void assertEquals(final File file, final BufferedImage image)
@@ -173,7 +173,7 @@ public abstract class WSTestCase extends TestCase
      * @param stream
      *            The input stream
      * @return The string
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public static String readString(final InputStream stream)
@@ -225,7 +225,7 @@ public abstract class WSTestCase extends TestCase
      *            The correct output text regular expression
      * @param errExpr
      *            The correct error text regular expression
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public static void testExec(final String command, final int statusCode,

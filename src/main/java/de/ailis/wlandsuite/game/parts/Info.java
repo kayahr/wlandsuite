@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -25,17 +25,17 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Additional map information.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -83,14 +83,15 @@ public class Info
     /**
      * Creates and returns a new Info object by reading it from the specified
      * stream.
-     * 
+     *
      * @param stream
      *            The stream to read the central directory from.
      * @return The central directory
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Info read(SeekableInputStream stream) throws IOException
+    public static Info read(final SeekableInputStream stream) throws IOException
     {
         Info info;
 
@@ -114,12 +115,12 @@ public class Info
 
     /**
      * Writes the info object to the specified output stream.
-     * 
+     *
      * @param stream
      *            The stream to write the info object to
      */
 
-    public void write(SeekableOutputStream stream)
+    public void write(final SeekableOutputStream stream)
     {
         stream.writeByte(this.unknown0);
         stream.writeByte(this.unknown1);
@@ -135,13 +136,13 @@ public class Info
 
     /**
      * Creates and returns a new Info object from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new Info object
      */
 
-    public static Info read(Element element)
+    public static Info read(final Element element)
     {
         Info info;
 
@@ -170,7 +171,7 @@ public class Info
 
     /**
      * Returns the map info as XML.
-     * 
+     *
      * @return The map info as XML
      */
 
@@ -224,7 +225,7 @@ public class Info
 
     /**
      * Returns the backgroundTile.
-     * 
+     *
      * @return The backgroundTile
      */
 
@@ -236,12 +237,12 @@ public class Info
 
     /**
      * Sets the backgroundTile.
-     * 
+     *
      * @param backgroundTile
      *            The backgroundTile to set
      */
 
-    public void setBackgroundTile(int backgroundTile)
+    public void setBackgroundTile(final int backgroundTile)
     {
         this.backgroundTile = backgroundTile;
     }
@@ -249,7 +250,7 @@ public class Info
 
     /**
      * Returns the encounterFrequency.
-     * 
+     *
      * @return The encounterFrequency
      */
 
@@ -261,12 +262,12 @@ public class Info
 
     /**
      * Sets the encounterFrequency.
-     * 
+     *
      * @param encounterFrequency
      *            The encounterFrequency to set
      */
 
-    public void setEncounterFrequency(int encounterFrequency)
+    public void setEncounterFrequency(final int encounterFrequency)
     {
         this.encounterFrequency = encounterFrequency;
     }
@@ -274,7 +275,7 @@ public class Info
 
     /**
      * Returns the lastMonster.
-     * 
+     *
      * @return The lastMonster
      */
 
@@ -286,12 +287,12 @@ public class Info
 
     /**
      * Sets the lastMonster.
-     * 
+     *
      * @param lastMonster
      *            The lastMonster to set
      */
 
-    public void setLastMonster(int lastMonster)
+    public void setLastMonster(final int lastMonster)
     {
         this.lastMonster = lastMonster;
     }
@@ -299,7 +300,7 @@ public class Info
 
     /**
      * Returns the maxEncounters.
-     * 
+     *
      * @return The maxEncounters
      */
 
@@ -311,12 +312,12 @@ public class Info
 
     /**
      * Sets the maxEncounters.
-     * 
+     *
      * @param maxEncounters
      *            The maxEncounters to set
      */
 
-    public void setMaxEncounters(int maxEncounters)
+    public void setMaxEncounters(final int maxEncounters)
     {
         this.maxEncounters = maxEncounters;
     }
@@ -324,7 +325,7 @@ public class Info
 
     /**
      * Returns the tileset.
-     * 
+     *
      * @return The tileset
      */
 
@@ -336,12 +337,12 @@ public class Info
 
     /**
      * Sets the tileset.
-     * 
+     *
      * @param tileset
      *            The tileset to set
      */
 
-    public void setTileset(int tileset)
+    public void setTileset(final int tileset)
     {
         this.tileset = tileset;
     }
@@ -349,7 +350,7 @@ public class Info
 
     /**
      * Returns the timeFactor.
-     * 
+     *
      * @return The timeFactor
      */
 
@@ -361,12 +362,12 @@ public class Info
 
     /**
      * Sets the timeFactor.
-     * 
+     *
      * @param timeFactor
      *            The timeFactor to set
      */
 
-    public void setTimeFactor(int timeFactor)
+    public void setTimeFactor(final int timeFactor)
     {
         this.timeFactor = timeFactor;
     }
@@ -374,7 +375,7 @@ public class Info
 
     /**
      * Returns the unknown0.
-     * 
+     *
      * @return The unknown0
      */
 
@@ -386,12 +387,12 @@ public class Info
 
     /**
      * Sets the unknown0.
-     * 
+     *
      * @param unknown0
      *            The unknown0 to set
      */
 
-    public void setUnknown0(int unknown0)
+    public void setUnknown0(final int unknown0)
     {
         this.unknown0 = unknown0;
     }
@@ -399,7 +400,7 @@ public class Info
 
     /**
      * Returns the unknown1.
-     * 
+     *
      * @return The unknown1
      */
 
@@ -411,12 +412,12 @@ public class Info
 
     /**
      * Sets the unknown1.
-     * 
+     *
      * @param unknown1
      *            The unknown1 to set
      */
 
-    public void setUnknown1(int unknown1)
+    public void setUnknown1(final int unknown1)
     {
         this.unknown1 = unknown1;
     }
@@ -424,7 +425,7 @@ public class Info
 
     /**
      * Returns the unknown9.
-     * 
+     *
      * @return The unknown9
      */
 
@@ -436,12 +437,12 @@ public class Info
 
     /**
      * Sets the unknown9.
-     * 
+     *
      * @param unknown9
      *            The unknown9 to set
      */
 
-    public void setUnknown9(int unknown9)
+    public void setUnknown9(final int unknown9)
     {
         this.unknown9 = unknown9;
     }

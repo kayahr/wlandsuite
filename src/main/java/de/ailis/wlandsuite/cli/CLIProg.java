@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -23,6 +23,9 @@
 
 package de.ailis.wlandsuite.cli;
 
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
+
 import java.io.IOException;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -30,14 +33,12 @@ import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import gnu.getopt.Getopt;
-import gnu.getopt.LongOpt;
 import de.ailis.wlandsuite.utils.ResourceUtils;
 
 
 /**
  * CLI program base class
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -46,12 +47,12 @@ public abstract class CLIProg
 {
     /** The logger */
     private static final Log log = LogFactory.getLog(CLIProg.class);
-    
+
     /** The help text resource */
     private String help = "help/launcher.txt";
 
     /** The version information text resource */
-    private String version = "version.txt";
+    private final String version = "version.txt";
 
     /** The program name */
     private String progName = "wlandsuite";
@@ -87,12 +88,12 @@ public abstract class CLIProg
 
     /**
      * Outputs a usage error message
-     * 
+     *
      * @param message
      *            The error message
      */
 
-    protected void wrongUsage(String message)
+    protected void wrongUsage(final String message)
     {
         log.error(message + "\nTry '" + this.progName
             + " --help' for more information.");
@@ -102,13 +103,13 @@ public abstract class CLIProg
 
     /**
      * Process command line options
-     * 
+     *
      * @param args
      *            Command line arguments
      * @return The parameters which are left after processing the options
      */
 
-    private String[] processOptions(String[] args)
+    private String[] processOptions(final String[] args)
     {
         int c;
         LongOpt[] allLongOpts;
@@ -123,7 +124,7 @@ public abstract class CLIProg
         allLongOpts[1] = new LongOpt("version", LongOpt.NO_ARGUMENT, null, 'V');
         allLongOpts[2] = new LongOpt("debug", LongOpt.NO_ARGUMENT, null, 'd');
         i = 3;
-        for (LongOpt longOpt: this.longOpts)
+        for (final LongOpt longOpt: this.longOpts)
         {
             allLongOpts[i] = longOpt;
             i++;
@@ -131,7 +132,7 @@ public abstract class CLIProg
 
         // Build the shortOpts
         shortOpts = new StringBuilder();
-        for (LongOpt longOpt: allLongOpts)
+        for (final LongOpt longOpt: allLongOpts)
         {
             shortOpts.append((char) longOpt.getVal());
             if (longOpt.getHasArg() == LongOpt.REQUIRED_ARGUMENT)
@@ -177,25 +178,26 @@ public abstract class CLIProg
 
     /**
      * Processes a single option.
-     * 
+     *
      * @param opt
      *            The option
      * @param getopt
      *            The Getopt object
      */
 
-    protected void processOption(int opt, Getopt getopt)
+    protected void processOption(final int opt, final Getopt getopt)
     {
         // Empty
     }
 
 
     /**
-     * The code wich should be executed when the program is run
-     * 
+     * The code which should be executed when the program is run
+     *
      * @param params
      *            The parameters without the already processed options
      * @throws IOException
+     *             When some file could not be read or written.
      */
 
     protected abstract void run(String[] params) throws IOException;
@@ -203,12 +205,12 @@ public abstract class CLIProg
 
     /**
      * Runs the program
-     * 
+     *
      * @param args
      *            The command line arguments.
      */
 
-    protected void start(String[] args)
+    protected void start(final String[] args)
     {
         setupLogging();
         try
@@ -217,7 +219,7 @@ public abstract class CLIProg
             run(processOptions(args));
             log.info("Success");
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             if (this.debug || e.getMessage() == null)
             {
@@ -231,18 +233,18 @@ public abstract class CLIProg
             }
         }
     }
-    
-    
+
+
     /**
      * Setups loggings.
      */
-    
+
     private void setupLogging()
     {
         Logger logger;
-        
+
         logger = Logger.getLogger("");
-        for (Handler handler: logger.getHandlers())
+        for (final Handler handler: logger.getHandlers())
         {
             logger.removeHandler(handler);
         }
@@ -252,12 +254,12 @@ public abstract class CLIProg
 
     /**
      * Sets the help resource.
-     * 
+     *
      * @param help
      *            The help resource to set
      */
 
-    public void setHelp(String help)
+    public void setHelp(final String help)
     {
         this.help = help;
     }
@@ -265,12 +267,12 @@ public abstract class CLIProg
 
     /**
      * Sets the long options.
-     * 
+     *
      * @param longOpts
      *            The long options to set
      */
 
-    public void setLongOpts(LongOpt[] longOpts)
+    public void setLongOpts(final LongOpt[] longOpts)
     {
         this.longOpts = longOpts;
     }
@@ -278,12 +280,12 @@ public abstract class CLIProg
 
     /**
      * Sets the program name
-     * 
+     *
      * @param progName
      *            The program name to set
      */
 
-    public void setProgName(String progName)
+    public void setProgName(final String progName)
     {
         this.progName = progName;
     }

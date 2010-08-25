@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -38,7 +38,7 @@ import de.ailis.wlandsuite.pic.Pic;
 /**
  * A raw animation frame represents the raw frame found in the wasteland
  * animation data block. It consists of multiple raw animation frame parts.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -46,22 +46,22 @@ import de.ailis.wlandsuite.pic.Pic;
 public class RawAnimationFrame
 {
     /** The raw animation frame parts */
-    private List<RawAnimationFramePart> parts;
+    private final List<RawAnimationFramePart> parts;
 
     /** The size of the animation frame */
-    private int size;
+    private final int size;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param parts
      *            The animation frame parts
      * @param size
      *            The size of the animation frame
      */
 
-    public RawAnimationFrame(List<RawAnimationFramePart> parts, int size)
+    public RawAnimationFrame(final List<RawAnimationFramePart> parts, final int size)
     {
         this.parts = parts;
         this.size = size;
@@ -70,14 +70,14 @@ public class RawAnimationFrame
 
     /**
      * Applies this animation frame to a image
-     * 
+     *
      * @param image
      *            The image to update
      */
 
-    public void apply(Pic image)
+    public void apply(final Pic image)
     {
-        for (RawAnimationFramePart part: this.parts)
+        for (final RawAnimationFramePart part: this.parts)
         {
             part.apply(image);
         }
@@ -86,14 +86,15 @@ public class RawAnimationFrame
 
     /**
      * Reads the next raw animation frame from the input stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The raw animation frame
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static RawAnimationFrame read(InputStream stream) throws IOException
+    public static RawAnimationFrame read(final InputStream stream) throws IOException
     {
         List<RawAnimationFramePart> parts;
         RawAnimationFramePart part;
@@ -112,16 +113,17 @@ public class RawAnimationFrame
 
     /**
      * Writes the animation frame to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         // Wrtie the animation frame parts
-        for (RawAnimationFramePart part: this.parts)
+        for (final RawAnimationFramePart part: this.parts)
         {
             part.write(stream);
         }
@@ -134,7 +136,7 @@ public class RawAnimationFrame
 
     /**
      * Returns the size.
-     * 
+     *
      * @return The size
      */
 
@@ -160,7 +162,7 @@ public class RawAnimationFrame
      */
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object o)
     {
         RawAnimationFrame other;
 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -25,17 +25,17 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Alteration
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -64,16 +64,17 @@ public class Alter
     /**
      * Creates a new alteration object by reading the data from the specified
      * stream.
-     * 
+     *
      * @param stream
      *            The stream to read the alteration data from
      * @param flags
      *            The flags
      * @return The alteration
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Alter read(SeekableInputStream stream, int flags)
+    public static Alter read(final SeekableInputStream stream, final int flags)
         throws IOException
     {
         Alter alteration;
@@ -91,13 +92,13 @@ public class Alter
 
     /**
      * Creates a new alteration object by reading the data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The alteration.
      */
 
-    public static Alter read(Element element)
+    public static Alter read(final Element element)
     {
         Alter alteration;
 
@@ -118,7 +119,7 @@ public class Alter
 
     /**
      * Converts the alteration data to XML and returns the XML element.
-     * 
+     *
      * @return The XML element
      */
 
@@ -157,14 +158,14 @@ public class Alter
 
     /**
      * Writes the alteration data to a stream.
-     * 
+     *
      * @param stream
      *            The stream to write to
      * @param last
      *            If this is the last alteration block
      */
 
-    public void write(SeekableOutputStream stream, boolean last)
+    public void write(final SeekableOutputStream stream, final boolean last)
     {
         stream.writeByte(this.unknown | (last ? 128 : 0)
             | (this.relative ? 1 : 0));
@@ -177,7 +178,7 @@ public class Alter
 
     /**
      * Returns the actionClass.
-     * 
+     *
      * @return The actionClass
      */
 
@@ -189,12 +190,12 @@ public class Alter
 
     /**
      * Sets the actionClass.
-     * 
+     *
      * @param actionClass
      *            The actionClass to set
      */
 
-    public void setNewActionClass(int actionClass)
+    public void setNewActionClass(final int actionClass)
     {
         this.newActionClass = actionClass;
     }
@@ -202,7 +203,7 @@ public class Alter
 
     /**
      * Returns the actionSelector.
-     * 
+     *
      * @return The actionSelector
      */
 
@@ -214,12 +215,12 @@ public class Alter
 
     /**
      * Sets the actionSelector.
-     * 
+     *
      * @param actionSelector
      *            The actionSelector to set
      */
 
-    public void setNewAction(int actionSelector)
+    public void setNewAction(final int actionSelector)
     {
         this.newAction = actionSelector;
     }
@@ -227,7 +228,7 @@ public class Alter
 
     /**
      * Returns the flags.
-     * 
+     *
      * @return The flags
      */
 
@@ -239,12 +240,12 @@ public class Alter
 
     /**
      * Sets the flags.
-     * 
+     *
      * @param flags
      *            The flags to set
      */
 
-    public void setUnknown(int flags)
+    public void setUnknown(final int flags)
     {
         this.unknown = flags;
     }
@@ -252,7 +253,7 @@ public class Alter
 
     /**
      * Returns the x.
-     * 
+     *
      * @return The x
      */
 
@@ -264,12 +265,12 @@ public class Alter
 
     /**
      * Sets the x.
-     * 
+     *
      * @param x
      *            The x to set
      */
 
-    public void setX(int x)
+    public void setX(final int x)
     {
         this.x = x;
     }
@@ -277,7 +278,7 @@ public class Alter
 
     /**
      * Returns the y.
-     * 
+     *
      * @return The y
      */
 
@@ -289,12 +290,12 @@ public class Alter
 
     /**
      * Sets the y.
-     * 
+     *
      * @param y
      *            The y to set
      */
 
-    public void setY(int y)
+    public void setY(final int y)
     {
         this.y = y;
     }
@@ -302,7 +303,7 @@ public class Alter
 
     /**
      * Returns the relative.
-     * 
+     *
      * @return The relative
      */
 
@@ -314,12 +315,12 @@ public class Alter
 
     /**
      * Sets the relative.
-     * 
+     *
      * @param relative
      *            The relative to set
      */
 
-    public void setRelative(boolean relative)
+    public void setRelative(final boolean relative)
     {
         this.relative = relative;
     }

@@ -23,7 +23,7 @@ import javax.imageio.stream.ImageOutputStream;
 
 /**
  * GIF animation writer
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,7 +54,7 @@ public class GifAnimWriter
 
         /**
          * Constructor
-         * 
+         *
          * @param name
          *            The disposal method name
          */
@@ -66,7 +66,7 @@ public class GifAnimWriter
 
         /**
          * Returns the disposal method name.
-         * 
+         *
          * @return The disposal method name
          */
 
@@ -97,7 +97,7 @@ public class GifAnimWriter
 
     /**
      * Constructor.
-     * 
+     *
      * @param output
      *            The output file
      * @param loops
@@ -120,7 +120,7 @@ public class GifAnimWriter
 
     /**
      * Finds a writer for image/gif mime type and returns it.
-     * 
+     *
      * @return The writer to use
      * @throws IOException
      *             If no writer could be found
@@ -138,7 +138,7 @@ public class GifAnimWriter
 
     /**
      * Creates and returns the metadata for the next frame.
-     * 
+     *
      * @param image
      *            The next frame
      * @return The metadata for the next frame
@@ -185,7 +185,7 @@ public class GifAnimWriter
 
     /**
      * Returns the node with the given name.
-     * 
+     *
      * @param rootNode
      *            The root node
      * @param nodeName
@@ -213,7 +213,7 @@ public class GifAnimWriter
     /**
      * Sets the display time of the next frame to the specified number of
      * milliseconds. Default wait time is 0.
-     * 
+     *
      * @param delay
      *            The next display time in milliseconds
      */
@@ -226,7 +226,7 @@ public class GifAnimWriter
 
     /**
      * Returns the display time of the next frame in milliseconds. Default is 0.
-     * 
+     *
      * @return The next display time in milliseconds.
      */
 
@@ -239,7 +239,7 @@ public class GifAnimWriter
     /**
      * Sets the index of the transparent color in the next frame. null means no
      * transparency.
-     * 
+     *
      * @param index
      *            The index of the transparent color or null for no transparency
      */
@@ -253,7 +253,7 @@ public class GifAnimWriter
     /**
      * Returns the index of the transparent color in the next frame. May return
      * null if no transparency is used.
-     * 
+     *
      * @return The index of the transparent color or null if none
      */
 
@@ -265,7 +265,7 @@ public class GifAnimWriter
 
     /**
      * Sets the disposal method for the next frame.
-     * 
+     *
      * @param disposalMethod
      *            The disposal method for the next frame. Must not be null.
      */
@@ -280,7 +280,7 @@ public class GifAnimWriter
 
     /**
      * Returns the disposal method for the next frame.
-     * 
+     *
      * @return The disposal method for the next frame. Never null.
      */
 
@@ -289,13 +289,14 @@ public class GifAnimWriter
         return this.disposalMethod;
     }
 
-    
+
     /**
      * Adds a new frame.
-     * 
+     *
      * @param image
      *            The frame to add
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void addFrame(final BufferedImage image) throws IOException
@@ -309,7 +310,7 @@ public class GifAnimWriter
 
     /**
      * Closes all open resources.
-     * 
+     *
      * @throws IOException
      *             If resources could not be closed
      */

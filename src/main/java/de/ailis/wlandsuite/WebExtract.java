@@ -1,7 +1,7 @@
 /*
  * $Id: UnpackTileset.java 126 2006-10-07 09:05:26Z k $
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -61,7 +61,7 @@ import de.ailis.wlandsuite.sprites.Sprites;
 /**
  * Extracts all game data to web compatible files (JSON objects and PNG
  * graphics).
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision: 126 $
  */
@@ -77,12 +77,13 @@ public class WebExtract extends ExtractProg
 
     /**
      * Extracts the tilesets.
-     * 
+     *
      * @param sourceDirectory
      *            The input directory
      * @param targetDirectory
      *            The output directory
      * @throws IOException
+     *             When file operation fails.
      */
 
     private void extractTilesets(final File sourceDirectory,
@@ -142,12 +143,13 @@ public class WebExtract extends ExtractProg
 
     /**
      * Extracts the sprites.
-     * 
+     *
      * @param sourceDirectory
      *            The input directory
      * @param targetDirectory
      *            The output directory
      * @throws IOException
+     *             When file operation fails.
      */
 
     private void extractSprites(final File sourceDirectory,
@@ -213,12 +215,13 @@ public class WebExtract extends ExtractProg
 
     /**
      * Extracts the animations.
-     * 
+     *
      * @param sourceDirectory
      *            The input directory
      * @param targetDirectory
      *            The output directory
      * @throws IOException
+     *             When file operation fails.
      */
 
     private void extractAnimations(final File sourceDirectory,
@@ -353,7 +356,7 @@ public class WebExtract extends ExtractProg
 
     /**
      * Main method
-     * 
+     *
      * @param args
      *            Command line arguments
      */

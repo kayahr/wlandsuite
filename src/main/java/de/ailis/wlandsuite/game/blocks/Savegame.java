@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -47,7 +47,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * Save game.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -85,7 +85,7 @@ public class Savegame extends GameBlock implements Serializable
     private Parties parties;
 
     /** The characters */
-    private List<Char> characters = new ArrayList<Char>(7);
+    private final List<Char> characters = new ArrayList<Char>(7);
 
 
     /**
@@ -102,14 +102,15 @@ public class Savegame extends GameBlock implements Serializable
      * Constructs a savegame by reading it from a wasteland gameX file stream.
      * The stream must point at the beginning of the MSQ block (which is at the
      * "m" of the "msq" header string.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The newly constructed save game
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Savegame read(SeekableInputStream stream) throws IOException
+    public static Savegame read(final SeekableInputStream stream) throws IOException
     {
         byte[] headerBytes;
         String header;
@@ -134,14 +135,15 @@ public class Savegame extends GameBlock implements Serializable
     /**
      * Reads the savegame data. This method is used internally by the read() and
      * readHacked() methods.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The save game
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private static Savegame readData(SeekableInputStream stream)
+    private static Savegame readData(final SeekableInputStream stream)
         throws IOException
     {
         Savegame savegame;
@@ -218,14 +220,15 @@ public class Savegame extends GameBlock implements Serializable
 
     /**
      * Reads an external savegame file (for Displacer's hacked EXE file).
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The savegame
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Savegame readHacked(InputStream stream) throws IOException
+    public static Savegame readHacked(final InputStream stream) throws IOException
     {
         return readData(new SeekableInputStream(stream));
     }
@@ -233,15 +236,16 @@ public class Savegame extends GameBlock implements Serializable
 
     /**
      * Writes the savegame to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @param disk
      *            The disk id (0 or 1)
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream, int disk) throws IOException
+    public void write(final OutputStream stream, final int disk) throws IOException
     {
         SeekableOutputStream seekStream;
 
@@ -264,13 +268,14 @@ public class Savegame extends GameBlock implements Serializable
     /**
      * Writes the savegame data to the specified stream. This method is used
      * internally by the write() and writeHacked() method.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private void writeData(SeekableOutputStream stream) throws IOException
+    private void writeData(final SeekableOutputStream stream) throws IOException
     {
         // Write the parties
         this.parties.write(stream);
@@ -307,7 +312,7 @@ public class Savegame extends GameBlock implements Serializable
         this.unknownF9.write(stream);
 
         // Write the characters
-        for (Char character: this.characters)
+        for (final Char character: this.characters)
         {
             character.write(stream);
         }
@@ -318,13 +323,14 @@ public class Savegame extends GameBlock implements Serializable
     /**
      * Writes the savegame to an external save file (Compatibly to Displacer's
      * hacked EXE file).
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeHacked(OutputStream stream) throws IOException
+    public void writeHacked(final OutputStream stream) throws IOException
     {
         writeData(new SeekableOutputStream(stream));
         for (int i = 0; i < 2560; i++)
@@ -336,13 +342,13 @@ public class Savegame extends GameBlock implements Serializable
 
     /**
      * Creates and returns a new savegame from XML.
-     * 
+     *
      * @param element
      *            The XML root element
      * @return The savegame
      */
 
-    public static Savegame read(Element element)
+    public static Savegame read(final Element element)
     {
         Savegame savegame;
         String[] parts;
@@ -374,9 +380,9 @@ public class Savegame extends GameBlock implements Serializable
         savegame.unknownF9 = Unknown.read(element.element("unknownF9"), 7);
 
         // Read the characters
-        for (Object item: element.element("characters").elements("character"))
+        for (final Object item: element.element("characters").elements("character"))
         {
-            Element subElement = (Element) item;
+            final Element subElement = (Element) item;
 
             savegame.characters.add(Char.read(subElement));
         }
@@ -387,13 +393,13 @@ public class Savegame extends GameBlock implements Serializable
 
     /**
      * Reads a savegame from the specified XML stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The savegame
      */
 
-    public static Savegame readXml(InputStream stream)
+    public static Savegame readXml(final InputStream stream)
     {
         Document document;
         Element element;
@@ -440,7 +446,7 @@ public class Savegame extends GameBlock implements Serializable
         // Write the characters
         subElement = XmlUtils.createElement("characters");
         int id = 1;
-        for (Char characters: this.characters)
+        for (final Char characters: this.characters)
         {
             subElement.add(characters.toXml(id));
             id++;

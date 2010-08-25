@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -39,7 +39,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * A unknown block.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -53,16 +53,17 @@ public class Unknown
     /**
      * Creates a new unknown block by reading the specified number of bytes from
      * the specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param size
      *            The number of bytes to read
      * @return The unknown block
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Unknown read(InputStream stream, int size) throws IOException
+    public static Unknown read(final InputStream stream, final int size) throws IOException
     {
         Unknown unknown;
 
@@ -75,13 +76,14 @@ public class Unknown
 
     /**
      * Writes the unknown data to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         stream.write(this.bytes);
     }
@@ -89,13 +91,13 @@ public class Unknown
 
     /**
      * Returns the unknown data as XML.
-     * 
+     *
      * @param elementName
      *            The element name
      * @return The unknown data as XML
      */
 
-    public Element toXml(String elementName)
+    public Element toXml(final String elementName)
     {
         Element element;
         StringWriter text;
@@ -138,7 +140,7 @@ public class Unknown
 
     /**
      * Creates and returns a new Unknown object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @param size
@@ -146,7 +148,7 @@ public class Unknown
      * @return The Unknown object
      */
 
-    public static Unknown read(Element element, int size)
+    public static Unknown read(final Element element, final int size)
     {
         Unknown unknown;
         ByteArrayOutputStream byteStream;
@@ -155,7 +157,7 @@ public class Unknown
         unknown = new Unknown();
         data = element.getTextTrim();
         byteStream = new ByteArrayOutputStream();
-        for (String b: data.split("\\s"))
+        for (final String b: data.split("\\s"))
         {
             byteStream.write(Integer.parseInt(b, 16));
         }

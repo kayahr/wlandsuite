@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -30,7 +30,7 @@ import java.io.OutputStream;
 /**
  * The VerticalXorOutputStream allows writing a vxor encoded data stream.
  * If this stream is closed then the connected output stream is also closed.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -38,31 +38,31 @@ import java.io.OutputStream;
 public class VerticalXorOutputStream extends OutputStream
 {
     /** The stream to write encoded data to */
-    private OutputStream stream;
+    private final OutputStream stream;
 
     /** The width in pixels */
-    private int width;
-    
+    private final int width;
+
     /** The last written line (used for encoding the next line) */
-    private int[] lastLine;
-    
+    private final int[] lastLine;
+
     /** Current X position in stream */
     private int x;
-    
+
     /** Current Y position in stream */
     private int y;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param stream
      *            The stream to write encoded data to
      * @param width
      *            The width in bytes (not in pixels)
      */
 
-    public VerticalXorOutputStream(OutputStream stream, int width)
+    public VerticalXorOutputStream(final OutputStream stream, final int width)
     {
         super();
         this.stream = stream;
@@ -74,23 +74,23 @@ public class VerticalXorOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#write(int)
      */
-    
+
     @Override
-    public void write(int b) throws IOException
-    {        
+    public void write(final int b) throws IOException
+    {
         // write unencoded byte for first row, encoded byte for all other rows
         if (this.y > 0)
         {
             this.stream.write(b ^ this.lastLine[this.x]);
         }
         else
-        {            
+        {
             this.stream.write(b);
         }
-        
+
         // Remember the real byte for the next row
         this.lastLine[this.x] = b;
-            
+
         // Move on the cursor
         if (this.x < this.width - 1)
         {
@@ -103,12 +103,13 @@ public class VerticalXorOutputStream extends OutputStream
         }
     }
 
-    
+
     /**
-     * @throws IOException 
+     * @throws IOException
+     *             When file operation fails.
      * @see java.io.InputStream#close()
      */
-    
+
     @Override
     public void close() throws IOException
     {

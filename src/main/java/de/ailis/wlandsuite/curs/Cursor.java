@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -33,7 +33,7 @@ import de.ailis.wlandsuite.image.EgaImage;
 
 /**
  * A cursor image.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -41,31 +41,31 @@ import de.ailis.wlandsuite.image.EgaImage;
 public class Cursor
 {
     /** The cursor image */
-    private EgaImage cursor;
+    private final EgaImage cursor;
 
     /** The mask image */
-    private EgaImage mask;
+    private final EgaImage mask;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param cursor
      *            The cursor image
      * @param mask
      *            The mask image
      */
 
-    public Cursor(EgaImage cursor, EgaImage mask)
+    public Cursor(final EgaImage cursor, final EgaImage mask)
     {
         this.cursor = cursor;
         this.mask = mask;
     }
-    
+
 
     /**
      * Loads a cursor from a stream
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
@@ -74,9 +74,10 @@ public class Cursor
      *            The height of the cursor to read in pixel
      * @return The cursor
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Cursor read(InputStream stream, int width, int height)
+    public static Cursor read(final InputStream stream, final int width, final int height)
         throws IOException
     {
         EgaImage cursor, mask, image;
@@ -117,13 +118,14 @@ public class Cursor
 
     /**
      * Writes the picture to the specified output stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         EgaImage image;
         int b;
@@ -157,7 +159,7 @@ public class Cursor
 
     /**
      * Returns the cursor image.
-     * 
+     *
      * @return The cursor image
      */
 
@@ -169,7 +171,7 @@ public class Cursor
 
     /**
      * Returns the mask image.
-     * 
+     *
      * @return The mask image
      */
 

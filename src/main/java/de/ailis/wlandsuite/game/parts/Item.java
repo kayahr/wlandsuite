@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,14 +27,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.dom4j.Element;
+
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
-import org.dom4j.Element;
 
 
 /**
  * A item as used by the Char class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -51,14 +52,15 @@ public class Item
     /**
      * Creates and returns a new item by reading its data from the specified
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The item
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Item read(InputStream stream) throws IOException
+    public static Item read(final InputStream stream) throws IOException
     {
         Item item;
 
@@ -73,13 +75,14 @@ public class Item
 
     /**
      * Writes the item to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         stream.write(this.id);
         stream.write(this.load);
@@ -88,7 +91,7 @@ public class Item
 
     /**
      * Returns the item data as XML.
-     * 
+     *
      * @return The item data as XML
      */
 
@@ -109,13 +112,13 @@ public class Item
 
     /**
      * Creates and returns a new item object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The item data
      */
 
-    public static Item read(Element element)
+    public static Item read(final Element element)
     {
         Item item;
 
@@ -130,7 +133,7 @@ public class Item
 
     /**
      * Returns the item.
-     * 
+     *
      * @return The item
      */
 
@@ -142,12 +145,12 @@ public class Item
 
     /**
      * Sets the item.
-     * 
+     *
      * @param item
      *            The item to set
      */
 
-    public void setId(int item)
+    public void setId(final int item)
     {
         this.id = item;
     }
@@ -155,7 +158,7 @@ public class Item
 
     /**
      * Returns the load.
-     * 
+     *
      * @return The load
      */
 
@@ -167,12 +170,12 @@ public class Item
 
     /**
      * Sets the load.
-     * 
+     *
      * @param load
      *            The load to set
      */
 
-    public void setLoad(int load)
+    public void setLoad(final int load)
     {
         this.load = load;
     }

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * A base class for extract programs. Extract programs are meant for extracting
  * information from the wasteland directory into a target directory.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -46,13 +46,13 @@ public abstract class ExtractProg extends CLIProg
 
     /**
      * Returns the source directory where the input data can be read from.
-     * 
+     *
      * @param input
      *            The input file name or null for stdin
      * @return The input stream
      */
 
-    private File getSourceDirectory(String input)
+    private File getSourceDirectory(final String input)
     {
         if (input == null)
         {
@@ -67,14 +67,15 @@ public abstract class ExtractProg extends CLIProg
 
     /**
      * Runs the program
-     * 
+     *
      * @param params
      *            The command line arguments.
      * @throws IOException
+     *             When some file could not be read or written.
      */
 
     @Override
-    public void run(String[] params) throws IOException
+    public void run(final String[] params) throws IOException
     {
         File sourceDirectory;
 
@@ -105,12 +106,13 @@ public abstract class ExtractProg extends CLIProg
 
     /**
      * Extracts some data from input directory into some output.
-     * 
+     *
      * @param sourceDirectory
      *            The input directory
      * @param targetDirectory
      *            The output directory
      * @throws IOException
+     *             When file operation fails.
      */
 
     protected abstract void extract(File sourceDirectory, File targetDirectory)

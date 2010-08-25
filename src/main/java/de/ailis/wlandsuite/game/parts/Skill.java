@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,14 +27,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.dom4j.Element;
+
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
-import org.dom4j.Element;
 
 
 /**
  * A skill as used by the Char class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,14 +55,15 @@ public class Skill
     /**
      * Creates and returns a new skill by reading its data from the specified
      * stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The skill
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Skill read(InputStream stream) throws IOException
+    public static Skill read(final InputStream stream) throws IOException
     {
         Skill skill;
 
@@ -76,13 +78,14 @@ public class Skill
 
     /**
      * Writes the skill to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         stream.write(this.id);
         stream.write(this.level);
@@ -91,7 +94,7 @@ public class Skill
 
     /**
      * Returns the skill data as XML.
-     * 
+     *
      * @return The skill data as XML
      */
 
@@ -113,13 +116,13 @@ public class Skill
 
     /**
      * Creates and returns a new skill object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The skill data
      */
 
-    public static Skill read(Element element)
+    public static Skill read(final Element element)
     {
         Skill skill;
 
@@ -136,7 +139,7 @@ public class Skill
 
     /**
      * Returns the skill.
-     * 
+     *
      * @return The skill
      */
 
@@ -148,12 +151,12 @@ public class Skill
 
     /**
      * Sets the skill.
-     * 
+     *
      * @param skill
      *            The skill to set
      */
 
-    public void setId(int skill)
+    public void setId(final int skill)
     {
         this.id = skill;
     }
@@ -161,7 +164,7 @@ public class Skill
 
     /**
      * Returns the level.
-     * 
+     *
      * @return The level
      */
 
@@ -173,12 +176,12 @@ public class Skill
 
     /**
      * Sets the level.
-     * 
+     *
      * @param level
      *            The level to set
      */
 
-    public void setLevel(int level)
+    public void setLevel(final int level)
     {
         this.level = level;
     }
@@ -186,7 +189,7 @@ public class Skill
 
     /**
      * Returns the special.
-     * 
+     *
      * @return The special
      */
 
@@ -198,12 +201,12 @@ public class Skill
 
     /**
      * Sets the special.
-     * 
+     *
      * @param special
      *            The special to set
      */
 
-    public void setSpecial(boolean special)
+    public void setSpecial(final boolean special)
     {
         this.special = special;
     }

@@ -57,7 +57,7 @@ public class HuffmanTreeTest extends TestCase
     /**
      * Tests creating a new huffman tree
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testCreateTree() throws IOException

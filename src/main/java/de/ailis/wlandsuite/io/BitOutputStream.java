@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -32,12 +32,12 @@ import java.io.OutputStream;
  * provides other useful methods like writing 16 or 32 bit values which also
  * works in a not-byte aligned stream. So if you write 4 bits then you are still
  * able to write the next 16 bits as a word.
- * 
+ *
  * If you have written not-byte aligned data (for example just 7 bits instead of
  * 8) then you MUST flush() the stream so these 8 bits are written (With an
  * appended zero bit). If you close() the stream then flush() is called
  * automatically.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -53,13 +53,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a bit to the output stream.
-     * 
+     *
      * @param bit
      *            The bit to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeBit(byte bit) throws IOException
+    public void writeBit(final byte bit) throws IOException
     {
         writeBit(bit, false);
     }
@@ -68,15 +69,16 @@ public abstract class BitOutputStream extends OutputStream
     /**
      * Writes a bit to the output stream. This method can write the bits in
      * reversed order.
-     * 
+     *
      * @param bit
      *            The bit to write
      * @param reverse
      *            If bits should be written in reversed order
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeBit(byte bit, boolean reverse) throws IOException
+    public void writeBit(final byte bit, final boolean reverse) throws IOException
     {
         if (reverse)
         {
@@ -101,7 +103,7 @@ public abstract class BitOutputStream extends OutputStream
     /**
      * Writes the specified number of bits. The bits can be written in reverse
      * order if the reverse flag is set.
-     * 
+     *
      * @param value
      *            The value containing the bits to write
      * @param quantity
@@ -109,9 +111,10 @@ public abstract class BitOutputStream extends OutputStream
      * @param reverse
      *            If the bits should be written reversed.
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeBits(int value, int quantity, boolean reverse)
+    public void writeBits(final int value, final int quantity, final boolean reverse)
         throws IOException
     {
         byte b;
@@ -133,13 +136,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a bit to the output stream.
-     * 
+     *
      * @param bit
      *            The bit to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeBit(boolean bit) throws IOException
+    public void writeBit(final boolean bit) throws IOException
     {
         writeBit((byte) (bit ? 1 : 0));
     }
@@ -147,13 +151,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a byte to the stream.
-     * 
+     *
      * @param b
      *            The byte to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeByte(int b) throws IOException
+    public void writeByte(final int b) throws IOException
     {
         if (this.currentBit == 0)
         {
@@ -171,13 +176,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a signed byte.
-     * 
+     *
      * @param b
      *            The byte to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeSignedByte(int b) throws IOException
+    public void writeSignedByte(final int b) throws IOException
     {
         if (b < 0)
         {
@@ -192,13 +198,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a 2-byte word to the stream.
-     * 
+     *
      * @param word
      *            The word to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeWord(int word) throws IOException
+    public void writeWord(final int word) throws IOException
     {
         writeByte(word & 0xff);
         writeByte((word >> 8) & 0xff);
@@ -207,13 +214,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a 4-byte integer to the stream.
-     * 
+     *
      * @param integer
      *            The integer to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeInt(long integer) throws IOException
+    public void writeInt(final long integer) throws IOException
     {
         writeByte((int) (integer & 0xff));
         writeByte((int) ((integer >> 8) & 0xff));
@@ -224,13 +232,14 @@ public abstract class BitOutputStream extends OutputStream
 
     /**
      * Writes a 3-byte integer to the stream.
-     * 
+     *
      * @param integer
      *            The integer to write
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeInt3(int integer) throws IOException
+    public void writeInt3(final int integer) throws IOException
     {
         writeByte(integer & 0xff);
         writeByte((integer >> 8) & 0xff);
@@ -241,8 +250,9 @@ public abstract class BitOutputStream extends OutputStream
     /**
      * Flush the output to make sure all bits are written even if they don't
      * fill a whole byte.
-     * 
+     *
      * @throws IOException
+     *             When file operation fails.
      */
 
     @Override
@@ -251,16 +261,17 @@ public abstract class BitOutputStream extends OutputStream
         flush(false);
     }
 
-    
+
     /**
      * Flush the output to make sure all bits are written even if they don't
      * fill a whole byte.
-     * 
+     *
      * @param reverse In bits are written in reverese order
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void flush(boolean reverse) throws IOException
+    public void flush(final boolean reverse) throws IOException
     {
         if (this.currentBit != 0)
         {
@@ -276,8 +287,9 @@ public abstract class BitOutputStream extends OutputStream
     /**
      * Closes the connected output stream and makes sure the last byte is
      * written.
-     * 
+     *
      * @throws IOException
+     *             When file operation fails.
      */
 
     @Override

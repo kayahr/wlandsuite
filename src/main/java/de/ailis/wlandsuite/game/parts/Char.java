@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,18 +27,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
 import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Character data
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -168,14 +168,15 @@ public class Char
     /**
      * Creates and returns a new Char object by reading the data from the
      * specified input stream.
-     * 
+     *
      * @param stream
      *            The stream to read the character data from
      * @return The newly created character
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Char read(SeekableInputStream stream) throws IOException
+    public static Char read(final SeekableInputStream stream) throws IOException
     {
         byte[] tmp;
         Char character;
@@ -240,13 +241,13 @@ public class Char
 
     /**
      * Converts a null-terminated string into a normal string.
-     * 
+     *
      * @param data
      *            The null-terminated data
      * @return The string
      */
 
-    private static String getString(byte[] data)
+    private static String getString(final byte[] data)
     {
         int pos = 0;
 
@@ -258,7 +259,7 @@ public class Char
         {
             return new String(data, 0, pos, "ASCII");
         }
-        catch (UnsupportedEncodingException e)
+        catch (final UnsupportedEncodingException e)
         {
             // Can't happen
             return null;
@@ -268,13 +269,13 @@ public class Char
 
     /**
      * Creates and returns a new character read from the specified XML element.
-     * 
+     *
      * @param element
      *            The XML element to read the charactger from
      * @return The character
      */
 
-    public static Char read(Element element)
+    public static Char read(final Element element)
     {
         Char character;
 
@@ -343,13 +344,13 @@ public class Char
 
     /**
      * Returns the character as XML.
-     * 
+     *
      * @param id
      *            The character id
      * @return The character as XML
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -451,13 +452,14 @@ public class Char
 
     /**
      * Writes the character to the specified stream.
-     * 
+     *
      * @param stream
      *            The stream to write the character to
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(SeekableOutputStream stream) throws IOException
+    public void write(final SeekableOutputStream stream) throws IOException
     {
         stream.write(getBytes(this.name, 14));
         stream.write(this.strength);
@@ -513,16 +515,17 @@ public class Char
 
     /**
      * Converts a string to null-terminated bytes array with a specific length.
-     * 
+     *
      * @param string
      *            The string
      * @param length
      *            The length of the byte array
      * @return The byte array
      * @throws IOException
+     *             When file operation fails.
      */
 
-    private byte[] getBytes(String string, int length) throws IOException
+    private byte[] getBytes(final String string, final int length) throws IOException
     {
         ByteArrayOutputStream stream;
 
@@ -543,7 +546,7 @@ public class Char
 
     /**
      * Returns the ac.
-     * 
+     *
      * @return The ac
      */
 
@@ -555,12 +558,12 @@ public class Char
 
     /**
      * Sets the ac.
-     * 
+     *
      * @param ac
      *            The ac to set
      */
 
-    public void setAc(int ac)
+    public void setAc(final int ac)
     {
         this.ac = ac;
     }
@@ -568,7 +571,7 @@ public class Char
 
     /**
      * Returns the afflictions.
-     * 
+     *
      * @return The afflictions
      */
 
@@ -580,12 +583,12 @@ public class Char
 
     /**
      * Sets the afflictions.
-     * 
+     *
      * @param afflictions
      *            The afflictions to set
      */
 
-    public void setAfflictions(int afflictions)
+    public void setAfflictions(final int afflictions)
     {
         this.afflictions = afflictions;
     }
@@ -593,7 +596,7 @@ public class Char
 
     /**
      * Returns the agility.
-     * 
+     *
      * @return The agility
      */
 
@@ -605,12 +608,12 @@ public class Char
 
     /**
      * Sets the agility.
-     * 
+     *
      * @param agility
      *            The agility to set
      */
 
-    public void setAgility(int agility)
+    public void setAgility(final int agility)
     {
         this.agility = agility;
     }
@@ -618,7 +621,7 @@ public class Char
 
     /**
      * Returns the armor.
-     * 
+     *
      * @return The armor
      */
 
@@ -630,12 +633,12 @@ public class Char
 
     /**
      * Sets the armor.
-     * 
+     *
      * @param armor
      *            The armor to set
      */
 
-    public void setArmor(int armor)
+    public void setArmor(final int armor)
     {
         this.armor = armor;
     }
@@ -643,7 +646,7 @@ public class Char
 
     /**
      * Returns the attribRefuse.
-     * 
+     *
      * @return The attribRefuse
      */
 
@@ -655,12 +658,12 @@ public class Char
 
     /**
      * Sets the attribRefuse.
-     * 
+     *
      * @param attribRefuse
      *            The attribRefuse to set
      */
 
-    public void setAttribRefuse(int attribRefuse)
+    public void setAttribRefuse(final int attribRefuse)
     {
         this.attribRefuse = attribRefuse;
     }
@@ -668,7 +671,7 @@ public class Char
 
     /**
      * Returns the charisma.
-     * 
+     *
      * @return The charisma
      */
 
@@ -680,12 +683,12 @@ public class Char
 
     /**
      * Sets the charisma.
-     * 
+     *
      * @param charisma
      *            The charisma to set
      */
 
-    public void setCharisma(int charisma)
+    public void setCharisma(final int charisma)
     {
         this.charisma = charisma;
     }
@@ -693,7 +696,7 @@ public class Char
 
     /**
      * Returns the con.
-     * 
+     *
      * @return The con
      */
 
@@ -705,12 +708,12 @@ public class Char
 
     /**
      * Sets the con.
-     * 
+     *
      * @param con
      *            The con to set
      */
 
-    public void setCon(int con)
+    public void setCon(final int con)
     {
         this.con = con;
     }
@@ -718,7 +721,7 @@ public class Char
 
     /**
      * Returns the dexterity.
-     * 
+     *
      * @return The dexterity
      */
 
@@ -730,12 +733,12 @@ public class Char
 
     /**
      * Sets the dexterity.
-     * 
+     *
      * @param dexterity
      *            The dexterity to set
      */
 
-    public void setDexterity(int dexterity)
+    public void setDexterity(final int dexterity)
     {
         this.dexterity = dexterity;
     }
@@ -743,7 +746,7 @@ public class Char
 
     /**
      * Returns the experience.
-     * 
+     *
      * @return The experience
      */
 
@@ -755,12 +758,12 @@ public class Char
 
     /**
      * Sets the experience.
-     * 
+     *
      * @param experience
      *            The experience to set
      */
 
-    public void setExperience(int experience)
+    public void setExperience(final int experience)
     {
         this.experience = experience;
     }
@@ -768,7 +771,7 @@ public class Char
 
     /**
      * Returns the gender.
-     * 
+     *
      * @return The gender
      */
 
@@ -780,12 +783,12 @@ public class Char
 
     /**
      * Sets the gender.
-     * 
+     *
      * @param gender
      *            The gender to set
      */
 
-    public void setGender(int gender)
+    public void setGender(final int gender)
     {
         this.gender = gender;
     }
@@ -793,7 +796,7 @@ public class Char
 
     /**
      * Returns the iq.
-     * 
+     *
      * @return The iq
      */
 
@@ -805,12 +808,12 @@ public class Char
 
     /**
      * Sets the iq.
-     * 
+     *
      * @param iq
      *            The iq to set
      */
 
-    public void setIq(int iq)
+    public void setIq(final int iq)
     {
         this.iq = iq;
     }
@@ -818,7 +821,7 @@ public class Char
 
     /**
      * Returns the itemRefuse.
-     * 
+     *
      * @return The itemRefuse
      */
 
@@ -830,12 +833,12 @@ public class Char
 
     /**
      * Sets the itemRefuse.
-     * 
+     *
      * @param itemRefuse
      *            The itemRefuse to set
      */
 
-    public void setItemRefuse(int itemRefuse)
+    public void setItemRefuse(final int itemRefuse)
     {
         this.itemRefuse = itemRefuse;
     }
@@ -843,7 +846,7 @@ public class Char
 
     /**
      * Returns the items.
-     * 
+     *
      * @return The items
      */
 
@@ -855,7 +858,7 @@ public class Char
 
     /**
      * Returns the joinString.
-     * 
+     *
      * @return The joinString
      */
 
@@ -867,12 +870,12 @@ public class Char
 
     /**
      * Sets the joinString.
-     * 
+     *
      * @param joinString
      *            The joinString to set
      */
 
-    public void setJoinString(int joinString)
+    public void setJoinString(final int joinString)
     {
         this.joinString = joinString;
     }
@@ -880,7 +883,7 @@ public class Char
 
     /**
      * Returns the lastCon.
-     * 
+     *
      * @return The lastCon
      */
 
@@ -892,12 +895,12 @@ public class Char
 
     /**
      * Sets the lastCon.
-     * 
+     *
      * @param lastCon
      *            The lastCon to set
      */
 
-    public void setLastCon(int lastCon)
+    public void setLastCon(final int lastCon)
     {
         this.lastCon = lastCon;
     }
@@ -905,7 +908,7 @@ public class Char
 
     /**
      * Returns the level.
-     * 
+     *
      * @return The level
      */
 
@@ -917,12 +920,12 @@ public class Char
 
     /**
      * Sets the level.
-     * 
+     *
      * @param level
      *            The level to set
      */
 
-    public void setLevel(int level)
+    public void setLevel(final int level)
     {
         this.level = level;
     }
@@ -930,7 +933,7 @@ public class Char
 
     /**
      * Returns the luck.
-     * 
+     *
      * @return The luck
      */
 
@@ -942,12 +945,12 @@ public class Char
 
     /**
      * Sets the luck.
-     * 
+     *
      * @param luck
      *            The luck to set
      */
 
-    public void setLuck(int luck)
+    public void setLuck(final int luck)
     {
         this.luck = luck;
     }
@@ -955,7 +958,7 @@ public class Char
 
     /**
      * Returns the maxCon.
-     * 
+     *
      * @return The maxCon
      */
 
@@ -967,12 +970,12 @@ public class Char
 
     /**
      * Sets the maxCon.
-     * 
+     *
      * @param maxCon
      *            The maxCon to set
      */
 
-    public void setMaxCon(int maxCon)
+    public void setMaxCon(final int maxCon)
     {
         this.maxCon = maxCon;
     }
@@ -980,7 +983,7 @@ public class Char
 
     /**
      * Returns the money.
-     * 
+     *
      * @return The money
      */
 
@@ -992,12 +995,12 @@ public class Char
 
     /**
      * Sets the money.
-     * 
+     *
      * @param money
      *            The money to set
      */
 
-    public void setMoney(int money)
+    public void setMoney(final int money)
     {
         this.money = money;
     }
@@ -1005,7 +1008,7 @@ public class Char
 
     /**
      * Returns the name.
-     * 
+     *
      * @return The name
      */
 
@@ -1017,12 +1020,12 @@ public class Char
 
     /**
      * Sets the name.
-     * 
+     *
      * @param name
      *            The name to set
      */
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -1030,7 +1033,7 @@ public class Char
 
     /**
      * Returns the nationality.
-     * 
+     *
      * @return The nationality
      */
 
@@ -1042,12 +1045,12 @@ public class Char
 
     /**
      * Sets the nationality.
-     * 
+     *
      * @param nationality
      *            The nationality to set
      */
 
-    public void setNationality(int nationality)
+    public void setNationality(final int nationality)
     {
         this.nationality = nationality;
     }
@@ -1055,7 +1058,7 @@ public class Char
 
     /**
      * Returns the npc.
-     * 
+     *
      * @return The npc
      */
 
@@ -1067,12 +1070,12 @@ public class Char
 
     /**
      * Sets the npc.
-     * 
+     *
      * @param npc
      *            The npc to set
      */
 
-    public void setNpc(boolean npc)
+    public void setNpc(final boolean npc)
     {
         this.npc = npc;
     }
@@ -1080,7 +1083,7 @@ public class Char
 
     /**
      * Returns the rank.
-     * 
+     *
      * @return The rank
      */
 
@@ -1092,12 +1095,12 @@ public class Char
 
     /**
      * Sets the rank.
-     * 
+     *
      * @param rank
      *            The rank to set
      */
 
-    public void setRank(String rank)
+    public void setRank(final String rank)
     {
         this.rank = rank;
     }
@@ -1105,7 +1108,7 @@ public class Char
 
     /**
      * Returns the skillPoints.
-     * 
+     *
      * @return The skillPoints
      */
 
@@ -1117,12 +1120,12 @@ public class Char
 
     /**
      * Sets the skillPoints.
-     * 
+     *
      * @param skillPoints
      *            The skillPoints to set
      */
 
-    public void setSkillPoints(int skillPoints)
+    public void setSkillPoints(final int skillPoints)
     {
         this.skillPoints = skillPoints;
     }
@@ -1130,7 +1133,7 @@ public class Char
 
     /**
      * Returns the skillRefuse.
-     * 
+     *
      * @return The skillRefuse
      */
 
@@ -1142,12 +1145,12 @@ public class Char
 
     /**
      * Sets the skillRefuse.
-     * 
+     *
      * @param skillRefuse
      *            The skillRefuse to set
      */
 
-    public void setSkillRefuse(int skillRefuse)
+    public void setSkillRefuse(final int skillRefuse)
     {
         this.skillRefuse = skillRefuse;
     }
@@ -1155,7 +1158,7 @@ public class Char
 
     /**
      * Returns the skills.
-     * 
+     *
      * @return The skills
      */
 
@@ -1167,7 +1170,7 @@ public class Char
 
     /**
      * Returns the speed.
-     * 
+     *
      * @return The speed
      */
 
@@ -1179,12 +1182,12 @@ public class Char
 
     /**
      * Sets the speed.
-     * 
+     *
      * @param speed
      *            The speed to set
      */
 
-    public void setSpeed(int speed)
+    public void setSpeed(final int speed)
     {
         this.speed = speed;
     }
@@ -1192,7 +1195,7 @@ public class Char
 
     /**
      * Returns the strength.
-     * 
+     *
      * @return The strength
      */
 
@@ -1204,12 +1207,12 @@ public class Char
 
     /**
      * Sets the strength.
-     * 
+     *
      * @param strength
      *            The strength to set
      */
 
-    public void setStrength(int strength)
+    public void setStrength(final int strength)
     {
         this.strength = strength;
     }
@@ -1217,7 +1220,7 @@ public class Char
 
     /**
      * Returns the tradeRefuse.
-     * 
+     *
      * @return The tradeRefuse
      */
 
@@ -1229,12 +1232,12 @@ public class Char
 
     /**
      * Sets the tradeRefuse.
-     * 
+     *
      * @param tradeRefuse
      *            The tradeRefuse to set
      */
 
-    public void setTradeRefuse(int tradeRefuse)
+    public void setTradeRefuse(final int tradeRefuse)
     {
         this.tradeRefuse = tradeRefuse;
     }
@@ -1242,7 +1245,7 @@ public class Char
 
     /**
      * Returns the unknown2A.
-     * 
+     *
      * @return The unknown2A
      */
 
@@ -1254,12 +1257,12 @@ public class Char
 
     /**
      * Sets the unknown2A.
-     * 
+     *
      * @param unknown2A
      *            The unknown2A to set
      */
 
-    public void setUnknown2A(int unknown2A)
+    public void setUnknown2A(final int unknown2A)
     {
         this.unknown2A = unknown2A;
     }
@@ -1267,7 +1270,7 @@ public class Char
 
     /**
      * Returns the unknown2F.
-     * 
+     *
      * @return The unknown2F
      */
 
@@ -1279,12 +1282,12 @@ public class Char
 
     /**
      * Sets the unknown2F.
-     * 
+     *
      * @param unknown2F
      *            The unknown2F to set
      */
 
-    public void setUnknown2F(int unknown2F)
+    public void setUnknown2F(final int unknown2F)
     {
         this.unknown2F = unknown2F;
     }
@@ -1292,7 +1295,7 @@ public class Char
 
     /**
      * Returns the weapon.
-     * 
+     *
      * @return The weapon
      */
 
@@ -1304,12 +1307,12 @@ public class Char
 
     /**
      * Sets the weapon.
-     * 
+     *
      * @param weapon
      *            The weapon to set
      */
 
-    public void setWeapon(int weapon)
+    public void setWeapon(final int weapon)
     {
         this.weapon = weapon;
     }
@@ -1317,7 +1320,7 @@ public class Char
 
     /**
      * Returns the willingness.
-     * 
+     *
      * @return The willingness
      */
 
@@ -1329,12 +1332,12 @@ public class Char
 
     /**
      * Sets the willingness.
-     * 
+     *
      * @param willingness
      *            The willingness to set
      */
 
-    public void setWillingness(int willingness)
+    public void setWillingness(final int willingness)
     {
         this.willingness = willingness;
     }
@@ -1342,13 +1345,13 @@ public class Char
 
     /**
      * Returns the text represenation of a numeric nationality.
-     * 
+     *
      * @param nationality
      *            The numeric nationality
      * @return The text nationality
      */
 
-    public static String getNationality(int nationality)
+    public static String getNationality(final int nationality)
     {
         return nationalities[nationality];
     }
@@ -1356,13 +1359,13 @@ public class Char
 
     /**
      * Returns the numeric represenation of a textual nationality.
-     * 
+     *
      * @param nationality
      *            The textual nationality
      * @return The numeric nationality
      */
 
-    public static int getNationality(String nationality)
+    public static int getNationality(final String nationality)
     {
         for (int i = 0; i < nationalities.length; i++)
         {

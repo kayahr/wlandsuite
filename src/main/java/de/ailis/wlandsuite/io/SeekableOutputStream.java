@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -29,7 +29,7 @@ import java.io.OutputStream;
 
 /**
  * A wrapper class to wrap any output stream into a BitOutputStream.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -57,12 +57,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Constructor
-     * 
+     *
      * @param stream
      *            The wrapped input stream
      */
 
-    public SeekableOutputStream(OutputStream stream)
+    public SeekableOutputStream(final OutputStream stream)
     {
         this.stream = stream;
         this.cache = new byte[32];
@@ -76,7 +76,7 @@ public class SeekableOutputStream extends OutputStream
      */
 
     @Override
-    public void write(int b)
+    public void write(final int b)
     {
         if (this.position < this.size)
         {
@@ -84,10 +84,10 @@ public class SeekableOutputStream extends OutputStream
         }
         else
         {
-            int newSize = this.size + 1;
+            final int newSize = this.size + 1;
             if (newSize > this.cache.length)
             {
-                byte newCache[] = new byte[Math.max(this.cache.length << 1,
+                final byte newCache[] = new byte[Math.max(this.cache.length << 1,
                     newSize)];
                 System.arraycopy(this.cache, 0, newCache, 0, this.size);
                 this.cache = newCache;
@@ -101,12 +101,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a bit to the output stream.
-     * 
+     *
      * @param bit
      *            The bit to write
      */
 
-    public void writeBit(byte bit)
+    public void writeBit(final byte bit)
     {
         writeBit(bit, false);
     }
@@ -115,14 +115,14 @@ public class SeekableOutputStream extends OutputStream
     /**
      * Writes a bit to the output stream. This method can write the bits in
      * reversed order.
-     * 
+     *
      * @param bit
      *            The bit to write
      * @param reverse
      *            If bits should be written in reversed order
      */
 
-    public void writeBit(byte bit, boolean reverse)
+    public void writeBit(final byte bit, final boolean reverse)
     {
         if (reverse)
         {
@@ -147,7 +147,7 @@ public class SeekableOutputStream extends OutputStream
     /**
      * Writes the specified number of bits. The bits can be written in reverse
      * order if the reverse flag is set.
-     * 
+     *
      * @param value
      *            The value containing the bits to write
      * @param quantity
@@ -156,7 +156,7 @@ public class SeekableOutputStream extends OutputStream
      *            If the bits should be written reversed.
      */
 
-    public void writeBits(int value, int quantity, boolean reverse)
+    public void writeBits(final int value, final int quantity, final boolean reverse)
     {
         byte b;
 
@@ -177,12 +177,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a bit to the output stream.
-     * 
+     *
      * @param bit
      *            The bit to write
      */
 
-    public void writeBit(boolean bit)
+    public void writeBit(final boolean bit)
     {
         writeBit((byte) (bit ? 1 : 0));
     }
@@ -190,19 +190,19 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a byte to the stream.
-     * 
+     *
      * @param b
      *            The byte to write
      */
 
-    public void writeByte(int b)
+    public void writeByte(final int b)
     {
         if (this.currentBit == 0)
         {
             write(b);
         }
         else
-        {            
+        {
             for (int i = 7; i >= 0; i--)
             {
                 writeBit((byte) ((b >> i) & 1));
@@ -213,12 +213,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a signed byte.
-     * 
+     *
      * @param b
      *            The byte to write
      */
 
-    public void writeSignedByte(int b)
+    public void writeSignedByte(final int b)
     {
         if (b < 0)
         {
@@ -233,12 +233,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a 2-byte word to the stream.
-     * 
+     *
      * @param word
      *            The word to write
      */
 
-    public void writeWord(int word)
+    public void writeWord(final int word)
     {
         writeByte(word & 0xff);
         writeByte((word >> 8) & 0xff);
@@ -247,12 +247,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a 4-byte integer to the stream.
-     * 
+     *
      * @param integer
      *            The integer to write
      */
 
-    public void writeInt(long integer)
+    public void writeInt(final long integer)
     {
         writeByte((int) (integer & 0xff));
         writeByte((int) ((integer >> 8) & 0xff));
@@ -263,12 +263,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Writes a 3-byte integer to the stream.
-     * 
+     *
      * @param integer
      *            The integer to write
      */
 
-    public void writeInt3(int integer)
+    public void writeInt3(final int integer)
     {
         writeByte(integer & 0xff);
         writeByte((integer >> 8) & 0xff);
@@ -279,8 +279,9 @@ public class SeekableOutputStream extends OutputStream
     /**
      * Flush the output to make sure all bits are written even if they don't
      * fill a whole byte.
-     * 
+     *
      * @throws IOException
+     *             When file operation fails.
      */
 
     @Override
@@ -293,13 +294,14 @@ public class SeekableOutputStream extends OutputStream
     /**
      * Flush the output to make sure all bits are written even if they don't
      * fill a whole byte.
-     * 
+     *
      * @param reverse
-     *            In bits are written in reverese order
+     *            In bits are written in reverse order
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void flush(boolean reverse) throws IOException
+    public void flush(final boolean reverse) throws IOException
     {
         if (this.currentBit != 0)
         {
@@ -318,8 +320,9 @@ public class SeekableOutputStream extends OutputStream
     /**
      * Closes the connected output stream and makes sure the last byte is
      * written.
-     * 
+     *
      * @throws IOException
+     *             When file operation fails.
      */
 
     @Override
@@ -332,7 +335,7 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Returns the current position in the stream.
-     * 
+     *
      * @return The current position in the stream
      */
 
@@ -344,12 +347,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Seeks to the specified position.
-     * 
+     *
      * @param position
      *            The position to seek to
      */
 
-    public void seek(long position)
+    public void seek(final long position)
     {
         this.currentByte = 0;
         this.currentBit = 0;
@@ -361,7 +364,7 @@ public class SeekableOutputStream extends OutputStream
             }
             else
             {
-                long rest = position - this.size;
+                final long rest = position - this.size;
                 this.position = this.size;
                 skip(rest);
             }
@@ -371,12 +374,12 @@ public class SeekableOutputStream extends OutputStream
 
     /**
      * Skips the specified amount of bytes by writing 0 bytes
-     * 
+     *
      * @param bytes
      *            The number of bytes to skip
      */
 
-    public void skip(long bytes)
+    public void skip(final long bytes)
     {
         for (int i = 0; i < bytes; i++)
         {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -44,7 +44,7 @@ import de.ailis.wlandsuite.utils.XmlUtils;
 
 /**
  * The Tile Map maps eachs square to a specific tile of the selected tileset.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -62,7 +62,7 @@ public class TileMap
      * Constructs a new Tile Map with the specified map size. Map size must be
      * 32 or 64. If an other size is specified then an IllegalArgumentException
      * is thrown
-     * 
+     *
      * @param mapSize
      *            The map size (32 or 64)
      * @throws IllegalArgumentException
@@ -82,7 +82,7 @@ public class TileMap
 
     /**
      * Creates and returns a new Tile Map from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @param mapSize
@@ -152,7 +152,7 @@ public class TileMap
      * Creates and returns a new Tile Map read from the specified input stream.
      * The stream must be positioned on the beginning of the tile map header
      * (Which is the 32 bit map size).
-     * 
+     *
      * @param stream
      *            The stream to read the tile map from
      * @param mapSize
@@ -162,6 +162,7 @@ public class TileMap
      *            assumed that we have to read Displacer's hacked data files.
      * @return The new Tile Map
      * @throws IOException
+     *             When file operation fails.
      */
 
     public static TileMap read(final SeekableInputStream stream,
@@ -222,7 +223,7 @@ public class TileMap
 
     /**
      * Returns the tile map as XML.
-     * 
+     *
      * @param backgroundTile
      *            The background tile for which ".." is printed
      * @return The tile map as XML
@@ -283,12 +284,13 @@ public class TileMap
 
     /**
      * Writes the Tile Map to the specified stream
-     * 
+     *
      * @param stream
      *            The stream to write the Tile Map to
      * @param compress
      *            If the tile map should be compressed
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void write(final SeekableOutputStream stream, final boolean compress)
@@ -336,7 +338,7 @@ public class TileMap
 
     /**
      * Returns the tile for the specified position
-     * 
+     *
      * @param x
      *            The X position
      * @param y
@@ -352,7 +354,7 @@ public class TileMap
 
     /**
      * Sets the tile at the specified position.
-     * 
+     *
      * @param x
      *            The X coordinate
      * @param y
@@ -369,7 +371,7 @@ public class TileMap
 
     /**
      * Returns the unknown 32 bit address.
-     * 
+     *
      * @return The unknown 32 bit address
      */
 

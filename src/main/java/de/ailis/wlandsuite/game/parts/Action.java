@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -32,7 +32,7 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 
 /**
  * Action
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -41,12 +41,13 @@ public interface Action
 {
     /**
      * Writes the action data to the specified stream.
-     * 
+     *
      * @param stream
      *            The stream to write the data to
      * @param specialActionTable
      *            The special action table
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void write(SeekableOutputStream stream,
@@ -55,7 +56,7 @@ public interface Action
 
     /**
      * Returns the action data as XML.
-     * 
+     *
      * @param id
      *            The action id
      * @return The action data as XML

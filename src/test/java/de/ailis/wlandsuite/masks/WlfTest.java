@@ -63,7 +63,7 @@ public class WlfTest extends WSTestCase
     /**
      * Tests reading a WLF.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testRead() throws IOException
@@ -88,7 +88,7 @@ public class WlfTest extends WSTestCase
     /**
      * Tests writing a PIC to a stream.
      * 
-     * @throws IOException
+     * @throws IOException When file operation fails.
      */
 
     public void testWriteToStream() throws IOException

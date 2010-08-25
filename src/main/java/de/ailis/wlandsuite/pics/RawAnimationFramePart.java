@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -36,7 +36,7 @@ import de.ailis.wlandsuite.pic.Pic;
 /**
  * A raw animation frame part defines a starting position in the base frame and
  * a number of byte diffs (palette XORs).
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -44,18 +44,18 @@ import de.ailis.wlandsuite.pic.Pic;
 public class RawAnimationFramePart
 {
     /** The starting offset */
-    private int offset;
+    private final int offset;
 
     /** The diff (palette XORs) */
     private int[] diff;
 
     /** The frame part size */
-    private int size;
+    private final int size;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param offset
      *            The starting offset
      * @param diff
@@ -64,7 +64,7 @@ public class RawAnimationFramePart
      *            The size
      */
 
-    public RawAnimationFramePart(int offset, int[] diff, int size)
+    public RawAnimationFramePart(final int offset, final int[] diff, final int size)
     {
         this.offset = offset;
         this.diff = diff;
@@ -74,19 +74,19 @@ public class RawAnimationFramePart
 
     /**
      * Applies this animation frame part to a image.
-     * 
+     *
      * @param image
      *            The image to modify
      */
 
-    public void apply(Pic image)
+    public void apply(final Pic image)
     {
         int x, y;
         int xor;
 
         x = (this.offset * 2) % image.getWidth();
         y = (this.offset * 2) / image.getWidth();
-        for (int xors: this.diff)
+        for (final int xors: this.diff)
         {
             xor = (xors >> 4) & 0x0f;
             image.setPixel(x, y, image.getPixel(x, y) ^ xor);
@@ -112,14 +112,15 @@ public class RawAnimationFramePart
      * Parses the next animation frame part from the specified input stream. If
      * the end of the animation frame has been reached then this method returns
      * null
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The next animation frame part or null if end of frame reached
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static RawAnimationFramePart read(InputStream stream)
+    public static RawAnimationFramePart read(final InputStream stream)
         throws IOException
     {
         int address;
@@ -164,13 +165,14 @@ public class RawAnimationFramePart
 
     /**
      * Writes this animation frame part to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         int address;
 
@@ -180,7 +182,7 @@ public class RawAnimationFramePart
         stream.write((address >> 8) & 0xff);
 
         // Write the update bytes
-        for (int b: this.diff)
+        for (final int b: this.diff)
         {
             stream.write(b);
         }
@@ -189,7 +191,7 @@ public class RawAnimationFramePart
 
     /**
      * Returns the size.
-     * 
+     *
      * @return The size
      */
 
@@ -216,7 +218,7 @@ public class RawAnimationFramePart
      */
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object o)
     {
         RawAnimationFramePart other;
 
@@ -237,13 +239,13 @@ public class RawAnimationFramePart
     /**
      * Checks if this frame part is mergable with the specified animation frame
      * part
-     * 
+     *
      * @param other
      *            The other animation frame part
      * @return If the frames are mergable or not
      */
 
-    public boolean isMergable(RawAnimationFramePart other)
+    public boolean isMergable(final RawAnimationFramePart other)
     {
         int size;
 
@@ -262,12 +264,12 @@ public class RawAnimationFramePart
 
     /**
      * Merges this frame part with an other frame part
-     * 
+     *
      * @param other
      *            The other frame part
      */
 
-    public void merge(RawAnimationFramePart other)
+    public void merge(final RawAnimationFramePart other)
     {
         int nulls;
         int[] newDiff;

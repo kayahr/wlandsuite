@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,18 +27,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The loot action defines a loot back and a new action to set the square to
  * when all items from the loot bag have been retrieved.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -52,30 +52,31 @@ public class LootAction implements Action
     private int newAction;
 
     /** The loot item */
-    private List<LootItem> items = new ArrayList<LootItem>();
+    private final List<LootItem> items = new ArrayList<LootItem>();
 
 
     /**
      * Creates and returns a new Loot Action by reading its data from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Loot Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static LootAction read(SeekableInputStream stream)
+    public static LootAction read(final SeekableInputStream stream)
         throws IOException
     {
         LootAction action;
         LootItem item;
-        
+
         action = new LootAction();
 
         action.newActionClass = stream.readByte();
         action.newAction = stream.readByte();
-        
+
         while ((item = LootItem.read(stream)) != null)
         {
             action.items.add(item);
@@ -87,13 +88,13 @@ public class LootAction implements Action
 
     /**
      * Creates and returns a Loot Action by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Loot Action
      */
 
-    public static LootAction read(Element element)
+    public static LootAction read(final Element element)
     {
         LootAction action;
 
@@ -105,7 +106,7 @@ public class LootAction implements Action
             .attributeValue("newAction"));
 
         // Read the items
-        for (Object item: element.elements())
+        for (final Object item: element.elements())
         {
             Element subElement;
 
@@ -122,7 +123,7 @@ public class LootAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -130,8 +131,8 @@ public class LootAction implements Action
         element.addAttribute("id", StringUtils.toHex(id));
         element.addAttribute("newActionClass", StringUtils.toHex(this.newActionClass));
         element.addAttribute("newAction", StringUtils.toHex(this.newAction));
-        
-        for (LootItem item: this.items)
+
+        for (final LootItem item: this.items)
         {
             element.add(item.toXml());
         }
@@ -145,13 +146,13 @@ public class LootAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.write(this.newActionClass);
         stream.write(this.newAction);
-        
-        for (LootItem item: this.items)
+
+        for (final LootItem item: this.items)
         {
             item.write(stream);
         }
@@ -164,7 +165,7 @@ public class LootAction implements Action
      *
      * @return The newAction
      */
-    
+
     public int getNewAction()
     {
         return this.newAction;
@@ -174,11 +175,11 @@ public class LootAction implements Action
     /**
      * Sets the newAction.
      *
-     * @param newAction 
+     * @param newAction
      *            The newAction to set
      */
-    
-    public void setNewAction(int newAction)
+
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -189,7 +190,7 @@ public class LootAction implements Action
      *
      * @return The newActionClass
      */
-    
+
     public int getNewActionClass()
     {
         return this.newActionClass;
@@ -199,11 +200,11 @@ public class LootAction implements Action
     /**
      * Sets the newActionClass.
      *
-     * @param newActionClass 
+     * @param newActionClass
      *            The newActionClass to set
      */
-    
-    public void setNewActionClass(int newActionClass)
+
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }
@@ -211,12 +212,12 @@ public class LootAction implements Action
 
     /**
      * Adds a new item
-     * 
+     *
      * @param item
      *            The item to add
      */
 
-    public void addItem(LootItem item)
+    public void addItem(final LootItem item)
     {
         this.items.add(item);
     }
@@ -224,13 +225,13 @@ public class LootAction implements Action
 
     /**
      * Returns the item with the specified index.
-     * 
+     *
      * @param index
      *            The index
      * @return The item
      */
 
-    public LootItem getItem(int index)
+    public LootItem getItem(final int index)
     {
         return this.items.get(index);
     }
@@ -238,14 +239,14 @@ public class LootAction implements Action
 
     /**
      * Sets a item at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param item
      *            The item
      */
 
-    public void setItem(int index, LootItem item)
+    public void setItem(final int index, final LootItem item)
     {
         this.items.set(index, item);
     }
@@ -263,12 +264,12 @@ public class LootAction implements Action
 
     /**
      * Removes the item at the specified index.
-     * 
+     *
      * @param index
      *            The index
      */
 
-    public void removeItem(int index)
+    public void removeItem(final int index)
     {
         this.items.remove(index);
     }
@@ -276,7 +277,7 @@ public class LootAction implements Action
 
     /**
      * Returns the number of items.
-     * 
+     *
      * @return The number of items
      */
 
@@ -288,14 +289,14 @@ public class LootAction implements Action
 
     /**
      * Inserts a item at a specific index.
-     * 
+     *
      * @param index
      *            The index
      * @param item
      *            The item
      */
 
-    public void addItem(int index, LootItem item)
+    public void addItem(final int index, final LootItem item)
     {
         this.items.add(index, item);
     }

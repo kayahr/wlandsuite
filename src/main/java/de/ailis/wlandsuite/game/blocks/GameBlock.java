@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -35,7 +35,7 @@ import org.dom4j.io.XMLWriter;
 
 /**
  * A base class for all game blocks providing common stuff.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -44,10 +44,11 @@ public abstract class GameBlock
 {
     /**
      * Writes the block to a stream as XML
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
     public void writeXml(final OutputStream stream) throws IOException
@@ -75,7 +76,7 @@ public abstract class GameBlock
 
     /**
      * Returns the game map as XML.
-     * 
+     *
      * @return The map as XML
      */
 

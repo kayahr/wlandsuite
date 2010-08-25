@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -43,7 +43,7 @@ import de.ailis.wlandsuite.pic.Pic;
 /**
  * A CPA (most likely a "Compressed Picture Animation") simply consists out of a
  * base frame and several animation frames with delay information.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -57,7 +57,7 @@ public class Cpa implements Serializable
     private Pic baseFrame;
 
     /** The animation frames */
-    private List<CpaFrame> frames;
+    private final List<CpaFrame> frames;
 
 
     /**
@@ -72,14 +72,14 @@ public class Cpa implements Serializable
 
     /**
      * Constructor for building a new CPA.
-     * 
+     *
      * @param baseFrame
      *            The base frame
      * @param frames
      *            The animation frames
      */
 
-    public Cpa(Pic baseFrame, List<CpaFrame> frames)
+    public Cpa(final Pic baseFrame, final List<CpaFrame> frames)
     {
         this.baseFrame = baseFrame;
         this.frames = frames;
@@ -91,16 +91,17 @@ public class Cpa implements Serializable
      * which is the size of Wasteland's end.cpa file. If you want to read a
      * picture with a different width then use the read method where you can
      * specify a custom width.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The CPA
      * @throws IOException
-     * 
+     *             When file operation fails.
+     *
      * @see Cpa#read(InputStream, int)
      */
 
-    public static Cpa read(InputStream stream) throws IOException
+    public static Cpa read(final InputStream stream) throws IOException
     {
         return read(stream, 288);
     }
@@ -110,16 +111,17 @@ public class Cpa implements Serializable
      * Loads a CPA from a stream. The width of the base frame must be specified
      * because image dimensions can't be read from a CPA. The height is
      * automatically calculated by using the data size and the width.
-     * 
+     *
      * @param stream
      *            The input stream
      * @param width
      *            The width of the base frame
      * @return The CPA
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Cpa read(InputStream stream, int width) throws IOException
+    public static Cpa read(final InputStream stream, final int width) throws IOException
     {
         MsqHeader header;
         HuffmanInputStream huffmanStream;
@@ -187,13 +189,14 @@ public class Cpa implements Serializable
 
     /**
      * Writes a CPA to a stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         MsqHeader header;
         HuffmanTree tree;
@@ -228,7 +231,7 @@ public class Cpa implements Serializable
     /**
      * Builds the animation block. This consists of a size, the animation data
      * and a trailing 0x0000.
-     * 
+     *
      * @return The animation block
      */
 
@@ -255,7 +258,7 @@ public class Cpa implements Serializable
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored. Can't happen
             return null;
@@ -265,7 +268,7 @@ public class Cpa implements Serializable
 
     /**
      * Builds the animation data.
-     * 
+     *
      * @return The animation data
      */
 
@@ -282,7 +285,7 @@ public class Cpa implements Serializable
                 basePic = this.baseFrame;
                 for (int i = 0; i < this.frames.size(); i++)
                 {
-                    CpaFrame frame = this.frames.get(i);
+                    final CpaFrame frame = this.frames.get(i);
                     stream.write(frame.getDelay() & 0xff);
                     stream.write(frame.getDelay() >> 8);
                     stream.write(buildDiff(basePic, frame.getPic(),
@@ -301,7 +304,7 @@ public class Cpa implements Serializable
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored. Can't happen
             return null;
@@ -313,7 +316,7 @@ public class Cpa implements Serializable
      * Builds a diff between two frames. For the 12th frame the last frame must
      * be specified, too so the diff also overwrites the changes made by tha
      * last frame. This is needed because Wasteland loops the frames 12-15.
-     * 
+     *
      * @param base
      *            The base frame
      * @param frame
@@ -323,7 +326,7 @@ public class Cpa implements Serializable
      * @return The diff
      */
 
-    private byte[] buildDiff(Pic base, Pic frame, Pic last)
+    private byte[] buildDiff(final Pic base, final Pic frame, final Pic last)
     {
         ByteArrayOutputStream stream;
         byte[] bytes;
@@ -379,7 +382,7 @@ public class Cpa implements Serializable
                 stream.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             // Ignored. Can't happen
             return null;
@@ -389,7 +392,7 @@ public class Cpa implements Serializable
 
     /**
      * Returns the base frame.
-     * 
+     *
      * @return The base frame
      */
 
@@ -401,7 +404,7 @@ public class Cpa implements Serializable
 
     /**
      * Returns the animation frames.
-     * 
+     *
      * @return The animation frames
      */
 

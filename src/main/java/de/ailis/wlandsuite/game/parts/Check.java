@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,15 +27,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.dom4j.Element;
+
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.utils.StringUtils;
 import de.ailis.wlandsuite.utils.XmlUtils;
-import org.dom4j.Element;
 
 
 /**
  * A check used in the Check Action.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -88,7 +89,7 @@ public class Check
 
     /**
      * Returns the check value.
-     * 
+     *
      * @return The check value
      */
 
@@ -100,7 +101,7 @@ public class Check
 
     /**
      * Returns the difficulty.
-     * 
+     *
      * @return The difficulty
      */
 
@@ -112,7 +113,7 @@ public class Check
 
     /**
      * Returns the type.
-     * 
+     *
      * @return The type
      */
 
@@ -125,18 +126,19 @@ public class Check
     /**
      * Creates and returns a new check by reading its data from the specified
      * stream. If no more checks are on the stream then null is returned.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The check
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static Check read(InputStream stream) throws IOException
+    public static Check read(final InputStream stream) throws IOException
     {
         int b;
         Check check;
-        
+
         check = new Check();
 
         b = stream.read();
@@ -151,13 +153,14 @@ public class Check
 
     /**
      * Reads the replacement action class/action for this check.
-     * 
+     *
      * @param stream
      *            The input stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void readReplacement(InputStream stream) throws IOException
+    public void readReplacement(final InputStream stream) throws IOException
     {
         this.newActionClass = stream.read();
         this.newAction = stream.read();
@@ -166,13 +169,14 @@ public class Check
 
     /**
      * Writes the check data to the specified stream.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void write(OutputStream stream) throws IOException
+    public void write(final OutputStream stream) throws IOException
     {
         stream.write(this.type << 5 | (this.difficulty & 31));
         stream.write(this.value);
@@ -181,13 +185,14 @@ public class Check
 
     /**
      * Writes the replacement data of the check.
-     * 
+     *
      * @param stream
      *            The output stream
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public void writeReplacement(OutputStream stream) throws IOException
+    public void writeReplacement(final OutputStream stream) throws IOException
     {
         stream.write(this.newActionClass);
         stream.write(this.newAction);
@@ -196,7 +201,7 @@ public class Check
 
     /**
      * Returns the check data as XML.
-     * 
+     *
      * @return The check data as XML
      */
 
@@ -224,16 +229,16 @@ public class Check
 
     /**
      * Creates and returns a new Check object by reading its data from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The check data
      */
 
-    public static Check read(Element element)
+    public static Check read(final Element element)
     {
         Check check;
-        
+
         check = new Check();
 
         check.type = getType(element.getName());
@@ -245,7 +250,7 @@ public class Check
         check.difficulty = StringUtils.toInt(element.attributeValue("difficulty", "0"));
         check.newActionClass = StringUtils.toInt(element.attributeValue("newActionClass", "-1"));
         check.newAction = StringUtils.toInt(element.attributeValue("newAction", "-1"));
-        
+
         return check;
     }
 
@@ -253,13 +258,13 @@ public class Check
     /**
      * Returns the type for the specified xml name. Returns -1 if no type was
      * found.
-     * 
+     *
      * @param xmlName
      *            The XML name
      * @return The type
      */
 
-    private static int getType(String xmlName)
+    private static int getType(final String xmlName)
     {
         for (int i = 0; i < xmlNames.length; i++)
         {
@@ -274,13 +279,13 @@ public class Check
 
     /**
      * Returns the XML name for the specified check type.
-     * 
+     *
      * @param type
      *            The check type
      * @return The XML name
      */
 
-    private static String getXmlName(int type)
+    private static String getXmlName(final int type)
     {
         return xmlNames[type];
     }
@@ -291,7 +296,7 @@ public class Check
      *
      * @return The newAction
      */
-    
+
     public int getNewAction()
     {
         return this.newAction;
@@ -301,11 +306,11 @@ public class Check
     /**
      * Sets the newAction.
      *
-     * @param newAction 
+     * @param newAction
      *            The newAction to set
      */
-    
-    public void setNewAction(int newAction)
+
+    public void setNewAction(final int newAction)
     {
         this.newAction = newAction;
     }
@@ -316,7 +321,7 @@ public class Check
      *
      * @return The newActionClass
      */
-    
+
     public int getNewActionClass()
     {
         return this.newActionClass;
@@ -326,11 +331,11 @@ public class Check
     /**
      * Sets the newActionClass.
      *
-     * @param newActionClass 
+     * @param newActionClass
      *            The newActionClass to set
      */
-    
-    public void setNewActionClass(int newActionClass)
+
+    public void setNewActionClass(final int newActionClass)
     {
         this.newActionClass = newActionClass;
     }
@@ -339,11 +344,11 @@ public class Check
     /**
      * Sets the difficulty.
      *
-     * @param difficulty 
+     * @param difficulty
      *            The difficulty to set
      */
-    
-    public void setDifficulty(int difficulty)
+
+    public void setDifficulty(final int difficulty)
     {
         this.difficulty = difficulty;
     }
@@ -352,11 +357,11 @@ public class Check
     /**
      * Sets the type.
      *
-     * @param type 
+     * @param type
      *            The type to set
      */
-    
-    public void setType(int type)
+
+    public void setType(final int type)
     {
         this.type = type;
     }
@@ -365,11 +370,11 @@ public class Check
     /**
      * Sets the value.
      *
-     * @param value 
+     * @param value
      *            The value to set
      */
-    
-    public void setValue(int value)
+
+    public void setValue(final int value)
     {
         this.value = value;
     }

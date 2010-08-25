@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -25,17 +25,17 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Transition action
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -70,14 +70,15 @@ public class TransitionAction implements Action
     /**
      * Creates a new Transition Action by reading its data from the specified
      * input stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Transition Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static TransitionAction read(SeekableInputStream stream)
+    public static TransitionAction read(final SeekableInputStream stream)
         throws IOException
     {
         TransitionAction action;
@@ -120,13 +121,13 @@ public class TransitionAction implements Action
     /**
      * Creates a new Transition Action by reading its data from the specified
      * XML element.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new Transition Action
      */
 
-    public static TransitionAction read(Element element)
+    public static TransitionAction read(final Element element)
     {
         TransitionAction action;
 
@@ -155,7 +156,7 @@ public class TransitionAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -204,8 +205,8 @@ public class TransitionAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         int b;
 
@@ -227,7 +228,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the action class.
-     * 
+     *
      * @return The action class
      */
 
@@ -239,12 +240,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the action class.
-     * 
+     *
      * @param actionClass
      *            The action class to set
      */
 
-    public void setNewActionClass(int actionClass)
+    public void setNewActionClass(final int actionClass)
     {
         this.newActionClass = actionClass;
     }
@@ -252,7 +253,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the action selector.
-     * 
+     *
      * @return The action selector
      */
 
@@ -264,12 +265,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the action selector.
-     * 
+     *
      * @param actionSelector
      *            The action selector to set
      */
 
-    public void setNewAction(int actionSelector)
+    public void setNewAction(final int actionSelector)
     {
         this.newAction = actionSelector;
     }
@@ -277,7 +278,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the confirm flag.
-     * 
+     *
      * @return The confirm flag
      */
 
@@ -289,12 +290,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the confirm flag.
-     * 
+     *
      * @param confirm
      *            The confirm flag to set
      */
 
-    public void setConfirm(boolean confirm)
+    public void setConfirm(final boolean confirm)
     {
         this.confirm = confirm;
     }
@@ -302,7 +303,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the relative flag.
-     * 
+     *
      * @return The relative flag
      */
 
@@ -314,12 +315,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the relative flag.
-     * 
+     *
      * @param relative
      *            The relative flag to set
      */
 
-    public void setRelative(boolean relative)
+    public void setRelative(final boolean relative)
     {
         this.relative = relative;
     }
@@ -327,7 +328,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the message id.
-     * 
+     *
      * @return The message id
      */
 
@@ -339,12 +340,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the message id.
-     * 
+     *
      * @param message
      *            The message id to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -352,7 +353,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the target map.
-     * 
+     *
      * @return The target map
      */
 
@@ -364,12 +365,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the target map.
-     * 
+     *
      * @param targetMap
      *            The target map to set
      */
 
-    public void setTargetMap(int targetMap)
+    public void setTargetMap(final int targetMap)
     {
         this.targetMap = targetMap;
     }
@@ -377,7 +378,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the target X position.
-     * 
+     *
      * @return The target X position
      */
 
@@ -389,12 +390,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the target X position.
-     * 
+     *
      * @param targetX
      *            The target X postion to set
      */
 
-    public void setTargetX(int targetX)
+    public void setTargetX(final int targetX)
     {
         this.targetX = targetX;
     }
@@ -402,7 +403,7 @@ public class TransitionAction implements Action
 
     /**
      * Returns the target Y position.
-     * 
+     *
      * @return The target Y position
      */
 
@@ -414,12 +415,12 @@ public class TransitionAction implements Action
 
     /**
      * Sets the target Y position.
-     * 
+     *
      * @param targetY
      *            The target Y position to set
      */
 
-    public void setTargetY(int targetY)
+    public void setTargetY(final int targetY)
     {
         this.targetY = targetY;
     }

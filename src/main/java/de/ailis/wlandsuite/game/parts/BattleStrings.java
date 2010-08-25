@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -25,20 +25,20 @@ package de.ailis.wlandsuite.game.parts;
 
 import java.io.IOException;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.io.SeekableInputStream;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The battle strings.
- * 
+ *
  * TODO Find out how the battle strings work in the game and rename all the
  * attributes in something meaningful.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -46,7 +46,7 @@ import de.ailis.wlandsuite.io.SeekableOutputStream;
 public class BattleStrings
 {
     /** Battle strings */
-    private int[] strings = new int[37];
+    private final int[] strings = new int[37];
 
 
     /**
@@ -62,14 +62,15 @@ public class BattleStrings
     /**
      * Creates and returns a new BattleStrings object by reading it from the
      * specified stream.
-     * 
+     *
      * @param stream
      *            The stream to read the battle strings from.
      * @return The battle strings
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static BattleStrings read(SeekableInputStream stream)
+    public static BattleStrings read(final SeekableInputStream stream)
         throws IOException
     {
         BattleStrings info;
@@ -89,12 +90,12 @@ public class BattleStrings
 
     /**
      * Writes the batte strings object to the specified output stream.
-     * 
+     *
      * @param stream
      *            The stream to write the battle strings object to
      */
 
-    public void write(SeekableOutputStream stream)
+    public void write(final SeekableOutputStream stream)
     {
         for (int i = 0; i < 37; i++)
         {
@@ -105,13 +106,13 @@ public class BattleStrings
 
     /**
      * Creates and returns a new battel strings object from XML.
-     * 
+     *
      * @param element
      *            The XML element
      * @return The new battle strings object
      */
 
-    public static BattleStrings read(Element element)
+    public static BattleStrings read(final Element element)
     {
         BattleStrings info;
 
@@ -127,7 +128,7 @@ public class BattleStrings
 
     /**
      * Returns the battle strings as XML.
-     * 
+     *
      * @return The battle strings as XML
      */
 

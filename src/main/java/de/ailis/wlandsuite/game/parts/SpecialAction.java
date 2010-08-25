@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -27,17 +27,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * The special action.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -54,7 +54,7 @@ public class SpecialAction implements Action
     /**
      * Creates and returns a new action by reading the data it from the
      * specified input stream.
-     * 
+     *
      * @param stream
      *            The input stream to read the action data from
      * @param action
@@ -63,10 +63,11 @@ public class SpecialAction implements Action
      *            The special action table
      * @return The new action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static SpecialAction read(InputStream stream, int action,
-        SpecialActionTable specialActionTable) throws IOException
+    public static SpecialAction read(final InputStream stream, final int action,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         int len, b;
         SpecialAction specialAction;
@@ -102,7 +103,7 @@ public class SpecialAction implements Action
                 b = stream.read();
             }
             byteStream.write(b);
-        }            
+        }
         if (replace)
         {
             b = stream.read();
@@ -121,13 +122,13 @@ public class SpecialAction implements Action
 
     /**
      * Creates and returns a new action by reading the data from XML.
-     * 
+     *
      * @param element
      *            The XML element to read
      * @return The new action
      */
 
-    public static SpecialAction read(Element element)
+    public static SpecialAction read(final Element element)
     {
         SpecialAction action;
         ByteArrayOutputStream stream;
@@ -138,7 +139,7 @@ public class SpecialAction implements Action
         action.action = StringUtils.toInt(element.attributeValue("action"));
 
         stream = new ByteArrayOutputStream();
-        for (String c: element.getTextTrim().split("\\s"))
+        for (final String c: element.getTextTrim().split("\\s"))
         {
             stream.write(Integer.valueOf(c, 16));
         }
@@ -153,7 +154,7 @@ public class SpecialAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
         StringBuilder data;
@@ -162,7 +163,7 @@ public class SpecialAction implements Action
         element.addAttribute("id", StringUtils.toHex(id));
         element.addAttribute("action", StringUtils.toHex(this.action));
         data = new StringBuilder();
-        for (byte b: this.data)
+        for (final byte b: this.data)
         {
             data.append(String.format("%02x ", new Object[] { b & 0xff }));
         }
@@ -177,8 +178,8 @@ public class SpecialAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable) throws IOException
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable) throws IOException
     {
         int action = -1;
 
@@ -204,97 +205,97 @@ public class SpecialAction implements Action
      * means the typical action class/action byte pair (Where the action is not
      * present when action class is >= 253). If Bit 9 is set then this means
      * it needs to read the data until FF byte is found.
-     * 
+     *
      * @param action
      *            The action
      * @return The data length
      */
 
-    private static int getDataLength(int action)
+    private static int getDataLength(final int action)
     {
         switch (action)
         {
             case 0x00:
                 return 0 + 512;
-                
+
             case 0x01:
                 return 6;
-                
+
             case 0x02:
                 return 4;
 
             case 0x03:
                 return 6;
-                
+
             case 0x04:
                 return 3;
-                
+
             case 0x06:
                 return 4;
-                
+
             case 0x07:
                 return 6;
-                
+
             case 0x09:
                 return 3;
-               
+
             case 0x0a:
                 return 3;
 
             case 0x0b:
                 return 3;
-              
+
             case 0x0c:
                 return 3;
-                
+
             case 0x0e:
                 return 1;
-                
+
             case 0x0f:
                 return 8;
 
             case 0x10:
                 return 2;
-                
+
             case 0x11:
                 return 3;
 
             case 0x12:
                 return 0 + 256;
-                
+
             case 0x13:
                 return 0 + 256;
-                
+
             case 0x14:
                 return 2;
-                
+
             case 0x15:
                 return 0 + 256;
-                
+
             case 0x16:
                 return 2;
-                
+
             case 0x17:
                 return 2;
-                
+
             case 0x18:
                 return 0 + 256;
-                
+
             case 0x19:
-                return 2; 
+                return 2;
 
             case 0x1a:
                 return 2;
-                
+
             case 0x1b:
                 return 2;
-                
+
             case 0x1c:
                 return 2;
-                
+
             case 0x1d:
                 return 3;
-                
+
             case 0x1e:
                 return 3;
 
@@ -303,34 +304,34 @@ public class SpecialAction implements Action
 
             case 0x21:
                 return 1;
-                
+
             case 0x22:
                 return 4;
-                
+
             case 0x23:
                 return 2;
-                
+
             case 0x24:
                 return 2;
-                
+
             case 0x25:
                 return 4;
-                
+
             case 0x26:
                 return 3;
-                
+
             case 0x27:
-                return 9; 
-               
+                return 9;
+
             case 0x28:
                 return 2;
-                
+
             case 0x29:
                 return 1;
-                
+
             case 0x2a:
                 return 1;
-               
+
             case 0x2b:
                 return 4 + 512;
 
@@ -344,7 +345,7 @@ public class SpecialAction implements Action
 
     /**
      * Returns the action.
-     * 
+     *
      * @return The action
      */
 
@@ -356,12 +357,12 @@ public class SpecialAction implements Action
 
     /**
      * Sets the action.
-     * 
+     *
      * @param action
      *            The action to set
      */
 
-    public void setAction(int action)
+    public void setAction(final int action)
     {
         this.action = action;
     }
@@ -369,7 +370,7 @@ public class SpecialAction implements Action
 
     /**
      * Returns the data.
-     * 
+     *
      * @return The data
      */
 
@@ -381,12 +382,12 @@ public class SpecialAction implements Action
 
     /**
      * Sets the data.
-     * 
+     *
      * @param data
      *            The data to set
      */
 
-    public void setData(byte[] data)
+    public void setData(final byte[] data)
     {
         this.data = data;
     }

@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,17 +26,17 @@ package de.ailis.wlandsuite.game.parts;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.ailis.wlandsuite.utils.StringUtils;
-import de.ailis.wlandsuite.utils.XmlUtils;
 import org.dom4j.Element;
 
 import de.ailis.wlandsuite.common.exceptions.GameException;
 import de.ailis.wlandsuite.io.SeekableOutputStream;
+import de.ailis.wlandsuite.utils.StringUtils;
+import de.ailis.wlandsuite.utils.XmlUtils;
 
 
 /**
  * Radiation action
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -62,14 +62,15 @@ public class RadiationAction implements Action
     /**
      * Creates a new Radiation Action by reading its data from the specified
      * input stream.
-     * 
+     *
      * @param stream
      *            The input stream
      * @return The new Radiation Action
      * @throws IOException
+     *             When file operation fails.
      */
 
-    public static RadiationAction read(InputStream stream) throws IOException
+    public static RadiationAction read(final InputStream stream) throws IOException
     {
         int b;
         RadiationAction action;
@@ -104,13 +105,13 @@ public class RadiationAction implements Action
     /**
      * Creates a new Radiation Action by reading the data from the specified XML
      * element
-     * 
+     *
      * @param element
      *            The XML element
      * @return The Radiation Action
      */
 
-    public static RadiationAction read(Element element)
+    public static RadiationAction read(final Element element)
     {
         RadiationAction action;
 
@@ -146,7 +147,7 @@ public class RadiationAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
-    public Element toXml(int id)
+    public Element toXml(final int id)
     {
         Element element;
 
@@ -181,8 +182,8 @@ public class RadiationAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
-    public void write(SeekableOutputStream stream,
-        SpecialActionTable specialActionTable)
+    public void write(final SeekableOutputStream stream,
+        final SpecialActionTable specialActionTable)
     {
         stream.write(this.message);
         stream.write(this.damage);
@@ -196,7 +197,7 @@ public class RadiationAction implements Action
 
     /**
      * Returns the action class.
-     * 
+     *
      * @return The action class
      */
 
@@ -208,12 +209,12 @@ public class RadiationAction implements Action
 
     /**
      * Sets the action class.
-     * 
+     *
      * @param actionClass
      *            The action class to set
      */
 
-    public void setNewActionClass(int actionClass)
+    public void setNewActionClass(final int actionClass)
     {
         this.newActionClass = actionClass;
     }
@@ -221,7 +222,7 @@ public class RadiationAction implements Action
 
     /**
      * Returns the action selector.
-     * 
+     *
      * @return The action selector
      */
 
@@ -233,12 +234,12 @@ public class RadiationAction implements Action
 
     /**
      * Sets the action selector.
-     * 
+     *
      * @param actionSelector
      *            The action selector to set
      */
 
-    public void setNewAction(int actionSelector)
+    public void setNewAction(final int actionSelector)
     {
         this.newAction = actionSelector;
     }
@@ -246,7 +247,7 @@ public class RadiationAction implements Action
 
     /**
      * Returns the ignoreArmor flag
-     * 
+     *
      * @return The ignorArmor flag
      */
 
@@ -258,12 +259,12 @@ public class RadiationAction implements Action
 
     /**
      * Sets the ignoreArmor flag.
-     * 
+     *
      * @param ignoreArmor
      *            The ignoreArmor flag to set
      */
 
-    public void setIgnoreArmor(boolean ignoreArmor)
+    public void setIgnoreArmor(final boolean ignoreArmor)
     {
         this.ignoreArmor = ignoreArmor;
     }
@@ -271,7 +272,7 @@ public class RadiationAction implements Action
 
     /**
      * Returns the message id.
-     * 
+     *
      * @return The message id
      */
 
@@ -283,12 +284,12 @@ public class RadiationAction implements Action
 
     /**
      * Sets the message id.
-     * 
+     *
      * @param message
      *            The message id to set
      */
 
-    public void setMessage(int message)
+    public void setMessage(final int message)
     {
         this.message = message;
     }
@@ -296,7 +297,7 @@ public class RadiationAction implements Action
 
     /**
      * Returns the damage.
-     * 
+     *
      * @return The damage
      */
 
@@ -308,12 +309,12 @@ public class RadiationAction implements Action
 
     /**
      * Sets the damage.
-     * 
+     *
      * @param damage
      *            The damage to set
      */
 
-    public void setTargetMap(int damage)
+    public void setTargetMap(final int damage)
     {
         this.damage = damage;
     }
