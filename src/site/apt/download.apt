@@ -2,9 +2,8 @@ Download
 
 * Requirements
 
-  The Wasteland Suite is written in Java 5.0 so you need the
-  {{{http://www.java.com/download/}Java 5.0 Runtime Environment}} from Sun.
-  The old Java version 1.4 is <<not>> sufficient.
+  The Wasteland Suite is written in Java 6 so you need the newest
+  {{{http://www.java.com/download/}Java Runtime Environment}} from Sun.
   
 
 * Binaries

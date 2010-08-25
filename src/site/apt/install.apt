@@ -3,11 +3,10 @@ Installation
 * Installing a JRE
 
   If you not already have a Java Runtime Environment installed then you have 
-  to do it now. {{{http://www.java.com/download/}Download Java 5.0 for your platform}}
+  to do it now. {{{http://www.java.com/download/}Download the latest Java for your platform}}
   from Sun and follow the installation instructions.
   
-  Please note that the Wasteland Suite needs at least Java 5.0. It will not
-  work with the ancient Java 1.4.
+  Please note that the Wasteland Suite needs at least Java 6.
   
 * Installing the Wasteland Suite
 
