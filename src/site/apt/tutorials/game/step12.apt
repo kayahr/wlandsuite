@@ -47,11 +47,11 @@ Game Tutorial Step 12: Adding NPCs
 <string id="17">\r"Ok, let's go".\r</string>  
 ----
 
-  You can download the current state of the map here: {{{step12/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step12/map01.xml}map01.xml}}.
   
-  {{{step11.html}Back to step 11}}
+  {{{./step11.html}Back to step 11}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step13.html}Move on to step 13}}
+  {{{./step13.html}Move on to step 13}}
   

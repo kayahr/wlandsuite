@@ -81,13 +81,13 @@ Game Tutorial Step 2: Adding a simple print action
   apple tree. and when you step on it you'll see the message. Step on it again
   and you'll see no more messages. What a great game, isn't it?
 
-  You can download the current state of the map here: {{{step2/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step2/map01.xml}map01.xml}}.
   
 [step2.png]
   
-  {{{step1.html}Back to step 1}}
+  {{{./step1.html}Back to step 1}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step3.html}Move on to step 3}}
+  {{{./step3.html}Move on to step 3}}
   

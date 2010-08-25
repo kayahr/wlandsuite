@@ -97,7 +97,7 @@ unpackgame c:\work c:\wland\game1
   map.
 
   If you are lazy you can download a prepared skeleton file here: 
-  {{{step1/map01.xml}map01.xml}}. Copy this file into your working directory
+  {{{./step1/map01.xml}map01.xml}}. Copy this file into your working directory
   and you are done.
   
   By the way: You may have noticed the attributes <mapSize>, <msqSize> and
@@ -129,6 +129,6 @@ packgame c:\work c:\wland\game1
   
 [step1.png] Title
   
-  {{{index.html}Back to index page}} 
+  {{{./index.html}Back to index page}} 
   | 
-  {{{step2.html}Move on to step 2}}
+  {{{./step2.html}Move on to step 2}}

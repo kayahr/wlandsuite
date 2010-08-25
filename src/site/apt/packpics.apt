@@ -12,13 +12,13 @@ packpics
   number the frame to display.
 
   The easiest way to initialize an animation directory is using 
-  {{{unpackpics.html}unpackpics}} to
+  {{{./unpackpics.html}unpackpics}} to
   unpack the original animations from the game.
 
   The second parameter specifies the filename of the PICS file to write. If
   the parameter is missing or is "-" then the output is written to stdout.
 
-  Please note that you must run the {{{fixwloffsets.html}fixwloffsets}} 
+  Please note that you must run the {{{./fixwloffsets.html}fixwloffsets}} 
   program after you have modified
   the allpics files of wasteland because the MSQ offsets in the allpics files
   are now most likely different to the original offsets hardcoded in the wl.exe
@@ -45,7 +45,7 @@ packpics [OPTION]... DIRECTORY [OUTPUT]
 * Example
 
   Let's assume you have unpacked the allpics2 file into c:\pics2 with the
-  {{{unpackpics}unpackpics program}} and
+  {{{./unpackpics}unpackpics program}} and
   you have modified some files. To build a custom allpics2 file with these 
   changes just run these commands:
   

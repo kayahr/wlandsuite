@@ -60,13 +60,13 @@ Game Tutorial Step 11: Adding fixed encounters
   feet around the square you placed the fixed counter on you will see a
   humanoid. Start an encounter and you can fight against him.
   
-  You can download the current state of the map here: {{{step11/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step11/map01.xml}map01.xml}}.
   
 [step11.png]
   
-  {{{step10.html}Back to step 10}}
+  {{{./step10.html}Back to step 10}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step12.html}Move on to step 12}}
+  {{{./step12.html}Move on to step 12}}
   

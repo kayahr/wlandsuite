@@ -89,13 +89,13 @@ Game Tutorial Step 10: Adding random encounters
   Now pack the game file, run the game and walk around a bit until you 
   encounter the Visa Man or Brother Tux.     
     
-  You can download the current state of the map here: {{{step10/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step10/map01.xml}map01.xml}}.
   
 [step10.png]
   
-  {{{step9.html}Back to step 9}}
+  {{{./step9.html}Back to step 9}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step11.html}Move on to step 11}}
+  {{{./step11.html}Move on to step 11}}
   

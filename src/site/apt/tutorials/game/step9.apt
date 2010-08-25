@@ -70,13 +70,13 @@ Game Tutorial Step 9: Altering multiple squares
   you put the worker he will create the wall. When you visit the worker again
   he will just tell you about the nice wall and that's it. 
  
-  You can download the current state of the map here: {{{step9/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step9/map01.xml}map01.xml}}.
   
 [step9.png]
   
-  {{{step8.html}Back to step 8}}
+  {{{./step8.html}Back to step 8}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step10.html}Move on to step 10}}
+  {{{./step10.html}Move on to step 10}}
   

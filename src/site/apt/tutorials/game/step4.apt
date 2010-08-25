@@ -43,13 +43,13 @@ Game Tutorial Step 4: Making loot bags
   from the first bag then it will also be removed from the second bag which may
   confuse the player.
  
-  You can download the current state of the map here: {{{step4/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step4/map01.xml}map01.xml}}.
   
 [step4.png]
   
-  {{{step3.html}Back to step 3}}
+  {{{./step3.html}Back to step 3}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step5.html}Move on to step 5}}
+  {{{./step5.html}Move on to step 5}}
   

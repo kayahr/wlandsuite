@@ -34,10 +34,10 @@ encodepic [OPTION]... [INPUT [OUTPUT]]
 
 * Example
 
-  The following command uses the {{{images/nuke.png}nuke.png}} in the current 
+  The following command uses the {{{./images/nuke.png}nuke.png}} in the current 
   directory as
   input, converts it to a Wasteland PIC file and replaces the original
-  title.pic of Wasteland with the {{{images/nuke.pic}created pic}} 
+  title.pic of Wasteland with the {{{./images/nuke.pic}created pic}} 
   (At least when you have installed Wasteland in c:\wland\)
   
 ---

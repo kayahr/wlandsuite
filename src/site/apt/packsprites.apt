@@ -7,7 +7,7 @@ packsprites
   001.png and so on.
 
   The easiest way to initialize a sprite directory is using 
-  {{{unpacksprites.html}unpacksprites}} to
+  {{{./unpacksprites.html}unpacksprites}} to
   unpack the original ic0_9.wlf from the game.
 
   The second parameter specifies the filename of the ic0_9.wlf file to write. 

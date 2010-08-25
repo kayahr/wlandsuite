@@ -7,7 +7,7 @@ packmasks
   001.png and so on.
 
   The easiest way to initialize a bit mask directory is using 
-  {{{unpackmasks.html}unpackmasks}} to
+  {{{./unpackmasks.html}unpackmasks}} to
   unpack the original masks.wlf from the game.
 
   The second parameter specifies the filename of the masks.wlf file to write. 

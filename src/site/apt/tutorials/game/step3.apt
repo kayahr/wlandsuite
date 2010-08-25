@@ -29,13 +29,13 @@ Game Tutorial Step 3: Making squares impassable
   Pack the new game file, start up wasteland and you can bang your head
   against the house.
   
-  You can download the current state of the map here: {{{step3/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step3/map01.xml}map01.xml}}.
   
 [step3.png]
   
-  {{{step2.html}Back to step 2}}
+  {{{./step2.html}Back to step 2}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step4.html}Move on to step 4}}
+  {{{./step4.html}Move on to step 4}}
   

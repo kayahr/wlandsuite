@@ -39,7 +39,7 @@ decodepic [OPTION]... [INPUT [OUTPUT]]
 * Example
 
   The following command reads Wasteland's title.pic, converts it to a PNG
-  and writes it to the file {{{images/title.png}title.png}} in the 
+  and writes it to the file {{{./images/title.png}title.png}} in the 
   current directory.
   
 ---

@@ -1,7 +1,7 @@
 News
 
-  (2006/10/07) Version 1.3.0 has been released with full support for the
-  external data files used by Displacer's hacked EXE file.
+  (2010/08/25) Version 1.3.1 has been released with some minor changes.
+  See {{{./changes-report.html}changelog}}.
 
 What is the Wasteland Suite?
 
@@ -19,45 +19,45 @@ What is the Wasteland Suite?
       
   The suite contains the following command line programs:
    
-    * {{{decodepic.html}decodepic}} (Converts a pic file to a standard image format file)
+    * {{{./decodepic.html}decodepic}} (Converts a pic file to a standard image format file)
     
-    * {{{encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
+    * {{{./encodepic.html}encodepic}} (Converts a standard image format file to a pic file)
 
-    * {{{unpackmasks.html}unpackmasks}} (Unpacks a masks.wlf file to a directory)
+    * {{{./unpackmasks.html}unpackmasks}} (Unpacks a masks.wlf file to a directory)
 
-    * {{{packmasks.html}packmasks}} (Packs the bit masks from a directory into a masks.wlf file)
+    * {{{./packmasks.html}packmasks}} (Packs the bit masks from a directory into a masks.wlf file)
     
-    * {{{unpacksprites.html}unpacksprites}} (Unpacks a ic0_9.wlf file to a directory)
+    * {{{./unpacksprites.html}unpacksprites}} (Unpacks a ic0_9.wlf file to a directory)
 
-    * {{{packsprites.html}packsprites}} (Packs the sprites from a directory into a ic0_9.wlf file)
+    * {{{./packsprites.html}packsprites}} (Packs the sprites from a directory into a ic0_9.wlf file)
     
-    * {{{unpackcpa.html}unpackcpa}} (Unpacks a CPA file to a directory)
+    * {{{./unpackcpa.html}unpackcpa}} (Unpacks a CPA file to a directory)
     
-    * {{{packcpa.html}packcpa}} (Packs the animation from a directory into a CPA file)
+    * {{{./packcpa.html}packcpa}} (Packs the animation from a directory into a CPA file)
 
-    * {{{unpackhtds.html}unpackhtds}} (Unpacks tilesets from an allhtds file to a directory)
+    * {{{./unpackhtds.html}unpackhtds}} (Unpacks tilesets from an allhtds file to a directory)
     
-    * {{{packhtds.html}packhtds}} (Packs tilesets from a directory into a allhtds file)
+    * {{{./packhtds.html}packhtds}} (Packs tilesets from a directory into a allhtds file)
 
-    * {{{unpackpics.html}unpackpics}} (Unpacks encounter animations from an allpics file to a directory)
+    * {{{./unpackpics.html}unpackpics}} (Unpacks encounter animations from an allpics file to a directory)
     
-    * {{{packpics.html}packpics}} (Packs encounter animations from a directory into a allpics file)
+    * {{{./packpics.html}packpics}} (Packs encounter animations from a directory into a allpics file)
 
-    * {{{unpackcurs.html}unpackcurs}} (Unpacks cursors from a curs file to a directory)
+    * {{{./unpackcurs.html}unpackcurs}} (Unpacks cursors from a curs file to a directory)
     
-    * {{{packcurs.html}packcurs}} (Packs cursors from a directory into a curs file)
+    * {{{./packcurs.html}packcurs}} (Packs cursors from a directory into a curs file)
 
-    * {{{unpackfnt.html}unpackfnt}} (Unpacks font characters from a fnt file to a directory)
+    * {{{./unpackfnt.html}unpackfnt}} (Unpacks font characters from a fnt file to a directory)
     
-    * {{{packfnt.html}packfnt}} (Packs font characters from a directory into a fnt file)
+    * {{{./packfnt.html}packfnt}} (Packs font characters from a directory into a fnt file)
     
-    * {{{unpackgame.html}unpackgame}} (Unpacks the maps, the shop item lists and the savegame of a game file as XML files into a directory)
+    * {{{./unpackgame.html}unpackgame}} (Unpacks the maps, the shop item lists and the savegame of a game file as XML files into a directory)
     
-    * {{{packgame.html}packgame}} (Packs the XML files for maps, shop item lists and the savegame from a directory into a game file)
+    * {{{./packgame.html}packgame}} (Packs the XML files for maps, shop item lists and the savegame from a directory into a game file)
     
-    * {{{extractmaps.html}extractmaps}} (Extracts the graphical maps of the game as PNGs into a directory)
+    * {{{./extractmaps.html}extractmaps}} (Extracts the graphical maps of the game as PNGs into a directory)
     
-    * {{{fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets for tilesets and encounter animations in the wl.exe file)
+    * {{{./fixwloffsets.html}fixwloffsets}} (Fixes the MSQ offsets for tilesets and encounter animations in the wl.exe file)
   
     []
       
@@ -89,5 +89,5 @@ What is the Wasteland Suite?
     
 * Getting started
 
-  {{{download.html}Download}} the latest binary archive of the Wasteland Suite 
-  and follow the {{{install.html}installation instructions}}.
+  {{{./download.html}Download}} the latest binary archive of the Wasteland Suite 
+  and follow the {{{./install.html}installation instructions}}.

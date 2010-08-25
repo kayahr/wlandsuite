@@ -3,7 +3,7 @@ Game Tutorial Step 8: Changing tiles
   With {{{http://wasteland.wikispaces.com/Dialogue+Data}action class 4}}
   you can hide the real tile of a square with an other tile. This is used when
   opening doors or hiding bases and secret hallways. In this example we will
-  modify the check action we created in {{{step6.html}Step 6}} so we can 
+  modify the check action we created in {{{./step6.html}Step 6}} so we can 
   destroy the wall we have climbed with some explosives.
   
   Here is the mask code:
@@ -19,7 +19,7 @@ Game Tutorial Step 8: Changing tiles
 
   Now this time we do not connect this action to a square directly. Instead we connect it
   to an other action. In this case it's a new check item in the wall check we
-  created in {{{step6.html}Step 6}}. Just add these lines to the check:
+  created in {{{./step6.html}Step 6}}. Just add these lines to the check:
 
 ----
 <item value="6" newActionClass="4" newAction="0" /> 
@@ -28,7 +28,7 @@ Game Tutorial Step 8: Changing tiles
 ----
 
   This means, when the player uses one of the explosives he got from the loot 
-  bag defined in {{{step4.html}Step 4}} (TNT, Plastic Explosives or Grenades)
+  bag defined in {{{./step4.html}Step 4}} (TNT, Plastic Explosives or Grenades)
   on the wall then the
   wall square is set to our new mask action. And this means the wall tile is
   replaced with a somewhat gray looking tile and the check is no longer connected
@@ -41,16 +41,16 @@ Game Tutorial Step 8: Changing tiles
 ----
 
   Pack the new game file and try it out. First get one of the explosives from
-  the loot bag we defined in {{{step4.html}Step 4}} and then use it against the
+  the loot bag we defined in {{{./step4.html}Step 4}} and then use it against the
   wall. KAWOOM!
  
-  You can download the current state of the map here: {{{step8/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step8/map01.xml}map01.xml}}.
   
 [step8.png]
   
-  {{{step7.html}Back to step 7}}
+  {{{./step7.html}Back to step 7}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step9.html}Move on to step 9}}
+  {{{./step9.html}Move on to step 9}}
   

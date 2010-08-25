@@ -40,4 +40,4 @@ unpackgame c:\game1 c:\wland\game1
   and document validation.
 
   After you have editid the files you can pack them in a new game1 file with
-  the {{{packgame.html}packgame}} program. 
+  the {{{./packgame.html}packgame}} program. 

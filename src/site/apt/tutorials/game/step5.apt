@@ -55,13 +55,13 @@ Game Tutorial Step 5: Creating transitions
 <string id="3">\rYou enter the house, crawl through a tunnel to another house and leave it through the door.\r</string>
 ----    
 
-  You can download the current state of the map here: {{{step5/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step5/map01.xml}map01.xml}}.
   
 [step5.png]
   
-  {{{step4.html}Back to step 4}}
+  {{{./step4.html}Back to step 4}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step6.html}Move on to step 6}}
+  {{{./step6.html}Move on to step 6}}
   

@@ -6,31 +6,31 @@ Creating a custom game
   steps for creating a new game (If you want to call it a game...) from the 
   ground up.
   
-  * Step 1: {{{step1.html}Create skeleton game files}}
+  * Step 1: {{{./step1.html}Create skeleton game files}}
   
-  * Step 2: {{{step2.html}Adding a simple print action}}
+  * Step 2: {{{./step2.html}Adding a simple print action}}
   
-  * Step 3: {{{step3.html}Making squares impassable}}
+  * Step 3: {{{./step3.html}Making squares impassable}}
   
-  * Step 4: {{{step4.html}Making loot bags}}
+  * Step 4: {{{./step4.html}Making loot bags}}
   
-  * Step 5: {{{step5.html}Creating transitions}}
+  * Step 5: {{{./step5.html}Creating transitions}}
   
-  * Step 6: {{{step6.html}Checking for skills, attributes and items}}
+  * Step 6: {{{./step6.html}Checking for skills, attributes and items}}
   
-  * Step 7: {{{step7.html}Creating dialogues}}
+  * Step 7: {{{./step7.html}Creating dialogues}}
 
-  * Step 8: {{{step8.html}Changing tiles}}
+  * Step 8: {{{./step8.html}Changing tiles}}
   
-  * Step 9: {{{step9.html}Altering multiple squares}}
+  * Step 9: {{{./step9.html}Altering multiple squares}}
   
-  * Step 10: {{{step10.html}Adding random encounters}}
+  * Step 10: {{{./step10.html}Adding random encounters}}
 
-  * Step 11: {{{step11.html}Adding fixed encounters}}
+  * Step 11: {{{./step11.html}Adding fixed encounters}}
   
-  * Step 12: {{{step12.html}Creating NPCs}}
+  * Step 12: {{{./step12.html}Creating NPCs}}
   
-  * Step 13: {{{step13.html}Adding a store}}
+  * Step 13: {{{./step13.html}Adding a store}}
   
   []
   

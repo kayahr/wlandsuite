@@ -10,7 +10,7 @@ packgame
   also the files shopitems1.xml and shopitems2.xml). 
 
   The easiest way to initialize a game directory is using 
-  {{{unpackgame.html}unpackgame}} to unpack the original data from the game.
+  {{{./unpackgame.html}unpackgame}} to unpack the original data from the game.
 
   The second parameter specifies the filename of the game file to write. If
   the parameter is missing or is "-" then the output is written to stdout.
@@ -35,7 +35,7 @@ packgame [OPTION]... DIRECTORY [OUTPUT]
 * Example
 
   Let's assume you have unpacked the game1 file into c:\game1 with the
-  {{{unpackgame}unpackgame program}} and
+  {{{./unpackgame}unpackgame program}} and
   you have modified some files. To build a custom game1 with these 
   changes just run this command:
   

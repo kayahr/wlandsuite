@@ -11,7 +11,7 @@ Installation
   
 * Installing the Wasteland Suite
 
-  After you have {{{download.html}downloaded}} the Wasteland Suite binary
+  After you have {{{./download.html}downloaded}} the Wasteland Suite binary
   archive you have to unpack it somewhere on your system. Windows users may choose
   <C:\Program Files> for it while Unix users may prefer </opt> or 
   </usr/local>.

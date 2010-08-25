@@ -54,13 +54,13 @@ Game Tutorial Step 7: Creating dialogues
 <string id="10">N</string>
 ----  
 
-  You can download the current state of the map here: {{{step7/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step7/map01.xml}map01.xml}}.
   
 [step7.png]
   
-  {{{step6.html}Back to step 6}}
+  {{{./step6.html}Back to step 6}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   | 
-  {{{step8.html}Move on to step 8}}
+  {{{./step8.html}Move on to step 8}}
   

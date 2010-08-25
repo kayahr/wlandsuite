@@ -8,12 +8,12 @@ packhtds
   The names must be numbered starting with 000. For example: 000.png. 
 
   The easiest way to initialize a tileset directory is using 
-  {{{unpackhtds.html}unpackhtds}} to unpack the original tilesets from the game.
+  {{{./unpackhtds.html}unpackhtds}} to unpack the original tilesets from the game.
 
   The second parameter specifies the filename of the HTDS file to write. If
   the parameter is missing or is "-" then the output is written to stdout.
 
-  Please note that you must run the {{{fixwloffsets.html}fixwloffsets}} program 
+  Please note that you must run the {{{./fixwloffsets.html}fixwloffsets}} program 
   after you have modified
   the tileset files of wasteland because the MSQ offsets in the allhtds files
   are now most likely different to the original offsets hardcoded in the wl.exe
@@ -40,7 +40,7 @@ packhtds [OPTION]... DIRECTORY [OUTPUT]
 * Example
 
   Let's assume you have unpacked the allhtds2 file into c:\tiles2 and
-  you have modified the tiles {{{images/18.png}18.png}} and {{{images/71.png}71.png}}
+  you have modified the tiles {{{./images/18.png}18.png}} and {{{./images/71.png}71.png}}
   (which draws the nuke symbol on the roof of the Mushroom Cloud Temple) of tile set bank 2. To
   build a custom allhtds2 file with these changes just run these commands:
   

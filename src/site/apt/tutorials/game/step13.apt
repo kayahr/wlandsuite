@@ -60,11 +60,11 @@ Game Tutorial Step 13: Adding a store
 <string id="19">\x07Welcome to the Kwik-E-Mart.\r\r</string>  
 ----
 
-  You can download the current state of the map here: {{{step13/map01.xml}map01.xml}}.
+  You can download the current state of the map here: {{{./step13/map01.xml}map01.xml}}.
   
 [step13.png]
   
-  {{{step12.html}Back to step 12}}
+  {{{./step12.html}Back to step 12}}
   | 
-  {{{index.html}Index page}} 
+  {{{./index.html}Index page}} 
   
