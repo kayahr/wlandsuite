@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,7 +26,7 @@ package de.ailis.wlandsuite.game.chartable;
 
 /**
  * CharTableEntry
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -34,7 +34,7 @@ package de.ailis.wlandsuite.game.chartable;
 public class CharTableEntry implements Comparable<CharTableEntry>
 {
     /** The character */
-    private int character;
+    private final int character;
 
     /** How many times the character of this entry is used */
     private int counter;
@@ -42,14 +42,14 @@ public class CharTableEntry implements Comparable<CharTableEntry>
 
     /**
      * Constructor
-     * 
+     *
      * @param character
      *            The character
      * @param counter
      *            How many times the character is already used
      */
 
-    public CharTableEntry(int character, int counter)
+    public CharTableEntry(final int character, final int counter)
     {
         this.character = character;
         this.counter = counter;
@@ -57,13 +57,14 @@ public class CharTableEntry implements Comparable<CharTableEntry>
 
     /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
-     * 
+     *
      * @param other
      *            The other object to compare this one with
      * @return The compare result
      */
 
-    public int compareTo(CharTableEntry other)
+    @Override
+    public int compareTo(final CharTableEntry other)
     {
         if (this.counter > other.counter)
         {
@@ -75,36 +76,36 @@ public class CharTableEntry implements Comparable<CharTableEntry>
         }
         return 0;
     }
-    
-    
+
+
     /**
      * Increments the usage counter.
      */
-    
+
     public void incrementCounter()
     {
         this.counter++;
     }
 
-    
+
     /**
      * Returns the character.
      *
      * @return The character
      */
-    
+
     public int getCharacter()
     {
         return this.character;
     }
 
-    
+
     /**
      * Returns the counter.
      *
      * @return The counter
      */
-    
+
     public int getCounter()
     {
         return this.counter;

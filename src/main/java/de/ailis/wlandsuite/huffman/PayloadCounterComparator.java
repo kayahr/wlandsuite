@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -28,7 +28,7 @@ import java.util.Comparator;
 
 /**
  * A comparator used for sorting the payloads by count.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -36,16 +36,16 @@ import java.util.Comparator;
 public class PayloadCounterComparator implements Comparator<Integer>
 {
     /** The payload counter */
-    private int[] counter;
+    private final int[] counter;
 
     /**
      * Constructor
-     * 
+     *
      * @param counter
      *            The payload counter
      */
 
-    public PayloadCounterComparator(int[] counter)
+    public PayloadCounterComparator(final int[] counter)
     {
         this.counter = counter;
     }
@@ -53,7 +53,7 @@ public class PayloadCounterComparator implements Comparator<Integer>
 
     /**
      * Compares the counters of the two given payloads.
-     * 
+     *
      * @param o1
      *            The payload 1
      * @param o2
@@ -61,7 +61,8 @@ public class PayloadCounterComparator implements Comparator<Integer>
      * @return The compare result
      */
 
-    public int compare(Integer o1, Integer o2)
+    @Override
+    public int compare(final Integer o1, final Integer o2)
     {
         int v1, v2;
 

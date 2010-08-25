@@ -128,6 +128,7 @@ public class StoreAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
+    @Override
     public void write(final SeekableOutputStream stream,
         final SpecialActionTable specialActionTable) throws IOException
     {
@@ -163,6 +164,7 @@ public class StoreAction implements Action
      * @return The store data as XML
      */
 
+    @Override
     public Element toXml(final int id)
     {
         Element element;

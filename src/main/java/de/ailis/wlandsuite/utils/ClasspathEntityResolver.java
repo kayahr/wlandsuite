@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -39,52 +39,53 @@ import org.xml.sax.InputSource;
 public class ClasspathEntityResolver implements EntityResolver
 {
     /** The singleton instance */
-    private static ClasspathEntityResolver instance = new ClasspathEntityResolver(); 
-    
-    
+    private static ClasspathEntityResolver instance = new ClasspathEntityResolver();
+
+
     /**
      * Private constructor
      */
-    
+
     private ClasspathEntityResolver()
     {
         super();
     }
-    
-    
+
+
     /**
      * Returns the singleton instance of the Resolver.
      *
      * @return The singleton resolver
      */
-    
+
     public static ClasspathEntityResolver getInstance()
     {
         return instance;
     }
-    
-    
+
+
     /**
      * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
      */
 
-    public InputSource resolveEntity(String publicId, String systemId)
+    @Override
+    public InputSource resolveEntity(final String publicId, final String systemId)
     {
         InputStream stream;
-        
+
         // Return null if we are not responsible
         if (!systemId.startsWith("classpath://"))
         {
             return null;
         }
-        
+
         // Return the input source if the file was found on the class path
         stream = getClass().getClassLoader().getResourceAsStream(systemId.substring(12));
         if (stream != null)
         {
             return new InputSource(stream);
         }
-        
+
         // Return null if file was not found on the class path
         return null;
     }

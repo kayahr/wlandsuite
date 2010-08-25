@@ -116,6 +116,7 @@ public class LibraryAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
+    @Override
     public void write(final SeekableOutputStream stream,
         final SpecialActionTable specialActionTable) throws IOException
     {
@@ -148,6 +149,7 @@ public class LibraryAction implements Action
      * @return The library data as XML
      */
 
+    @Override
     public Element toXml(final int id)
     {
         Element element;

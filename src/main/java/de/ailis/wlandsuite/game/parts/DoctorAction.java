@@ -107,6 +107,7 @@ public class DoctorAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
+    @Override
     public void write(final SeekableOutputStream stream,
         final SpecialActionTable specialActionTable) throws IOException
     {
@@ -136,6 +137,7 @@ public class DoctorAction implements Action
      * @return The doctor data as XML
      */
 
+    @Override
     public Element toXml(final int id)
     {
         Element element;

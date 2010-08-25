@@ -1,7 +1,7 @@
 /*
  * $Id$
  * Copyright (C) 2006 Klaus Reimer <k@ailis.de>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the
@@ -26,7 +26,7 @@ package de.ailis.wlandsuite.huffman;
 
 /**
  * A Node in the Huffman tree.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  * @version $Revision$
  */
@@ -49,7 +49,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
     private boolean[] fullKey;
 
     /** The payload */
-    private int payload;
+    private final int payload;
 
     /** The propability */
     private int probability;
@@ -58,19 +58,19 @@ public class HuffmanNode implements Comparable<HuffmanNode>
     private static int nextId = 0;
 
     /** The serial id */
-    private int id = nextId++;
+    private final int id = nextId++;
 
 
     /**
      * Constructor
-     * 
+     *
      * @param left
      *            The left sub node
      * @param right
      *            The right sub node
      */
 
-    public HuffmanNode(HuffmanNode left, HuffmanNode right)
+    public HuffmanNode(final HuffmanNode left, final HuffmanNode right)
     {
         this.left = left;
         if (this.left != null)
@@ -91,12 +91,12 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Constructor
-     * 
+     *
      * @param payload
      *            The payload
      */
 
-    public HuffmanNode(int payload)
+    public HuffmanNode(final int payload)
     {
         this.payload = payload;
     }
@@ -104,14 +104,14 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Constructor
-     * 
+     *
      * @param payload
      *            The payload
      * @param probability
      *            The probability
      */
 
-    public HuffmanNode(int payload, int probability)
+    public HuffmanNode(final int payload, final int probability)
     {
         this.payload = payload;
         this.probability = probability;
@@ -120,7 +120,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the left.
-     * 
+     *
      * @return The left
      */
 
@@ -132,7 +132,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the payload.
-     * 
+     *
      * @return The payload
      */
 
@@ -144,7 +144,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the right sub node.
-     * 
+     *
      * @return The right sub node
      */
 
@@ -156,7 +156,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the node key.
-     * 
+     *
      * @return The node key
      */
 
@@ -168,7 +168,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the parent node.
-     * 
+     *
      * @return The parent node
      */
 
@@ -180,7 +180,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the full key of this node (Beginning from the root).
-     * 
+     *
      * @return The full key
      */
 
@@ -220,7 +220,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
     /**
      * Returns the string representation of the node key. For the root node
      * "ROOT" is returned
-     * 
+     *
      * @return The node key as a string
      */
 
@@ -246,7 +246,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Returns the probability.
-     * 
+     *
      * @return The probability
      */
 
@@ -258,13 +258,14 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 
     /**
      * Compares to Huffman Nodes.
-     * 
+     *
      * @param other
      *            The other Huffman Node.
      * @return The compare result
      */
 
-    public int compareTo(HuffmanNode other)
+    @Override
+    public int compareTo(final HuffmanNode other)
     {
         if (this.probability < other.probability)
         {
@@ -286,14 +287,14 @@ public class HuffmanNode implements Comparable<HuffmanNode>
      * Dumps the current node into the given string builder. Output is indented
      * by level*2 space characters. This method is used by toString() to
      * recursively build a nice tree output.
-     * 
+     *
      * @param builder
      *            The string builder
      * @param level
      *            The indent level
      */
 
-    private void dumpNode(StringBuilder builder, int level)
+    private void dumpNode(final StringBuilder builder, final int level)
     {
         char[] indent;
 

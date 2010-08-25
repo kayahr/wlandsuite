@@ -131,6 +131,7 @@ public class MaskAction implements Action
      * @see de.ailis.wlandsuite.game.parts.Action#toXml(int)
      */
 
+    @Override
     public Element toXml(final int id)
     {
         Element element;
@@ -163,6 +164,7 @@ public class MaskAction implements Action
      *      de.ailis.wlandsuite.game.parts.SpecialActionTable)
      */
 
+    @Override
     public void write(final SeekableOutputStream stream,
         final SpecialActionTable specialActionTable)
     {

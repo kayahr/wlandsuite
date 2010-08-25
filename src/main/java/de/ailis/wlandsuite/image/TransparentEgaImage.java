@@ -107,51 +107,12 @@ public class TransparentEgaImage extends PaletteImage
 
     public TransparentEgaImage(final BufferedImage image)
     {
-        this(image.getWidth(), image.getHeight()/*, createPalette(image)*/);
+        this(image.getWidth(), image.getHeight());
         final Graphics2D ctx = createGraphics();
         ctx.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         ctx.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
         ctx.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
         ctx.drawImage(image, 0, 0, null);
-    }
-
-
-    /**
-     * A color counter.
-     *
-     * @author Klaus Reimer (k@ailis.de)
-     */
-
-    static class CountColor implements Comparable<CountColor>
-    {
-        /** The color. */
-        public int color;
-
-        /** The counter. */
-        public int counter;
-
-
-        /**
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
-         */
-
-        public int compareTo(final CountColor o)
-        {
-            if (this.counter < o.counter) return 1;
-            if (this.counter > o.counter) return -1;
-            return 0;
-        }
-
-
-        /**
-         * @see java.lang.Object#toString()
-         */
-
-        @Override
-        public String toString()
-        {
-            return Long.toString(this.color & 0xffffffffL, 16);
-        }
     }
 
 
