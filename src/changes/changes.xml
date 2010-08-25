@@ -5,8 +5,8 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
-    <release version="1.3.1" date="2010-08-25" desc="Minor update">
-      <action dev="k" type="update" date="2010-08-25"">
+    <release version="1.3.1" date="2010-08-25" description="Minor update">
+      <action dev="k" type="update" date="2010-08-25">
         Wasteland Suite is now compiled with Java 6.
       </action>
       <action dev="k" type="update">
@@ -17,7 +17,7 @@
         but XML file still uses an integer.
       </action>
     </release>
-    <release version="1.3.0" date="2009-10-07" desc="Minor update">
+    <release version="1.3.0" date="2009-10-07" description="Minor update">
       <action dev="k" type="add">
         Added full support for the external data files used by Displacer's 
         hacked EXE.
@@ -26,7 +26,7 @@
         Patch for safe check (20) on map 4 was not working correctly. 
       </action>
     </release>
-    <release version="1.2.0" date="2006-09-24" desc="Major update">
+    <release version="1.2.0" date="2006-09-24" description="Major update">
       <action dev="k" type="add">
         Added full read and write support for the game files. unpackgame
         and packgame can be used to edit the maps in every respect (but within
@@ -52,7 +52,7 @@
         different EXE unpackers.
       </action>
     </release>
-    <release version="1.1.0" date="2006-08-01" desc="Minor update">
+    <release version="1.1.0" date="2006-08-01" description="Minor update">
       <action dev="k" type="add">
         Added read and write support for CPA files
       </action>
@@ -72,7 +72,7 @@
         Added fixwloffsets program to fix the MSQ offsets in wl.exe
       </action>
     </release>
-    <release version="1.0.0" date="2006-07-12" desc="Initial release">
+    <release version="1.0.0" date="2006-07-12" description="Initial release">
     </release>
   </body>
 </document>
