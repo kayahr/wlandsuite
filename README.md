@@ -9,4 +9,4 @@ files which can be processed by standard software.
 
 Read more on [here][1]
 
-[1]: http://www.ailis.de/~k/software/projects/wlandsuite/ "Wasteland Suite Website"
+[1]: http://kayahr.github.com/wlandsuite/ "Wasteland Suite Website"
