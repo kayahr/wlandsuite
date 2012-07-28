@@ -139,7 +139,6 @@ public class NPCs extends ArrayList<Char>
      * @return The NPCs
      */
 
-    @SuppressWarnings("unchecked")
     public static NPCs read(final Element element)
     {
         NPCs npcs;

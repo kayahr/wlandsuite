@@ -136,7 +136,6 @@ public class Monsters extends ArrayList<Monster>
      * @return The Monsters
      */
 
-    @SuppressWarnings("unchecked")
     public static Monsters read(final Element element)
     {
         Monsters monsters;
