@@ -33,7 +33,7 @@
         <span id="publishDate">Last Published: 2012-01-08</span>
                   &nbsp;| <span id="projectVersion">Version: 1.3.1</span>
                       </div>
-            <div class="xright">                    <a href="http://wasteland.wikispaces.com/" class="externalLink" title="Wasteland Wiki">Wasteland Wiki</a>
+            <div class="xright">                    <a href="http://wasteland.gamepedia.com/Wasteland:_The_Definitive_Deconstruction" class="externalLink" title="Wasteland Wiki">Wasteland Wiki</a>
             |
                         <a href="http://games.groups.yahoo.com/group/wasteland/" class="externalLink" title="Snake Squeezins">Snake Squeezins</a>
               
@@ -149,7 +149,7 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>Game Tutorial Step 3: Making squares impassable<a name="Game_Tutorial_Step_3:_Making_squares_impassable"></a></h2><p>With <a class="externalLink" href="http://wasteland.wikispaces.com/Impassable+Data">action class 11 (b)</a> you can create squares which are not passable by the player. Additionaly a message can be printed when the player tries to enter the square. This action class also can change the action class and the action of the square by using the attributes <i>newActionClass</i> and <i>newAction</i> which we will not use in this example.</p><p>Like in the previous step first create a new action container for all the impassable actions and add your new action to it:</p><div><pre>&lt;actions actionClass=&quot;0xb&quot;&gt;
+        <div class="section"><h2>Game Tutorial Step 3: Making squares impassable<a name="Game_Tutorial_Step_3:_Making_squares_impassable"></a></h2><p>With <a class="externalLink" href="http://wasteland.gamepedia.com/Impassable+Data">action class 11 (b)</a> you can create squares which are not passable by the player. Additionaly a message can be printed when the player tries to enter the square. This action class also can change the action class and the action of the square by using the attributes <i>newActionClass</i> and <i>newAction</i> which we will not use in this example.</p><p>Like in the previous step first create a new action container for all the impassable actions and add your new action to it:</p><div><pre>&lt;actions actionClass=&quot;0xb&quot;&gt;
   &lt;impassable id=&quot;0&quot; message=&quot;2&quot; /&gt;
 &lt;/actions&gt;</pre></div><p>We reference a message string with id 2 here so we have to add it as well:</p><div><pre>&lt;string id=&quot;2&quot;&gt;\rBONG! Didn't you see the house standing here? Go around!\r&lt;/string&gt;</pre></div><p>And now as usual connect a square for it by setting the squares action class to <i>b</i> and the action to <i>00</i>. This time we set the tile 77 which is a small house. </p><p>Pack the new game file, start up wasteland and you can bang your head against the house.</p><p>You can download the current state of the map here: <a href="./step3/map01.xml">map01.xml</a>.</p><img src="step3.png" alt="" /><p><a href="./step2.html">Back to step 2</a> | <a href="./index.html">Index page</a> | <a href="./step4.html">Move on to step 4</a></p></div>
       </div>

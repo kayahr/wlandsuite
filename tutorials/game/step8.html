@@ -33,7 +33,7 @@
         <span id="publishDate">Last Published: 2012-01-08</span>
                   &nbsp;| <span id="projectVersion">Version: 1.3.1</span>
                       </div>
-            <div class="xright">                    <a href="http://wasteland.wikispaces.com/" class="externalLink" title="Wasteland Wiki">Wasteland Wiki</a>
+            <div class="xright">                    <a href="http://wasteland.gamepedia.com/Wasteland:_The_Definitive_Deconstruction" class="externalLink" title="Wasteland Wiki">Wasteland Wiki</a>
             |
                         <a href="http://games.groups.yahoo.com/group/wasteland/" class="externalLink" title="Snake Squeezins">Snake Squeezins</a>
               
@@ -149,7 +149,7 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>Game Tutorial Step 8: Changing tiles<a name="Game_Tutorial_Step_8:_Changing_tiles"></a></h2><p>With <a class="externalLink" href="http://wasteland.wikispaces.com/Dialogue+Data">action class 4</a> you can hide the real tile of a square with an other tile. This is used when opening doors or hiding bases and secret hallways. In this example we will modify the check action we created in <a href="./step6.html">Step 6</a> so we can destroy the wall we have climbed with some explosives.</p><p>Here is the mask code:</p><div><pre>&lt;actions actionClass=&quot;4&quot;&gt;
+        <div class="section"><h2>Game Tutorial Step 8: Changing tiles<a name="Game_Tutorial_Step_8:_Changing_tiles"></a></h2><p>With <a class="externalLink" href="http://wasteland.gamepedia.com/Dialogue+Data">action class 4</a> you can hide the real tile of a square with an other tile. This is used when opening doors or hiding bases and secret hallways. In this example we will modify the check action we created in <a href="./step6.html">Step 6</a> so we can destroy the wall we have climbed with some explosives.</p><p>Here is the mask code:</p><div><pre>&lt;actions actionClass=&quot;4&quot;&gt;
   &lt;mask id=&quot;0&quot; message=&quot;11&quot; tile=&quot;71&quot; /&gt;
 &lt;/actions&gt;</pre></div><p>This simply hides the tile of the square with tile id 71 and displays message string 11 when the player steps on the square.</p><p>Now this time we do not connect this action to a square directly. Instead we connect it to an other action. In this case it's a new check item in the wall check we created in <a href="./step6.html">Step 6</a>. Just add these lines to the check:</p><div><pre>&lt;item value=&quot;6&quot; newActionClass=&quot;4&quot; newAction=&quot;0&quot; /&gt; 
 &lt;item value=&quot;7&quot; newActionClass=&quot;4&quot; newAction=&quot;0&quot; /&gt; 
