@@ -1,13 +1,63 @@
-#bannerRight img
+#bannerLeft,
+#bannerLeft h1
+{
+    margin: 0;
+}
+
+#bannerLeft a
+{
+    display: block;
+    font-size: 0;
+    line-height: 0;
+}
+
+#bannerLeft img
+{
+    display: block;
+    max-width: none;
+}
+
+#banner > .pull-right
 {
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 1000;
+    float: none;
+    margin: 0;
+    width: 149px;
+    height: 149px;
+}
+
+#bannerRight,
+#bannerRight h1
+{
+    margin: 0;
+}
+
+#bannerRight a
+{
+    display: block;
+    width: 149px;
+    height: 149px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-indent: -9999px;
+    padding: 0;
+    background: none;
+}
+
+#bannerRight img
+{
+    display: block;
+    width: 149px;
+    height: 149px;
+    max-width: none;
     border: 0;
 }
 
-#breadcrumbs
+a.externalLink[href^=https]
 {
-    padding-right: 150px;
+    padding-right: 0;
+    background: none;
 }
-
