@@ -4,10 +4,6 @@
       xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
       name="Wasteland Suite">
 
-  <bannerRight name="Fork me on GitHub" href="https://github.com/kayahr/${project.artifactId}/">
-    <image src="images/forkme-right-orange.svg" />
-  </bannerRight>
-
   <bannerLeft name="wlandsuite" href="http://kayahr.github.com/wlandsuite/">
     <image src="images/logo.png" />
   </bannerLeft>
@@ -17,13 +13,10 @@
     <artifactId>maven-fluido-skin</artifactId>
     <version>2.0.0-M10</version>
   </skin>
-  
+
   <body>
     <menu name="Wasteland Suite">
       <item name="About" href="index.html" />
-      <item name="Download" href="download.html" />
-      <item name="Installation" href="install.html" />
-      <item name="Report problems" href="problems.html" />
     </menu>
     <menu name="Tutorials">
       <item name="Game tutorial" href="tutorials/game/index.html" />
@@ -50,8 +43,8 @@
       <item name="fixwloffsets" href="fixwloffsets.html" />
       <item name="extractmaps" href="extractmaps.html" />
     </menu>
-    
+
     <menu ref="reports" />
-    
+
   </body>
 </site>

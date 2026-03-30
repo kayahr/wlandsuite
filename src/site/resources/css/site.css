@@ -55,3 +55,9 @@
     max-width: none;
     border: 0;
 }
+
+a.externalLink[href^=https]
+{
+    padding-right: 0;
+    background: none;
+}
